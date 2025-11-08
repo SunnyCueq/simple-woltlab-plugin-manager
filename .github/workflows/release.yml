@@ -48,10 +48,11 @@ jobs:
       id: parse_package
       working-directory: ${{ steps.plugin_dir.outputs.PLUGIN_DIR }}
       run: |
-        # Lade die Parser-Scripts
+        # Lade die Parser-Scripts aus dem Repository-Root
+        REPO_ROOT="${{ github.workspace }}"
         mkdir -p /tmp/scripts
-        cp ../../scripts/parse-package-xml.sh /tmp/scripts/
-        cp ../../scripts/pip-defaults.sh /tmp/scripts/
+        cp "$REPO_ROOT/scripts/parse-package-xml.sh" /tmp/scripts/
+        cp "$REPO_ROOT/scripts/pip-defaults.sh" /tmp/scripts/
         chmod +x /tmp/scripts/*.sh
         
         # Setze SCRIPT_DIR für die Scripts
