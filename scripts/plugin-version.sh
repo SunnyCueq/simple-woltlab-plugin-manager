@@ -112,7 +112,7 @@ echo "Neue Version: $NEW_VERSION"
 echo "Inkrement-Typ: $INCREMENT_TYPE"
 echo ""
 
-read -p "Möchten Sie die Version auf $NEW_VERSION erhöhen? (j/n): " -n 1 -r
+read -p "Möchtest du die Version auf $NEW_VERSION erhöhen? (j/n): " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
     echo "Abgebrochen."
@@ -150,7 +150,7 @@ if [ "$NO_RELEASE" = false ]; then
     # Prüfe ob update-tars.sh ausgeführt werden muss
     if [ -d "_extracted" ]; then
         echo "ℹ️  _extracted/ Verzeichnis gefunden."
-        read -p "Möchten Sie die TAR-Archive aktualisieren? (j/n): " -n 1 -r
+        read -p "Möchtest du die TAR-Archive aktualisieren? (j/n): " -n 1 -r
         echo
         if [[ $REPLY =~ ^[JjYy]$ ]]; then
             echo ""

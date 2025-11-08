@@ -10,7 +10,7 @@
 # attribution must be preserved in all copies and substantial portions.
 #
 # Script zum Aktualisieren der TAR-Archive nach Code-Änderungen
-# Nutzen Sie dieses Script VOR dem Git-Commit
+# Nutze dieses Script VOR dem Git-Commit
 #
 # Verwendung: ./update-tars.sh [PLUGIN_DIR]
 # Falls PLUGIN_DIR nicht angegeben, wird das aktuelle Verzeichnis verwendet

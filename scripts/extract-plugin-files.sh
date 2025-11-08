@@ -33,7 +33,7 @@ echo ""
 # Prüfe ob bereits entpackt wurde
 if [ -d "_extracted" ]; then
     echo "⚠️  Warnung: _extracted Ordner existiert bereits."
-    echo "Möchten Sie fortfahren? Dies überschreibt existierende Dateien."
+    echo "Möchtest du fortfahren? Dies überschreibt existierende Dateien."
     read -p "Fortfahren? (j/n): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[JjYy]$ ]]; then

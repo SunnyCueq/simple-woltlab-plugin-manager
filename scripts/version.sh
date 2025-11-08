@@ -107,7 +107,7 @@ if [ "$DRY_RUN" = true ]; then
     exit 0
 fi
 
-read -p "Möchten Sie die Version auf $NEW_VERSION erhöhen? (j/n): " -n 1 -r
+read -p "Möchtest du die Version auf $NEW_VERSION erhöhen? (j/n): " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
     echo "Abgebrochen."
