@@ -1,0 +1,34 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+*.cache
+*.bak
+*.backup
+*.old
+
+# WoltLab-spezifisch
+.woltlab-config.local
+_extracted/
+*.tar
+*.tar.gz
+.tar-backups/
+
+# User-spezifische Workspaces
+*-workspace.code-workspace
+!templates/workspace.code-workspace
+

@@ -1,0 +1,163 @@
+#!/bin/bash
+
+# Script zum Erstellen eines Plugin-Packages und optional GitHub Release
+#
+# Verwendung: ./create-release.sh VERSION [PLUGIN_DIR] [GITHUB_REPO]
+#   VERSION: Versionsnummer (z.B. 1.0.0)
+#   PLUGIN_DIR: Plugin-Verzeichnis (optional, Standard: aktuelles Verzeichnis)
+#   GITHUB_REPO: GitHub Repository im Format "owner/repo" (optional)
+#
+# Beispiel: ./create-release.sh 1.0.0 /path/to/plugin owner/repo-name
+
+set -e
+
+# Parameter prüfen
+if [ -z "$1" ]; then
+    echo "❌ Fehler: Versionsnummer fehlt!"
+    echo ""
+    echo "Verwendung: $0 VERSION [PLUGIN_DIR] [GITHUB_REPO]"
+    echo "Beispiel: $0 1.0.0 /path/to/plugin owner/repo-name"
+    exit 1
+fi
+
+VERSION="$1"
+PLUGIN_DIR="${2:-$(pwd)}"
+GITHUB_REPO="$3"
+
+cd "$PLUGIN_DIR" || exit 1
+
+# Prüfe ob package.xml existiert
+if [ ! -f "package.xml" ]; then
+    echo "❌ Fehler: package.xml nicht gefunden in $PLUGIN_DIR"
+    exit 1
+fi
+
+# Package-Name aus package.xml extrahieren
+PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' package.xml | head -1)
+if [ -z "$PACKAGE_NAME" ]; then
+    echo "❌ Fehler: Konnte Package-Name nicht aus package.xml extrahieren"
+    exit 1
+fi
+
+PACKAGE_FILE="${PACKAGE_NAME}-${VERSION}.tar.gz"
+
+echo "=== Erstelle Plugin-Package ==="
+echo "Package: $PACKAGE_NAME"
+echo "Version: $VERSION"
+echo "Verzeichnis: $PLUGIN_DIR"
+echo ""
+
+# Prüfe ob TAR-Dateien existieren
+REQUIRED_TARS=("package.xml")
+OPTIONAL_TARS=("files.tar" "files_urlshort.tar" "templates.tar" "templates_urlshort.tar" "acptemplates.tar" "acptemplates_urlshort.tar")
+
+# Prüfe welche TAR-Dateien vorhanden sind
+TAR_FILES=()
+for tar_file in "${REQUIRED_TARS[@]}" "${OPTIONAL_TARS[@]}"; do
+    if [ -f "$tar_file" ]; then
+        TAR_FILES+=("$tar_file")
+    fi
+done
+
+# Prüfe ob XML-Dateien vorhanden sind
+XML_FILES=()
+for xml_file in *.xml; do
+    if [ -f "$xml_file" ] && [ "$xml_file" != "package.xml" ]; then
+        XML_FILES+=("$xml_file")
+    fi
+done
+
+# Prüfe ob language-Verzeichnis vorhanden ist
+LANGUAGE_DIR=""
+if [ -d "language" ]; then
+    LANGUAGE_DIR="language"
+fi
+
+# Erstelle Package in /tmp
+echo "📦 Erstelle Package..."
+cd /tmp || exit 1
+
+# Erstelle temporäres Verzeichnis
+TMP_DIR=$(mktemp -d)
+trap "rm -rf $TMP_DIR" EXIT
+
+# Kopiere Dateien
+for file in "${TAR_FILES[@]}" "${XML_FILES[@]}"; do
+    cp "$PLUGIN_DIR/$file" "$TMP_DIR/"
+done
+
+# Kopiere language-Verzeichnis falls vorhanden
+if [ -n "$LANGUAGE_DIR" ]; then
+    cp -r "$PLUGIN_DIR/$LANGUAGE_DIR" "$TMP_DIR/"
+fi
+
+# Erstelle TAR.GZ
+cd "$TMP_DIR" || exit 1
+tar -czf "/tmp/$PACKAGE_FILE" *
+mv "/tmp/$PACKAGE_FILE" "$PLUGIN_DIR/"
+
+echo "✅ Package erstellt: $PACKAGE_FILE"
+echo ""
+
+# GitHub Release erstellen (falls Repository angegeben)
+if [ -n "$GITHUB_REPO" ]; then
+    echo "=== GitHub Release erstellen ==="
+    
+    # Prüfe ob GitHub CLI installiert ist
+    if ! command -v gh &> /dev/null; then
+        echo "⚠️  GitHub CLI nicht gefunden. Installieren Sie es mit:"
+        echo "   Linux: sudo pacman -S github-cli (oder entsprechendes Paket-Manager)"
+        echo "   macOS: brew install gh"
+        echo "   Windows: winget install GitHub.cli"
+        echo ""
+        echo "Oder erstellen Sie das Release manuell auf GitHub."
+        exit 0
+    fi
+    
+    # Prüfe GitHub-Authentifizierung
+    if ! gh auth status &> /dev/null; then
+        echo "⚠️  Sie sind nicht bei GitHub angemeldet!"
+        echo "Bitte führen Sie aus: gh auth login"
+        exit 1
+    fi
+    
+    # Release-Titel aus CHANGELOG.md extrahieren (falls vorhanden)
+    RELEASE_TITLE="Version $VERSION"
+    if [ -f "$PLUGIN_DIR/CHANGELOG.md" ]; then
+        # Versuche Titel aus CHANGELOG zu extrahieren
+        CHANGELOG_TITLE=$(grep -A 1 "^## Version $VERSION" "$PLUGIN_DIR/CHANGELOG.md" | head -2 | tail -1 | sed 's/^### //' | sed 's/^## //' | xargs)
+        if [ -n "$CHANGELOG_TITLE" ]; then
+            RELEASE_TITLE="$CHANGELOG_TITLE"
+        fi
+    fi
+    
+    # Release erstellen
+    echo "🚀 Erstelle GitHub Release v$VERSION..."
+    cd "$PLUGIN_DIR" || exit 1
+    
+    if [ -f "CHANGELOG.md" ]; then
+        gh release create "v$VERSION" \
+            "$PACKAGE_FILE" \
+            --title "Version $VERSION" \
+            --notes-file CHANGELOG.md \
+            --repo "$GITHUB_REPO"
+    else
+        gh release create "v$VERSION" \
+            "$PACKAGE_FILE" \
+            --title "Version $VERSION" \
+            --repo "$GITHUB_REPO"
+    fi
+    
+    echo ""
+    echo "=== ✅ Release erfolgreich erstellt! ==="
+    echo ""
+    echo "📦 Download-Link:"
+    echo "https://github.com/$GITHUB_REPO/releases/download/v$VERSION/$PACKAGE_FILE"
+    echo ""
+    echo "🔗 Release-Seite:"
+    echo "https://github.com/$GITHUB_REPO/releases/tag/v$VERSION"
+else
+    echo "ℹ️  Kein GitHub Repository angegeben. Release nur lokal erstellt."
+    echo "   Für GitHub Release: $0 $VERSION $PLUGIN_DIR owner/repo-name"
+fi
+
