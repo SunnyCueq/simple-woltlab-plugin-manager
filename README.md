@@ -408,46 +408,6 @@ Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe [LICENSE](LICENSE) fü
 
 ---
 
-## 📋 Changelog
-
-**Wichtigste Änderungen im Überblick:**
-
-### Version 1.0.0 (Aktuell)
-
-**Features:**
-- ✅ Automatische Plugin-Versionsverwaltung (`plugin-version.sh`)
-- ✅ Backup-Funktionalität für Plugin-Packages (`.package-backups/`)
-- ✅ Automatische Versionsaktualisierung in `package.xml`
-- ✅ Versionsverwaltungs-Script für Repository (`version.sh`)
-- ✅ Professionelle Advanced-Dokumentation (README_ADVANCED.md)
-- ✅ Entwickler-Werkzeuge dokumentiert (DEVELOPER-TOOLS.md)
-- ✅ Plugin-Namenskonventionen dokumentiert (PLUGIN-NAMING.md)
-- ✅ macOS-Anleitung hinzugefügt (MACOS.md / MACOS_EN.md)
-- ✅ Automatische Installation fehlender Voraussetzungen
-- ✅ Automatischer WoltLab Core Download und Entpacken
-- ✅ Verbesserte README mit Download-Links und Terminal-Anleitungen
-- ✅ Laienfreundliche Dokumentation (Per-Du, Schritt-für-Schritt)
-- ✅ Umfassende Troubleshooting-Sektionen
-
-**Verbesserungen:**
-- 🔧 Install-Script erweitert mit automatischer Paket-Installation
-- 🔧 Workspace-Erstellung automatisiert
-- 🔧 Plugin-Verzeichnis wird automatisch erstellt
-- 🔧 Detaillierte Fehlermeldungen mit Lösungsvorschlägen
-- 🔧 Betriebssystem-Erkennung für automatische Installation
-
-**Dokumentation:**
-- 📚 Alle Dokumentationen auf Per-Du umgestellt
-- 📚 Terminal-Anleitungen mit "Wo öffne ich Terminal?"
-- 📚 Download-Links zu allen benötigten Programmen
-- 📚 Alternative Wege für jeden Schritt
-- 📚 Mac-spezifische Anleitungen
-
-**Vorherige Versionen:**
-- Version 0.1.0 - Initiale Version mit Basis-Features
-
----
-
 <div align="center">
 
 **Entwickelt mit ❤️ für die WoltLab Community**

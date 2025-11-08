@@ -1,0 +1,108 @@
+# Cursor Rules - Simple WoltLab Plugin Manager
+
+**Copyright (c) 2025 SunnyCueq**
+
+Diese Datei wird automatisch von Cursor gelesen und als Kontext für AI-Assistenten verwendet.
+
+## WICHTIG: Regeln befolgen
+
+**IMMER die folgenden Dateien im Root-Verzeichnis beachten:**
+- `RULES.md` - Vollständige Projekt-Regeln (INTERN, nicht auf GitHub)
+- `PROJEKT-KONTEXT.md` - Projekt-Kontext und Status (INTERN, nicht auf GitHub)
+
+## Kernregeln (Kurzfassung)
+
+### 1. Ansprache
+- IMMER "Du" verwenden, nie "Sie"
+- Persönlich und freundlich bleiben
+
+### 2. Einfachheit
+- Alles für Laien verständlich
+- Schritt-für-Schritt Anleitungen
+- Alternative Wege anbieten
+
+### 3. Terminal-Anleitungen
+- IMMER erklären, wo das Terminal geöffnet wird
+- Im System selbst oder in der IDE
+- Was passiert wenn der Befehl nicht funktioniert
+
+### 4. Download-Links
+- IMMER Download-Links zu IDEs anbieten (Cursor, VSCode, Git)
+- Am Anfang der Dokumentation
+
+### 5. Mehrsprachigkeit
+- Deutsch (DE) und Englisch (EN) für Standard-Dokumentationen
+- Advanced-Dokumentation bleibt Englisch
+
+### 6. Redundanz vermeiden
+- Keine WoltLab-Dokumentation wiederholen
+- Verweise auf offizielle Docs statt Wiederholung
+
+### 7. Copyright
+- Copyright-Hinweis in ALLEN Dateien
+- Format: "Copyright (c) 2025 SunnyCueq"
+- Hinweis dass Copyright nicht entfernt werden darf
+
+### 8. Dateien die NICHT auf GitHub gehören
+- RULES.md, PROJEKT-KONTEXT.md, ANALYSE.md, ZUSAMMENFASSUNG.md
+- GITHUB_SETUP.md, GITHUB_REPO_INFO.md, COMMIT_AND_PUSH.md
+- WSPACKAGER-ANALYSE.md
+- Alle in .gitignore aufgenommen
+
+### 9. Versionsverwaltung
+- IMMER nach Änderung committen und pushen
+- Semantic Versioning (MAJOR.MINOR.PATCH)
+- IMMER GitHub Release bei neuer Version erstellen
+- Git-Tag pushen: `git push origin vX.Y.Z`
+
+### 10. Backup-System
+- IMMER die zwei letzten Versionen behalten:
+  - Aktuelle Version = Release
+  - Vorherige Version = Backup in `.package-backups/`
+
+### 11. Changelog
+- Changelog ist NUR lokal (nicht in README auf GitHub)
+- Nur für interne Dokumentation
+
+### 12. Datei-Organisation
+- README.md, README_EN.md, LICENSE, install.sh bleiben im Root
+- Alle anderen MD-Dateien gehören in `docs/` (außer interne)
+- README_ADVANCED.md gehört in `docs/`
+
+## Bei neuen Regeln
+
+- IMMER RULES.md sofort aktualisieren
+- Diese .cursorrules Datei aktualisieren (Kurzfassung)
+- RULES.md ist die Quelle der Wahrheit
+
+## Checkliste vor jedem Commit
+
+- [ ] Alle "Sie" durch "Du" ersetzt?
+- [ ] Terminal-Anleitungen erklärt wo Terminal geöffnet wird?
+- [ ] Download-Links zu IDEs vorhanden?
+- [ ] Alternative Wege angeboten?
+- [ ] Mac-Unterstützung berücksichtigt?
+- [ ] Redundanzen entfernt?
+- [ ] Fehler und Syntax geprüft?
+- [ ] Copyright-Hinweis vorhanden?
+- [ ] Einfach genug für Laien?
+- [ ] Mehrsprachigkeit beachtet (DE/EN)?
+- [ ] Version erhöht (falls nötig)?
+- [ ] Git-Tag erstellt und gepusht?
+- [ ] GitHub Release erstellt?
+- [ ] Backup-System funktioniert (2 Versionen)?
+- [ ] Neue interne Dateien zu .gitignore hinzugefügt?
+- [ ] RULES.md aktualisiert (falls neue Regeln)?
+
+## Wichtige Erinnerungen
+
+- RULES.md ist die vollständige Quelle - IMMER dort nachschauen
+- Bei neuen Regeln: RULES.md UND .cursorrules aktualisieren
+- Changelog bleibt lokal, nicht auf GitHub in README
+- Bei neuen Versionen: IMMER GitHub Release erstellen
+- Bei neuen Dateien: Prüfen ob sie auf GitHub gehören
+
+---
+
+**Letzte Aktualisierung:** 2025-01-08
+
