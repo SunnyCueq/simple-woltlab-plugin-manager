@@ -44,7 +44,8 @@ The script asks for all required paths and automatically creates the workspace f
 If you want to create the workspace manually:
 
 ```bash
-./scripts/setup-workspace.sh
+# Workspace wird automatisch von install.sh erstellt
+# Siehe INSTALLATION_EN.md für Details
 ```
 
 The script will guide you interactively through the creation.

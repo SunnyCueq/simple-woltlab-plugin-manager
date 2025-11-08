@@ -68,6 +68,7 @@ echo "Verzeichnis: $PLUGIN_DIR"
 echo ""
 
 # Backup-System: Behalte immer die zwei letzten Versionen
+# System: Aktuelle Version = Release, Vorherige Version = Backup
 BACKUP_DIR=".package-backups"
 mkdir -p "$BACKUP_DIR"
 
@@ -77,25 +78,29 @@ ALL_PACKAGES=($(ls -t "${PACKAGE_NAME}"-*.tar.gz 2>/dev/null))
 if [ ${#ALL_PACKAGES[@]} -gt 0 ]; then
     echo "💾 Backup-System: Behalte die zwei letzten Versionen..."
     
-    # Aktuelle Version (wird gerade erstellt) = Release
-    # Vorherige Version = Backup
+    # Das neueste Package (Index 0) ist die vorherige Version
+    # Die aktuelle Version (wird gerade erstellt) wird das neue neueste
+    # System: Aktuelle = Release, Vorherige = Backup
     
-    # Wenn es bereits Packages gibt, sichere das neueste als Backup
     if [ ${#ALL_PACKAGES[@]} -ge 1 ]; then
-        LAST_PACKAGE="${ALL_PACKAGES[0]}"
-        BACKUP_FILE="$BACKUP_DIR/$(basename "$LAST_PACKAGE")"
-        cp "$LAST_PACKAGE" "$BACKUP_FILE"
-        echo "✓ Backup erstellt: $BACKUP_FILE (vorherige Version)"
+        PREVIOUS_PACKAGE="${ALL_PACKAGES[0]}"
+        BACKUP_FILE="$BACKUP_DIR/$(basename "$PREVIOUS_PACKAGE")"
+        
+        # Verschiebe die vorherige Version ins Backup-Verzeichnis
+        if [ ! -f "$BACKUP_FILE" ]; then
+            mv "$PREVIOUS_PACKAGE" "$BACKUP_FILE" 2>/dev/null || cp "$PREVIOUS_PACKAGE" "$BACKUP_FILE"
+            echo "✓ Backup erstellt: $BACKUP_FILE (vorherige Version als Backup)"
+        fi
     fi
     
-    # Lösche ältere Versionen (behalte nur die zwei neuesten)
+    # Lösche/Archiviere alle älteren Versionen (behalte nur die zwei neuesten)
     if [ ${#ALL_PACKAGES[@]} -gt 1 ]; then
         for i in "${!ALL_PACKAGES[@]}"; do
             if [ $i -ge 1 ]; then
                 OLD_PACKAGE="${ALL_PACKAGES[$i]}"
                 OLD_BACKUP="$BACKUP_DIR/$(basename "$OLD_PACKAGE")"
                 # Verschiebe ältere Versionen ins Backup-Verzeichnis
-                if [ ! -f "$OLD_BACKUP" ]; then
+                if [ ! -f "$OLD_BACKUP" ] && [ -f "$OLD_PACKAGE" ]; then
                     mv "$OLD_PACKAGE" "$OLD_BACKUP" 2>/dev/null || true
                     echo "ℹ️  Ältere Version archiviert: $(basename "$OLD_PACKAGE")"
                 fi
@@ -103,7 +108,8 @@ if [ ${#ALL_PACKAGES[@]} -gt 0 ]; then
         done
     fi
     
-    echo "✓ Backup-System: Aktuelle Version = Release, Vorherige = Backup"
+    echo "✓ Backup-System: Aktuelle Version (wird erstellt) = Release"
+    echo "✓ Backup-System: Vorherige Version = Backup in .package-backups/"
     echo ""
 fi
 

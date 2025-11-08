@@ -44,8 +44,7 @@ simple-woltlab-plugin-manager/
 │   ├── update-tars.sh           # TAR archive builder
 │   ├── create-release.sh        # Release packaging and GitHub integration
 │   ├── parse-package-xml.sh    # Dynamic package.xml parser
-│   ├── pip-defaults.sh          # PIP type to filename mapping
-│   └── setup-workspace.sh       # Workspace generator (deprecated, integrated in install.sh)
+│   └── pip-defaults.sh          # PIP type to filename mapping
 ├── templates/                    # IDE and workspace templates
 │   ├── workspace.code-workspace # Multi-root workspace template
 │   └── .vscode/
