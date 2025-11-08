@@ -406,6 +406,9 @@ Das Repository enthält ein vollständiges, funktionierendes Beispiel-Plugin in 
 
 Dieses Projekt ist Open Source und Community-getrieben. Beiträge sind willkommen!
 
+**📖 Siehe [CONTRIBUTING.md](CONTRIBUTING.md) für detaillierte Informationen zum Beitragen.**
+
+Kurzfassung:
 1. Fork das Repository
 2. Erstelle einen Feature-Branch
 3. Committe deine Änderungen

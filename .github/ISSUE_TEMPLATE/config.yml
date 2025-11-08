@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Dokumentation / Documentation
+    url: https://github.com/SunnyCueq/simple-woltlab-plugin-manager/tree/main/docs
+    about: Siehe die vollständige Dokumentation / See the full documentation
+  - name: 💬 Community Support
+    url: https://www.woltlab.com/community/
+    about: WoltLab Community Forum / WoltLab Community Forum
+  - name: 📚 WoltLab Dokumentation
+    url: https://docs.woltlab.com/6.0/
+    about: Offizielle WoltLab Suite Dokumentation / Official WoltLab Suite Documentation
+

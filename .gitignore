@@ -41,7 +41,8 @@ REFERENZ-WSPACKAGER.md
 docs/GITHUB-WORKFLOW-TEST.md
 docs/WSPACKAGER-ANALYSE.md
 
-# Cursor-spezifisch (intern)
+# Cursor-spezifisch (intern - nur lokal, nicht auf GitHub)
 .cursorrules
 
+# Claude Code Verweis (intern - nur lokal, nicht auf GitHub)
 CLAUDE.md
