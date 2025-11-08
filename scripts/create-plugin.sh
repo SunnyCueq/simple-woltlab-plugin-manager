@@ -123,7 +123,7 @@ EOF
 # Erstelle Beispiel-PHP-Klasse
 echo "📝 Erstelle Beispiel-PHP-Klasse..."
 mkdir -p "$PLUGIN_DIR/files/lib/page"
-cat > "$PLUGIN_DIR/files/lib/page/ExamplePage.class.php" <<'EOFPHP'
+cat > "$PLUGIN_DIR/files/lib/page/ExamplePage.class.php" <<EOFPHP
 <?php
 
 namespace wcf\page;
@@ -136,7 +136,7 @@ use wcf\system\WCF;
  * @author	Your Name
  * @copyright	2025 Your Name
  * @license	MIT License <http://opensource.org/licenses/MIT>
- * @package	$PACKAGE_IDENTIFIER
+ * @package	${PACKAGE_IDENTIFIER}
  */
 class ExamplePage extends AbstractPage {
 	/**
@@ -173,12 +173,12 @@ EOFPHP
 
 # Erstelle Beispiel-Template
 echo "📝 Erstelle Beispiel-Template..."
-cat > "$PLUGIN_DIR/templates/example.tpl" <<'EOFTEMPLATE'
+cat > "$PLUGIN_DIR/templates/example.tpl" <<EOFTEMPLATE
 {* Template for Example Page *}
 
 <div class="section">
 	<header class="sectionHeader">
-		<h2 class="sectionTitle">{lang}$PACKAGE_IDENTIFIER.page.title{/lang}</h2>
+		<h2 class="sectionTitle">{lang}${PACKAGE_IDENTIFIER}.page.title{/lang}</h2>
 	</header>
 	
 	<div class="sectionContent">
