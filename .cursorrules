@@ -121,6 +121,13 @@ Diese Datei wird automatisch von Cursor gelesen und als Kontext für AI-Assisten
 - ✅ README_ADVANCED.md gehört in `docs/`
 - ✅ Keine unnötigen Dateien im Root
 
+### 16. Git-Commits und AI-Tool-Referenzen
+- ✅ **NIEMALS** Claude, Cursor oder andere AI-Tools in öffentlichen Commits erwähnen
+- ✅ **NIEMALS** "Generated with Claude Code" oder ähnliche Signaturen
+- ✅ **NIEMALS** "Co-Authored-By: Claude" oder ähnliches
+- ✅ **NUR** SunnyCueq als Author in allen Commits
+- ✅ Commit-Messages professionell und neutral formulieren
+
 ---
 
 ## Versionsverwaltung und Releases
