@@ -232,11 +232,24 @@ nano templates/mypage.tpl
 
 ```bash
 # 1. TAR-Archive aktualisieren
-./update-tars.sh
+./scripts/update-tars.sh
 
-# 2. Package erstellen
-./create-release.sh 1.0.0
+# 2. Package erstellen (analysiert automatisch package.xml)
+./scripts/create-release.sh 1.0.0
 ```
+
+**Was passiert beim Package-Erstellen?**
+
+Das Toolkit analysiert automatisch deine `package.xml`:
+- ✅ Findet alle `<instruction>` Tags
+- ✅ Bestimmt Standard-Dateinamen für jeden PIP-Typ
+- ✅ Sucht Dateien case-insensitive
+- ✅ Zeigt Package-Struktur vor dem Packen
+- ✅ Packt alle gefundenen Dateien zusammen
+
+**Siehe auch:**
+- [PACKAGING.md](../docs/PACKAGING.md) - Kompletter Packaging-Workflow
+- [PIP-TYPES.md](../docs/PIP-TYPES.md) - Unterstützte PIP-Typen
 
 ---
 

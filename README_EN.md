@@ -222,10 +222,12 @@ Example:
 ```
 
 **Features:**
+- ✅ **Automatic package.xml parsing** - Finds all required files automatically
 - ✅ Automatic version update in `package.xml`
 - ✅ Automatic date update
 - ✅ Backup of last TAR archive (in `.package-backups/`)
 - ✅ Optional: GitHub release creation
+- ✅ Shows package structure before packaging
 
 ## 📁 Structure
 

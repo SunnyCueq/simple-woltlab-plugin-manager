@@ -43,6 +43,8 @@ simple-woltlab-plugin-manager/
 │   ├── extract-plugin-files.sh  # TAR extraction utility
 │   ├── update-tars.sh           # TAR archive builder
 │   ├── create-release.sh        # Release packaging and GitHub integration
+│   ├── parse-package-xml.sh    # Dynamic package.xml parser
+│   ├── pip-defaults.sh          # PIP type to filename mapping
 │   └── setup-workspace.sh       # Workspace generator (deprecated, integrated in install.sh)
 ├── templates/                    # IDE and workspace templates
 │   ├── workspace.code-workspace # Multi-root workspace template
@@ -119,15 +121,27 @@ simple-woltlab-plugin-manager/
 - `GITHUB_REPO`: Optional, format: `owner/repo-name`
 
 **Behavior:**
+- **Automatically parses `package.xml`** to find all required files
+- Analyzes `<instruction>` tags to determine needed files
+- Shows package structure before packaging
 - Creates `{plugin}-{version}.tar.gz` package
 - Validates plugin structure
 - Optionally uses GitHub CLI for release creation
 - Updates version in `package.xml` if present
 
 **Implementation Details:**
+- Uses `parse-package-xml.sh` for dynamic file discovery
+- Uses `pip-defaults.sh` for PIP type to filename mapping
+- Case-insensitive file search
 - Uses `tar -czf` for compressed archives
 - Integrates with `gh` CLI if available
 - Validates package structure before packaging
+
+**New Features (v1.0.1+):**
+- Dynamic `package.xml` parsing (no static file lists)
+- Automatic PIP type recognition
+- Tree structure output
+- Support for all standard WoltLab PIP types
 
 ### install.sh
 

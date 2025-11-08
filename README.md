@@ -208,6 +208,8 @@ code woltlab-plugin-dev.code-workspace
 - **[VERSIONING.md](docs/VERSIONING.md)** - Versionsverwaltung und Semantic Versioning
 - **[PLUGIN-NAMING.md](docs/PLUGIN-NAMING.md)** - Plugin-Namenskonventionen
 - **[DEVELOPER-TOOLS.md](docs/DEVELOPER-TOOLS.md)** - Entwickler-Werkzeuge und Debug-Optionen
+- **[PACKAGING.md](docs/PACKAGING.md)** - Kompletter Packaging-Workflow (Entwicklung → Package → Release)
+- **[PIP-TYPES.md](docs/PIP-TYPES.md)** - Unterstützte PIP-Typen und Standard-Dateinamen
 
 ### ⚙️ Für Experten
 
@@ -290,10 +292,12 @@ Beispiel:
 ```
 
 **Features:**
+- ✅ **Automatisches package.xml Parsing** - Findet alle benötigten Dateien automatisch
 - ✅ Automatische Versionsaktualisierung in `package.xml`
 - ✅ Automatische Datumsaktualisierung
 - ✅ Backup des letzten TAR-Archivs (in `.package-backups/`)
 - ✅ Optional: GitHub Release erstellen
+- ✅ Zeigt Package-Struktur vor dem Packen
 
 ## 📁 Struktur
 
