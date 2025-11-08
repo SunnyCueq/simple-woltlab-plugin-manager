@@ -62,7 +62,7 @@ Das Script `scripts/version.sh` hilft dir, die Version automatisch zu erhöhen:
 git diff
 
 # 3. Committen
-git add README.md README_EN.md README_ADVANCED.md
+git add README.md README_EN.md docs/README_ADVANCED.md
 git commit -m "chore: Version auf 1.0.1 erhöht"
 
 # 4. Tag pushen
@@ -139,7 +139,7 @@ Und ändere zu:
 **Dateien, die aktualisiert werden müssen:**
 - `README.md`
 - `README_EN.md`
-- `README_ADVANCED.md` (falls Version erwähnt)
+- `docs/README_ADVANCED.md` (falls Version erwähnt)
 
 ### 2. Git-Tag erstellen
 
@@ -203,7 +203,7 @@ Wir verwenden dasselbe Schema für Konsistenz und Vertrautheit.
 ## Hilfe
 
 Bei Fragen zur Versionsverwaltung:
-- Siehe [README_ADVANCED.md](../README_ADVANCED.md) für technische Details
+- Siehe [README_ADVANCED.md](README_ADVANCED.md) für technische Details
 - Öffne ein Issue auf GitHub
 - Kontaktiere die Community
 

@@ -101,7 +101,7 @@ if [ "$DRY_RUN" = true ]; then
     echo "Folgende Dateien würden aktualisiert:"
     echo "  • README.md"
     echo "  • README_EN.md"
-    echo "  • README_ADVANCED.md"
+    echo "  • docs/README_ADVANCED.md"
     echo ""
     echo "Git-Tag würde erstellt: v$NEW_VERSION"
     exit 0
@@ -125,9 +125,9 @@ sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" README.md
 sed -i "s/\*\*Version:\*\* $CURRENT_VERSION/\*\*Version:\*\* $NEW_VERSION/g" README_EN.md
 sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" README_EN.md
 
-# Update README_ADVANCED.md (if version is mentioned)
-if grep -q "Version:" README_ADVANCED.md 2>/dev/null; then
-    sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" README_ADVANCED.md
+# Update docs/README_ADVANCED.md (if version is mentioned)
+if grep -q "Version:" docs/README_ADVANCED.md 2>/dev/null; then
+    sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" docs/README_ADVANCED.md
 fi
 
 echo "✅ Version aktualisiert"
@@ -158,7 +158,7 @@ echo "1. Änderungen prüfen:"
 echo "   git diff"
 echo ""
 echo "2. Änderungen committen:"
-echo "   git add README.md README_EN.md README_ADVANCED.md"
+echo "   git add README.md README_EN.md docs/README_ADVANCED.md"
 echo "   git commit -m \"chore: Version auf $NEW_VERSION erhöht\""
 echo ""
 echo "3. Tag pushen:"

@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**🌍 Sprache / Language:** [🇩🇪 Deutsch](#) | [🇬🇧 English](README_EN.md) | [⚙️ Advanced](README_ADVANCED.md)
+**🌍 Sprache / Language:** [🇩🇪 Deutsch](#) | [🇬🇧 English](README_EN.md) | [⚙️ Advanced](docs/README_ADVANCED.md)
 
 </div>
 
@@ -213,7 +213,7 @@ code woltlab-plugin-dev.code-workspace
 
 ### ⚙️ Für Experten
 
-- **[README_ADVANCED.md](README_ADVANCED.md)** - Advanced technical documentation (EN only)
+- **[README_ADVANCED.md](docs/README_ADVANCED.md)** - Advanced technical documentation (EN only)
   - Architecture and design principles
   - Scripts reference and internals
   - Advanced usage and customization

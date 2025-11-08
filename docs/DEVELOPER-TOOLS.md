@@ -337,7 +337,7 @@ Das Toolkit analysiert automatisch deine `package.xml`:
 
 Bei Fragen zu Entwickler-Werkzeugen:
 - Siehe [WoltLab Dokumentation](https://docs.woltlab.com/6.0/)
-- Siehe [README_ADVANCED.md](../README_ADVANCED.md) für technische Details
+- Siehe [README_ADVANCED.md](README_ADVANCED.md) für technische Details
 - Öffne ein Issue auf GitHub
 
 ---
