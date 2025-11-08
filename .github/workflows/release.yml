@@ -22,20 +22,23 @@ jobs:
       id: tag_version
       run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
       
+    - name: Check if this is a plugin repository
+      id: is_plugin
+      run: |
+        # Prüfe ob package.xml im ROOT existiert (nicht in Unterverzeichnissen)
+        if [ -f "package.xml" ]; then
+          echo "IS_PLUGIN=true" >> $GITHUB_OUTPUT
+          echo "✅ Plugin-Repository erkannt (package.xml im Root gefunden)"
+        else
+          echo "IS_PLUGIN=false" >> $GITHUB_OUTPUT
+          echo "ℹ️  Toolkit-Repository erkannt (kein package.xml im Root)"
+        fi
+        
     - name: Extract package name from package.xml
       id: package_name
+      if: steps.is_plugin.outputs.IS_PLUGIN == 'true'
       run: |
-        # Suche package.xml im Root oder in Unterverzeichnissen
-        if [ -f "package.xml" ]; then
-          PACKAGE_XML="package.xml"
-        else
-          PACKAGE_XML=$(find . -name "package.xml" -type f | head -1)
-          if [ -z "$PACKAGE_XML" ]; then
-            echo "❌ package.xml nicht gefunden"
-            exit 1
-          fi
-        fi
-        PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' "$PACKAGE_XML" | head -1)
+        PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' "package.xml" | head -1)
         if [ -z "$PACKAGE_NAME" ]; then
           echo "❌ Konnte Package-Name nicht aus package.xml extrahieren"
           exit 1
@@ -44,23 +47,15 @@ jobs:
         
     - name: Find plugin directory
       id: plugin_dir
+      if: steps.is_plugin.outputs.IS_PLUGIN == 'true'
       run: |
-        # Suche nach package.xml im Root oder in Unterverzeichnissen
-        if [ -f "package.xml" ]; then
-          PLUGIN_DIR="."
-        else
-          PACKAGE_XML=$(find . -name "package.xml" -type f | head -1)
-          if [ -z "$PACKAGE_XML" ]; then
-            echo "❌ package.xml nicht gefunden"
-            exit 1
-          fi
-          PLUGIN_DIR=$(dirname "$PACKAGE_XML")
-        fi
+        PLUGIN_DIR="."
         echo "PLUGIN_DIR=$PLUGIN_DIR" >> $GITHUB_OUTPUT
         echo "Plugin-Verzeichnis: $PLUGIN_DIR"
         
     - name: Parse package.xml dynamically
       id: parse_package
+      if: steps.is_plugin.outputs.IS_PLUGIN == 'true'
       working-directory: ${{ steps.plugin_dir.outputs.PLUGIN_DIR }}
       run: |
         # Lade die Parser-Scripts aus dem Repository-Root
@@ -96,6 +91,7 @@ jobs:
         done
         
     - name: Create package
+      if: steps.is_plugin.outputs.IS_PLUGIN == 'true'
       working-directory: ${{ steps.plugin_dir.outputs.PLUGIN_DIR }}
       run: |
         PACKAGE_NAME="${{ steps.package_name.outputs.PACKAGE_NAME }}"
@@ -132,19 +128,47 @@ jobs:
         echo "PACKAGE_FILE=$PACKAGE_FILE" >> $GITHUB_ENV
         echo "PACKAGE_PATH=${{ steps.plugin_dir.outputs.PLUGIN_DIR }}/$PACKAGE_FILE" >> $GITHUB_ENV
         
-    - name: Create Release
+    - name: Prepare release body
+      id: release_body
+      run: |
+        if [ "${{ steps.is_plugin.outputs.IS_PLUGIN }}" == "true" ]; then
+          RELEASE_BODY="## Version ${{ steps.tag_version.outputs.VERSION }}
+
+Automatisch erstellt mit dynamischem package.xml Parsing.
+
+**Package:** ${{ steps.package_name.outputs.PACKAGE_NAME }}
+
+Siehe CHANGELOG.md für Details falls vorhanden."
+        else
+          RELEASE_BODY="## Version ${{ steps.tag_version.outputs.VERSION }}
+
+**Simple WoltLab Plugin Manager Toolkit**
+
+Toolkit für die WoltLab Suite Plugin-Entwicklung.
+
+Siehe README.md für Details."
+        fi
+        echo "$RELEASE_BODY" > /tmp/release_body.txt
+        echo "RELEASE_BODY_FILE=/tmp/release_body.txt" >> $GITHUB_ENV
+        
+    - name: Create Release (Plugin)
+      if: steps.is_plugin.outputs.IS_PLUGIN == 'true'
       uses: softprops/action-gh-release@v1
       with:
         files: ${{ env.PACKAGE_PATH }}
         name: Version ${{ steps.tag_version.outputs.VERSION }}
-        body: |
-          ## Version ${{ steps.tag_version.outputs.VERSION }}
-          
-          Automatisch erstellt mit dynamischem package.xml Parsing.
-          
-          **Package:** ${{ steps.package_name.outputs.PACKAGE_NAME }}
-          
-          Siehe CHANGELOG.md für Details falls vorhanden.
+        body_path: ${{ env.RELEASE_BODY_FILE }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Create Release (Toolkit)
+      if: steps.is_plugin.outputs.IS_PLUGIN != 'true'
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Version ${{ steps.tag_version.outputs.VERSION }}
+        body_path: ${{ env.RELEASE_BODY_FILE }}
         draft: false
         prerelease: false
       env:
