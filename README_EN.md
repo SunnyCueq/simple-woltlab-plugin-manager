@@ -17,7 +17,7 @@
 ---
 
 **Last Updated:** 2025-01-08  
-**Version:** 1.0.0  
+**Version:** 1.0.1  
 **Status:** Current
 
 ---
@@ -324,6 +324,46 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 - **"The install script doesn't work"** → See [Troubleshooting in INSTALLATION_EN.md](docs/INSTALLATION_EN.md#troubleshooting)
 - **"How do I create a new plugin?"** → See [Example Plugin](#-example-plugin) and [WoltLab Getting Started](https://docs.woltlab.com/6.0/getting-started/)
 - **"Where can I find the documentation?"** → See [Documentation](#-documentation) above
+
+---
+
+## 📋 Changelog
+
+**Most important changes at a glance:**
+
+### Version 1.0.1 (Current)
+
+**Features:**
+- ✅ Automatic plugin version management (`plugin-version.sh`)
+- ✅ Backup functionality for plugin packages (`.package-backups/`)
+- ✅ Automatic version update in `package.xml`
+- ✅ Version management script for repository (`version.sh`)
+- ✅ Professional advanced documentation (README_ADVANCED.md)
+- ✅ Developer tools documented (DEVELOPER-TOOLS.md)
+- ✅ Plugin naming conventions documented (PLUGIN-NAMING.md)
+- ✅ macOS guide added (MACOS.md / MACOS_EN.md)
+- ✅ Automatic installation of missing prerequisites
+- ✅ Automatic WoltLab Core download and extraction
+- ✅ Improved README with download links and terminal instructions
+- ✅ Beginner-friendly documentation (step-by-step)
+- ✅ Comprehensive troubleshooting sections
+
+**Improvements:**
+- 🔧 Install script extended with automatic package installation
+- 🔧 Workspace creation automated
+- 🔧 Plugin directory automatically created
+- 🔧 Detailed error messages with solutions
+- 🔧 Operating system detection for automatic installation
+
+**Documentation:**
+- 📚 All documentation updated to be more beginner-friendly
+- 📚 Terminal instructions with "Where do I open Terminal?"
+- 📚 Download links to all required programs
+- 📚 Alternative ways for every step
+- 📚 Mac-specific guides
+
+**Previous Versions:**
+- Version 0.1.0 - Initial version with basic features
 
 ---
 
