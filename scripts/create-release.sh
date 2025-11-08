@@ -67,18 +67,43 @@ echo "Neue Version: $VERSION"
 echo "Verzeichnis: $PLUGIN_DIR"
 echo ""
 
-# Backup des letzten TAR-Archivs erstellen
+# Backup-System: Behalte immer die zwei letzten Versionen
 BACKUP_DIR=".package-backups"
 mkdir -p "$BACKUP_DIR"
 
-# Finde das letzte Package-Archiv
-LAST_PACKAGE=$(ls -t "${PACKAGE_NAME}"-*.tar.gz 2>/dev/null | head -1)
+# Finde alle Package-Archive (sortiert nach Zeit, neueste zuerst)
+ALL_PACKAGES=($(ls -t "${PACKAGE_NAME}"-*.tar.gz 2>/dev/null))
 
-if [ -n "$LAST_PACKAGE" ]; then
-    echo "💾 Erstelle Backup des letzten Packages..."
-    BACKUP_FILE="$BACKUP_DIR/${LAST_PACKAGE}.backup"
-    cp "$LAST_PACKAGE" "$BACKUP_FILE"
-    echo "✓ Backup erstellt: $BACKUP_FILE"
+if [ ${#ALL_PACKAGES[@]} -gt 0 ]; then
+    echo "💾 Backup-System: Behalte die zwei letzten Versionen..."
+    
+    # Aktuelle Version (wird gerade erstellt) = Release
+    # Vorherige Version = Backup
+    
+    # Wenn es bereits Packages gibt, sichere das neueste als Backup
+    if [ ${#ALL_PACKAGES[@]} -ge 1 ]; then
+        LAST_PACKAGE="${ALL_PACKAGES[0]}"
+        BACKUP_FILE="$BACKUP_DIR/$(basename "$LAST_PACKAGE")"
+        cp "$LAST_PACKAGE" "$BACKUP_FILE"
+        echo "✓ Backup erstellt: $BACKUP_FILE (vorherige Version)"
+    fi
+    
+    # Lösche ältere Versionen (behalte nur die zwei neuesten)
+    if [ ${#ALL_PACKAGES[@]} -gt 1 ]; then
+        for i in "${!ALL_PACKAGES[@]}"; do
+            if [ $i -ge 1 ]; then
+                OLD_PACKAGE="${ALL_PACKAGES[$i]}"
+                OLD_BACKUP="$BACKUP_DIR/$(basename "$OLD_PACKAGE")"
+                # Verschiebe ältere Versionen ins Backup-Verzeichnis
+                if [ ! -f "$OLD_BACKUP" ]; then
+                    mv "$OLD_PACKAGE" "$OLD_BACKUP" 2>/dev/null || true
+                    echo "ℹ️  Ältere Version archiviert: $(basename "$OLD_PACKAGE")"
+                fi
+            fi
+        done
+    fi
+    
+    echo "✓ Backup-System: Aktuelle Version = Release, Vorherige = Backup"
     echo ""
 fi
 
