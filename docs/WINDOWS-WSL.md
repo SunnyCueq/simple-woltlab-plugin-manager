@@ -1,6 +1,6 @@
 # Windows WSL - Simple WoltLab Plugin Manager
 
-**Letzte Aktualisierung:** 2025-01-08  
+**Letzte Aktualisierung:** 2025-11-08  
 **Status:** Aktuell
 
 **Letzte Änderung:** Initiale Version

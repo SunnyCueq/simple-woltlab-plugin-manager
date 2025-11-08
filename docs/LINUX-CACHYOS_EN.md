@@ -1,6 +1,6 @@
 # Linux CachyOS - Simple WoltLab Plugin Manager
 
-**Last Updated:** 2025-01-08  
+**Last Updated:** 2025-11-08  
 **Status:** Current
 
 **Last Change:** Initial version

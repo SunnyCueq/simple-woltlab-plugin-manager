@@ -8,7 +8,7 @@
 
 ---
 
-**Letzte Aktualisierung:** 2025-01-08  
+**Letzte Aktualisierung:** 2025-11-08  
 **Status:** Aktuell
 
 ---
@@ -329,5 +329,5 @@ cd ~/Dokumente/com.example.myplugin
 
 ---
 
-**Letzte Aktualisierung:** 2025-01-08
+**Letzte Aktualisierung:** 2025-11-08
 

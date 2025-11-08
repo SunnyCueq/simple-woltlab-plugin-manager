@@ -8,7 +8,7 @@
 
 ---
 
-**Letzte Aktualisierung:** 2025-01-08  
+**Letzte Aktualisierung:** 2025-11-08  
 **Status:** Aktuell
 
 ---
@@ -331,4 +331,4 @@ Die Workspace-Konfiguration deaktiviert bereits viele undefined-Diagnostics. Fal
 
 ---
 
-**Letzte Aktualisierung:** 2025-01-08
+**Letzte Aktualisierung:** 2025-11-08

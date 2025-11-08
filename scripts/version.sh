@@ -115,22 +115,27 @@ if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
 fi
 
 echo ""
-echo "📝 Aktualisiere Version in Dateien..."
+echo "📝 Aktualisiere Version und Datum in Dateien..."
+
+# Get current date
+CURRENT_DATE=$(date +%Y-%m-%d)
 
 # Update README.md
 sed -i "s/\*\*Version:\*\* $CURRENT_VERSION/\*\*Version:\*\* $NEW_VERSION/g" README.md
 sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" README.md
+sed -i "s/\*\*Letzte Aktualisierung:\*\* [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/\*\*Letzte Aktualisierung:\*\* $CURRENT_DATE/g" README.md
 
 # Update README_EN.md
 sed -i "s/\*\*Version:\*\* $CURRENT_VERSION/\*\*Version:\*\* $NEW_VERSION/g" README_EN.md
 sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" README_EN.md
+sed -i "s/\*\*Last Updated:\*\* [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/\*\*Last Updated:\*\* $CURRENT_DATE/g" README_EN.md
 
 # Update docs/README_ADVANCED.md (if version is mentioned)
 if grep -q "Version:" docs/README_ADVANCED.md 2>/dev/null; then
     sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" docs/README_ADVANCED.md
 fi
 
-echo "✅ Version aktualisiert"
+echo "✅ Version und Datum aktualisiert"
 echo ""
 
 # Create git tag

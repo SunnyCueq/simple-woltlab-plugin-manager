@@ -274,5 +274,5 @@ chmod +x dateiname.sh
 
 ---
 
-**Letzte Aktualisierung:** 2025-01-08
+**Letzte Aktualisierung:** 2025-11-08
 
