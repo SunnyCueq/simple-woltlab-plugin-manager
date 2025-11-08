@@ -140,6 +140,8 @@ code woltlab-plugin-dev.code-workspace
 - **[VERSIONING.md](docs/VERSIONING.md)** - Version management and Semantic Versioning
 - **[PLUGIN-NAMING.md](docs/PLUGIN-NAMING.md)** - Plugin naming conventions
 - **[DEVELOPER-TOOLS.md](docs/DEVELOPER-TOOLS.md)** - Developer tools and debug options
+- **[PACKAGING.md](docs/PACKAGING.md)** - Complete packaging workflow (Development → Package → Release)
+- **[PIP-TYPES.md](docs/PIP-TYPES.md)** - Supported PIP types and default filenames
 
 ### ⚙️ For Experts
 
