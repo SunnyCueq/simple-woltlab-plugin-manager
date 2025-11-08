@@ -136,7 +136,7 @@ use wcf\system\WCF;
  * @author	Your Name
  * @copyright	2025 Your Name
  * @license	MIT License <http://opensource.org/licenses/MIT>
- * @package	com.example.myplugin
+ * @package	$PACKAGE_IDENTIFIER
  */
 class ExamplePage extends AbstractPage {
 	/**
@@ -178,7 +178,7 @@ cat > "$PLUGIN_DIR/templates/example.tpl" <<'EOFTEMPLATE'
 
 <div class="section">
 	<header class="sectionHeader">
-		<h2 class="sectionTitle">{lang}com.example.myplugin.page.title{/lang}</h2>
+		<h2 class="sectionTitle">{lang}$PACKAGE_IDENTIFIER.page.title{/lang}</h2>
 	</header>
 	
 	<div class="sectionContent">
