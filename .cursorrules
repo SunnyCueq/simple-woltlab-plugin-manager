@@ -9,7 +9,6 @@ Diese Datei wird automatisch von Cursor gelesen und als Kontext für AI-Assisten
 **IMMER die folgenden Dateien im Root-Verzeichnis beachten:**
 - `RULES.md` - Vollständige Projekt-Regeln (INTERN, nicht auf GitHub) - **DIESE DATEI ENTHÄLT ALLE REGELN!**
 - `PROJEKT-STATUS.md` - Projekt-Status und Kontext (INTERN, nicht auf GitHub)
-- `REFERENZ-WSPACKAGER.md` - Referenz-Analyse (INTERN, nicht auf GitHub)
 
 **WICHTIG:** `.cursorrules` enthält eine Kurzfassung der Regeln aus `RULES.md`. Bei Unklarheit IMMER `RULES.md` konsultieren!
 

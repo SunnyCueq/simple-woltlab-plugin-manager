@@ -8,7 +8,7 @@
 
 ---
 
-**Letzte Aktualisierung:** 2025-01-08  
+**Letzte Aktualisierung:** 2025-11-08  
 **Status:** Aktuell
 
 ---
@@ -418,6 +418,87 @@ chmod +x scripts/*.sh
 - Gib dein Passwort ein (wird nicht angezeigt, das ist normal)
 - Falls du das nicht möchtest, installiere die Programme manuell (siehe oben)
 
+### "Installation fehlgeschlagen in Zeile X"
+
+**Problem:** Das Script ist unerwartet fehlgeschlagen
+
+**Lösung:**
+1. Prüfe die Log-Datei:
+   ```bash
+   cat /tmp/woltlab-install-YYYYMMDD-HHMMSS.log
+   ```
+   (Der genaue Pfad wird im Fehler angezeigt)
+
+2. Häufige Ursachen:
+   - Fehlende Schreibrechte → Prüfe Berechtigungen für das Zielverzeichnis
+   - Fehlende Abhängigkeiten → Installiere PHP, Git, tar manuell
+   - Ungültige Pfade → Prüfe ob die angegebenen Pfade korrekt sind
+
+3. Führe das Script erneut aus nach Behebung des Problems
+
+### "WoltLab Core Struktur unvollständig"
+
+**Problem:** Der angegebene WoltLab Core Pfad ist ungültig
+
+**Lösung:**
+- Prüfe ob folgende Pfade existieren:
+  - `lib/` - WoltLab Bibliotheken
+  - `wcf/` - WoltLab Community Framework
+  - `wcf/global.php` - Hauptdatei
+  - `lib/system/` - System-Klassen
+- Lade den Core neu herunter falls Dateien fehlen: https://www.woltlab.com/de/woltlab-suite-download/
+- Entpacke den Core vollständig
+
+### "Maximale Anzahl von Versuchen erreicht"
+
+**Problem:** Du hast 3x einen ungültigen Pfad eingegeben
+
+**Lösung:**
+- Das Script bricht ab um Endlosschleifen zu vermeiden
+- Starte das Script erneut mit `./install.sh`
+- Bereite die korrekten Pfade vor dem Start vor
+- Prüfe Pfade mit `ls /pfad/zum/verzeichnis` vor der Eingabe
+
+### "Konnte Workspace nicht erstellen"
+
+**Problem:** Workspace-Datei konnte nicht geschrieben werden
+
+**Lösung:**
+1. Prüfe Schreibrechte:
+   ```bash
+   # Für Plugin-Verzeichnis Workspace:
+   ls -ld $(dirname /pfad/zu/deinem/plugin/)
+
+   # Für Home-Verzeichnis Workspace:
+   ls -ld $HOME
+   ```
+
+2. Erstelle Verzeichnis manuell falls nötig:
+   ```bash
+   mkdir -p $(dirname /pfad/zum/workspace/)
+   ```
+
+3. Führe das Script erneut aus
+
+### "Scripts konnten nicht kopiert werden"
+
+**Problem:** Build-Scripts konnten nicht ins Plugin-Verzeichnis kopiert werden
+
+**Lösung:**
+- Prüfe Schreibrechte für Plugin-Verzeichnis:
+  ```bash
+  ls -ld /pfad/zu/deinem/plugin/
+  ```
+- Prüfe ob Scripts im Toolkit vorhanden sind:
+  ```bash
+  ls -l scripts/
+  ```
+- Kopiere Scripts manuell falls nötig:
+  ```bash
+  cp scripts/*.sh /pfad/zu/deinem/plugin/
+  chmod +x /pfad/zu/deinem/plugin/*.sh
+  ```
+
 ---
 
 ## 📚 Weitere Hilfe
@@ -436,4 +517,4 @@ chmod +x scripts/*.sh
 
 ---
 
-**Letzte Aktualisierung:** 2025-01-08
+**Letzte Aktualisierung:** 2025-11-08

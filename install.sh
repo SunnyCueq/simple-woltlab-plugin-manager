@@ -12,10 +12,51 @@
 # This script sets up the development environment for WoltLab plugin development.
 # Usage: ./install.sh
 
-set -e
+# Fehlerbehandlung: Nur bei unerwarteten Fehlern abbrechen
+set -euo pipefail
+
+# Fehler-Handler
+trap 'error_handler $? $LINENO' ERR
+
+# Logging-Variablen
+LOG_FILE="/tmp/woltlab-install-$(date +%Y%m%d-%H%M%S).log"
+VERBOSE=false
+
+# Fehler-Handler Funktion
+error_handler() {
+    local exit_code=$1
+    local line_number=$2
+    echo ""
+    echo "❌ FEHLER: Installation fehlgeschlagen in Zeile $line_number (Exit-Code: $exit_code)"
+    echo "   Log-Datei: $LOG_FILE"
+    echo "   Bitte prüfe die Log-Datei für Details."
+    echo ""
+    echo "Häufige Probleme:"
+    echo "  • Fehlende Berechtigungen: Prüfe ob du Schreibrechte hast"
+    echo "  • Fehlende Abhängigkeiten: Installiere PHP, Git, tar"
+    echo "  • Ungültige Pfade: Prüfe ob die angegebenen Pfade korrekt sind"
+    echo ""
+    exit 1
+}
+
+# Logging-Funktion
+log() {
+    local level="$1"
+    shift
+    local message="$*"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] [$level] $message" >> "$LOG_FILE"
+
+    if [ "$VERBOSE" = true ] || [ "$level" = "ERROR" ] || [ "$level" = "WARNING" ]; then
+        echo "$message"
+    fi
+}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
+
+log "INFO" "Installation gestartet"
+log "INFO" "Script-Verzeichnis: $SCRIPT_DIR"
 
 echo "═══════════════════════════════════════════════════════════════"
 echo "  Simple WoltLab Plugin Manager - Installation"
@@ -29,34 +70,166 @@ echo ""
 read -p "Drücke ENTER, um fortzufahren... "
 echo ""
 
-# Funktion zum Abfragen von Pfaden
+# Funktion zum Validieren von Pfaden
+validate_path() {
+    local path="$1"
+    local type="${2:-any}"  # any, file, directory
+    local must_exist="${3:-false}"
+
+    # Erweitere ~ zu $HOME
+    path="${path/#\~/$HOME}"
+
+    # Prüfe ob Pfad leer ist
+    if [ -z "$path" ]; then
+        return 1
+    fi
+
+    # Prüfe ob Pfad existiert (falls erforderlich)
+    if [ "$must_exist" = "true" ]; then
+        if [ "$type" = "file" ] && [ ! -f "$path" ]; then
+            log "WARNING" "Datei existiert nicht: $path"
+            return 1
+        elif [ "$type" = "directory" ] && [ ! -d "$path" ]; then
+            log "WARNING" "Verzeichnis existiert nicht: $path"
+            return 1
+        elif [ "$type" = "any" ] && [ ! -e "$path" ]; then
+            log "WARNING" "Pfad existiert nicht: $path"
+            return 1
+        fi
+    fi
+
+    # Prüfe ob Pfad absolute oder relative ist
+    if [[ ! "$path" = /* ]] && [[ ! "$path" = ~* ]]; then
+        # Relativer Pfad - konvertiere zu absolutem Pfad
+        path="$(cd "$(dirname "$path")" 2>/dev/null && pwd)/$(basename "$path")" || path="$PWD/$path"
+    fi
+
+    echo "$path"
+    return 0
+}
+
+# Funktion zum Abfragen von Pfaden mit Validierung
 ask_path() {
     local prompt="$1"
     local default="$2"
+    local allow_empty="${3:-false}"
+    local max_retries=3
+    local retry_count=0
     local path
-    
-    if [ -n "$default" ]; then
-        read -p "$prompt [$default]: " path
-        path="${path:-$default}"
-    else
-        read -p "$prompt: " path
-    fi
-    
-    # Erweitere ~ zu $HOME
-    path="${path/#\~/$HOME}"
-    
-    # Prüfe ob Pfad existiert
-    if [ ! -d "$path" ] && [ ! -f "$path" ]; then
-        echo "⚠️  Warnung: Pfad existiert nicht: $path"
-        read -p "Trotzdem verwenden? (j/n): " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
-            ask_path "$prompt" "$default"
-            return
+
+    while [ $retry_count -lt $max_retries ]; do
+        if [ -n "$default" ]; then
+            read -p "$prompt [$default]: " path
+            path="${path:-$default}"
+        else
+            read -p "$prompt: " path
         fi
+
+        # Leer erlaubt?
+        if [ -z "$path" ]; then
+            if [ "$allow_empty" = "true" ]; then
+                echo ""
+                return 0
+            else
+                echo "⚠️  Pfad darf nicht leer sein. Bitte versuche es erneut."
+                ((retry_count++))
+                continue
+            fi
+        fi
+
+        # Erweitere ~ zu $HOME
+        path="${path/#\~/$HOME}"
+
+        # Validiere Pfad
+        if [ ! -d "$path" ] && [ ! -f "$path" ]; then
+            echo "⚠️  Warnung: Pfad existiert nicht: $path"
+            log "WARNING" "Benutzer gab nicht-existierenden Pfad an: $path"
+
+            read -p "Trotzdem verwenden? (j/n): " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[JjYy]$ ]]; then
+                log "INFO" "Benutzer akzeptierte nicht-existierenden Pfad: $path"
+                echo "$path"
+                return 0
+            else
+                ((retry_count++))
+                if [ $retry_count -lt $max_retries ]; then
+                    echo "Bitte gib einen anderen Pfad an (Versuch $((retry_count + 1))/$max_retries):"
+                fi
+                continue
+            fi
+        fi
+
+        # Pfad existiert - validiert
+        log "INFO" "Pfad validiert: $path"
+        echo "$path"
+        return 0
+    done
+
+    # Max Retries erreicht
+    echo "❌ Maximale Anzahl von Versuchen erreicht. Installation abgebrochen."
+    log "ERROR" "Maximale Anzahl von Pfad-Eingabe-Versuchen erreicht"
+    exit 1
+}
+
+# Funktion zum Validieren des WoltLab Cores
+validate_woltlab_core() {
+    local core_path="$1"
+
+    if [ -z "$core_path" ]; then
+        return 1
     fi
-    
-    echo "$path"
+
+    log "INFO" "Validiere WoltLab Core: $core_path"
+
+    # Prüfe ob Verzeichnis existiert
+    if [ ! -d "$core_path" ]; then
+        log "ERROR" "WoltLab Core Verzeichnis existiert nicht: $core_path"
+        echo "❌ Verzeichnis existiert nicht: $core_path"
+        return 1
+    fi
+
+    # Prüfe kritische Verzeichnisse und Dateien
+    local required_paths=(
+        "lib"
+        "wcf"
+        "wcf/global.php"
+    )
+
+    local missing_paths=()
+
+    for req_path in "${required_paths[@]}"; do
+        if [ ! -e "$core_path/$req_path" ]; then
+            missing_paths+=("$req_path")
+        fi
+    done
+
+    if [ ${#missing_paths[@]} -gt 0 ]; then
+        log "ERROR" "WoltLab Core Struktur unvollständig. Fehlende Pfade: ${missing_paths[*]}"
+        echo "❌ Ungültige WoltLab Core Struktur!"
+        echo "   Fehlende Pfade:"
+        for missing in "${missing_paths[@]}"; do
+            echo "     • $missing"
+        done
+        echo ""
+        echo "   Erwartete Struktur:"
+        echo "     • lib/ - WoltLab Bibliotheken"
+        echo "     • wcf/ - WoltLab Community Framework"
+        echo "     • wcf/global.php - Hauptdatei"
+        echo ""
+        return 1
+    fi
+
+    # Prüfe ob lib/system Verzeichnis existiert (enthält wichtige Klassen)
+    if [ -d "$core_path/lib/system" ]; then
+        log "INFO" "WoltLab Core Struktur validiert: $core_path"
+        echo "✅ WoltLab Core Struktur validiert"
+        return 0
+    else
+        log "WARNING" "lib/system Verzeichnis fehlt in: $core_path"
+        echo "⚠️  lib/system Verzeichnis fehlt - Core könnte unvollständig sein"
+        return 1
+    fi
 }
 
 # Funktion zum Erkennen des Betriebssystems
@@ -72,6 +245,8 @@ detect_os() {
     else
         OS="unknown"
     fi
+
+    log "INFO" "Betriebssystem erkannt: $OS"
 }
 
 # Funktion zum automatischen Installieren von Paketen
@@ -228,15 +403,17 @@ download_woltlab_core() {
             rmdir "$extracted_dir" 2>/dev/null || true
         fi
         
-        # Validierung
-        if [ -d "$target_dir/lib" ] && [ -f "$target_dir/wcf/global.php" ]; then
-            echo "✅ WoltLab Core erfolgreich installiert und validiert"
+        # Validierung mit verbesserter Funktion
+        if validate_woltlab_core "$target_dir"; then
             echo "   Pfad: $target_dir"
             rm -f "$zip_file"
+            log "INFO" "WoltLab Core erfolgreich heruntergeladen und installiert: $target_dir"
             return 0
         else
-            echo "⚠️  WoltLab Core entpackt, aber Struktur unvollständig"
+            echo "⚠️  WoltLab Core entpackt, aber Validierung fehlgeschlagen"
             echo "   Bitte prüfe: $target_dir"
+            log "ERROR" "WoltLab Core Validierung fehlgeschlagen nach Download: $target_dir"
+            return 1
         fi
     else
         echo "❌ Entpacken fehlgeschlagen"
@@ -312,7 +489,7 @@ echo "  1. Automatischer Download: Das Script kann den Core automatisch herunter
 echo "  2. Manueller Pfad: Gib den Pfad zu einem bereits vorhandenen Core an"
 echo "  3. Überspringen: Lass leer, um später hinzuzufügen"
 echo ""
-WOLTLAB_CORE=$(ask_path "Pfad zum WoltLab Core Verzeichnis (oder leer lassen)" "")
+WOLTLAB_CORE=$(ask_path "Pfad zum WoltLab Core Verzeichnis (oder leer lassen)" "" "true")
 
 # Automatischer Download falls leer
 if [ -z "$WOLTLAB_CORE" ]; then
@@ -322,25 +499,31 @@ if [ -z "$WOLTLAB_CORE" ]; then
     if [[ $REPLY =~ ^[JjYy]$ ]]; then
         DEFAULT_CORE_DIR="$HOME/Documents/woltlab-core"
         echo ""
-        CORE_DIR=$(ask_path "Ziel-Verzeichnis für WoltLab Core" "$DEFAULT_CORE_DIR")
-        
+        CORE_DIR=$(ask_path "Ziel-Verzeichnis für WoltLab Core" "$DEFAULT_CORE_DIR" "false")
+
         if download_woltlab_core "$CORE_DIR"; then
             WOLTLAB_CORE="$CORE_DIR"
         else
             echo ""
             echo "⚠️  Download fehlgeschlagen. Du kannst den Core später manuell hinzufügen."
             echo "   Download-Seite: https://www.woltlab.com/de/woltlab-suite-download/"
+            log "WARNING" "WoltLab Core Download fehlgeschlagen"
             WOLTLAB_CORE=""
         fi
     fi
-elif [ -n "$WOLTLAB_CORE" ] && [ ! -d "$WOLTLAB_CORE/lib" ]; then
+elif [ -n "$WOLTLAB_CORE" ]; then
+    # Validiere den angegebenen WoltLab Core Pfad
     echo ""
-    echo "⚠️  Warnung: Das angegebene Verzeichnis scheint kein gültiger WoltLab Core zu sein."
-    echo "   Erwartete Struktur: lib/, wcf/global.php"
-    read -p "Trotzdem verwenden? (j/n): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
-        WOLTLAB_CORE=""
+    if ! validate_woltlab_core "$WOLTLAB_CORE"; then
+        echo ""
+        read -p "Trotzdem verwenden? (j/n): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
+            WOLTLAB_CORE=""
+            log "INFO" "Benutzer hat ungültigen WoltLab Core Pfad abgelehnt"
+        else
+            log "WARNING" "Benutzer verwendet ungültigen WoltLab Core Pfad: $WOLTLAB_CORE"
+        fi
     fi
 fi
 
@@ -356,7 +539,7 @@ echo "  • Falls du bereits ein Plugin hast: Gib den Pfad an"
 echo "  • Falls du ein neues Plugin erstellen möchtest: Lass leer"
 echo "    (Du kannst später ein Plugin erstellen oder das Beispiel-Plugin verwenden)"
 echo ""
-PLUGIN_DIR=$(ask_path "Pfad zu deinem Plugin-Verzeichnis (oder leer lassen)" "")
+PLUGIN_DIR=$(ask_path "Pfad zu deinem Plugin-Verzeichnis (oder leer lassen)" "" "true")
 
 # Erstelle Plugin-Verzeichnis falls es nicht existiert
 if [ -n "$PLUGIN_DIR" ] && [ ! -d "$PLUGIN_DIR" ]; then
@@ -364,18 +547,28 @@ if [ -n "$PLUGIN_DIR" ] && [ ! -d "$PLUGIN_DIR" ]; then
     read -p "Verzeichnis existiert nicht. Soll es erstellt werden? (j/n): " -n 1 -r
     echo
     if [[ $REPLY =~ ^[JjYy]$ ]]; then
-        mkdir -p "$PLUGIN_DIR"
-        echo "✓ Verzeichnis erstellt: $PLUGIN_DIR"
-        echo ""
-        echo "📝 Wichtige Informationen für dein Plugin:"
-        echo "   • Dein Plugin-Verzeichnis: $PLUGIN_DIR"
-        echo "   • Erstelle dort: package.xml, page.xml, files/, templates/"
-        echo "   • Siehe Beispiel-Plugin: $SCRIPT_DIR/example-plugin/"
-        echo "   • Dokumentation: https://docs.woltlab.com/6.0/getting-started/"
-        echo ""
-        read -p "Drücke ENTER, um fortzufahren... "
+        if mkdir -p "$PLUGIN_DIR" 2>/dev/null; then
+            echo "✓ Verzeichnis erstellt: $PLUGIN_DIR"
+            log "INFO" "Plugin-Verzeichnis erstellt: $PLUGIN_DIR"
+        else
+            echo "❌ Fehler: Konnte Verzeichnis nicht erstellen: $PLUGIN_DIR"
+            log "ERROR" "Konnte Plugin-Verzeichnis nicht erstellen: $PLUGIN_DIR"
+            PLUGIN_DIR=""
+        fi
+
+        if [ -n "$PLUGIN_DIR" ]; then
+            echo ""
+            echo "📝 Wichtige Informationen für dein Plugin:"
+            echo "   • Dein Plugin-Verzeichnis: $PLUGIN_DIR"
+            echo "   • Erstelle dort: package.xml, page.xml, files/, templates/"
+            echo "   • Siehe Beispiel-Plugin: $SCRIPT_DIR/example-plugin/"
+            echo "   • Dokumentation: https://docs.woltlab.com/6.0/getting-started/"
+            echo ""
+            read -p "Drücke ENTER, um fortzufahren... "
+        fi
     else
         PLUGIN_DIR=""
+        log "INFO" "Benutzer hat Plugin-Verzeichnis Erstellung abgelehnt"
     fi
 fi
 
@@ -394,12 +587,13 @@ echo "  • Offizielle WoltLab Plugins zum Lernen"
 echo ""
 MAIN_PLUGINS=()
 while true; do
-    PLUGIN_PATH=$(ask_path "Pfad zu einem Hauptplugin (oder leer lassen, um zu beenden)" "")
+    PLUGIN_PATH=$(ask_path "Pfad zu einem Hauptplugin (oder leer lassen, um zu beenden)" "" "true")
     if [ -z "$PLUGIN_PATH" ]; then
         break
     fi
     MAIN_PLUGINS+=("$PLUGIN_PATH")
     echo "✓ Hauptplugin hinzugefügt: $PLUGIN_PATH"
+    log "INFO" "Hauptplugin hinzugefügt: $PLUGIN_PATH"
 done
 
 # Erstelle Konfigurationsdatei
@@ -442,11 +636,39 @@ if [ -n "$PLUGIN_DIR" ] && [ -d "$PLUGIN_DIR" ]; then
     echo "═══════════════════════════════════════════════════════════════"
     echo ""
     echo "📋 Kopiere Build-Scripts ins Plugin-Verzeichnis..."
-    cp "$SCRIPT_DIR/scripts/extract-plugin-files.sh" "$PLUGIN_DIR/"
-    cp "$SCRIPT_DIR/scripts/update-tars.sh" "$PLUGIN_DIR/"
-    cp "$SCRIPT_DIR/scripts/create-release.sh" "$PLUGIN_DIR/"
-    chmod +x "$PLUGIN_DIR"/*.sh
-    echo "✓ Scripts kopiert nach: $PLUGIN_DIR"
+
+    # Prüfe ob Script-Dateien existieren
+    local scripts_to_copy=(
+        "extract-plugin-files.sh"
+        "update-tars.sh"
+        "create-release.sh"
+    )
+
+    local copy_success=true
+    for script in "${scripts_to_copy[@]}"; do
+        if [ -f "$SCRIPT_DIR/scripts/$script" ]; then
+            if cp "$SCRIPT_DIR/scripts/$script" "$PLUGIN_DIR/" 2>/dev/null; then
+                chmod +x "$PLUGIN_DIR/$script" 2>/dev/null || true
+                echo "  ✓ $script"
+                log "INFO" "Script kopiert: $script → $PLUGIN_DIR/"
+            else
+                echo "  ❌ Fehler beim Kopieren von $script"
+                log "ERROR" "Fehler beim Kopieren von $script nach $PLUGIN_DIR/"
+                copy_success=false
+            fi
+        else
+            echo "  ⚠️  $script nicht gefunden in $SCRIPT_DIR/scripts/"
+            log "WARNING" "Script nicht gefunden: $SCRIPT_DIR/scripts/$script"
+        fi
+    done
+
+    if [ "$copy_success" = true ]; then
+        echo ""
+        echo "✓ Alle Scripts erfolgreich kopiert nach: $PLUGIN_DIR"
+    else
+        echo ""
+        echo "⚠️  Einige Scripts konnten nicht kopiert werden"
+    fi
     echo ""
 fi
 
@@ -502,8 +724,8 @@ if [ -n "$WOLTLAB_CORE" ]; then
 fi
 INCLUDE_PATHS+="\n    ]"
 
-# Erstelle Workspace-JSON
-cat > "$WORKSPACE_PATH" << EOF
+# Erstelle Workspace-JSON mit Fehlerbehandlung
+if cat > "$WORKSPACE_PATH" 2>/dev/null << EOF
 {
   "folders": $FOLDERS_JSON,
   "settings": {
@@ -544,8 +766,14 @@ cat > "$WORKSPACE_PATH" << EOF
   }
 }
 EOF
-
-echo "✅ Workspace erstellt: $WORKSPACE_PATH"
+then
+    echo "✅ Workspace erstellt: $WORKSPACE_PATH"
+    log "INFO" "Workspace erfolgreich erstellt: $WORKSPACE_PATH"
+else
+    echo "❌ Fehler: Konnte Workspace nicht erstellen: $WORKSPACE_PATH"
+    echo "   Bitte prüfe die Schreibberechtigungen für: $(dirname "$WORKSPACE_PATH")"
+    log "ERROR" "Konnte Workspace nicht erstellen: $WORKSPACE_PATH"
+fi
 echo ""
 
 echo "═══════════════════════════════════════════════════════════════"
@@ -604,10 +832,12 @@ echo "  • docs/WORKSPACE-SETUP.md - Workspace-Konfiguration"
 echo ""
 echo "❓ Bei Problemen:"
 echo "  • Schau in die Dokumentation in docs/"
+echo "  • Prüfe die Log-Datei: $LOG_FILE"
 echo "  • Öffne ein Issue auf GitHub"
 echo ""
 echo "═══════════════════════════════════════════════════════════════"
 echo "Viel Erfolg bei der Plugin-Entwicklung! 🚀"
 echo "═══════════════════════════════════════════════════════════════"
 echo ""
+log "INFO" "Installation erfolgreich abgeschlossen"
 
