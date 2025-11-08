@@ -15,7 +15,7 @@ A comprehensive toolkit for developing WoltLab Suite plugins with generic build 
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/simple-woltlab-plugin-manager.git
+   git clone https://github.com/SunnyCueq/simple-woltlab-plugin-manager.git
    cd simple-woltlab-plugin-manager
    ```
 

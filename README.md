@@ -15,7 +15,7 @@ Ein umfassendes Toolkit für die Entwicklung von WoltLab Suite Plugins mit gener
 
 1. **Repository klonen:**
    ```bash
-   git clone https://github.com/your-username/simple-woltlab-plugin-manager.git
+   git clone https://github.com/SunnyCueq/simple-woltlab-plugin-manager.git
    cd simple-woltlab-plugin-manager
    ```
 

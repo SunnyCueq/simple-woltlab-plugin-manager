@@ -58,7 +58,7 @@ Before installing WoltLab Suite, we recommend using the system check script:
 ## Step 1: Clone Repository
 
 ```bash
-git clone https://github.com/your-username/simple-woltlab-plugin-manager.git
+git clone https://github.com/SunnyCueq/simple-woltlab-plugin-manager.git
 cd simple-woltlab-plugin-manager
 ```
 
