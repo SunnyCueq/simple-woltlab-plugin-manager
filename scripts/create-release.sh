@@ -107,31 +107,31 @@ else
     echo ""
 fi
 
-# Prüfe ob TAR-Dateien existieren
-REQUIRED_TARS=("package.xml")
-OPTIONAL_TARS=("files.tar" "files_urlshort.tar" "templates.tar" "templates_urlshort.tar" "acptemplates.tar" "acptemplates_urlshort.tar")
+# Lade Package.xml Parser
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/parse-package-xml.sh"
 
-# Prüfe welche TAR-Dateien vorhanden sind
-TAR_FILES=()
-for tar_file in "${REQUIRED_TARS[@]}" "${OPTIONAL_TARS[@]}"; do
-    if [ -f "$tar_file" ]; then
-        TAR_FILES+=("$tar_file")
+# Zeige Package-Struktur
+echo "=== Package-Struktur ==="
+show_package_structure "package.xml" "$PLUGIN_DIR"
+echo ""
+
+# Parse package.xml und hole alle benötigten Dateien
+echo "📋 Analysiere package.xml..."
+FILES_TO_PACKAGE=()
+while IFS= read -r file; do
+    if [ -n "$file" ]; then
+        FILES_TO_PACKAGE+=("$file")
     fi
-done
+done < <(get_required_files "package.xml" "$PLUGIN_DIR")
 
-# Prüfe ob XML-Dateien vorhanden sind
-XML_FILES=()
-for xml_file in *.xml; do
-    if [ -f "$xml_file" ] && [ "$xml_file" != "package.xml" ]; then
-        XML_FILES+=("$xml_file")
-    fi
-done
-
-# Prüfe ob language-Verzeichnis vorhanden ist
-LANGUAGE_DIR=""
-if [ -d "language" ]; then
-    LANGUAGE_DIR="language"
+if [ ${#FILES_TO_PACKAGE[@]} -eq 0 ]; then
+    echo "❌ Fehler: Keine Dateien zum Packen gefunden"
+    exit 1
 fi
+
+echo "✅ Gefundene Dateien: ${#FILES_TO_PACKAGE[@]}"
+echo ""
 
 # Erstelle Package in /tmp
 echo "📦 Erstelle Package..."
@@ -141,15 +141,20 @@ cd /tmp || exit 1
 TMP_DIR=$(mktemp -d)
 trap "rm -rf $TMP_DIR" EXIT
 
-# Kopiere Dateien
-for file in "${TAR_FILES[@]}" "${XML_FILES[@]}"; do
-    cp "$PLUGIN_DIR/$file" "$TMP_DIR/"
+# Kopiere alle benötigten Dateien
+for file in "${FILES_TO_PACKAGE[@]}"; do
+    file_path="$PLUGIN_DIR/$file"
+    
+    if [ -f "$file_path" ]; then
+        cp "$file_path" "$TMP_DIR/"
+        echo "  ✅ Kopiert: $file"
+    elif [ -d "$file_path" ]; then
+        cp -r "$file_path" "$TMP_DIR/"
+        echo "  ✅ Kopiert: $file/ (Verzeichnis)"
+    else
+        echo "  ⚠️  Warnung: $file nicht gefunden, überspringe..."
+    fi
 done
-
-# Kopiere language-Verzeichnis falls vorhanden
-if [ -n "$LANGUAGE_DIR" ]; then
-    cp -r "$PLUGIN_DIR/$LANGUAGE_DIR" "$TMP_DIR/"
-fi
 
 # Erstelle TAR.GZ
 cd "$TMP_DIR" || exit 1
