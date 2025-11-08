@@ -2,197 +2,31 @@
 
 **Copyright (c) 2025 SunnyCueq**
 
-Diese Datei wird automatisch von Cursor gelesen und als Kontext für AI-Assistenten verwendet.
+## ⚠️ WICHTIG: Lies IMMER RULES.md
 
-## ⚠️ KRITISCH: RULES.md IMMER berücksichtigen
+**Diese Datei enthält NUR einen Verweis. Alle Regeln sind in `RULES.md` dokumentiert!**
 
-**IMMER die folgenden Dateien im Root-Verzeichnis beachten:**
-- `RULES.md` - Vollständige Projekt-Regeln (INTERN, nicht auf GitHub) - **DIESE DATEI ENTHÄLT ALLE REGELN!**
-- `PROJEKT-STATUS.md` - Projekt-Status und Kontext (INTERN, nicht auf GitHub)
+### Vor jeder Aktion:
 
-**WICHTIG:** `.cursorrules` enthält eine Kurzfassung der Regeln aus `RULES.md`. Bei Unklarheit IMMER `RULES.md` konsultieren!
+1. **IMMER** `RULES.md` lesen (vollständige Regeln im Root-Verzeichnis)
+2. **IMMER** `PROJEKT-STATUS.md` prüfen (aktueller Projekt-Status)
+3. Bei Unklarheit: **NIEMALS** raten, sondern `RULES.md` konsultieren
 
-**ALLE MD-Dateien aktuell halten:**
-- Bei Änderungen IMMER alle betroffenen MD-Dateien aktualisieren
-- README.md und README_EN.md synchron halten
-- Dokumentation in `docs/` aktuell halten
-- Interne Dokumentation (RULES.md, etc.) bei neuen Regeln aktualisieren
+### Wichtige Dateien (alle im Root):
 
----
+- **`RULES.md`** - Vollständige Projekt-Regeln (QUELLE DER WAHRHEIT)
+- **`PROJEKT-STATUS.md`** - Projekt-Status und Kontext
+- **`.cursorrules`** - Diese Datei (nur Verweis)
 
-## Kernregeln (aus RULES.md)
+### Kernregeln (aus RULES.md):
 
-### 1. Ansprache: Per-Du
-- ✅ **IMMER** "Du" verwenden, nie "Sie"
-- ✅ Persönlich und freundlich bleiben
-- ✅ Beispiel: "Du kannst..." statt "Sie können..."
-
-### 2. Einfachheit ist oberstes Gebot
-- ✅ Alles muss für Laien verständlich sein
-- ✅ Schritt-für-Schritt Anleitungen
-- ✅ Jeden Schritt genau erklären
-- ✅ Keine Annahmen über Vorwissen
-- ✅ Alternative Wege anbieten wenn etwas nicht funktioniert
-
-### 3. Terminal-Anleitungen
-- ✅ **IMMER** erklären, wo das Terminal geöffnet wird:
-  - Im System selbst (Finder, Datei-Explorer, etc.)
-  - In der IDE (integriertes Terminal)
-  - Alternative Wege
-- ✅ Screenshots oder klare Beschreibungen
-- ✅ Was passiert wenn der Befehl nicht funktioniert
-
-### 4. Download-Links
-- ✅ **IMMER** Download-Links zu IDEs anbieten:
-  - Cursor: https://cursor.sh/
-  - VSCode: https://code.visualstudio.com/
-  - Git: https://git-scm.com/
-- ✅ Am Anfang der Dokumentation, nicht versteckt
-
-### 5. Mehrsprachigkeit
-- ✅ Deutsch (DE) und Englisch (EN) für alle Standard-Dokumentationen
-- ✅ Advanced-Dokumentation bleibt Englisch und fachlich
-- ✅ Konsistenz zwischen DE und EN Versionen
-
-### 6. Redundanz vermeiden
-- ✅ Keine doppelten Informationen
-- ✅ Verweise auf andere Dokumentationen statt Wiederholung
-- ✅ Klare Struktur ohne Überschneidungen
-- ✅ **KEINE WoltLab-Dokumentation wiederholen** - Verweise auf offizielle Docs
-
-### 7. Fehler und Syntax
-- ✅ Alle Code-Beispiele testen
-- ✅ Korrekte Syntax prüfen
-- ✅ Keine Tippfehler
-- ✅ Konsistente Formatierung
-
-### 8. Alternative Wege
-- ✅ **IMMER** alternative Lösungen anbieten
-- ✅ Was tun wenn etwas nicht funktioniert
-- ✅ Troubleshooting direkt einbauen
-- ✅ Beispiel: "Falls das nicht funktioniert, versuche..."
-
-### 9. Mac-Unterstützung
-- ✅ Mac-Anleitungen für alle wichtigen Schritte
-- ✅ Homebrew-Befehle
-- ✅ macOS-spezifische Pfade
-- ✅ Separate Mac-Dokumentation (DE/EN)
-
-### 10. Copyright
-- ✅ Copyright-Hinweis in ALLEN Dateien
-- ✅ Format: "Copyright (c) 2025 SunnyCueq"
-- ✅ Hinweis dass Copyright nicht entfernt werden darf
-- ✅ MIT-Lizenz erwähnen
-
-### 11. Dateien die NICHT auf GitHub gehören
-- ✅ RULES.md (diese Datei)
-- ✅ PROJEKT-KONTEXT.md
-- ✅ GITHUB_SETUP.md
-- ✅ GITHUB_REPO_INFO.md
-- ✅ GITHUB-WORKFLOW-ERKLAERUNG.md
-- ✅ WSPACKAGER-ANALYSE.md
-- ✅ FINALE-PRUEFUNG-ABGESCHLOSSEN.md
-- ✅ ANALYSE-ALLE-DATEIEN.md
-- ✅ docs/GITHUB-WORKFLOW-TEST.md
-- ✅ docs/WSPACKAGER-ANALYSE.md
-- ✅ Alle in .gitignore aufgenommen
-- ✅ **IMMER prüfen:** Neue interne Dateien sofort zu .gitignore hinzufügen
-
-### 12. Versionsverwaltung
-- ✅ Semantic Versioning (MAJOR.MINOR.PATCH)
-- ✅ WoltLab-konformes Schema
-- ✅ Automatische Versionsverwaltung für Plugins
-- ✅ Backup-Funktionalität
-
-### 13. Entwickler-Werkzeuge
-- ✅ Entwickler-Optionen dokumentieren
-- ✅ Debug-Modus, Benchmark, etc.
-- ✅ Sicherheitshinweise
-- ✅ Workflow für Plugin-Entwicklung
-
-### 14. Plugin-Namenskonventionen
-- ✅ Format: com.[domain].[pluginname]
-- ✅ Beispiele und Erklärungen
-- ✅ DO's und DON'Ts
-
-### 15. Datei-Organisation
-- ✅ **README.md, README_EN.md, LICENSE, install.sh** bleiben im Root
-- ✅ **Alle anderen MD-Dateien** gehören in `docs/` (außer interne, die in .gitignore sind)
-- ✅ README_ADVANCED.md gehört in `docs/`
-- ✅ Keine unnötigen Dateien im Root
-
-### 16. Git-Commits und AI-Tool-Referenzen
-- ✅ **NIEMALS** Claude, Cursor oder andere AI-Tools in öffentlichen Commits erwähnen
-- ✅ **NIEMALS** "Generated with Claude Code" oder ähnliche Signaturen
-- ✅ **NIEMALS** "Co-Authored-By: Claude" oder ähnliches
-- ✅ **NUR** SunnyCueq als Author in allen Commits
-- ✅ Commit-Messages professionell und neutral formulieren
+- ✅ **Per-Du** anstatt "Sie"
+- ✅ **Einfachheit** für Laien
+- ✅ **Keine AI-Tool-Referenzen** in öffentlichen Commits
+- ✅ **IMMER** RULES.md als erste Quelle
 
 ---
 
-## Versionsverwaltung und Releases
+**Letzte Aktualisierung:** 2025-11-08
 
-### Commits und Pushes
-- ✅ **IMMER** nach jeder Änderung committen und pushen
-- ✅ Versionsverwaltung beachten (siehe unten)
-- ✅ Klare Commit-Messages verwenden
-- ✅ Regelmäßig pushen (nicht alles auf einmal)
-
-### Versionsverwaltung
-- ✅ **IMMER** Version erhöhen bei Änderungen
-- ✅ Semantic Versioning verwenden (MAJOR.MINOR.PATCH)
-- ✅ Git-Tag erstellen nach Version-Update
-- ✅ Tag pushen: `git push origin vX.Y.Z`
-- ✅ **IMMER ein GitHub Release erstellen** (wichtig!)
-
-### Release-Verwaltung
-- ✅ **IMMER** nach Version-Update ein GitHub Release erstellen
-- ✅ **IMMER** bei jeder neuen Version ein Release anbieten
-- ✅ Release-Notes mit Changelog hinzufügen
-- ✅ Package-Dateien als Assets hochladen (falls vorhanden)
-- ✅ Release auf GitHub veröffentlichen, nicht nur als Draft
-- ✅ Release sollte automatisch erstellt werden (GitHub Actions oder manuell)
-
-### Backup-Versionen
-- ✅ **IMMER** die zwei letzten Versionen behalten:
-  - **Aktuelle Version** (z.B. 1.0.1) → **Als Release anbieten**
-  - **Vorherige Version** (z.B. 1.0.0) → **Als Backup behalten**
-- ✅ Ältere Versionen können archiviert werden
-- ✅ Backups in `.package-backups/` für Plugins
-- ✅ **System:** Aktuelle Version = Release, Version davor = Backup
-
----
-
-## Checkliste vor jedem Commit
-
-- [ ] Alle "Sie" durch "Du" ersetzt?
-- [ ] Terminal-Anleitungen erklärt wo Terminal geöffnet wird?
-- [ ] Download-Links zu IDEs vorhanden?
-- [ ] Alternative Wege angeboten?
-- [ ] Mac-Unterstützung berücksichtigt?
-- [ ] Redundanzen entfernt?
-- [ ] Fehler und Syntax geprüft?
-- [ ] Copyright-Hinweis vorhanden?
-- [ ] Einfach genug für Laien?
-- [ ] Mehrsprachigkeit beachtet (DE/EN)?
-- [ ] Version erhöht (falls nötig)?
-- [ ] Git-Tag erstellt und gepusht?
-- [ ] GitHub Release erstellt?
-- [ ] Backup-System funktioniert (2 Versionen)?
-- [ ] Neue interne Dateien zu .gitignore hinzugefügt?
-- [ ] RULES.md aktualisiert (falls neue Regeln)?
-- [ ] .cursorrules aktualisiert (falls neue Regeln)?
-
----
-
-## Wichtige Erinnerungen
-
-- RULES.md ist die vollständige Quelle - IMMER dort nachschauen
-- Bei neuen Regeln: RULES.md UND .cursorrules aktualisieren
-- Changelog bleibt lokal, nicht auf GitHub in README
-- Bei neuen Versionen: IMMER GitHub Release erstellen
-- Bei neuen Dateien: Prüfen ob sie auf GitHub gehören
-
----
-
-**Letzte Aktualisierung:** 2025-01-08
+**WICHTIG:** Für alle Details siehe `RULES.md` im Root-Verzeichnis!
