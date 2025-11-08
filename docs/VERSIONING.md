@@ -126,7 +126,7 @@ Falls du die Version manuell ändern möchtest:
 
 ### 1. Version in README-Dateien aktualisieren
 
-Suchen Sie nach:
+Suche nach:
 ```markdown
 **Version:** 1.0.0
 ```
@@ -204,8 +204,8 @@ Wir verwenden dasselbe Schema für Konsistenz und Vertrautheit.
 
 Bei Fragen zur Versionsverwaltung:
 - Siehe [README_ADVANCED.md](../README_ADVANCED.md) für technische Details
-- Öffnen Sie ein Issue auf GitHub
-- Kontaktieren Sie die Community
+- Öffne ein Issue auf GitHub
+- Kontaktiere die Community
 
 ---
 

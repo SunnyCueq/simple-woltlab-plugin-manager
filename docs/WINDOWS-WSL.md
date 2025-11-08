@@ -130,7 +130,7 @@ cd /mnt/c/Users/YourName/Documents/mein-plugin
 
 ### "PHP nicht gefunden"
 
-Prüfen Sie den PHP-Pfad in WSL:
+Prüfe den PHP-Pfad in WSL:
 ```bash
 which php
 ```
@@ -148,18 +148,18 @@ chmod +x scripts/*.sh
 
 ### Windows-Pfade funktionieren nicht
 
-Verwenden Sie immer WSL-Pfade (`/mnt/c/...`) statt Windows-Pfade (`C:\...`).
+Verwende immer WSL-Pfade (`/mnt/c/...`) statt Windows-Pfade (`C:\...`).
 
 ### IDE findet Dateien nicht
 
-Stellen Sie sicher, dass die IDE im WSL-Modus läuft (siehe "Remote - WSL" Extension).
+Stelle sicher, dass die IDE im WSL-Modus läuft (siehe "Remote - WSL" Extension).
 
 ## Best Practices
 
-1. **WSL für alles:** Führen Sie alle Scripts in WSL aus
-2. **Windows für IDE:** Verwenden Sie Windows für Cursor/VSCode
-3. **WSL Extension:** Verwenden Sie die Remote-WSL Extension
-4. **Pfade:** Verwenden Sie immer WSL-Pfade (`/mnt/c/...`)
+1. **WSL für alles:** Führe alle Scripts in WSL aus
+2. **Windows für IDE:** Verwende Windows für Cursor/VSCode
+3. **WSL Extension:** Verwende die Remote-WSL Extension
+4. **Pfade:** Verwende immer WSL-Pfade (`/mnt/c/...`)
 
 ## Weitere Informationen
 

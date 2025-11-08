@@ -18,7 +18,7 @@ Diese Anleitung ist speziell für CachyOS (Arch-basiert) optimiert, funktioniert
 sudo pacman -S php
 ```
 
-Prüfen Sie die Version:
+Prüfe die Version:
 ```bash
 php --version
 ```
@@ -82,7 +82,7 @@ Empfohlene Struktur für CachyOS:
 
 ### WoltLab Core herunterladen
 
-Falls Sie WoltLab Core noch nicht haben:
+Falls du WoltLab Core noch nicht hast:
 
 ```bash
 cd ~/Dokumente
@@ -132,13 +132,13 @@ sudo pacman -S github-cli
 
 ### "PHP nicht gefunden"
 
-Prüfen Sie den PHP-Pfad:
+Prüfe den PHP-Pfad:
 ```bash
 which php
 # Sollte zeigen: /usr/bin/php
 ```
 
-Falls nicht, fügen Sie PHP zum PATH hinzu oder verwenden Sie den vollständigen Pfad im Workspace.
+Falls nicht, füge PHP zum PATH hinzu oder verwende den vollständigen Pfad im Workspace.
 
 ### "Permission denied" bei Scripts
 

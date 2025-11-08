@@ -247,7 +247,7 @@ Siehe [example-plugin/](../example-plugin/) für das vollständige Beispiel.
 Bei Fragen zur Namenskonvention:
 - Siehe [WoltLab Getting Started](https://docs.woltlab.com/6.0/getting-started/)
 - Siehe [example-plugin/](../example-plugin/) für ein Beispiel
-- Öffnen Sie ein Issue auf GitHub
+- Öffne ein Issue auf GitHub
 
 ---
 
