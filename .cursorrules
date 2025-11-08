@@ -4,7 +4,7 @@
 
 Diese Datei wird automatisch von Cursor gelesen und als Kontext für AI-Assistenten verwendet.
 
-## WICHTIG: Regeln befolgen
+## ⚠️ KRITISCH: RULES.md IMMER berücksichtigen
 
 **IMMER die folgenden Dateien im Root-Verzeichnis beachten:**
 - `RULES.md` - Vollständige Projekt-Regeln (INTERN, nicht auf GitHub)
@@ -16,70 +16,143 @@ Diese Datei wird automatisch von Cursor gelesen und als Kontext für AI-Assisten
 - Dokumentation in `docs/` aktuell halten
 - Interne Dokumentation (RULES.md, etc.) bei neuen Regeln aktualisieren
 
-## Kernregeln (Kurzfassung)
+---
 
-### 1. Ansprache
-- IMMER "Du" verwenden, nie "Sie"
-- Persönlich und freundlich bleiben
+## Kernregeln (aus RULES.md)
 
-### 2. Einfachheit
-- Alles für Laien verständlich
-- Schritt-für-Schritt Anleitungen
-- Alternative Wege anbieten
+### 1. Ansprache: Per-Du
+- ✅ **IMMER** "Du" verwenden, nie "Sie"
+- ✅ Persönlich und freundlich bleiben
+- ✅ Beispiel: "Du kannst..." statt "Sie können..."
+
+### 2. Einfachheit ist oberstes Gebot
+- ✅ Alles muss für Laien verständlich sein
+- ✅ Schritt-für-Schritt Anleitungen
+- ✅ Jeden Schritt genau erklären
+- ✅ Keine Annahmen über Vorwissen
+- ✅ Alternative Wege anbieten wenn etwas nicht funktioniert
 
 ### 3. Terminal-Anleitungen
-- IMMER erklären, wo das Terminal geöffnet wird
-- Im System selbst oder in der IDE
-- Was passiert wenn der Befehl nicht funktioniert
+- ✅ **IMMER** erklären, wo das Terminal geöffnet wird:
+  - Im System selbst (Finder, Datei-Explorer, etc.)
+  - In der IDE (integriertes Terminal)
+  - Alternative Wege
+- ✅ Screenshots oder klare Beschreibungen
+- ✅ Was passiert wenn der Befehl nicht funktioniert
 
 ### 4. Download-Links
-- IMMER Download-Links zu IDEs anbieten (Cursor, VSCode, Git)
-- Am Anfang der Dokumentation
+- ✅ **IMMER** Download-Links zu IDEs anbieten:
+  - Cursor: https://cursor.sh/
+  - VSCode: https://code.visualstudio.com/
+  - Git: https://git-scm.com/
+- ✅ Am Anfang der Dokumentation, nicht versteckt
 
 ### 5. Mehrsprachigkeit
-- Deutsch (DE) und Englisch (EN) für Standard-Dokumentationen
-- Advanced-Dokumentation bleibt Englisch
+- ✅ Deutsch (DE) und Englisch (EN) für alle Standard-Dokumentationen
+- ✅ Advanced-Dokumentation bleibt Englisch und fachlich
+- ✅ Konsistenz zwischen DE und EN Versionen
 
 ### 6. Redundanz vermeiden
-- Keine WoltLab-Dokumentation wiederholen
-- Verweise auf offizielle Docs statt Wiederholung
+- ✅ Keine doppelten Informationen
+- ✅ Verweise auf andere Dokumentationen statt Wiederholung
+- ✅ Klare Struktur ohne Überschneidungen
+- ✅ **KEINE WoltLab-Dokumentation wiederholen** - Verweise auf offizielle Docs
 
-### 7. Copyright
-- Copyright-Hinweis in ALLEN Dateien
-- Format: "Copyright (c) 2025 SunnyCueq"
-- Hinweis dass Copyright nicht entfernt werden darf
+### 7. Fehler und Syntax
+- ✅ Alle Code-Beispiele testen
+- ✅ Korrekte Syntax prüfen
+- ✅ Keine Tippfehler
+- ✅ Konsistente Formatierung
 
-### 8. Dateien die NICHT auf GitHub gehören
-- RULES.md, PROJEKT-KONTEXT.md, ANALYSE.md, ZUSAMMENFASSUNG.md
-- GITHUB_SETUP.md, GITHUB_REPO_INFO.md, COMMIT_AND_PUSH.md
-- WSPACKAGER-ANALYSE.md
-- Alle in .gitignore aufgenommen
+### 8. Alternative Wege
+- ✅ **IMMER** alternative Lösungen anbieten
+- ✅ Was tun wenn etwas nicht funktioniert
+- ✅ Troubleshooting direkt einbauen
+- ✅ Beispiel: "Falls das nicht funktioniert, versuche..."
 
-### 9. Versionsverwaltung
-- IMMER nach Änderung committen und pushen
-- Semantic Versioning (MAJOR.MINOR.PATCH)
-- IMMER GitHub Release bei neuer Version erstellen
-- Git-Tag pushen: `git push origin vX.Y.Z`
+### 9. Mac-Unterstützung
+- ✅ Mac-Anleitungen für alle wichtigen Schritte
+- ✅ Homebrew-Befehle
+- ✅ macOS-spezifische Pfade
+- ✅ Separate Mac-Dokumentation (DE/EN)
 
-### 10. Backup-System
-- IMMER die zwei letzten Versionen behalten:
-  - Aktuelle Version = Release
-  - Vorherige Version = Backup in `.package-backups/`
+### 10. Copyright
+- ✅ Copyright-Hinweis in ALLEN Dateien
+- ✅ Format: "Copyright (c) 2025 SunnyCueq"
+- ✅ Hinweis dass Copyright nicht entfernt werden darf
+- ✅ MIT-Lizenz erwähnen
 
-### 11. Changelog
-- Changelog ist NUR lokal (nicht in README auf GitHub)
-- Nur für interne Dokumentation
+### 11. Dateien die NICHT auf GitHub gehören
+- ✅ RULES.md (diese Datei)
+- ✅ PROJEKT-KONTEXT.md
+- ✅ GITHUB_SETUP.md
+- ✅ GITHUB_REPO_INFO.md
+- ✅ GITHUB-WORKFLOW-ERKLAERUNG.md
+- ✅ WSPACKAGER-ANALYSE.md
+- ✅ FINALE-PRUEFUNG-ABGESCHLOSSEN.md
+- ✅ ANALYSE-ALLE-DATEIEN.md
+- ✅ docs/GITHUB-WORKFLOW-TEST.md
+- ✅ docs/WSPACKAGER-ANALYSE.md
+- ✅ Alle in .gitignore aufgenommen
+- ✅ **IMMER prüfen:** Neue interne Dateien sofort zu .gitignore hinzufügen
 
-### 12. Datei-Organisation
-- README.md, README_EN.md, LICENSE, install.sh bleiben im Root
-- Alle anderen MD-Dateien gehören in `docs/` (außer interne)
-- README_ADVANCED.md gehört in `docs/`
+### 12. Versionsverwaltung
+- ✅ Semantic Versioning (MAJOR.MINOR.PATCH)
+- ✅ WoltLab-konformes Schema
+- ✅ Automatische Versionsverwaltung für Plugins
+- ✅ Backup-Funktionalität
 
-## Bei neuen Regeln
+### 13. Entwickler-Werkzeuge
+- ✅ Entwickler-Optionen dokumentieren
+- ✅ Debug-Modus, Benchmark, etc.
+- ✅ Sicherheitshinweise
+- ✅ Workflow für Plugin-Entwicklung
 
-- IMMER RULES.md sofort aktualisieren
-- Diese .cursorrules Datei aktualisieren (Kurzfassung)
-- RULES.md ist die Quelle der Wahrheit
+### 14. Plugin-Namenskonventionen
+- ✅ Format: com.[domain].[pluginname]
+- ✅ Beispiele und Erklärungen
+- ✅ DO's und DON'Ts
+
+### 15. Datei-Organisation
+- ✅ **README.md, README_EN.md, LICENSE, install.sh** bleiben im Root
+- ✅ **Alle anderen MD-Dateien** gehören in `docs/` (außer interne, die in .gitignore sind)
+- ✅ README_ADVANCED.md gehört in `docs/`
+- ✅ Keine unnötigen Dateien im Root
+
+---
+
+## Versionsverwaltung und Releases
+
+### Commits und Pushes
+- ✅ **IMMER** nach jeder Änderung committen und pushen
+- ✅ Versionsverwaltung beachten (siehe unten)
+- ✅ Klare Commit-Messages verwenden
+- ✅ Regelmäßig pushen (nicht alles auf einmal)
+
+### Versionsverwaltung
+- ✅ **IMMER** Version erhöhen bei Änderungen
+- ✅ Semantic Versioning verwenden (MAJOR.MINOR.PATCH)
+- ✅ Git-Tag erstellen nach Version-Update
+- ✅ Tag pushen: `git push origin vX.Y.Z`
+- ✅ **IMMER ein GitHub Release erstellen** (wichtig!)
+
+### Release-Verwaltung
+- ✅ **IMMER** nach Version-Update ein GitHub Release erstellen
+- ✅ **IMMER** bei jeder neuen Version ein Release anbieten
+- ✅ Release-Notes mit Changelog hinzufügen
+- ✅ Package-Dateien als Assets hochladen (falls vorhanden)
+- ✅ Release auf GitHub veröffentlichen, nicht nur als Draft
+- ✅ Release sollte automatisch erstellt werden (GitHub Actions oder manuell)
+
+### Backup-Versionen
+- ✅ **IMMER** die zwei letzten Versionen behalten:
+  - **Aktuelle Version** (z.B. 1.0.1) → **Als Release anbieten**
+  - **Vorherige Version** (z.B. 1.0.0) → **Als Backup behalten**
+- ✅ Ältere Versionen können archiviert werden
+- ✅ Backups in `.package-backups/` für Plugins
+- ✅ **System:** Aktuelle Version = Release, Version davor = Backup
+
+---
 
 ## Checkliste vor jedem Commit
 
@@ -99,6 +172,9 @@ Diese Datei wird automatisch von Cursor gelesen und als Kontext für AI-Assisten
 - [ ] Backup-System funktioniert (2 Versionen)?
 - [ ] Neue interne Dateien zu .gitignore hinzugefügt?
 - [ ] RULES.md aktualisiert (falls neue Regeln)?
+- [ ] .cursorrules aktualisiert (falls neue Regeln)?
+
+---
 
 ## Wichtige Erinnerungen
 
@@ -111,4 +187,3 @@ Diese Datei wird automatisch von Cursor gelesen und als Kontext für AI-Assisten
 ---
 
 **Letzte Aktualisierung:** 2025-01-08
-
