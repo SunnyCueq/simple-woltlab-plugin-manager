@@ -25,7 +25,21 @@ jobs:
     - name: Extract package name from package.xml
       id: package_name
       run: |
-        PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' package.xml | head -1)
+        # Suche package.xml im Root oder in Unterverzeichnissen
+        if [ -f "package.xml" ]; then
+          PACKAGE_XML="package.xml"
+        else
+          PACKAGE_XML=$(find . -name "package.xml" -type f | head -1)
+          if [ -z "$PACKAGE_XML" ]; then
+            echo "❌ package.xml nicht gefunden"
+            exit 1
+          fi
+        fi
+        PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' "$PACKAGE_XML" | head -1)
+        if [ -z "$PACKAGE_NAME" ]; then
+          echo "❌ Konnte Package-Name nicht aus package.xml extrahieren"
+          exit 1
+        fi
         echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_OUTPUT
         
     - name: Find plugin directory
