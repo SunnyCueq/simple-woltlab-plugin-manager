@@ -24,36 +24,71 @@
 
 ## 📖 Was ist das?
 
-Der **Simple WoltLab Plugin Manager** ist ein kostenloses Toolkit, das Ihnen hilft, Plugins für die WoltLab Suite zu entwickeln. 
+Der **Simple WoltLab Plugin Manager** ist ein kostenloses Toolkit, das dir hilft, Plugins für die WoltLab Suite zu entwickeln. 
 
 **Für Einsteiger erklärt:**
 - Ein **Plugin** erweitert die WoltLab Suite mit neuen Funktionen
-- Dieses Toolkit hilft Ihnen dabei, Plugins zu erstellen, zu testen und zu veröffentlichen
-- Sie müssen kein Experte sein – das Toolkit führt Sie Schritt für Schritt durch alles
+- Dieses Toolkit hilft dir dabei, Plugins zu erstellen, zu testen und zu veröffentlichen
+- Du musst kein Experte sein – das Toolkit führt dich Schritt für Schritt durch alles
 
-**Was Sie bekommen:**
-- ✅ Automatische Scripts zum Erstellen und Verpacken Ihrer Plugins
-- ✅ Vorkonfigurierte Entwicklungsumgebung für Ihre IDE (Cursor/VSCode)
+**Was du bekommst:**
+- ✅ Automatische Scripts zum Erstellen und Verpacken deiner Plugins
+- ✅ Vorkonfigurierte Entwicklungsumgebung für deine IDE (Cursor/VSCode)
 - ✅ Vollständiges Beispiel-Plugin zum Lernen
 - ✅ Detaillierte Anleitungen in Deutsch und Englisch
 - ✅ Einfache Installation mit einem einzigen Befehl
 
-## 🚀 Schnellstart (3 einfache Schritte)
+## 🚀 Schnellstart (4 einfache Schritte)
 
-### Schritt 1: Projekt herunterladen
+### Schritt 1: Was du brauchst
 
-Öffnen Sie ein Terminal (auf Linux/Mac) oder PowerShell (auf Windows) und führen Sie aus:
+**Bevor du startest, lade dir diese Programme herunter:**
+
+1. **Git** (zum Herunterladen des Projekts)
+   - Download: https://git-scm.com/downloads
+   - Wähle dein Betriebssystem (Windows, Mac, Linux)
+   - Installiere Git nach dem Download
+
+2. **Eine IDE** (Code-Editor - wähle einen):
+   - **Cursor** (empfohlen): https://cursor.sh/ - Download und installieren
+   - **VSCode** (Alternative): https://code.visualstudio.com/ - Download und installieren
+
+**💡 Keine Sorge:** Falls du Git noch nicht hast, kannst du das Projekt auch als ZIP-Datei von GitHub herunterladen (siehe unten).
+
+### Schritt 2: Projekt herunterladen
+
+**Wo öffne ich ein Terminal?**
+
+**Option A: Terminal im System öffnen**
+- **Windows:** Drücke `Windows + R`, tippe `cmd` oder `powershell` und drücke Enter
+- **Mac:** Drücke `Cmd + Leertaste`, tippe "Terminal" und drücke Enter
+- **Linux:** Drücke `Ctrl + Alt + T` oder suche nach "Terminal" im Menü
+
+**Option B: Terminal in der IDE öffnen (nach Installation)**
+- **Cursor/VSCode:** Drücke `Ctrl + ~` (Windows/Linux) oder `Cmd + ~` (Mac)
+- Oder: Menü → Terminal → Neues Terminal
+
+**Jetzt führe diese Befehle aus:**
 
 ```bash
 git clone https://github.com/SunnyCueq/simple-woltlab-plugin-manager.git
 cd simple-woltlab-plugin-manager
 ```
 
-**💡 Tipp:** Falls Sie Git nicht installiert haben, können Sie das Projekt auch als ZIP-Datei von GitHub herunterladen.
+**💡 Alternative ohne Git:**
+1. Gehe zu: https://github.com/SunnyCueq/simple-woltlab-plugin-manager
+2. Klicke auf "Code" → "Download ZIP"
+3. Entpacke die ZIP-Datei
+4. Öffne ein Terminal im entpackten Ordner
 
-### Schritt 2: Installation starten
+### Schritt 3: Installation starten
 
-Das Installations-Script führt Sie **automatisch durch alles** – von A bis Z:
+**Wichtig:** Du musst im richtigen Verzeichnis sein! Falls du nicht sicher bist, führe zuerst aus:
+```bash
+cd simple-woltlab-plugin-manager
+```
+
+**Jetzt starte die Installation:**
 
 ```bash
 ./install.sh
@@ -61,16 +96,35 @@ Das Installations-Script führt Sie **automatisch durch alles** – von A bis Z:
 
 **Was passiert dabei?**
 - ✅ Das Script prüft, ob alle benötigten Programme installiert sind (PHP, Git, etc.)
-- ✅ Es fragt Sie nach den benötigten Pfaden (WoltLab Core, Plugin-Verzeichnis)
+- ✅ Es fragt dich nach den benötigten Pfaden (WoltLab Core, Plugin-Verzeichnis)
 - ✅ Es erstellt automatisch die Konfigurationsdateien
-- ✅ Es richtet Ihre Entwicklungsumgebung ein
+- ✅ Es richtet deine Entwicklungsumgebung ein
 - ✅ Es kopiert alle benötigten Scripts an die richtigen Stellen
 
-**Sie müssen nur die Fragen beantworten – der Rest passiert automatisch!**
+**Du musst nur die Fragen beantworten – der Rest passiert automatisch!**
 
-### Schritt 3: Entwicklungsumgebung öffnen
+**💡 Falls der Befehl nicht funktioniert:**
+- **Windows:** Versuche `bash install.sh` oder `sh install.sh`
+- **Mac/Linux:** Stelle sicher, dass die Datei ausführbar ist: `chmod +x install.sh`
 
-Nach der Installation öffnen Sie einfach das erstellte Workspace-File:
+### Schritt 4: Entwicklungsumgebung öffnen
+
+**Nach der Installation findest du eine Datei namens `woltlab-plugin-dev.code-workspace`**
+
+**Wo finde ich diese Datei?**
+- Meist im übergeordneten Verzeichnis deines Plugins
+- Oder in deinem Home-Verzeichnis (`~/` auf Mac/Linux, `C:\Users\DeinName\` auf Windows)
+
+**Wie öffne ich sie?**
+
+**Option A: Über das Terminal (einfachste Methode)**
+
+1. Öffne ein Terminal (siehe Schritt 2)
+2. Navigiere zum Verzeichnis wo die `.code-workspace` Datei liegt:
+   ```bash
+   cd ~/Dokumente  # Beispiel - passe den Pfad an
+   ```
+3. Führe einen dieser Befehle aus:
 
 ```bash
 # Mit Cursor (empfohlen)
@@ -80,39 +134,51 @@ cursor woltlab-plugin-dev.code-workspace
 code woltlab-plugin-dev.code-workspace
 ```
 
-**Fertig!** 🎉 Sie können jetzt mit der Plugin-Entwicklung beginnen.
+**Option B: Über den Datei-Explorer/Finder**
+
+1. Öffne den Datei-Explorer (Windows) oder Finder (Mac)
+2. Navigiere zum Verzeichnis wo die `.code-workspace` Datei liegt
+3. **Doppelklicke** auf die Datei `woltlab-plugin-dev.code-workspace`
+4. Falls sich nichts tut, klicke mit Rechtsklick → "Öffnen mit" → Cursor oder VSCode
+
+**💡 Falls der Befehl nicht funktioniert:**
+- Stelle sicher, dass Cursor/VSCode installiert ist
+- Prüfe ob der Pfad zur Datei korrekt ist: `ls -la woltlab-plugin-dev.code-workspace`
+- Versuche die Datei per Doppelklick zu öffnen (siehe Option B)
+
+**Fertig!** 🎉 Du kannst jetzt mit der Plugin-Entwicklung beginnen.
 
 ## ✨ Was kann das Toolkit?
 
 ### Für Einsteiger
 
-- **🎯 Einfache Installation:** Ein Script macht alles für Sie
+- **🎯 Einfache Installation:** Ein Script macht alles für dich
 - **📚 Schritt-für-Schritt Anleitungen:** Alles wird genau erklärt
-- **💡 Beispiel-Plugin:** Lernen Sie anhand eines vollständigen Beispiels
-- **🔧 Automatische Konfiguration:** Ihre IDE wird automatisch eingerichtet
+- **💡 Beispiel-Plugin:** Lerne anhand eines vollständigen Beispiels
+- **🔧 Automatische Konfiguration:** Deine IDE wird automatisch eingerichtet
 
 ### Für Entwickler
 
 - **📦 Generische Build-Scripts:** Automatisches Erstellen von TAR-Archiven und Releases
 - **🏗️ Workspace-Templates:** Vorkonfigurierte Multi-Root Workspaces für Cursor/VSCode
 - **🧠 IDE-Setup:** Automatische Konfiguration von Intelephense für WoltLab-Klassen
-- **🚀 Release-Management:** Erstellen Sie Releases mit einem einzigen Befehl
+- **🚀 Release-Management:** Erstelle Releases mit einem einzigen Befehl
 - **📖 Umfassende Dokumentation:** Anleitungen für verschiedene Betriebssysteme und IDEs (DE/EN)
 
 ## 📚 Dokumentation
 
 ### 📖 Für Einsteiger
 
-**Beginnen Sie hier, wenn Sie neu sind:**
+**Beginne hier, wenn du neu bist:**
 
 1. **[INSTALLATION.md](docs/INSTALLATION.md)** - 📥 Vollständige Installationsanleitung
    - Schritt-für-Schritt erklärt
-   - Was Sie brauchen und wie Sie es installieren
+   - Was du brauchst und wie du es installierst
    - Häufige Probleme und Lösungen
 
 2. **[WORKSPACE-SETUP.md](docs/WORKSPACE-SETUP.md)** - 🏗️ Workspace-Konfiguration
-   - Wie Sie Ihre Entwicklungsumgebung einrichten
-   - Was ist ein Workspace und warum brauchen Sie ihn?
+   - Wie du deine Entwicklungsumgebung einrichtest
+   - Was ist ein Workspace und warum brauchst du ihn?
 
 ### 🛠️ Für Fortgeschrittene
 
@@ -125,6 +191,8 @@ code woltlab-plugin-dev.code-workspace
 
 ### 💻 Betriebssystem-spezifisch
 
+- **[MACOS.md](docs/MACOS.md)** - macOS-spezifische Anleitung (DE)
+- **[MACOS_EN.md](docs/MACOS_EN.md)** - macOS-specific guide (EN)
 - **[LINUX-CACHYOS.md](docs/LINUX-CACHYOS.md)** - CachyOS-spezifische Anleitung (DE)
 - **[LINUX-CACHYOS_EN.md](docs/LINUX-CACHYOS_EN.md)** - CachyOS-specific guide (EN)
 - **[WINDOWS-WSL.md](docs/WINDOWS-WSL.md)** - Windows WSL Setup (DE)
@@ -241,51 +309,60 @@ simple-woltlab-plugin-manager/
 └── LICENSE               # Lizenz
 ```
 
-## 🔧 Was Sie brauchen
+## 🔧 Was du brauchst
 
 ### Erforderlich (wird vom Install-Script geprüft)
 
 - **PHP 8.0 oder höher** - Programmiersprache für WoltLab Plugins
+  - Download: https://www.php.net/downloads.php
+  - Oder installiere es über deinen Paket-Manager (siehe [INSTALLATION.md](docs/INSTALLATION.md))
 - **Git** - Zum Herunterladen des Projekts
-- **tar** - Meist bereits auf Ihrem System installiert
+  - Download: https://git-scm.com/downloads
+  - Wähle dein Betriebssystem und installiere Git
+- **tar** - Meist bereits auf deinem System installiert
 
-**💡 Keine Sorge:** Das Install-Script prüft automatisch, ob alles installiert ist und sagt Ihnen, was fehlt!
+**💡 Keine Sorge:** Das Install-Script prüft automatisch, ob alles installiert ist und sagt dir, was fehlt!
 
 ### Empfohlen
 
-- **Cursor IDE** oder **VSCode** - Code-Editor (kostenlos)
+- **Cursor IDE** (empfohlen) - Code-Editor (kostenlos)
+  - Download: https://cursor.sh/
+  - Installiere Cursor nach dem Download
+- **VSCode** (Alternative) - Code-Editor (kostenlos)
+  - Download: https://code.visualstudio.com/
+  - Installiere VSCode nach dem Download
 - **WoltLab Suite Core** - Für Referenz und Auto-Completion (wird während der Installation abgefragt)
 
 ### 📥 WoltLab Suite Core herunterladen
 
 **Was ist das?**
-Der WoltLab Suite Core ist die Basis-Software, für die Sie Plugins entwickeln. Sie benötigen eine lokale Kopie als Referenz.
+Der WoltLab Suite Core ist die Basis-Software, für die du Plugins entwickelst. Du benötigst eine lokale Kopie als Referenz.
 
-**Wie bekomme ich ihn?**
+**Wie bekommst du ihn?**
 
 1. **Aktuelle Version herunterladen:**
    - [WoltLab Suite Download-Seite](https://www.woltlab.com/de/woltlab-suite-download/)
    - Direkter Download: [woltlab-suite-6.1.14.zip](https://assets.woltlab.com/release/woltlab-suite-6.1.14.zip)
 
 2. **ZIP-Datei entpacken:**
-   - Entpacken Sie die ZIP-Datei in einen Ordner Ihrer Wahl (z.B. `~/Dokumente/woltlab core`)
-   - **Wichtig:** Merken Sie sich den Pfad – das Install-Script fragt danach!
+   - Entpacke die ZIP-Datei in einen Ordner deiner Wahl (z.B. `~/Dokumente/woltlab core` auf Mac/Linux oder `C:\Users\DeinName\Documents\woltlab core` auf Windows)
+   - **Wichtig:** Merke dir den Pfad – das Install-Script fragt danach!
 
 3. **Systemüberprüfung (optional):**
-   - [Systemüberprüfungs-Skript](https://www.woltlab.com/media/302-test-php/) - Prüft, ob Ihr System alle Voraussetzungen erfüllt
+   - [Systemüberprüfungs-Skript](https://www.woltlab.com/media/302-test-php/) - Prüft, ob dein System alle Voraussetzungen erfüllt
 
-**💡 Tipp:** Falls Sie den Core noch nicht haben, können Sie das Install-Script trotzdem starten. Es erinnert Sie daran, ihn herunterzuladen.
+**💡 Tipp:** Falls du den Core noch nicht hast, kannst du das Install-Script trotzdem starten. Es erinnert dich daran, ihn herunterzuladen.
 
 ## 📖 Beispiel-Plugin
 
-**Lernen Sie anhand eines echten Beispiels!**
+**Lerne anhand eines echten Beispiels!**
 
 Das Repository enthält ein vollständiges, funktionierendes Beispiel-Plugin in `example-plugin/`. 
 
-**Was Sie lernen:**
+**Was du lernst:**
 - ✅ Wie ein Plugin aufgebaut ist
-- ✅ Wie Sie eine neue Seite erstellen
-- ✅ Wie Sie PHP-Klassen und Templates verwenden
+- ✅ Wie du eine neue Seite erstellst
+- ✅ Wie du PHP-Klassen und Templates verwendest
 - ✅ Die Struktur eines WoltLab Plugins
 
 **Basierend auf:** [WoltLab Getting Started Dokumentation](https://docs.woltlab.com/6.0/getting-started/)
@@ -313,17 +390,57 @@ Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe [LICENSE](LICENSE) fü
 
 ## ❓ Hilfe & Support
 
-**Haben Sie Fragen oder Probleme?**
+**Hast du Fragen oder Probleme?**
 
-1. **📖 Dokumentation prüfen:** Schauen Sie in die `docs/`-Ordner für detaillierte Anleitungen
-2. **🐛 Problem melden:** Öffnen Sie ein [Issue auf GitHub](https://github.com/SunnyCueq/simple-woltlab-plugin-manager/issues)
-3. **💬 Community:** Kontaktieren Sie die WoltLab Community
+1. **📖 Dokumentation prüfen:** Schau in die `docs/`-Ordner für detaillierte Anleitungen
+2. **🐛 Problem melden:** Öffne ein [Issue auf GitHub](https://github.com/SunnyCueq/simple-woltlab-plugin-manager/issues)
+3. **💬 Community:** Kontaktiere die WoltLab Community
 
 **Häufige Fragen:**
 
 - **"Das Install-Script funktioniert nicht"** → Siehe [Troubleshooting in INSTALLATION.md](docs/INSTALLATION.md#troubleshooting)
 - **"Wie erstelle ich ein neues Plugin?"** → Siehe [Beispiel-Plugin](#-beispiel-plugin) und [WoltLab Getting Started](https://docs.woltlab.com/6.0/getting-started/)
 - **"Wo finde ich die Dokumentation?"** → Siehe [Dokumentation](#-dokumentation) oben
+
+---
+
+## 📋 Changelog
+
+**Wichtigste Änderungen im Überblick:**
+
+### Version 1.0.0 (Aktuell)
+
+**Features:**
+- ✅ Automatische Plugin-Versionsverwaltung (`plugin-version.sh`)
+- ✅ Backup-Funktionalität für Plugin-Packages (`.package-backups/`)
+- ✅ Automatische Versionsaktualisierung in `package.xml`
+- ✅ Versionsverwaltungs-Script für Repository (`version.sh`)
+- ✅ Professionelle Advanced-Dokumentation (README_ADVANCED.md)
+- ✅ Entwickler-Werkzeuge dokumentiert (DEVELOPER-TOOLS.md)
+- ✅ Plugin-Namenskonventionen dokumentiert (PLUGIN-NAMING.md)
+- ✅ macOS-Anleitung hinzugefügt (MACOS.md / MACOS_EN.md)
+- ✅ Automatische Installation fehlender Voraussetzungen
+- ✅ Automatischer WoltLab Core Download und Entpacken
+- ✅ Verbesserte README mit Download-Links und Terminal-Anleitungen
+- ✅ Laienfreundliche Dokumentation (Per-Du, Schritt-für-Schritt)
+- ✅ Umfassende Troubleshooting-Sektionen
+
+**Verbesserungen:**
+- 🔧 Install-Script erweitert mit automatischer Paket-Installation
+- 🔧 Workspace-Erstellung automatisiert
+- 🔧 Plugin-Verzeichnis wird automatisch erstellt
+- 🔧 Detaillierte Fehlermeldungen mit Lösungsvorschlägen
+- 🔧 Betriebssystem-Erkennung für automatische Installation
+
+**Dokumentation:**
+- 📚 Alle Dokumentationen auf Per-Du umgestellt
+- 📚 Terminal-Anleitungen mit "Wo öffne ich Terminal?"
+- 📚 Download-Links zu allen benötigten Programmen
+- 📚 Alternative Wege für jeden Schritt
+- 📚 Mac-spezifische Anleitungen
+
+**Vorherige Versionen:**
+- Version 0.1.0 - Initiale Version mit Basis-Features
 
 ---
 
