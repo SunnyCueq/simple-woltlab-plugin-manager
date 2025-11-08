@@ -1,67 +1,147 @@
 # Simple WoltLab Plugin Manager
 
+<div align="center">
+
+**🌍 Language / Sprache:** [🇬🇧 English](#) | [🇩🇪 Deutsch](README.md) | [⚙️ Advanced](README_ADVANCED.md)
+
+</div>
+
+---
+
+**Copyright (c) 2025 SunnyCueq**  
+**License:** MIT (Open Source)  
+**Repository:** https://github.com/SunnyCueq/simple-woltlab-plugin-manager
+
+> **⚠️ IMPORTANT:** This copyright notice must not be removed. This project is open source under the MIT License, but the copyright attribution must be preserved in all copies and substantial portions of the software.
+
+---
+
 **Last Updated:** 2025-01-08  
 **Version:** 1.0.0  
 **Status:** Current
 
-**Last Change:** Initial version
-- Reason: Repository creation for WoltLab plugin development
-
 ---
 
-A comprehensive toolkit for developing WoltLab Suite plugins with generic build scripts, workspace templates, and detailed installation guides.
+## 📖 What is this?
 
-## 🚀 Quick Start
+The **Simple WoltLab Plugin Manager** is a free toolkit that helps you develop plugins for the WoltLab Suite.
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/SunnyCueq/simple-woltlab-plugin-manager.git
-   cd simple-woltlab-plugin-manager
-   ```
+**For beginners explained:**
+- A **plugin** extends the WoltLab Suite with new features
+- This toolkit helps you create, test, and publish plugins
+- You don't need to be an expert – the toolkit guides you step by step through everything
 
-2. **Run installation:**
-   ```bash
-   ./install.sh
-   ```
+**What you get:**
+- ✅ Automatic scripts to create and package your plugins
+- ✅ Pre-configured development environment for your IDE (Cursor/VSCode)
+- ✅ Complete example plugin to learn from
+- ✅ Detailed guides in English and German
+- ✅ Easy installation with a single command
 
-3. **Open workspace:**
-   ```bash
-   cursor woltlab-plugin-dev.code-workspace
-   # or
-   code woltlab-plugin-dev.code-workspace
-   ```
+## 🚀 Quick Start (3 Simple Steps)
 
-## 📦 Features
+### Step 1: Download the Project
 
-- **Generic Build Scripts:** Automatic creation of TAR archives and releases
-- **Workspace Templates:** Pre-configured multi-root workspaces for Cursor/VSCode
-- **IDE Setup:** Automatic configuration of Intelephense for WoltLab classes
-- **Install Script:** Interactive setup of the development environment
-- **Example Plugin:** Complete example based on WoltLab Getting Started
-- **Comprehensive Documentation:** Guides for different operating systems and IDEs
+Open a terminal (on Linux/Mac) or PowerShell (on Windows) and run:
+
+```bash
+git clone https://github.com/SunnyCueq/simple-woltlab-plugin-manager.git
+cd simple-woltlab-plugin-manager
+```
+
+**💡 Tip:** If you don't have Git installed, you can also download the project as a ZIP file from GitHub.
+
+### Step 2: Start Installation
+
+The installation script guides you **automatically through everything** – from A to Z:
+
+```bash
+./install.sh
+```
+
+**What happens?**
+- ✅ The script checks if all required programs are installed (PHP, Git, etc.)
+- ✅ It asks you for the required paths (WoltLab Core, plugin directory)
+- ✅ It automatically creates configuration files
+- ✅ It sets up your development environment
+- ✅ It copies all required scripts to the right places
+
+**You only need to answer the questions – the rest happens automatically!**
+
+### Step 3: Open Development Environment
+
+After installation, simply open the created workspace file:
+
+```bash
+# With Cursor (recommended)
+cursor woltlab-plugin-dev.code-workspace
+
+# Or with VSCode
+code woltlab-plugin-dev.code-workspace
+```
+
+**Done!** 🎉 You can now start developing plugins.
+
+## ✨ What can this toolkit do?
+
+### For Beginners
+
+- **🎯 Easy Installation:** One script does everything for you
+- **📚 Step-by-step Guides:** Everything is explained in detail
+- **💡 Example Plugin:** Learn from a complete example
+- **🔧 Automatic Configuration:** Your IDE is set up automatically
+
+### For Developers
+
+- **📦 Generic Build Scripts:** Automatic creation of TAR archives and releases
+- **🏗️ Workspace Templates:** Pre-configured multi-root workspaces for Cursor/VSCode
+- **🧠 IDE Setup:** Automatic configuration of Intelephense for WoltLab classes
+- **🚀 Release Management:** Create releases with a single command
+- **📖 Comprehensive Documentation:** Guides for different operating systems and IDEs (EN/DE)
 
 ## 📚 Documentation
 
-### Installation & Setup
+### 📖 For Beginners
 
-- **[INSTALLATION.md](docs/INSTALLATION.md)** - Detailed installation guide (DE)
-- **[INSTALLATION_EN.md](docs/INSTALLATION_EN.md)** - Detailed installation guide (EN)
+**Start here if you're new:**
 
-### Workspace & IDE
+1. **[INSTALLATION_EN.md](docs/INSTALLATION_EN.md)** - 📥 Complete Installation Guide
+   - Step-by-step explained
+   - What you need and how to install it
+   - Common problems and solutions
 
-- **[WORKSPACE-SETUP.md](docs/WORKSPACE-SETUP.md)** - Workspace configuration (DE)
-- **[WORKSPACE-SETUP_EN.md](docs/WORKSPACE-SETUP_EN.md)** - Workspace configuration (EN)
-- **[IDE-SETUP-CURSOR.md](docs/IDE-SETUP-CURSOR.md)** - Cursor IDE Setup (DE)
+2. **[WORKSPACE-SETUP_EN.md](docs/WORKSPACE-SETUP_EN.md)** - 🏗️ Workspace Configuration
+   - How to set up your development environment
+   - What is a workspace and why do you need it?
+
+### 🛠️ For Advanced Users
+
+**Additional Guides:**
+
 - **[IDE-SETUP-CURSOR_EN.md](docs/IDE-SETUP-CURSOR_EN.md)** - Cursor IDE Setup (EN)
-- **[IDE-SETUP-VSCODE.md](docs/IDE-SETUP-VSCODE.md)** - VSCode Setup (DE)
+- **[IDE-SETUP-CURSOR.md](docs/IDE-SETUP-CURSOR.md)** - Cursor IDE Setup (DE)
 - **[IDE-SETUP-VSCODE_EN.md](docs/IDE-SETUP-VSCODE_EN.md)** - VSCode Setup (EN)
+- **[IDE-SETUP-VSCODE.md](docs/IDE-SETUP-VSCODE.md)** - VSCode Setup (DE)
 
-### Operating System Specific
+### 💻 Operating System Specific
 
-- **[LINUX-CACHYOS.md](docs/LINUX-CACHYOS.md)** - CachyOS-specific guide (DE)
 - **[LINUX-CACHYOS_EN.md](docs/LINUX-CACHYOS_EN.md)** - CachyOS-specific guide (EN)
-- **[WINDOWS-WSL.md](docs/WINDOWS-WSL.md)** - Windows WSL Setup (DE)
+- **[LINUX-CACHYOS.md](docs/LINUX-CACHYOS.md)** - CachyOS-specific guide (DE)
 - **[WINDOWS-WSL_EN.md](docs/WINDOWS-WSL_EN.md)** - Windows WSL Setup (EN)
+- **[WINDOWS-WSL.md](docs/WINDOWS-WSL.md)** - Windows WSL Setup (DE)
+
+### 🇩🇪 German Versions
+
+- **[INSTALLATION.md](docs/INSTALLATION.md)** - Detaillierte Installationsanleitung (DE)
+- **[WORKSPACE-SETUP.md](docs/WORKSPACE-SETUP.md)** - Workspace-Konfiguration (DE)
+
+### ⚙️ For Experts
+
+- **[README_ADVANCED.md](README_ADVANCED.md)** - Advanced technical documentation (EN only)
+  - Architecture and design principles
+  - Scripts reference and internals
+  - Advanced usage and customization
+  - Troubleshooting guide
 
 ## 🛠️ Scripts
 
@@ -116,32 +196,56 @@ simple-woltlab-plugin-manager/
 └── LICENSE               # License
 ```
 
-## 🔧 Requirements
+## 🔧 What You Need
 
-- PHP 8.0 or higher
-- Git
-- tar (usually pre-installed)
-- Cursor or VSCode
-- WoltLab Suite Core (for reference)
+### Required (checked by install script)
 
-### Download WoltLab Suite Core
+- **PHP 8.0 or higher** - Programming language for WoltLab plugins
+- **Git** - To download the project
+- **tar** - Usually already installed on your system
 
-**Current Version:**
-- [WoltLab Suite Download](https://www.woltlab.com/de/woltlab-suite-download/)
-- Direct Download: [woltlab-suite-6.1.14.zip](https://assets.woltlab.com/release/woltlab-suite-6.1.14.zip)
+**💡 Don't worry:** The install script automatically checks if everything is installed and tells you what's missing!
 
-**Older Versions:**
-- Example: [woltlab-suite-6.0.22.zip](https://assets.woltlab.com/release/woltlab-suite-6.0.22.zip)
-- URL Pattern: `https://assets.woltlab.com/release/woltlab-suite-{VERSION}.zip`
+### Recommended
 
-**System Check:**
-- [System Check Script](https://www.woltlab.com/media/302-test-php/) - Checks system requirements before installation
+- **Cursor IDE** or **VSCode** - Code editor (free)
+- **WoltLab Suite Core** - For reference and auto-completion (asked during installation)
+
+### 📥 Download WoltLab Suite Core
+
+**What is this?**
+The WoltLab Suite Core is the base software for which you develop plugins. You need a local copy as a reference.
+
+**How do I get it?**
+
+1. **Download current version:**
+   - [WoltLab Suite Download Page](https://www.woltlab.com/de/woltlab-suite-download/)
+   - Direct Download: [woltlab-suite-6.1.14.zip](https://assets.woltlab.com/release/woltlab-suite-6.1.14.zip)
+
+2. **Extract ZIP file:**
+   - Extract the ZIP file to a folder of your choice (e.g., `~/Documents/woltlab core`)
+   - **Important:** Remember the path – the install script will ask for it!
+
+3. **System Check (optional):**
+   - [System Check Script](https://www.woltlab.com/media/302-test-php/) - Checks if your system meets all requirements
+
+**💡 Tip:** If you don't have the Core yet, you can still start the install script. It will remind you to download it.
 
 ## 📖 Example Plugin
 
-The repository contains a complete example plugin in `example-plugin/`, based on the [WoltLab Getting Started Documentation](https://docs.woltlab.com/6.0/getting-started/).
+**Learn from a real example!**
 
-See [example-plugin/README.md](example-plugin/README.md) for details.
+The repository contains a complete, working example plugin in `example-plugin/`.
+
+**What you'll learn:**
+- ✅ How a plugin is structured
+- ✅ How to create a new page
+- ✅ How to use PHP classes and templates
+- ✅ The structure of a WoltLab plugin
+
+**Based on:** [WoltLab Getting Started Documentation](https://docs.woltlab.com/6.0/getting-started/)
+
+📄 See [example-plugin/README.md](example-plugin/README.md) for details.
 
 ## 🤝 Contributing
 
@@ -162,14 +266,27 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 - [WoltLab Getting Started](https://docs.woltlab.com/6.0/getting-started/)
 - [WoltLab PHP API](https://docs.woltlab.com/6.0/api/)
 
-## 💡 Support
+## ❓ Help & Support
 
-For questions or issues:
-- Open an issue on GitHub
-- Check the documentation in `docs/`
-- Contact the community
+**Have questions or problems?**
+
+1. **📖 Check Documentation:** Look in the `docs/` folders for detailed guides
+2. **🐛 Report Issue:** Open an [Issue on GitHub](https://github.com/SunnyCueq/simple-woltlab-plugin-manager/issues)
+3. **💬 Community:** Contact the WoltLab community
+
+**Frequently Asked Questions:**
+
+- **"The install script doesn't work"** → See [Troubleshooting in INSTALLATION_EN.md](docs/INSTALLATION_EN.md#troubleshooting)
+- **"How do I create a new plugin?"** → See [Example Plugin](#-example-plugin) and [WoltLab Getting Started](https://docs.woltlab.com/6.0/getting-started/)
+- **"Where can I find the documentation?"** → See [Documentation](#-documentation) above
 
 ---
 
+<div align="center">
+
 **Developed with ❤️ for the WoltLab Community**
+
+[⬆️ Back to top](#simple-woltlab-plugin-manager) | [🇩🇪 Deutsche Version](README.md)
+
+</div>
 

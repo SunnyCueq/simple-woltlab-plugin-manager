@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Simple WoltLab Plugin Manager - Extract Plugin Files Script
+# Copyright (c) 2025 SunnyCueq
+# License: MIT (Open Source)
+# Repository: https://github.com/SunnyCueq/simple-woltlab-plugin-manager
+#
+# ⚠️ IMPORTANT: This copyright notice must not be removed.
+# This project is open source under the MIT License, but the copyright
+# attribution must be preserved in all copies and substantial portions.
+#
 # Script zum Entpacken der WoltLab Plugin TAR-Dateien
 # unter Beibehaltung der Ordnerstruktur
 #

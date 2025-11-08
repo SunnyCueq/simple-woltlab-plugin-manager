@@ -1,16 +1,32 @@
 #!/bin/bash
 
-# Install-Script für Simple WoltLab Plugin Manager
-# Dieses Script richtet die Entwicklungsumgebung für WoltLab Plugin-Entwicklung ein
+# Simple WoltLab Plugin Manager - Installation Script
+# Copyright (c) 2025 SunnyCueq
+# License: MIT (Open Source)
+# Repository: https://github.com/SunnyCueq/simple-woltlab-plugin-manager
 #
-# Verwendung: ./install.sh
+# ⚠️ IMPORTANT: This copyright notice must not be removed.
+# This project is open source under the MIT License, but the copyright
+# attribution must be preserved in all copies and substantial portions.
+#
+# This script sets up the development environment for WoltLab plugin development.
+# Usage: ./install.sh
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-echo "=== Simple WoltLab Plugin Manager - Installation ==="
+echo "═══════════════════════════════════════════════════════════════"
+echo "  Simple WoltLab Plugin Manager - Installation"
+echo "═══════════════════════════════════════════════════════════════"
+echo ""
+echo "Dieses Script führt Sie Schritt für Schritt durch die Installation."
+echo "Sie müssen nur die Fragen beantworten – der Rest passiert automatisch!"
+echo ""
+echo "Drücken Sie STRG+C, um die Installation abzubrechen."
+echo ""
+read -p "Drücken Sie ENTER, um fortzufahren... "
 echo ""
 
 # Funktion zum Abfragen von Pfaden
@@ -43,59 +59,357 @@ ask_path() {
     echo "$path"
 }
 
+# Funktion zum Erkennen des Betriebssystems
+detect_os() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        OS=$ID
+        OS_LIKE=$ID_LIKE
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        OS="macos"
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        OS="linux"
+    else
+        OS="unknown"
+    fi
+}
+
+# Funktion zum automatischen Installieren von Paketen
+install_package() {
+    local package="$1"
+    local os="$2"
+    
+    echo ""
+    echo "🔧 Versuche automatische Installation von $package..."
+    
+    case "$os" in
+        arch|cachyos|manjaro)
+            if command -v sudo &> /dev/null && command -v pacman &> /dev/null; then
+                echo "   Verwende: sudo pacman -S --noconfirm $package"
+                if sudo pacman -S --noconfirm "$package" 2>/dev/null; then
+                    echo "✓ $package erfolgreich installiert"
+                    return 0
+                fi
+            fi
+            ;;
+        debian|ubuntu|raspbian)
+            if command -v sudo &> /dev/null && command -v apt-get &> /dev/null; then
+                echo "   Aktualisiere Paketliste..."
+                sudo apt-get update -qq > /dev/null 2>&1
+                echo "   Verwende: sudo apt-get install -y $package"
+                if sudo apt-get install -y "$package" > /dev/null 2>&1; then
+                    echo "✓ $package erfolgreich installiert"
+                    return 0
+                fi
+            fi
+            ;;
+        macos)
+            if command -v brew &> /dev/null; then
+                echo "   Verwende: brew install $package"
+                if brew install "$package" > /dev/null 2>&1; then
+                    echo "✓ $package erfolgreich installiert"
+                    return 0
+                fi
+            fi
+            ;;
+    esac
+    
+    return 1
+}
+
+# Funktion zum Prüfen und Installieren einer Voraussetzung
+check_and_install() {
+    local command="$1"
+    local package="$2"
+    local os="$3"
+    local manual_instructions="$4"
+    
+    if command -v "$command" &> /dev/null; then
+        return 0
+    fi
+    
+    echo "❌ $command nicht gefunden!"
+    
+    # Versuche automatische Installation
+    if install_package "$package" "$os"; then
+        # Nachprüfung
+        if command -v "$command" &> /dev/null; then
+            echo "✅ $command erfolgreich installiert und verifiziert"
+            return 0
+        else
+            echo "⚠️  Installation durchgeführt, aber $command nicht gefunden"
+        fi
+    fi
+    
+    # Falls automatische Installation fehlgeschlagen
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Manuelle Installation erforderlich"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "$manual_instructions"
+    echo ""
+    read -p "Drücken Sie ENTER, nachdem Sie $command installiert haben, oder STRG+C zum Abbrechen... "
+    echo ""
+    
+    # Erneute Prüfung
+    if command -v "$command" &> /dev/null; then
+        echo "✅ $command gefunden!"
+        return 0
+    else
+        echo "❌ $command immer noch nicht gefunden. Bitte installieren Sie es manuell."
+        exit 1
+    fi
+}
+
+# Funktion zum Herunterladen und Entpacken des WoltLab Cores
+download_woltlab_core() {
+    local target_dir="$1"
+    local version="${2:-6.1.14}"
+    
+    local download_url="https://assets.woltlab.com/release/woltlab-suite-${version}.zip"
+    local zip_file="/tmp/woltlab-suite-${version}.zip"
+    
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "WoltLab Core Download"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "Version: $version"
+    echo "Download-URL: $download_url"
+    echo "Ziel-Verzeichnis: $target_dir"
+    echo ""
+    
+    # Prüfe ob curl verfügbar ist
+    if ! command -v curl &> /dev/null; then
+        echo "❌ curl nicht gefunden. Bitte installieren Sie curl für den Download."
+        echo ""
+        check_and_install "curl" "curl" "$OS" "Installieren Sie curl:\n  • Arch/CachyOS: sudo pacman -S curl\n  • Ubuntu/Debian: sudo apt install curl\n  • macOS: brew install curl"
+    fi
+    
+    # Prüfe ob unzip verfügbar ist
+    if ! command -v unzip &> /dev/null; then
+        echo "❌ unzip nicht gefunden. Bitte installieren Sie unzip für das Entpacken."
+        echo ""
+        check_and_install "unzip" "unzip" "$OS" "Installieren Sie unzip:\n  • Arch/CachyOS: sudo pacman -S unzip\n  • Ubuntu/Debian: sudo apt install unzip\n  • macOS: brew install unzip"
+    fi
+    
+    read -p "Möchten Sie den WoltLab Core jetzt herunterladen? (j/n): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
+        return 1
+    fi
+    
+    # Erstelle Ziel-Verzeichnis
+    mkdir -p "$target_dir"
+    
+    # Download
+    echo ""
+    echo "📥 Lade WoltLab Core herunter..."
+    if curl -L -o "$zip_file" "$download_url" --progress-bar; then
+        echo "✓ Download abgeschlossen"
+    else
+        echo "❌ Download fehlgeschlagen"
+        return 1
+    fi
+    
+    # Entpacken
+    echo ""
+    echo "📦 Entpacke WoltLab Core..."
+    if unzip -q "$zip_file" -d "$target_dir"; then
+        echo "✓ Entpacken abgeschlossen"
+        
+        # Finde das Hauptverzeichnis (meist woltlab-suite-X.X.X)
+        local extracted_dir=$(find "$target_dir" -maxdepth 1 -type d -name "woltlab-suite-*" | head -1)
+        if [ -n "$extracted_dir" ] && [ "$extracted_dir" != "$target_dir" ]; then
+            # Verschiebe Inhalt ins Ziel-Verzeichnis
+            echo "📁 Organisiere Verzeichnisstruktur..."
+            mv "$extracted_dir"/* "$target_dir/" 2>/dev/null || true
+            rmdir "$extracted_dir" 2>/dev/null || true
+        fi
+        
+        # Validierung
+        if [ -d "$target_dir/lib" ] && [ -f "$target_dir/wcf/global.php" ]; then
+            echo "✅ WoltLab Core erfolgreich installiert und validiert"
+            echo "   Pfad: $target_dir"
+            rm -f "$zip_file"
+            return 0
+        else
+            echo "⚠️  WoltLab Core entpackt, aber Struktur unvollständig"
+            echo "   Bitte prüfen Sie: $target_dir"
+        fi
+    else
+        echo "❌ Entpacken fehlgeschlagen"
+        return 1
+    fi
+}
+
+# Betriebssystem erkennen
+detect_os
+
 # Prüfe Voraussetzungen
-echo "🔍 Prüfe Voraussetzungen..."
+echo "═══════════════════════════════════════════════════════════════"
+echo "  Schritt 1: Voraussetzungen prüfen"
+echo "═══════════════════════════════════════════════════════════════"
+echo ""
+echo "Das Script prüft jetzt, ob alle benötigten Programme installiert sind..."
+echo ""
 
 # PHP
-if ! command -v php &> /dev/null; then
-    echo "❌ PHP nicht gefunden. Bitte installieren Sie PHP 8.0 oder höher."
-    exit 1
+MANUAL_PHP="Installieren Sie PHP 8.0 oder höher:\n  • Arch/CachyOS: sudo pacman -S php\n  • Ubuntu/Debian: sudo apt install php\n  • macOS: brew install php\n  • Windows WSL: sudo apt install php\n\nNach der Installation:\n  1. Prüfen Sie die Installation: php --version\n  2. Stellen Sie sicher, dass PHP 8.0+ installiert ist\n  3. Führen Sie dieses Script erneut aus"
+
+if check_and_install "php" "php" "$OS" "$MANUAL_PHP"; then
+    PHP_VERSION=$(php -r 'echo PHP_VERSION;')
+    echo "✓ PHP gefunden: $PHP_VERSION"
+    
+    # Prüfe PHP-Version
+    PHP_MAJOR=$(echo "$PHP_VERSION" | cut -d. -f1)
+    PHP_MINOR=$(echo "$PHP_VERSION" | cut -d. -f2)
+    if [ "$PHP_MAJOR" -lt 8 ]; then
+        echo "⚠️  Warnung: PHP Version $PHP_VERSION ist zu alt. PHP 8.0+ wird empfohlen."
+    fi
 fi
-PHP_VERSION=$(php -r 'echo PHP_VERSION;')
-echo "✓ PHP gefunden: $PHP_VERSION"
 
 # Git
-if ! command -v git &> /dev/null; then
-    echo "❌ Git nicht gefunden. Bitte installieren Sie Git."
-    exit 1
+MANUAL_GIT="Installieren Sie Git:\n  • Arch/CachyOS: sudo pacman -S git\n  • Ubuntu/Debian: sudo apt install git\n  • macOS: brew install git\n  • Windows WSL: sudo apt install git\n\nNach der Installation:\n  1. Prüfen Sie die Installation: git --version\n  2. Führen Sie dieses Script erneut aus"
+
+if check_and_install "git" "git" "$OS" "$MANUAL_GIT"; then
+    echo "✓ Git gefunden: $(git --version | cut -d' ' -f3)"
 fi
-echo "✓ Git gefunden: $(git --version)"
 
 # tar
-if ! command -v tar &> /dev/null; then
-    echo "❌ tar nicht gefunden. Bitte installieren Sie tar."
-    exit 1
+MANUAL_TAR="Installieren Sie tar:\n  • Arch/CachyOS: sudo pacman -S tar\n  • Ubuntu/Debian: sudo apt install tar\n  • macOS: tar ist normalerweise vorinstalliert\n  • Windows WSL: sudo apt install tar\n\nNach der Installation:\n  1. Prüfen Sie die Installation: tar --version\n  2. Führen Sie dieses Script erneut aus"
+
+if check_and_install "tar" "tar" "$OS" "$MANUAL_TAR"; then
+    echo "✓ tar gefunden"
 fi
-echo "✓ tar gefunden"
 
 echo ""
-echo "=== Konfiguration ==="
+echo "✅ Alle Voraussetzungen erfüllt!"
+echo ""
+read -p "Drücken Sie ENTER, um fortzufahren... "
+echo ""
+
+# Konfiguration
+echo "═══════════════════════════════════════════════════════════════"
+echo "  Schritt 2: Konfiguration"
+echo "═══════════════════════════════════════════════════════════════"
+echo ""
+echo "Jetzt werden Sie nach den benötigten Pfaden gefragt."
+echo "Sie können Pfade mit ~ für Ihr Home-Verzeichnis angeben."
 echo ""
 
 # WoltLab Core
-echo "🔧 WoltLab Suite Core"
-WOLTLAB_CORE=$(ask_path "Pfad zum WoltLab Core Verzeichnis" "")
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "WoltLab Suite Core"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Der WoltLab Suite Core ist die Basis-Software, für die Sie Plugins entwickeln."
+echo "Sie benötigen eine lokale Kopie als Referenz für Auto-Completion."
+echo ""
+echo "Optionen:"
+echo "  1. Automatischer Download: Das Script kann den Core automatisch herunterladen"
+echo "  2. Manueller Pfad: Geben Sie den Pfad zu einem bereits vorhandenen Core an"
+echo "  3. Überspringen: Lassen Sie leer, um später hinzuzufügen"
+echo ""
+WOLTLAB_CORE=$(ask_path "Pfad zum WoltLab Core Verzeichnis (oder leer lassen)" "")
+
+# Automatischer Download falls leer
+if [ -z "$WOLTLAB_CORE" ]; then
+    echo ""
+    read -p "Möchten Sie den WoltLab Core automatisch herunterladen? (j/n): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[JjYy]$ ]]; then
+        DEFAULT_CORE_DIR="$HOME/Documents/woltlab-core"
+        echo ""
+        CORE_DIR=$(ask_path "Ziel-Verzeichnis für WoltLab Core" "$DEFAULT_CORE_DIR")
+        
+        if download_woltlab_core "$CORE_DIR"; then
+            WOLTLAB_CORE="$CORE_DIR"
+        else
+            echo ""
+            echo "⚠️  Download fehlgeschlagen. Sie können den Core später manuell hinzufügen."
+            echo "   Download-Seite: https://www.woltlab.com/de/woltlab-suite-download/"
+            WOLTLAB_CORE=""
+        fi
+    fi
+elif [ -n "$WOLTLAB_CORE" ] && [ ! -d "$WOLTLAB_CORE/lib" ]; then
+    echo ""
+    echo "⚠️  Warnung: Das angegebene Verzeichnis scheint kein gültiger WoltLab Core zu sein."
+    echo "   Erwartete Struktur: lib/, wcf/global.php"
+    read -p "Trotzdem verwenden? (j/n): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
+        WOLTLAB_CORE=""
+    fi
+fi
 
 # Plugin-Verzeichnis
 echo ""
-echo "📦 Plugin-Verzeichnis"
-PLUGIN_DIR=$(ask_path "Pfad zu Ihrem Plugin-Verzeichnis (oder leer für neues Plugin)" "")
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Plugin-Verzeichnis"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Geben Sie den Pfad zu Ihrem Plugin-Verzeichnis an."
+echo ""
+echo "  • Falls Sie bereits ein Plugin haben: Geben Sie den Pfad an"
+echo "  • Falls Sie ein neues Plugin erstellen möchten: Lassen Sie leer"
+echo "    (Sie können später ein Plugin erstellen oder das Beispiel-Plugin verwenden)"
+echo ""
+PLUGIN_DIR=$(ask_path "Pfad zu Ihrem Plugin-Verzeichnis (oder leer lassen)" "")
+
+# Erstelle Plugin-Verzeichnis falls es nicht existiert
+if [ -n "$PLUGIN_DIR" ] && [ ! -d "$PLUGIN_DIR" ]; then
+    echo ""
+    read -p "Verzeichnis existiert nicht. Soll es erstellt werden? (j/n): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[JjYy]$ ]]; then
+        mkdir -p "$PLUGIN_DIR"
+        echo "✓ Verzeichnis erstellt: $PLUGIN_DIR"
+        echo ""
+        echo "📝 Wichtige Informationen für Ihr Plugin:"
+        echo "   • Ihr Plugin-Verzeichnis: $PLUGIN_DIR"
+        echo "   • Erstellen Sie dort: package.xml, page.xml, files/, templates/"
+        echo "   • Siehe Beispiel-Plugin: $SCRIPT_DIR/example-plugin/"
+        echo "   • Dokumentation: https://docs.woltlab.com/6.0/getting-started/"
+        echo ""
+        read -p "Drücken Sie ENTER, um fortzufahren... "
+    else
+        PLUGIN_DIR=""
+    fi
+fi
 
 # Hauptplugins (optional)
 echo ""
-echo "📦 Hauptplugins (optional, leer lassen zum Überspringen)"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Hauptplugins (optional)"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Hauptplugins sind andere Plugins, die Sie als Referenz verwenden möchten."
+echo "Dies ist optional – Sie können diesen Schritt überspringen."
+echo ""
+echo "Beispiele:"
+echo "  • Basis-Plugins, die Sie häufig als Vorlage verwenden"
+echo "  • Offizielle WoltLab Plugins zum Lernen"
+echo ""
 MAIN_PLUGINS=()
 while true; do
-    PLUGIN_PATH=$(ask_path "Pfad zu einem Hauptplugin (oder leer zum Beenden)" "")
+    PLUGIN_PATH=$(ask_path "Pfad zu einem Hauptplugin (oder leer lassen, um zu beenden)" "")
     if [ -z "$PLUGIN_PATH" ]; then
         break
     fi
     MAIN_PLUGINS+=("$PLUGIN_PATH")
+    echo "✓ Hauptplugin hinzugefügt: $PLUGIN_PATH"
 done
 
 # Erstelle Konfigurationsdatei
-CONFIG_FILE="$HOME/.woltlab-config"
 echo ""
+echo "═══════════════════════════════════════════════════════════════"
+echo "  Schritt 3: Konfiguration speichern"
+echo "═══════════════════════════════════════════════════════════════"
+echo ""
+
+CONFIG_FILE="$HOME/.woltlab-config"
 echo "💾 Erstelle Konfigurationsdatei: $CONFIG_FILE"
 
 cat > "$CONFIG_FILE" << EOF
@@ -119,21 +433,30 @@ fi
 
 chmod 600 "$CONFIG_FILE"
 echo "✓ Konfiguration gespeichert"
+echo ""
 
 # Kopiere Scripts ins Plugin-Verzeichnis (falls angegeben)
 if [ -n "$PLUGIN_DIR" ] && [ -d "$PLUGIN_DIR" ]; then
+    echo "═══════════════════════════════════════════════════════════════"
+    echo "  Schritt 4: Scripts kopieren"
+    echo "═══════════════════════════════════════════════════════════════"
     echo ""
-    echo "📋 Kopiere Scripts ins Plugin-Verzeichnis..."
+    echo "📋 Kopiere Build-Scripts ins Plugin-Verzeichnis..."
     cp "$SCRIPT_DIR/scripts/extract-plugin-files.sh" "$PLUGIN_DIR/"
     cp "$SCRIPT_DIR/scripts/update-tars.sh" "$PLUGIN_DIR/"
     cp "$SCRIPT_DIR/scripts/create-release.sh" "$PLUGIN_DIR/"
     chmod +x "$PLUGIN_DIR"/*.sh
-    echo "✓ Scripts kopiert"
+    echo "✓ Scripts kopiert nach: $PLUGIN_DIR"
+    echo ""
 fi
 
 # Erstelle Workspace
+echo "═══════════════════════════════════════════════════════════════"
+echo "  Schritt 5: Workspace erstellen"
+echo "═══════════════════════════════════════════════════════════════"
 echo ""
-echo "📝 Erstelle Workspace..."
+echo "📝 Erstelle Multi-Root Workspace für Ihre IDE..."
+echo ""
 
 # Workspace-Pfad bestimmen
 WORKSPACE_FILE="woltlab-plugin-dev.code-workspace"
@@ -223,31 +546,68 @@ cat > "$WORKSPACE_PATH" << EOF
 EOF
 
 echo "✅ Workspace erstellt: $WORKSPACE_PATH"
+echo ""
 
+echo "═══════════════════════════════════════════════════════════════"
+echo "  ✅ Installation erfolgreich abgeschlossen!"
+echo "═══════════════════════════════════════════════════════════════"
 echo ""
-echo "=== ✅ Installation abgeschlossen! ==="
+echo "🎉 Alles ist eingerichtet! Hier sind die nächsten Schritte:"
 echo ""
-echo "Nächste Schritte:"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "1. Entwicklungsumgebung öffnen"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "1. Öffnen Sie das Workspace:"
+echo "Öffnen Sie das erstellte Workspace-File:"
+echo ""
 echo "   cursor $WORKSPACE_PATH"
-echo "   oder"
+echo "   # oder"
 echo "   code $WORKSPACE_PATH"
 echo ""
-echo "2. Installieren Sie die empfohlenen Extensions in der IDE"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "2. IDE-Extensions installieren"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "3. Falls Sie ein neues Plugin erstellen möchten:"
-echo "   - Schauen Sie sich das Beispiel-Plugin an: example-plugin/"
-echo "   - Folgen Sie der Anleitung: https://docs.woltlab.com/6.0/getting-started/"
+echo "Die IDE wird automatisch Extensions vorschlagen:"
+echo "  • Intelephense - PHP Auto-Completion"
+echo "  • Xdebug - PHP Debugging"
+echo "  • EditorConfig - Code-Formatierung"
 echo ""
-echo "4. Scripts verwenden:"
-echo "   - ./extract-plugin-files.sh  # TAR-Dateien entpacken"
-echo "   - ./update-tars.sh            # TAR-Dateien aktualisieren"
-echo "   - ./create-release.sh VERSION # Release erstellen"
+echo "Installieren Sie diese Extensions und starten Sie die IDE neu."
 echo ""
-echo "📚 Dokumentation:"
-echo "   - README.md - Übersicht und Schnellstart"
-echo "   - docs/INSTALLATION.md - Detaillierte Installationsanleitung"
-echo "   - docs/WORKSPACE-SETUP.md - Workspace-Konfiguration"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "3. Plugin-Entwicklung starten"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+if [ -n "$PLUGIN_DIR" ] && [ -d "$PLUGIN_DIR" ]; then
+    echo "Ihr Plugin-Verzeichnis: $PLUGIN_DIR"
+    echo ""
+    echo "Die Build-Scripts wurden bereits kopiert. Sie können sie verwenden:"
+    echo "  • ./extract-plugin-files.sh  # TAR-Dateien entpacken"
+    echo "  • ./update-tars.sh            # TAR-Dateien aktualisieren"
+    echo "  • ./create-release.sh VERSION # Release erstellen"
+    echo ""
+else
+    echo "Falls Sie ein neues Plugin erstellen möchten:"
+    echo "  • Schauen Sie sich das Beispiel-Plugin an: example-plugin/"
+    echo "  • Folgen Sie der Anleitung: https://docs.woltlab.com/6.0/getting-started/"
+    echo ""
+fi
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "4. Hilfe & Dokumentation"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "📚 Weitere Informationen:"
+echo "  • README.md - Übersicht und Schnellstart"
+echo "  • docs/INSTALLATION.md - Detaillierte Installationsanleitung"
+echo "  • docs/WORKSPACE-SETUP.md - Workspace-Konfiguration"
+echo ""
+echo "❓ Bei Problemen:"
+echo "  • Schauen Sie in die Dokumentation in docs/"
+echo "  • Öffnen Sie ein Issue auf GitHub"
+echo ""
+echo "═══════════════════════════════════════════════════════════════"
+echo "Viel Erfolg bei der Plugin-Entwicklung! 🚀"
+echo "═══════════════════════════════════════════════════════════════"
 echo ""
 
