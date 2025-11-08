@@ -15,7 +15,45 @@
 # Verwendung: ./update-tars.sh [PLUGIN_DIR]
 # Falls PLUGIN_DIR nicht angegeben, wird das aktuelle Verzeichnis verwendet
 
-set -e
+# Fehlerbehandlung
+set -euo pipefail
+
+# Fehler-Handler
+trap 'error_handler $? $LINENO' ERR
+
+# Logging-Variablen
+LOG_FILE="/tmp/update-tars-$(date +%Y%m%d-%H%M%S).log"
+VERBOSE=false
+
+# Fehler-Handler Funktion
+error_handler() {
+    local exit_code=$1
+    local line_number=$2
+    echo ""
+    echo "❌ FEHLER: TAR-Update fehlgeschlagen in Zeile $line_number (Exit-Code: $exit_code)"
+    echo "   Log-Datei: $LOG_FILE"
+    echo ""
+    echo "Häufige Probleme:"
+    echo "  • _extracted/ Verzeichnis fehlt → Führe zuerst extract-plugin-files.sh aus"
+    echo "  • Fehlende Schreibrechte im Plugin-Verzeichnis"
+    echo ""
+    exit 1
+}
+
+# Logging-Funktion
+log() {
+    local level="$1"
+    shift
+    local message="$*"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] [$level] $message" >> "$LOG_FILE"
+
+    if [ "$VERBOSE" = true ] || [ "$level" = "ERROR" ] || [ "$level" = "WARNING" ]; then
+        echo "$message" >&2
+    fi
+}
+
+log "INFO" "TAR-Update gestartet"
 
 # Plugin-Verzeichnis bestimmen
 if [ -n "$1" ]; then
@@ -24,7 +62,12 @@ else
     PLUGIN_DIR="$(pwd)"
 fi
 
-cd "$PLUGIN_DIR" || exit 1
+log "INFO" "Plugin-Verzeichnis: $PLUGIN_DIR"
+
+cd "$PLUGIN_DIR" || {
+    log "ERROR" "Konnte nicht in Plugin-Verzeichnis wechseln: $PLUGIN_DIR"
+    exit 1
+}
 
 echo "=== Aktualisiere TAR-Archive ==="
 echo "Verzeichnis: $PLUGIN_DIR"
@@ -34,8 +77,11 @@ echo ""
 if [ ! -d "_extracted" ]; then
     echo "❌ Fehler: _extracted/ Ordner nicht gefunden!"
     echo "Führe zuerst ./extract-plugin-files.sh aus"
+    log "ERROR" "_extracted/ Verzeichnis nicht gefunden"
     exit 1
 fi
+
+log "INFO" "_extracted/ Verzeichnis gefunden"
 
 # Backup alte TAR-Dateien
 if [ -f "files.tar" ] || [ -f "files_urlshort.tar" ] || [ -f "templates_urlshort.tar" ] || [ -f "acptemplates_urlshort.tar" ]; then
@@ -94,10 +140,13 @@ echo ""
 echo "=== Fertig! ==="
 echo ""
 echo "✅ Alle TAR-Archive wurden aktualisiert"
+log "INFO" "Alle TAR-Archive erfolgreich aktualisiert"
 echo ""
 echo "Nächste Schritte:"
 echo "  1. git add *.tar"
 echo "  2. git commit -m 'Update: Beschreibung'"
 echo "  3. git push"
 echo ""
+echo "ℹ️  Log-Datei: $LOG_FILE"
+log "INFO" "TAR-Update erfolgreich abgeschlossen"
 

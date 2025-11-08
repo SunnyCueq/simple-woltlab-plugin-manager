@@ -18,7 +18,47 @@
 #
 # Beispiel: ./create-release.sh 1.0.0 /path/to/plugin owner/repo-name
 
-set -e
+# Fehlerbehandlung
+set -euo pipefail
+
+# Fehler-Handler
+trap 'error_handler $? $LINENO' ERR
+
+# Logging-Variablen
+LOG_FILE="/tmp/create-release-$(date +%Y%m%d-%H%M%S).log"
+VERBOSE=false
+
+# Fehler-Handler Funktion
+error_handler() {
+    local exit_code=$1
+    local line_number=$2
+    echo ""
+    echo "❌ FEHLER: Release-Erstellung fehlgeschlagen in Zeile $line_number (Exit-Code: $exit_code)"
+    echo "   Log-Datei: $LOG_FILE"
+    echo "   Bitte prüfe die Log-Datei für Details."
+    echo ""
+    echo "Häufige Probleme:"
+    echo "  • Fehlende package.xml oder ungültige Struktur"
+    echo "  • Fehlende Schreibrechte im Plugin-Verzeichnis"
+    echo "  • GitHub CLI nicht authentifiziert (gh auth login)"
+    echo ""
+    exit 1
+}
+
+# Logging-Funktion
+log() {
+    local level="$1"
+    shift
+    local message="$*"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] [$level] $message" >> "$LOG_FILE"
+
+    if [ "$VERBOSE" = true ] || [ "$level" = "ERROR" ] || [ "$level" = "WARNING" ]; then
+        echo "$message" >&2
+    fi
+}
+
+log "INFO" "Release-Erstellung gestartet"
 
 # Parameter prüfen
 if [ -z "$1" ]; then
@@ -26,6 +66,7 @@ if [ -z "$1" ]; then
     echo ""
     echo "Verwendung: $0 VERSION [PLUGIN_DIR] [GITHUB_REPO]"
     echo "Beispiel: $0 1.0.0 /path/to/plugin owner/repo-name"
+    log "ERROR" "Versionsnummer fehlt"
     exit 1
 fi
 
@@ -33,34 +74,51 @@ VERSION="$1"
 PLUGIN_DIR="${2:-$(pwd)}"
 GITHUB_REPO="$3"
 
-cd "$PLUGIN_DIR" || exit 1
+log "INFO" "Parameter: VERSION=$VERSION, PLUGIN_DIR=$PLUGIN_DIR, GITHUB_REPO=${GITHUB_REPO:-none}"
+
+cd "$PLUGIN_DIR" || {
+    log "ERROR" "Konnte nicht in Plugin-Verzeichnis wechseln: $PLUGIN_DIR"
+    exit 1
+}
+
+log "INFO" "Arbeitsverzeichnis: $PLUGIN_DIR"
 
 # Prüfe ob package.xml existiert
 if [ ! -f "package.xml" ]; then
     echo "❌ Fehler: package.xml nicht gefunden in $PLUGIN_DIR"
+    log "ERROR" "package.xml nicht gefunden in $PLUGIN_DIR"
     exit 1
 fi
 
+log "INFO" "package.xml gefunden"
+
 # Validierung 1: XML-Syntax prüfen
 echo "🔍 Validiere package.xml Syntax..."
+log "INFO" "Validiere XML-Syntax..."
 if command -v xmllint &> /dev/null; then
     if ! xmllint --noout package.xml 2>/dev/null; then
         echo "❌ Fehler: package.xml hat XML-Syntax-Fehler!"
         echo "   Bitte prüfe die Datei mit: xmllint package.xml"
+        log "ERROR" "XML-Syntax-Fehler in package.xml"
         exit 1
     fi
     echo "✓ XML-Syntax OK"
+    log "INFO" "XML-Syntax validiert"
 else
     echo "⚠️  Warnung: xmllint nicht gefunden, überspringe XML-Validierung"
     echo "   Installiere mit: sudo pacman -S libxml2 (Arch) oder sudo apt install libxml2-utils (Debian)"
+    log "WARNING" "xmllint nicht gefunden, überspringe XML-Validierung"
 fi
 
 # Package-Name aus package.xml extrahieren
 PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' package.xml | head -1)
 if [ -z "$PACKAGE_NAME" ]; then
     echo "❌ Fehler: Konnte Package-Name nicht aus package.xml extrahieren"
+    log "ERROR" "Konnte Package-Name nicht aus package.xml extrahieren"
     exit 1
 fi
+
+log "INFO" "Package-Name: $PACKAGE_NAME"
 
 # Validierung 2: Package-Name-Format prüfen
 echo "🔍 Validiere Package-Name-Format..."
@@ -315,8 +373,14 @@ if [ -n "$GITHUB_REPO" ]; then
     echo ""
     echo "🔗 Release-Seite:"
     echo "https://github.com/$GITHUB_REPO/releases/tag/v$VERSION"
+    log "INFO" "GitHub Release erfolgreich erstellt: v$VERSION"
 else
     echo "ℹ️  Kein GitHub Repository angegeben. Release nur lokal erstellt."
     echo "   Für GitHub Release: $0 $VERSION $PLUGIN_DIR owner/repo-name"
+    log "INFO" "Release lokal erstellt (kein GitHub Repository angegeben)"
 fi
+
+echo ""
+echo "ℹ️  Log-Datei: $LOG_FILE"
+log "INFO" "Release-Erstellung erfolgreich abgeschlossen"
 

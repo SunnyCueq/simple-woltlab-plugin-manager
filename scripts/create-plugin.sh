@@ -17,7 +17,46 @@
 #
 # Beispiel: ./create-plugin.sh com.example.myplugin
 
-set -e
+# Fehlerbehandlung
+set -euo pipefail
+
+# Fehler-Handler
+trap 'error_handler $? $LINENO' ERR
+
+# Logging-Variablen
+LOG_FILE="/tmp/create-plugin-$(date +%Y%m%d-%H%M%S).log"
+VERBOSE=false
+
+# Fehler-Handler Funktion
+error_handler() {
+    local exit_code=$1
+    local line_number=$2
+    echo ""
+    echo "❌ FEHLER: Plugin-Erstellung fehlgeschlagen in Zeile $line_number (Exit-Code: $exit_code)"
+    echo "   Log-Datei: $LOG_FILE"
+    echo ""
+    echo "Häufige Probleme:"
+    echo "  • Plugin-Verzeichnis existiert bereits"
+    echo "  • Fehlende Schreibrechte im Zielverzeichnis"
+    echo "  • Ungültiger Package-Identifier"
+    echo ""
+    exit 1
+}
+
+# Logging-Funktion
+log() {
+    local level="$1"
+    shift
+    local message="$*"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] [$level] $message" >> "$LOG_FILE"
+
+    if [ "$VERBOSE" = true ] || [ "$level" = "ERROR" ] || [ "$level" = "WARNING" ]; then
+        echo "$message" >&2
+    fi
+}
+
+log "INFO" "Plugin-Erstellung gestartet"
 
 # Parameter prüfen
 if [ -z "$1" ]; then
@@ -27,11 +66,15 @@ if [ -z "$1" ]; then
     echo "Beispiel: $0 com.example.myplugin"
     echo ""
     echo "Package-Identifier Format: com.domain.pluginname"
+    log "ERROR" "Package-Identifier fehlt"
     exit 1
 fi
 
 PACKAGE_IDENTIFIER="$1"
 TARGET_DIR="${2:-$(pwd)}"
+
+log "INFO" "Package-Identifier: $PACKAGE_IDENTIFIER"
+log "INFO" "Ziel-Verzeichnis: $TARGET_DIR"
 
 # Validierung: Package-Identifier-Format
 if [[ ! "$PACKAGE_IDENTIFIER" =~ ^com\.[a-z0-9]+\.[a-z0-9]+(\.[a-z0-9]+)*$ ]]; then
@@ -42,23 +85,33 @@ if [[ ! "$PACKAGE_IDENTIFIER" =~ ^com\.[a-z0-9]+\.[a-z0-9]+(\.[a-z0-9]+)*$ ]]; t
     echo "  - com.example.myplugin"
     echo "  - com.sunnyc.wcf.buttonBox"
     echo ""
+    log "ERROR" "Ungültiges Package-Identifier-Format: $PACKAGE_IDENTIFIER"
     exit 1
 fi
+
+log "INFO" "Package-Identifier-Format ist korrekt"
 
 # Extrahiere Plugin-Name aus Identifier
 PLUGIN_NAME=$(echo "$PACKAGE_IDENTIFIER" | sed 's/.*\.//')
 PLUGIN_DIR="$TARGET_DIR/$PACKAGE_IDENTIFIER"
 
+log "INFO" "Plugin-Name: $PLUGIN_NAME"
+log "INFO" "Plugin-Verzeichnis: $PLUGIN_DIR"
+
 # Prüfe ob Verzeichnis bereits existiert
 if [ -d "$PLUGIN_DIR" ]; then
     echo "⚠️  Warnung: Verzeichnis existiert bereits: $PLUGIN_DIR"
+    log "WARNING" "Verzeichnis existiert bereits: $PLUGIN_DIR"
     read -p "Möchtest du es überschreiben? (j/n): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
         echo "Abgebrochen."
+        log "INFO" "Plugin-Erstellung vom Benutzer abgebrochen"
         exit 0
     fi
+    log "INFO" "Benutzer hat bestätigt, überschreibe existierendes Verzeichnis"
     rm -rf "$PLUGIN_DIR"
+    log "INFO" "Existierendes Verzeichnis gelöscht"
 fi
 
 echo "═══════════════════════════════════════════════════════════════"
@@ -72,12 +125,15 @@ echo ""
 
 # Erstelle Verzeichnisstruktur
 echo "📁 Erstelle Verzeichnisstruktur..."
+log "INFO" "Erstelle Verzeichnisstruktur"
 mkdir -p "$PLUGIN_DIR/files/lib"
 mkdir -p "$PLUGIN_DIR/templates"
 mkdir -p "$PLUGIN_DIR/language"
+log "INFO" "Verzeichnisstruktur erstellt"
 
 # Erstelle package.xml
 echo "📝 Erstelle package.xml..."
+log "INFO" "Erstelle package.xml"
 cat > "$PLUGIN_DIR/package.xml" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/package.xsd" name="$PACKAGE_IDENTIFIER">
@@ -105,9 +161,11 @@ cat > "$PLUGIN_DIR/package.xml" <<EOF
 	</instructions>
 </package>
 EOF
+log "INFO" "package.xml erstellt"
 
 # Erstelle page.xml (optional)
 echo "📝 Erstelle page.xml..."
+log "INFO" "Erstelle page.xml"
 cat > "$PLUGIN_DIR/page.xml" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/page.xsd">
@@ -119,9 +177,11 @@ cat > "$PLUGIN_DIR/page.xml" <<EOF
 	</import>
 </data>
 EOF
+log "INFO" "page.xml erstellt"
 
 # Erstelle Beispiel-PHP-Klasse
 echo "📝 Erstelle Beispiel-PHP-Klasse..."
+log "INFO" "Erstelle Beispiel-PHP-Klasse"
 mkdir -p "$PLUGIN_DIR/files/lib/page"
 cat > "$PLUGIN_DIR/files/lib/page/ExamplePage.class.php" <<EOFPHP
 <?php
@@ -170,9 +230,11 @@ class ExamplePage extends AbstractPage {
 	}
 }
 EOFPHP
+log "INFO" "Beispiel-PHP-Klasse erstellt"
 
 # Erstelle Beispiel-Template
 echo "📝 Erstelle Beispiel-Template..."
+log "INFO" "Erstelle Beispiel-Template"
 cat > "$PLUGIN_DIR/templates/example.tpl" <<EOFTEMPLATE
 {* Template for Example Page *}
 
@@ -186,9 +248,11 @@ cat > "$PLUGIN_DIR/templates/example.tpl" <<EOFTEMPLATE
 	</div>
 </div>
 EOFTEMPLATE
+log "INFO" "Beispiel-Template erstellt"
 
 # Erstelle README.md
 echo "📝 Erstelle README.md..."
+log "INFO" "Erstelle README.md"
 cat > "$PLUGIN_DIR/README.md" <<EOF
 # $PLUGIN_NAME
 
@@ -227,9 +291,11 @@ $PACKAGE_IDENTIFIER/
 - [WoltLab Dokumentation](https://docs.woltlab.com/6.0/)
 - [Simple WoltLab Plugin Manager](https://github.com/SunnyCueq/simple-woltlab-plugin-manager)
 EOF
+log "INFO" "README.md erstellt"
 
 echo ""
 echo "✅ Plugin-Grundstruktur erstellt!"
+log "INFO" "Plugin-Grundstruktur erfolgreich erstellt"
 echo ""
 echo "📁 Verzeichnis: $PLUGIN_DIR"
 echo ""
@@ -251,4 +317,6 @@ echo "📚 Dokumentation:"
 echo "   - WoltLab: https://docs.woltlab.com/6.0/getting-started/"
 echo "   - Plugin Manager: https://github.com/SunnyCueq/simple-woltlab-plugin-manager"
 echo ""
+echo "ℹ️  Log-Datei: $LOG_FILE"
+log "INFO" "Plugin-Erstellung erfolgreich abgeschlossen"
 
