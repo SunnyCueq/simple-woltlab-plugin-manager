@@ -32,3 +32,9 @@ _extracted/
 *-workspace.code-workspace
 !templates/workspace.code-workspace
 
+# Interne Dokumentation (nicht für GitHub)
+COMMIT_AND_PUSH.md
+PROJEKT-KONTEXT.md
+GITHUB_SETUP.md
+GITHUB_REPO_INFO.md
+

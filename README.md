@@ -135,6 +135,12 @@ code woltlab-plugin-dev.code-workspace
 - **[INSTALLATION_EN.md](docs/INSTALLATION_EN.md)** - Detailed installation guide (EN)
 - **[WORKSPACE-SETUP_EN.md](docs/WORKSPACE-SETUP_EN.md)** - Workspace configuration (EN)
 
+### 📚 Weitere Anleitungen
+
+- **[VERSIONING.md](docs/VERSIONING.md)** - Versionsverwaltung und Semantic Versioning
+- **[PLUGIN-NAMING.md](docs/PLUGIN-NAMING.md)** - Plugin-Namenskonventionen
+- **[DEVELOPER-TOOLS.md](docs/DEVELOPER-TOOLS.md)** - Entwickler-Werkzeuge und Debug-Optionen
+
 ### ⚙️ Für Experten
 
 - **[README_ADVANCED.md](README_ADVANCED.md)** - Advanced technical documentation (EN only)
@@ -144,6 +150,26 @@ code woltlab-plugin-dev.code-workspace
   - Troubleshooting guide
 
 ## 🛠️ Scripts
+
+### version.sh
+
+Verwaltet Versionsnummern für das Repository (Semantic Versioning).
+
+```bash
+# Patch-Version erhöhen (Bugfix)
+./scripts/version.sh patch
+
+# Minor-Version erhöhen (Neues Feature)
+./scripts/version.sh minor
+
+# Major-Version erhöhen (Breaking Change)
+./scripts/version.sh major
+
+# Dry-Run (nur anzeigen)
+./scripts/version.sh patch --dry-run
+```
+
+Siehe [VERSIONING.md](docs/VERSIONING.md) für Details.
 
 ### extract-plugin-files.sh
 
@@ -172,14 +198,6 @@ Erstellt Plugin-Package und optional GitHub Release.
 Beispiel:
 ```bash
 ./scripts/create-release.sh 1.0.0 /path/to/plugin owner/repo-name
-```
-
-### setup-workspace.sh
-
-Erstellt Multi-Root Workspace für die IDE.
-
-```bash
-./scripts/setup-workspace.sh
 ```
 
 ## 📁 Struktur
