@@ -29,6 +29,22 @@ Diese Anleitung erklärt den kompletten Workflow von der Entwicklung bis zum fer
 
 ### Plugin-Struktur erstellen
 
+**Option 1: Automatisch mit create-plugin.sh (empfohlen)**
+
+```bash
+# Erstellt vollständige Plugin-Grundstruktur
+./scripts/create-plugin.sh com.example.myplugin
+
+# Das Script erstellt automatisch:
+# - Plugin-Verzeichnisstruktur
+# - package.xml mit korrektem Identifier
+# - page.xml mit Beispiel-Seite
+# - PHP-Klasse und Template
+# - README.md
+```
+
+**Option 2: Manuell erstellen**
+
 ```bash
 # 1. Plugin-Verzeichnis erstellen
 mkdir -p ~/Dokumente/com.example.myplugin
@@ -42,6 +58,8 @@ mkdir -p language
 # 3. package.xml erstellen
 # (siehe example-plugin/ für Beispiel)
 ```
+
+**💡 Tipp:** Verwende `create-plugin.sh` für schnellen Start!
 
 ### package.xml konfigurieren
 
