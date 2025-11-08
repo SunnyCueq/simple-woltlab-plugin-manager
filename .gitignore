@@ -27,6 +27,8 @@ _extracted/
 *.tar
 *.tar.gz
 .tar-backups/
+.package-backups/
+package.xml.bak
 
 # User-spezifische Workspaces
 *-workspace.code-workspace

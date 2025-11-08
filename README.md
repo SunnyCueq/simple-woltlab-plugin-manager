@@ -187,9 +187,30 @@ Erstellt TAR-Archive aus `_extracted/` Verzeichnis.
 ./scripts/update-tars.sh [PLUGIN_DIR]
 ```
 
+### plugin-version.sh
+
+Automatische Versionsverwaltung für Plugins. Erhöht die Version in `package.xml` und erstellt optional ein Package.
+
+```bash
+# Patch-Version erhöhen und Package erstellen
+./scripts/plugin-version.sh patch
+
+# Minor-Version erhöhen ohne Package zu erstellen
+./scripts/plugin-version.sh minor --no-release
+
+# Major-Version erhöhen für ein bestimmtes Plugin
+./scripts/plugin-version.sh major /path/to/plugin
+```
+
+**Features:**
+- ✅ Automatische Versionsaktualisierung in `package.xml`
+- ✅ Automatische Datumsaktualisierung
+- ✅ Optional: Automatisches Package-Erstellen
+- ✅ Backup des letzten Packages
+
 ### create-release.sh
 
-Erstellt Plugin-Package und optional GitHub Release.
+Erstellt Plugin-Package und optional GitHub Release. Aktualisiert automatisch die Version in `package.xml` und erstellt ein Backup des letzten Packages.
 
 ```bash
 ./scripts/create-release.sh VERSION [PLUGIN_DIR] [GITHUB_REPO]
@@ -197,8 +218,14 @@ Erstellt Plugin-Package und optional GitHub Release.
 
 Beispiel:
 ```bash
-./scripts/create-release.sh 1.0.0 /path/to/plugin owner/repo-name
+./scripts/create-release.sh 1.0.1 /path/to/plugin owner/repo-name
 ```
+
+**Features:**
+- ✅ Automatische Versionsaktualisierung in `package.xml`
+- ✅ Automatische Datumsaktualisierung
+- ✅ Backup des letzten TAR-Archivs (in `.package-backups/`)
+- ✅ Optional: GitHub Release erstellen
 
 ## 📁 Struktur
 

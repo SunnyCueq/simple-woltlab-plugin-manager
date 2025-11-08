@@ -48,13 +48,64 @@ if [ -z "$PACKAGE_NAME" ]; then
     exit 1
 fi
 
+# Aktuelle Version aus package.xml lesen
+CURRENT_VERSION=$(grep -oP '<version>\K[^<]+' package.xml | head -1)
+if [ -z "$CURRENT_VERSION" ]; then
+    echo "⚠️  Warnung: Konnte aktuelle Version nicht aus package.xml lesen"
+    CURRENT_VERSION="0.0.0"
+fi
+
 PACKAGE_FILE="${PACKAGE_NAME}-${VERSION}.tar.gz"
 
-echo "=== Erstelle Plugin-Package ==="
+echo "═══════════════════════════════════════════════════════════════"
+echo "  Plugin-Package erstellen"
+echo "═══════════════════════════════════════════════════════════════"
+echo ""
 echo "Package: $PACKAGE_NAME"
-echo "Version: $VERSION"
+echo "Aktuelle Version: $CURRENT_VERSION"
+echo "Neue Version: $VERSION"
 echo "Verzeichnis: $PLUGIN_DIR"
 echo ""
+
+# Backup des letzten TAR-Archivs erstellen
+BACKUP_DIR=".package-backups"
+mkdir -p "$BACKUP_DIR"
+
+# Finde das letzte Package-Archiv
+LAST_PACKAGE=$(ls -t "${PACKAGE_NAME}"-*.tar.gz 2>/dev/null | head -1)
+
+if [ -n "$LAST_PACKAGE" ]; then
+    echo "💾 Erstelle Backup des letzten Packages..."
+    BACKUP_FILE="$BACKUP_DIR/${LAST_PACKAGE}.backup"
+    cp "$LAST_PACKAGE" "$BACKUP_FILE"
+    echo "✓ Backup erstellt: $BACKUP_FILE"
+    echo ""
+fi
+
+# Aktualisiere Version in package.xml
+echo "📝 Aktualisiere Version in package.xml..."
+
+# Aktuelle Version ersetzen
+if [ "$CURRENT_VERSION" != "$VERSION" ]; then
+    # Backup der originalen package.xml
+    cp package.xml package.xml.bak
+    
+    # Aktualisiere Version
+    sed -i "s/<version>$CURRENT_VERSION<\/version>/<version>$VERSION<\/version>/g" package.xml
+    
+    # Aktualisiere auch das Datum
+    TODAY=$(date +%Y-%m-%d)
+    sed -i "s/<date>[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}<\/date>/<date>$TODAY<\/date>/g" package.xml
+    
+    echo "✓ Version aktualisiert: $CURRENT_VERSION → $VERSION"
+    echo "✓ Datum aktualisiert: $TODAY"
+    echo ""
+    echo "ℹ️  package.xml wurde aktualisiert. Backup: package.xml.bak"
+    echo ""
+else
+    echo "ℹ️  Version bereits $VERSION, keine Änderung nötig"
+    echo ""
+fi
 
 # Prüfe ob TAR-Dateien existieren
 REQUIRED_TARS=("package.xml")
@@ -107,6 +158,15 @@ mv "/tmp/$PACKAGE_FILE" "$PLUGIN_DIR/"
 
 echo "✅ Package erstellt: $PACKAGE_FILE"
 echo ""
+
+# package.xml.bak bleibt als Backup erhalten
+# Die aktualisierte package.xml mit neuer Version bleibt aktiv
+cd "$PLUGIN_DIR" || exit 1
+if [ -f "package.xml.bak" ]; then
+    echo "ℹ️  Backup der originalen package.xml: package.xml.bak"
+    echo "   Die package.xml wurde mit Version $VERSION aktualisiert"
+    echo ""
+fi
 
 # GitHub Release erstellen (falls Repository angegeben)
 if [ -n "$GITHUB_REPO" ]; then
