@@ -28,79 +28,105 @@ jobs:
         PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' package.xml | head -1)
         echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_OUTPUT
         
-    - name: Create TAR archives
+    - name: Find plugin directory
+      id: plugin_dir
       run: |
-        # Extract existing TARs if available
-        if [ -f files.tar ]; then
-          mkdir -p _extracted/files
-          tar -xf files.tar -C _extracted/files/ || true
+        # Suche nach package.xml im Root oder in Unterverzeichnissen
+        if [ -f "package.xml" ]; then
+          PLUGIN_DIR="."
+        else
+          PLUGIN_DIR=$(find . -name "package.xml" -type f | head -1 | xargs dirname)
+          if [ -z "$PLUGIN_DIR" ]; then
+            echo "❌ package.xml nicht gefunden"
+            exit 1
+          fi
         fi
-        if [ -f files_urlshort.tar ]; then
-          mkdir -p _extracted/files_urlshort
-          tar -xf files_urlshort.tar -C _extracted/files_urlshort/ || true
-        fi
-        if [ -f templates.tar ]; then
-          mkdir -p _extracted/templates
-          tar -xf templates.tar -C _extracted/templates/ || true
-        fi
-        if [ -f templates_urlshort.tar ]; then
-          mkdir -p _extracted/templates_urlshort
-          tar -xf templates_urlshort.tar -C _extracted/templates_urlshort/ || true
-        fi
+        echo "PLUGIN_DIR=$PLUGIN_DIR" >> $GITHUB_OUTPUT
+        echo "Plugin-Verzeichnis: $PLUGIN_DIR"
         
-        # Recreate TARs
-        if [ -d "_extracted/files" ] && [ "$(ls -A _extracted/files 2>/dev/null)" ]; then
-          cd _extracted/files && tar -cf ../../files.tar * && cd ../..
-        fi
-        if [ -d "_extracted/files_urlshort" ] && [ "$(ls -A _extracted/files_urlshort 2>/dev/null)" ]; then
-          cd _extracted/files_urlshort && tar -cf ../../files_urlshort.tar * && cd ../..
-        fi
-        if [ -d "_extracted/templates" ] && [ "$(ls -A _extracted/templates 2>/dev/null)" ]; then
-          cd _extracted/templates && tar -cf ../../templates.tar * && cd ../..
-        fi
-        if [ -d "_extracted/templates_urlshort" ] && [ "$(ls -A _extracted/templates_urlshort 2>/dev/null)" ]; then
-          cd _extracted/templates_urlshort && tar -cf ../../templates_urlshort.tar * && cd ../..
-        fi
+    - name: Parse package.xml dynamically
+      id: parse_package
+      working-directory: ${{ steps.plugin_dir.outputs.PLUGIN_DIR }}
+      run: |
+        # Lade die Parser-Scripts
+        mkdir -p /tmp/scripts
+        cp ../../scripts/parse-package-xml.sh /tmp/scripts/
+        cp ../../scripts/pip-defaults.sh /tmp/scripts/
+        chmod +x /tmp/scripts/*.sh
+        
+        # Setze SCRIPT_DIR für die Scripts
+        export SCRIPT_DIR="/tmp/scripts"
+        
+        # Source die Scripts
+        source /tmp/scripts/pip-defaults.sh
+        source /tmp/scripts/parse-package-xml.sh
+        
+        # Parse package.xml und hole alle benötigten Dateien
+        FILES_TO_PACKAGE=()
+        while IFS= read -r file; do
+          if [ -n "$file" ]; then
+            FILES_TO_PACKAGE+=("$file")
+          fi
+        done < <(get_required_files "package.xml" ".")
+        
+        # Erstelle komma-separierte Liste für GitHub Actions
+        FILES_LIST=$(IFS=','; echo "${FILES_TO_PACKAGE[*]}")
+        echo "FILES_LIST=$FILES_LIST" >> $GITHUB_OUTPUT
+        
+        # Zeige gefundene Dateien
+        echo "Gefundene Dateien:"
+        for file in "${FILES_TO_PACKAGE[@]}"; do
+          echo "  - $file"
+        done
         
     - name: Create package
+      working-directory: ${{ steps.plugin_dir.outputs.PLUGIN_DIR }}
       run: |
         PACKAGE_NAME="${{ steps.package_name.outputs.PACKAGE_NAME }}"
         VERSION="${{ steps.tag_version.outputs.VERSION }}"
         PACKAGE_FILE="${PACKAGE_NAME}-${VERSION}.tar.gz"
         
-        # Collect files
-        TAR_FILES=()
-        [ -f "files.tar" ] && TAR_FILES+=("files.tar")
-        [ -f "files_urlshort.tar" ] && TAR_FILES+=("files_urlshort.tar")
-        [ -f "templates.tar" ] && TAR_FILES+=("templates.tar")
-        [ -f "templates_urlshort.tar" ] && TAR_FILES+=("templates_urlshort.tar")
-        [ -f "acptemplates.tar" ] && TAR_FILES+=("acptemplates.tar")
-        [ -f "acptemplates_urlshort.tar" ] && TAR_FILES+=("acptemplates_urlshort.tar")
+        # Konvertiere komma-separierte Liste zurück zu Array
+        IFS=',' read -ra FILES_TO_PACKAGE <<< "${{ steps.parse_package.outputs.FILES_LIST }}"
         
-        XML_FILES=()
-        for xml_file in *.xml; do
-          if [ -f "$xml_file" ]; then
-            XML_FILES+=("$xml_file")
+        # Erstelle temporäres Verzeichnis
+        TMP_DIR=$(mktemp -d)
+        
+        # Kopiere alle benötigten Dateien
+        for file in "${FILES_TO_PACKAGE[@]}"; do
+          if [ -f "$file" ]; then
+            cp "$file" "$TMP_DIR/"
+            echo "✅ Kopiert: $file"
+          elif [ -d "$file" ]; then
+            cp -r "$file" "$TMP_DIR/"
+            echo "✅ Kopiert: $file/ (Verzeichnis)"
+          else
+            echo "⚠️  Warnung: $file nicht gefunden, überspringe..."
           fi
         done
         
-        # Create package
-        tar -czf "$PACKAGE_FILE" "${TAR_FILES[@]}" "${XML_FILES[@]}" language/ 2>/dev/null || \
-        tar -czf "$PACKAGE_FILE" "${TAR_FILES[@]}" "${XML_FILES[@]}"
+        # Erstelle TAR.GZ
+        cd "$TMP_DIR" || exit 1
+        tar -czf "/tmp/$PACKAGE_FILE" *
+        mv "/tmp/$PACKAGE_FILE" "${{ steps.plugin_dir.outputs.PLUGIN_DIR }}/"
         
         echo "PACKAGE_FILE=$PACKAGE_FILE" >> $GITHUB_ENV
+        echo "PACKAGE_PATH=${{ steps.plugin_dir.outputs.PLUGIN_DIR }}/$PACKAGE_FILE" >> $GITHUB_ENV
         
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        files: ${{ env.PACKAGE_FILE }}
+        files: ${{ env.PACKAGE_PATH }}
         name: Version ${{ steps.tag_version.outputs.VERSION }}
         body: |
           ## Version ${{ steps.tag_version.outputs.VERSION }}
           
-          See CHANGELOG.md for details.
+          Automatisch erstellt mit dynamischem package.xml Parsing.
+          
+          **Package:** ${{ steps.package_name.outputs.PACKAGE_NAME }}
+          
+          Siehe CHANGELOG.md für Details (falls vorhanden).
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
