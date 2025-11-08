@@ -131,11 +131,13 @@ cd ~/Dokumente/com.example.myplugin
 
 **Was macht das Script?**
 
-1. ✅ **Analysiert package.xml** - Findet automatisch alle benötigten Dateien
-2. ✅ **Zeigt Package-Struktur** - Du siehst was gepackt wird
-3. ✅ **Aktualisiert Version** - Setzt Version in `package.xml`
-4. ✅ **Erstellt Backup** - Sichert das letzte Package
-5. ✅ **Packt alles zusammen** - Erstellt `{plugin}-{version}.tar.gz`
+1. ✅ **Validiert package.xml** - XML-Syntax, Format, Dateien
+2. ✅ **Analysiert package.xml** - Findet automatisch alle benötigten Dateien
+3. ✅ **Prüft Dateien** - Verifiziert dass alle benötigten Dateien existieren
+4. ✅ **Zeigt Package-Struktur** - Du siehst was gepackt wird
+5. ✅ **Aktualisiert Version** - Setzt Version in `package.xml`
+6. ✅ **Erstellt Backup** - Sichert das letzte Package
+7. ✅ **Packt alles zusammen** - Erstellt `{plugin}-{version}.tar.gz`
 
 **Beispiel-Output:**
 ```
