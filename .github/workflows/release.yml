@@ -124,6 +124,9 @@ jobs:
         # Erstelle TAR.GZ
         cd "$TMP_DIR" || exit 1
         tar -czf "/tmp/$PACKAGE_FILE" *
+
+        # Stelle sicher dass Zielverzeichnis existiert
+        mkdir -p "${{ steps.plugin_dir.outputs.PLUGIN_DIR }}"
         mv "/tmp/$PACKAGE_FILE" "${{ steps.plugin_dir.outputs.PLUGIN_DIR }}/"
         
         echo "PACKAGE_FILE=$PACKAGE_FILE" >> $GITHUB_ENV
