@@ -16,8 +16,8 @@
 
 ---
 
-**Last Updated:** 2025-01-08  
-**Version:** 1.1.0  
+**Last Updated:** 2025-11-08  
+**Version:** 1.4.1  
 **Status:** Current
 
 ---
