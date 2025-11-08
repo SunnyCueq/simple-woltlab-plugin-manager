@@ -225,11 +225,40 @@ Example:
 
 **Features:**
 - ✅ **Automatic package.xml parsing** - Finds all required files automatically
+- ✅ **XML syntax validation** - Validates package.xml for errors
+- ✅ **Package name format validation** - Checks format (com.domain.pluginname)
+- ✅ **File existence check** - Verifies all required files exist
 - ✅ Automatic version update in `package.xml`
 - ✅ Automatic date update
 - ✅ Backup of last TAR archive (in `.package-backups/`)
 - ✅ Optional: GitHub release creation
 - ✅ Shows package structure before packaging
+
+### create-plugin.sh
+
+Automatically creates a complete plugin structure based on the package identifier.
+
+```bash
+./scripts/create-plugin.sh PACKAGE_IDENTIFIER [TARGET_DIR]
+```
+
+Example:
+```bash
+./scripts/create-plugin.sh com.example.myplugin
+```
+
+**What is created:**
+- ✅ Plugin directory structure (`files/`, `templates/`, `language/`)
+- ✅ `package.xml` with correct identifier
+- ✅ `page.xml` with example page
+- ✅ PHP class (`ExamplePage.class.php`)
+- ✅ Example template (`example.tpl`)
+- ✅ `README.md` with documentation
+
+**Features:**
+- ✅ Package identifier format validation
+- ✅ Complete WoltLab-compliant structure
+- ✅ Ready for immediate development
 
 ## 📁 Structure
 

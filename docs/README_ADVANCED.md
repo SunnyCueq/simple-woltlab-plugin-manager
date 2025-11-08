@@ -43,6 +43,7 @@ simple-woltlab-plugin-manager/
 │   ├── extract-plugin-files.sh  # TAR extraction utility
 │   ├── update-tars.sh           # TAR archive builder
 │   ├── create-release.sh        # Release packaging and GitHub integration
+│   ├── create-plugin.sh         # Plugin template generator
 │   ├── parse-package-xml.sh    # Dynamic package.xml parser
 │   └── pip-defaults.sh          # PIP type to filename mapping
 ├── templates/                    # IDE and workspace templates
@@ -134,13 +135,46 @@ simple-woltlab-plugin-manager/
 - Case-insensitive file search
 - Uses `tar -czf` for compressed archives
 - Integrates with `gh` CLI if available
-- Validates package structure before packaging
+- **XML validation:** Uses `xmllint` to validate XML syntax (if available)
+- **Format validation:** Regex-based package name format check
+- **File validation:** Checks all required files exist before packaging
+- Comprehensive error handling with clear messages
 
 **New Features (v1.0.1+):**
 - Dynamic `package.xml` parsing (no static file lists)
 - Automatic PIP type recognition
 - Tree structure output
 - Support for all standard WoltLab PIP types
+- **XML syntax validation** using `xmllint`
+- **Package name format validation** (com.domain.pluginname)
+- **File existence validation** before packaging
+- Comprehensive error messages and warnings
+
+### create-plugin.sh
+
+**Purpose:** Generates a complete plugin structure from a package identifier.
+
+**Usage:**
+```bash
+./create-plugin.sh PACKAGE_IDENTIFIER [TARGET_DIR]
+```
+
+**Parameters:**
+- `PACKAGE_IDENTIFIER`: Format `com.domain.pluginname` (e.g., `com.example.myplugin`)
+- `TARGET_DIR`: Optional, defaults to current directory
+
+**Behavior:**
+- Validates package identifier format
+- Creates complete directory structure
+- Generates `package.xml` with correct identifier
+- Creates example PHP class and template
+- Generates `README.md` with documentation
+
+**Implementation Details:**
+- Uses regex validation for identifier format
+- Creates WoltLab-compliant structure
+- Based on WoltLab best practices
+- Inspired by real-world plugin structures
 
 ### install.sh
 
