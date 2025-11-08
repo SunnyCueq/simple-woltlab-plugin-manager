@@ -210,19 +210,19 @@ if [ -n "$GITHUB_REPO" ]; then
     
     # Prüfe ob GitHub CLI installiert ist
     if ! command -v gh &> /dev/null; then
-        echo "⚠️  GitHub CLI nicht gefunden. Installieren Sie es mit:"
+        echo "⚠️  GitHub CLI nicht gefunden. Installiere es mit:"
         echo "   Linux: sudo pacman -S github-cli (oder entsprechendes Paket-Manager)"
         echo "   macOS: brew install gh"
         echo "   Windows: winget install GitHub.cli"
         echo ""
-        echo "Oder erstellen Sie das Release manuell auf GitHub."
+        echo "Oder erstelle das Release manuell auf GitHub."
         exit 0
     fi
     
     # Prüfe GitHub-Authentifizierung
     if ! gh auth status &> /dev/null; then
-        echo "⚠️  Sie sind nicht bei GitHub angemeldet!"
-        echo "Bitte führen Sie aus: gh auth login"
+        echo "⚠️  Du bist nicht bei GitHub angemeldet!"
+        echo "Bitte führe aus: gh auth login"
         exit 1
     fi
     

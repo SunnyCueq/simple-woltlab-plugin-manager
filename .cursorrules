@@ -10,6 +10,12 @@ Diese Datei wird automatisch von Cursor gelesen und als Kontext für AI-Assisten
 - `RULES.md` - Vollständige Projekt-Regeln (INTERN, nicht auf GitHub)
 - `PROJEKT-KONTEXT.md` - Projekt-Kontext und Status (INTERN, nicht auf GitHub)
 
+**ALLE MD-Dateien aktuell halten:**
+- Bei Änderungen IMMER alle betroffenen MD-Dateien aktualisieren
+- README.md und README_EN.md synchron halten
+- Dokumentation in `docs/` aktuell halten
+- Interne Dokumentation (RULES.md, etc.) bei neuen Regeln aktualisieren
+
 ## Kernregeln (Kurzfassung)
 
 ### 1. Ansprache

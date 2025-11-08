@@ -33,7 +33,7 @@ echo ""
 # Prüfe ob _extracted existiert
 if [ ! -d "_extracted" ]; then
     echo "❌ Fehler: _extracted/ Ordner nicht gefunden!"
-    echo "Führen Sie zuerst ./extract-plugin-files.sh aus"
+    echo "Führe zuerst ./extract-plugin-files.sh aus"
     exit 1
 fi
 
