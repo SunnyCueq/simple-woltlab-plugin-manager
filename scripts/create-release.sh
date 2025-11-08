@@ -41,11 +41,42 @@ if [ ! -f "package.xml" ]; then
     exit 1
 fi
 
+# Validierung 1: XML-Syntax prüfen
+echo "🔍 Validiere package.xml Syntax..."
+if command -v xmllint &> /dev/null; then
+    if ! xmllint --noout package.xml 2>/dev/null; then
+        echo "❌ Fehler: package.xml hat XML-Syntax-Fehler!"
+        echo "   Bitte prüfe die Datei mit: xmllint package.xml"
+        exit 1
+    fi
+    echo "✓ XML-Syntax OK"
+else
+    echo "⚠️  Warnung: xmllint nicht gefunden, überspringe XML-Validierung"
+    echo "   Installiere mit: sudo pacman -S libxml2 (Arch) oder sudo apt install libxml2-utils (Debian)"
+fi
+
 # Package-Name aus package.xml extrahieren
 PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' package.xml | head -1)
 if [ -z "$PACKAGE_NAME" ]; then
     echo "❌ Fehler: Konnte Package-Name nicht aus package.xml extrahieren"
     exit 1
+fi
+
+# Validierung 2: Package-Name-Format prüfen
+echo "🔍 Validiere Package-Name-Format..."
+if [[ ! "$PACKAGE_NAME" =~ ^com\.[a-z0-9]+\.[a-z0-9]+(\.[a-z0-9]+)*$ ]]; then
+    echo "⚠️  Warnung: Package-Name entspricht möglicherweise nicht dem Standard-Format!"
+    echo "   Erwartetes Format: com.domain.pluginname (z.B. com.example.myplugin)"
+    echo "   Gefundener Name: $PACKAGE_NAME"
+    echo ""
+    read -p "Möchtest du trotzdem fortfahren? (j/n): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[JjYy]$ ]]; then
+        echo "Abgebrochen."
+        exit 0
+    fi
+else
+    echo "✓ Package-Name-Format OK"
 fi
 
 # Aktuelle Version aus package.xml lesen
@@ -162,6 +193,29 @@ if [ ${#FILES_TO_PACKAGE[@]} -eq 0 ]; then
 fi
 
 echo "✅ Gefundene Dateien: ${#FILES_TO_PACKAGE[@]}"
+echo ""
+
+# Validierung 3: Prüfe ob alle benötigten Dateien existieren
+echo "🔍 Prüfe ob alle benötigten Dateien existieren..."
+MISSING_FILES=()
+for file in "${FILES_TO_PACKAGE[@]}"; do
+    file_path="$PLUGIN_DIR/$file"
+    if [ ! -f "$file_path" ] && [ ! -d "$file_path" ]; then
+        MISSING_FILES+=("$file")
+    fi
+done
+
+if [ ${#MISSING_FILES[@]} -gt 0 ]; then
+    echo "❌ Fehler: Folgende Dateien fehlen:"
+    for file in "${MISSING_FILES[@]}"; do
+        echo "   - $file"
+    done
+    echo ""
+    echo "Bitte erstelle die fehlenden Dateien oder entferne sie aus package.xml"
+    exit 1
+fi
+
+echo "✓ Alle benötigten Dateien vorhanden"
 echo ""
 
 # Erstelle Package in /tmp
