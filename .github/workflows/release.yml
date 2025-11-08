@@ -49,11 +49,12 @@ jobs:
         if [ -f "package.xml" ]; then
           PLUGIN_DIR="."
         else
-          PLUGIN_DIR=$(find . -name "package.xml" -type f | head -1 | xargs dirname)
-          if [ -z "$PLUGIN_DIR" ]; then
+          PACKAGE_XML=$(find . -name "package.xml" -type f | head -1)
+          if [ -z "$PACKAGE_XML" ]; then
             echo "❌ package.xml nicht gefunden"
             exit 1
           fi
+          PLUGIN_DIR=$(dirname "$PACKAGE_XML")
         fi
         echo "PLUGIN_DIR=$PLUGIN_DIR" >> $GITHUB_OUTPUT
         echo "Plugin-Verzeichnis: $PLUGIN_DIR"
@@ -140,7 +141,7 @@ jobs:
           
           **Package:** ${{ steps.package_name.outputs.PACKAGE_NAME }}
           
-          Siehe CHANGELOG.md für Details (falls vorhanden).
+          Siehe CHANGELOG.md für Details falls vorhanden.
         draft: false
         prerelease: false
       env:

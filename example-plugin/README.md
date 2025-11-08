@@ -45,14 +45,14 @@ Optional kann ein Parameter übergeben werden: `index.php?test/&greet=You` zeigt
    - Package hochladen und installieren
 
 4. **Testen:**
-   - Öffnen Sie: `https://ihre-domain.de/index.php?test/`
+   - Öffne: `https://ihre-domain.de/index.php?test/`
    - Oder mit Parameter: `https://ihre-domain.de/index.php?test/&greet=You`
 
 ## Anpassungen
 
-- **Seiten-URL ändern:** Bearbeiten Sie `page.xml` und ändern Sie den Identifier
-- **Template anpassen:** Bearbeiten Sie `templates/test.tpl`
-- **PHP-Logik erweitern:** Bearbeiten Sie `files/lib/page/TestPage.class.php`
+- **Seiten-URL ändern:** Bearbeite `page.xml` und ändere den Identifier
+- **Template anpassen:** Bearbeite `templates/test.tpl`
+- **PHP-Logik erweitern:** Bearbeite `files/lib/page/TestPage.class.php`
 
 ## Weitere Informationen
 
