@@ -10,7 +10,7 @@
 
 ## Übersicht
 
-WoltLab Suite verwendet ein spezielles Namensschema für Plugins (Packages). Dieser Leitfaden erklärt, wie Sie Ihr Plugin korrekt benennen sollten.
+WoltLab Suite verwendet ein spezielles Namensschema für Plugins (Packages). Dieser Leitfaden erklärt, wie du dein Plugin korrekt benennen solltest.
 
 ---
 
@@ -30,7 +30,7 @@ WoltLab Suite verwendet ein spezielles Namensschema für Plugins (Packages). Die
 
 ### 1. Domain-Teil (`com`)
 
-**Verwenden Sie:**
+**Verwende:**
 - `com` - Für kommerzielle/öffentliche Plugins (Standard)
 - `de` - Für deutsche Plugins (optional)
 - `org` - Für Open-Source-Organisationen (optional)
@@ -42,10 +42,10 @@ WoltLab Suite verwendet ein spezielles Namensschema für Plugins (Packages). Die
 
 ### 2. Domain/Organisation (`example`)
 
-**Verwenden Sie:**
-- Ihre Domain (ohne TLD)
-- Ihr Firmenname
-- Ihr GitHub-Username
+**Verwende:**
+- Deine Domain (ohne TLD)
+- Dein Firmenname
+- Dein GitHub-Username
 - Ein eindeutiger Bezeichner
 
 **Gute Beispiele:**
@@ -60,7 +60,7 @@ WoltLab Suite verwendet ein spezielles Namensschema für Plugins (Packages). Die
 
 ### 3. Plugin-Name (`test`)
 
-**Verwenden Sie:**
+**Verwende:**
 - Kleine Buchstaben
 - Keine Leerzeichen
 - Keine Sonderzeichen (außer Bindestrich)
@@ -168,7 +168,7 @@ Das finale Package-Archiv sollte den Plugin-Identifier als Namen haben:
 
 ### Verzeichnisstruktur
 
-Ihr Plugin-Verzeichnis kann beliebig benannt werden, aber für Klarheit verwenden Sie den Identifier:
+Dein Plugin-Verzeichnis kann beliebig benannt werden, aber für Klarheit verwende den Identifier:
 
 ```
 ~/Dokumente/
@@ -185,25 +185,25 @@ Ihr Plugin-Verzeichnis kann beliebig benannt werden, aber für Klarheit verwende
 
 ### ✅ DO's
 
-- Verwenden Sie Kleinbuchstaben
-- Verwenden Sie Bindestriche statt Unterstriche
-- Verwenden Sie beschreibende Namen
-- Verwenden Sie Ihre Domain oder einen eindeutigen Bezeichner
-- Halten Sie es einfach und klar
+- Verwende Kleinbuchstaben
+- Verwende Bindestriche statt Unterstriche
+- Verwende beschreibende Namen
+- Verwende deine Domain oder einen eindeutigen Bezeichner
+- Halte es einfach und klar
 
 ### ❌ DON'Ts
 
-- Verwenden Sie keine Großbuchstaben im Identifier
-- Verwenden Sie keine Leerzeichen
-- Verwenden Sie keine Sonderzeichen (außer Bindestrich)
-- Verwenden Sie keine generischen Namen wie "test" oder "plugin"
-- Verwenden Sie keine Zahlen allein
+- Verwende keine Großbuchstaben im Identifier
+- Verwende keine Leerzeichen
+- Verwende keine Sonderzeichen (außer Bindestrich)
+- Verwende keine generischen Namen wie "test" oder "plugin"
+- Verwende keine Zahlen allein
 
 ---
 
 ## Checkliste
 
-Bevor Sie Ihr Plugin benennen, prüfen Sie:
+Bevor du dein Plugin benennst, prüfe:
 
 - [ ] Format: `com.[domain].[pluginname]`
 - [ ] Nur Kleinbuchstaben

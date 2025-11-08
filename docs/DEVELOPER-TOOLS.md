@@ -10,7 +10,7 @@
 
 ## Übersicht
 
-WoltLab Suite bietet spezielle Entwickler-Werkzeuge, die Ihnen bei der Plugin-Entwicklung helfen. Diese Werkzeuge sind **ausschließlich für die Entwicklung und Fehlersuche** gedacht und **nicht für den produktiven Einsatz** geeignet.
+WoltLab Suite bietet spezielle Entwickler-Werkzeuge, die dir bei der Plugin-Entwicklung helfen. Diese Werkzeuge sind **ausschließlich für die Entwicklung und Fehlersuche** gedacht und **nicht für den produktiven Einsatz** geeignet.
 
 **Referenz:** [WoltLab Developer Tools Dokumentation](https://docs.woltlab.com/6.0/getting-started/#developer-tools)
 
@@ -20,9 +20,9 @@ WoltLab Suite bietet spezielle Entwickler-Werkzeuge, die Ihnen bei der Plugin-En
 
 ### Wo finde ich die Optionen?
 
-1. Loggen Sie sich in das **Administration Control Panel (ACP)** ein
-2. Navigieren Sie zu: **Konfiguration → Optionen → Entwicklung**
-3. Aktivieren Sie die gewünschten Optionen
+1. Logge dich in das **Administration Control Panel (ACP)** ein
+2. Navigiere zu: **Konfiguration → Optionen → Entwicklung**
+3. Aktiviere die gewünschten Optionen
 
 ### Verfügbare Optionen
 
@@ -124,15 +124,15 @@ WoltLab Suite bietet spezielle Entwickler-Werkzeuge, die Ihnen bei der Plugin-En
 **Wie verwenden?**
 
 1. **Entwickler-Werkzeuge aktivieren** (siehe oben)
-2. Navigieren Sie zu: **Entwicklung → Projekte**
-3. Klicken Sie auf **"Projekt registrieren"**
-4. Geben Sie den **absoluten Pfad** zu Ihrem Plugin-Verzeichnis an
+2. Navigiere zu: **Entwicklung → Projekte**
+3. Klicke auf **"Projekt registrieren"**
+4. Gib den **absoluten Pfad** zu deinem Plugin-Verzeichnis an
    - Beispiel: `/home/benny/Dokumente/com.example.myplugin`
    - **Wichtig:** Der Pfad muss zu dem Verzeichnis zeigen, das `package.xml` enthält
 
 **Mass-Import:**
-- Verwenden Sie den Button **"Mass-Import"**
-- Geben Sie einen Suchpfad an (z.B. `/home/benny/Dokumente/plugins/`)
+- Verwende den Button **"Mass-Import"**
+- Gib einen Suchpfad an (z.B. `/home/benny/Dokumente/plugins/`)
 - Alle direkten Unterverzeichnisse werden automatisch als Projekte registriert
 
 ### Synchronisierung
@@ -145,10 +145,10 @@ WoltLab Suite bietet spezielle Entwickler-Werkzeuge, die Ihnen bei der Plugin-En
 **Wie verwenden?**
 
 1. **Projekt registrieren** (siehe oben)
-2. Navigieren Sie zu: **Entwicklung → Projekte**
-3. Wählen Sie Ihr Projekt aus
-4. Klicken Sie auf **"Synchronisieren"**
-5. Wählen Sie die PIPs aus, die synchronisiert werden sollen
+2. Navigiere zu: **Entwicklung → Projekte**
+3. Wähle dein Projekt aus
+4. Klicke auf **"Synchronisieren"**
+5. Wähle die PIPs aus, die synchronisiert werden sollen
 
 **Welche PIPs können synchronisiert werden?**
 
@@ -170,7 +170,7 @@ Nur PIPs, die das Interface `wcf\system\devtools\pip\IIdempotentPackageInstallat
 - `script` - Installations-Scripts
 - `database` - Datenbank-Strukturen
 
-**Für diese PIPs müssen Sie ein manuelles Package-Update durchführen.**
+**Für diese PIPs musst du ein manuelles Package-Update durchführen.**
 
 ---
 
@@ -193,7 +193,7 @@ cd ~/Dokumente/com.example.myplugin
 ### 2. Entwickler-Werkzeuge aktivieren
 
 1. ACP → Konfiguration → Optionen → Entwicklung
-2. Aktivieren Sie:
+2. Aktiviere:
    - ✅ Debug-Modus
    - ✅ Entwickler-Werkzeuge
    - ✅ Fehlende Sprachvariablen protokollieren
@@ -204,8 +204,8 @@ cd ~/Dokumente/com.example.myplugin
 ### 3. Projekt registrieren
 
 1. ACP → Entwicklung → Projekte
-2. Klicken Sie auf "Projekt registrieren"
-3. Geben Sie den Pfad an: `/home/benny/Dokumente/com.example.myplugin`
+2. Klicke auf "Projekt registrieren"
+3. Gib den Pfad an: `/home/benny/Dokumente/com.example.myplugin`
 
 ### 4. Entwickeln und synchronisieren
 
@@ -217,16 +217,16 @@ nano files/lib/page/MyPage.class.php
 nano templates/mypage.tpl
 
 # 3. In WoltLab synchronisieren
-# ACP → Entwicklung → Projekte → [Ihr Projekt] → Synchronisieren
-# Wählen Sie: file, template
-# Klicken Sie auf "Synchronisieren"
+# ACP → Entwicklung → Projekte → [Dein Projekt] → Synchronisieren
+# Wähle: file, template
+# Klicke auf "Synchronisieren"
 ```
 
 ### 5. Testen
 
-- Öffnen Sie die Seite im Browser
-- Prüfen Sie die Fehler (Debug-Modus zeigt Details)
-- Prüfen Sie fehlende Sprachvariablen (falls aktiviert)
+- Öffne die Seite im Browser
+- Prüfe die Fehler (Debug-Modus zeigt Details)
+- Prüfe fehlende Sprachvariablen (falls aktiviert)
 
 ### 6. Package erstellen
 
@@ -244,18 +244,18 @@ nano templates/mypage.tpl
 
 ### ✅ DO's
 
-- Aktivieren Sie Entwickler-Werkzeuge nur in Entwicklungsumgebungen
-- Verwenden Sie Projekt-Registrierung für aktive Entwicklung
-- Synchronisieren Sie regelmäßig während der Entwicklung
-- Prüfen Sie fehlende Sprachvariablen regelmäßig
-- Deaktivieren Sie alle Entwickler-Optionen vor dem Live-Betrieb
+- Aktiviere Entwickler-Werkzeuge nur in Entwicklungsumgebungen
+- Verwende Projekt-Registrierung für aktive Entwicklung
+- Synchronisiere regelmäßig während der Entwicklung
+- Prüfe fehlende Sprachvariablen regelmäßig
+- Deaktiviere alle Entwickler-Optionen vor dem Live-Betrieb
 
 ### ❌ DON'Ts
 
 - **NIEMALS** Entwickler-Werkzeuge im Live-Betrieb aktivieren
 - **NIEMALS** Debug-Modus im Live-Betrieb aktivieren
 - **NIEMALS** Benchmark im Live-Betrieb aktivieren
-- Verwenden Sie keine Entwickler-Werkzeuge auf produktiven Servern
+- Verwende keine Entwickler-Werkzeuge auf produktiven Servern
 
 ---
 
@@ -286,29 +286,29 @@ nano templates/mypage.tpl
 **Problem:** "Projekt nicht gefunden" beim Synchronisieren
 
 **Lösung:**
-1. Prüfen Sie den Pfad (muss absolut sein)
-2. Prüfen Sie, ob `package.xml` im Verzeichnis existiert
-3. Prüfen Sie Dateiberechtigungen
-4. Registrieren Sie das Projekt erneut
+1. Prüfe den Pfad (muss absolut sein)
+2. Prüfe, ob `package.xml` im Verzeichnis existiert
+3. Prüfe Dateiberechtigungen
+4. Registriere das Projekt erneut
 
 ### Synchronisierung funktioniert nicht
 
 **Problem:** PIPs werden nicht synchronisiert
 
 **Lösung:**
-1. Prüfen Sie, ob der PIP synchronisierbar ist (siehe Liste oben)
-2. Für `sql` und `script` müssen Sie ein manuelles Update durchführen
-3. Prüfen Sie die Fehler im Debug-Modus
+1. Prüfe, ob der PIP synchronisierbar ist (siehe Liste oben)
+2. Für `sql` und `script` musst du ein manuelles Update durchführen
+3. Prüfe die Fehler im Debug-Modus
 
 ### Debug-Modus zeigt keine Fehler
 
 **Problem:** Fehler werden nicht angezeigt
 
 **Lösung:**
-1. Prüfen Sie, ob Debug-Modus aktiviert ist
-2. Prüfen Sie PHP-Fehlerprotokoll
-3. Prüfen Sie Browser-Konsole
-4. Prüfen Sie WoltLab-Logs
+1. Prüfe, ob Debug-Modus aktiviert ist
+2. Prüfe PHP-Fehlerprotokoll
+3. Prüfe Browser-Konsole
+4. Prüfe WoltLab-Logs
 
 ---
 
@@ -325,7 +325,7 @@ nano templates/mypage.tpl
 Bei Fragen zu Entwickler-Werkzeugen:
 - Siehe [WoltLab Dokumentation](https://docs.woltlab.com/6.0/)
 - Siehe [README_ADVANCED.md](../README_ADVANCED.md) für technische Details
-- Öffnen Sie ein Issue auf GitHub
+- Öffne ein Issue auf GitHub
 
 ---
 

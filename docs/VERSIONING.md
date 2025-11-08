@@ -28,7 +28,7 @@ Dieses Projekt verwendet **Semantic Versioning** (SemVer) nach dem Schema `MAJOR
 
 ### Version-Script verwenden
 
-Das Script `scripts/version.sh` hilft Ihnen, die Version automatisch zu erhöhen:
+Das Script `scripts/version.sh` hilft dir, die Version automatisch zu erhöhen:
 
 ```bash
 # Patch-Version erhöhen (Bugfix)
@@ -50,7 +50,7 @@ Das Script `scripts/version.sh` hilft Ihnen, die Version automatisch zu erhöhen
 2. ✅ Berechnet die neue Version basierend auf dem Inkrement-Typ
 3. ✅ Aktualisiert die Version in allen README-Dateien
 4. ✅ Erstellt einen Git-Tag `vX.Y.Z`
-5. ✅ Zeigt Ihnen die nächsten Schritte
+5. ✅ Zeigt dir die nächsten Schritte
 
 ### Beispiel-Workflow
 
@@ -78,7 +78,7 @@ git push origin main
 
 ### Patch (1.0.0 → 1.0.1)
 
-**Verwenden Sie Patch für:**
+**Verwende Patch für:**
 - Bugfixes
 - Kleine Korrekturen
 - Dokumentations-Updates
@@ -92,7 +92,7 @@ git push origin main
 
 ### Minor (1.0.0 → 1.1.0)
 
-**Verwenden Sie Minor für:**
+**Verwende Minor für:**
 - Neue Features
 - Neue Scripts
 - Neue Dokumentation
@@ -107,7 +107,7 @@ git push origin main
 
 ### Major (1.0.0 → 2.0.0)
 
-**Verwenden Sie Major für:**
+**Verwende Major für:**
 - Breaking Changes
 - API-Änderungen
 - Strukturelle Änderungen
@@ -122,7 +122,7 @@ git push origin main
 
 ## Manuelle Versionsverwaltung
 
-Falls Sie die Version manuell ändern möchten:
+Falls du die Version manuell ändern möchtest:
 
 ### 1. Version in README-Dateien aktualisieren
 
@@ -131,7 +131,7 @@ Suchen Sie nach:
 **Version:** 1.0.0
 ```
 
-Und ändern Sie zu:
+Und ändere zu:
 ```markdown
 **Version:** 1.0.1
 ```
@@ -162,29 +162,29 @@ git push origin v1.0.1
    - Auch kleine Dokumentations-Updates
 
 2. **Version vor dem Push erhöhen**
-   - Erhöhen Sie die Version, bevor Sie auf GitHub pushen
-   - Erstellen Sie den Tag zusammen mit dem Commit
+   - Erhöhe die Version, bevor du auf GitHub pushst
+   - Erstelle den Tag zusammen mit dem Commit
 
 3. **Klare Commit-Messages**
-   - Verwenden Sie `chore: Version auf X.Y.Z erhöht`
-   - Oder beschreiben Sie die Änderungen
+   - Verwende `chore: Version auf X.Y.Z erhöht`
+   - Oder beschreibe die Änderungen
 
 4. **Release-Notes**
-   - Dokumentieren Sie wichtige Änderungen
-   - Erstellen Sie GitHub Releases mit Changelog
+   - Dokumentiere wichtige Änderungen
+   - Erstelle GitHub Releases mit Changelog
 
 ---
 
 ## GitHub Releases
 
-Nach dem Erstellen eines Tags können Sie auf GitHub ein Release erstellen:
+Nach dem Erstellen eines Tags kannst du auf GitHub ein Release erstellen:
 
-1. Gehen Sie zu: https://github.com/SunnyCueq/simple-woltlab-plugin-manager/releases
-2. Klicken Sie auf "Draft a new release"
-3. Wählen Sie den Tag (z.B. `v1.0.1`)
+1. Gehe zu: https://github.com/SunnyCueq/simple-woltlab-plugin-manager/releases
+2. Klicke auf "Draft a new release"
+3. Wähle den Tag (z.B. `v1.0.1`)
 4. Titel: `Version 1.0.1`
 5. Beschreibung: Changelog mit Änderungen
-6. Klicken Sie auf "Publish release"
+6. Klicke auf "Publish release"
 
 ---
 
