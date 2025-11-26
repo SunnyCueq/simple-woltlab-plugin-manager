@@ -99,8 +99,8 @@ if [ "$DRY_RUN" = true ]; then
     echo "🔍 DRY-RUN Modus - Es werden keine Änderungen vorgenommen"
     echo ""
     echo "Folgende Dateien würden aktualisiert:"
-    echo "  • README.md"
-    echo "  • README_EN.md"
+    echo "  • README.md (English)"
+    echo "  • README_DE.md (German)"
     echo "  • docs/README_ADVANCED.md"
     echo ""
     echo "Git-Tag würde erstellt: v$NEW_VERSION"
@@ -120,15 +120,15 @@ echo "📝 Aktualisiere Version und Datum in Dateien..."
 # Get current date
 CURRENT_DATE=$(date +%Y-%m-%d)
 
-# Update README.md
+# Update README.md (English version)
 sed -i "s/\*\*Version:\*\* $CURRENT_VERSION/\*\*Version:\*\* $NEW_VERSION/g" README.md
 sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" README.md
-sed -i "s/\*\*Letzte Aktualisierung:\*\* [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/\*\*Letzte Aktualisierung:\*\* $CURRENT_DATE/g" README.md
+sed -i "s/\*\*Last Updated:\*\* [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/\*\*Last Updated:\*\* $CURRENT_DATE/g" README.md
 
-# Update README_EN.md
-sed -i "s/\*\*Version:\*\* $CURRENT_VERSION/\*\*Version:\*\* $NEW_VERSION/g" README_EN.md
-sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" README_EN.md
-sed -i "s/\*\*Last Updated:\*\* [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/\*\*Last Updated:\*\* $CURRENT_DATE/g" README_EN.md
+# Update README_DE.md (German version)
+sed -i "s/\*\*Version:\*\* $CURRENT_VERSION/\*\*Version:\*\* $NEW_VERSION/g" README_DE.md
+sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/g" README_DE.md
+sed -i "s/\*\*Letzte Aktualisierung:\*\* [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/\*\*Letzte Aktualisierung:\*\* $CURRENT_DATE/g" README_DE.md
 
 # Update docs/README_ADVANCED.md (if version is mentioned)
 if grep -q "Version:" docs/README_ADVANCED.md 2>/dev/null; then

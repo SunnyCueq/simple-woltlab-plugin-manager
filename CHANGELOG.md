@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [1.5.0] - 2025-11-26
+
 ### Added
 - WoltLab 6.0/6.1/6.2 compatibility validation
 - Plugin Store compliance checks in `validate-plugin.sh`:
@@ -23,11 +27,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New documentation files:
   - `PLUGIN-STORE-CHECKLIST.md` / `PLUGIN-STORE-CHECKLIST_EN.md` - Complete submission guide
   - `WOLTLAB-VERSIONS.md` / `WOLTLAB-VERSIONS_EN.md` - Version compatibility guide
-  - `CHANGELOG.md` - This file
+  - `CHANGELOG.md` - This file (English only for releases)
 
 ### Changed
-- `README.md` and `README_EN.md` - Added new features and documentation links
+- **BREAKING:** `README.md` is now English (was German), German version renamed to `README_DE.md`
+- English is now the primary language for the project
+- `README.md` and `README_DE.md` - Added new features and documentation links
 - `validate-plugin.sh` - Removed strict error handling to allow warnings
+- `version.sh` - Updated to support new README naming (README.md = EN, README_DE.md = DE)
 - Moved `GITHUB-WORKFLOWS.md` and `GITHUB-WORKFLOW-TEST.md` to `.github/docs/`
 
 ### Removed
