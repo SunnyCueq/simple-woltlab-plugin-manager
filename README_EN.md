@@ -97,6 +97,11 @@ code woltlab-plugin-dev.code-workspace
 - **🏗️ Workspace Templates:** Pre-configured multi-root workspaces for Cursor/VSCode
 - **🧠 IDE Setup:** Automatic configuration of Intelephense for WoltLab classes
 - **🚀 Release Management:** Create releases with a single command
+- **🔒 Security Validation:** Automatic checks for SQL injection and XSS risks
+- **✅ Plugin Store Compliance:** Automatically checks all Plugin Store requirements
+- **🌍 Translation Check:** Validates German + English (mandatory)
+- **🎯 API Best Practices:** Checks WoltLab API usage (cloud-compatible)
+- **🧹 Quality Checks:** Finds debug code, test credentials, inefficient patterns
 - **📖 Comprehensive Documentation:** Guides for different operating systems and IDEs (EN/DE)
 
 ## 📚 Documentation
@@ -142,6 +147,9 @@ code woltlab-plugin-dev.code-workspace
 - **[DEVELOPER-TOOLS.md](docs/DEVELOPER-TOOLS.md)** - Developer tools and debug options
 - **[PACKAGING.md](docs/PACKAGING.md)** - Complete packaging workflow (Development → Package → Release)
 - **[PIP-TYPES.md](docs/PIP-TYPES.md)** - Supported PIP types and default filenames
+- **[PLUGIN-STORE-CHECKLIST_EN.md](docs/PLUGIN-STORE-CHECKLIST_EN.md)** - 🆕 Checklist for Plugin Store submission
+- **[WOLTLAB-VERSIONS_EN.md](docs/WOLTLAB-VERSIONS_EN.md)** - 🆕 WoltLab 6.0/6.1/6.2 compatibility
+- **[CHANGELOG.md](CHANGELOG.md)** - 🆕 Project changelog (release notes)
 
 ### ⚙️ For Experts
 
