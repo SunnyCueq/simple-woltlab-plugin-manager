@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\system\cronjob;
+namespace shrinkr\system\cronjob;
 
 use wcf\data\cronjob\Cronjob;
 use wcf\system\cronjob\AbstractCronjob;
@@ -13,10 +13,10 @@ use wcf\system\WCF;
  * Between expiration and deactivation, the special is shown as "Ended" in the ACP.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.cronjob
  */
 class DiscountCountdownCleanupCronjob extends AbstractCronjob
@@ -33,7 +33,7 @@ class DiscountCountdownCleanupCronjob extends AbstractCronjob
 
         // Find specials that expired more than 2 days ago and are still active
         $sql = "SELECT specialID
-                FROM " . WCF::getDB()->escapeString('urlshort' . WCF_N . '_special') . "
+                FROM " . WCF::getDB()->escapeString('shrinkr' . WCF_N . '_special') . "
                 WHERE isActive = 1
                   AND endTime > 0
                   AND endTime < ?";
@@ -44,7 +44,7 @@ class DiscountCountdownCleanupCronjob extends AbstractCronjob
         if (!empty($specialIDs)) {
             // Deactivate the specials
             $placeholders = str_repeat('?,', count($specialIDs) - 1) . '?';
-            $updateSql = "UPDATE " . WCF::getDB()->escapeString('urlshort' . WCF_N . '_special') . "
+            $updateSql = "UPDATE " . WCF::getDB()->escapeString('shrinkr' . WCF_N . '_special') . "
                          SET isActive = 0
                          WHERE specialID IN ({$placeholders})";
             $updateStatement = WCF::getDB()->prepareStatement($updateSql);

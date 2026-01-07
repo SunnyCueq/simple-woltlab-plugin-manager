@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\special;
+namespace shrinkr\data\special;
 
 use wcf\data\AbstractDatabaseObjectAction;
 
@@ -8,10 +8,10 @@ use wcf\data\AbstractDatabaseObjectAction;
  * Executes special-related actions.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.special
  *
  * @method      SpecialEditor[]    getObjects()
@@ -27,17 +27,17 @@ class SpecialAction extends AbstractDatabaseObjectAction
     /**
      * @inheritDoc
      */
-    protected $permissionsCreate = ['admin.urlshort.canManageSpecials'];
+    protected $permissionsCreate = ['admin.shrinkr.canManageSpecials'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsDelete = ['admin.urlshort.canManageSpecials'];
+    protected $permissionsDelete = ['admin.shrinkr.canManageSpecials'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsUpdate = ['admin.urlshort.canManageSpecials'];
+    protected $permissionsUpdate = ['admin.shrinkr.canManageSpecials'];
 
     /**
      * @inheritDoc

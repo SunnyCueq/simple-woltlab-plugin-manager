@@ -1,15 +1,15 @@
-{include file='header' pageTitle='urlshort.acp.menu.link.special.'|concat:$action}
+{include file='header' pageTitle='shrinkr.acp.menu.link.special.'|concat:$action}
 
 <header class="contentHeader">
 	<div class="contentHeaderTitle">
-		<h1 class="contentTitle">{lang}urlshort.acp.menu.link.special.{$action}{/lang}{if $urlHash} ({$urlHash}){/if}</h1>
+		<h1 class="contentTitle">{lang}shrinkr.acp.menu.link.special.{$action}{/lang}{if $urlHash} ({$urlHash}){/if}</h1>
 	</div>
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='SpecialList' application='urlshort'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}urlshort.acp.menu.link.special.list{/lang}</span></a></li>
-			{if $urlID}
-				<li><a href="{link controller='UrlEdit' application='urlshort' id=$urlID}{/link}" class="button">{icon size=16 name='pen-to-square'} <span>{lang}wcf.urlshort.special.editUrl{/lang}</span></a></li>
+			<li><a href="{link controller='SpecialList' application='shrinkr'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.special.list{/lang}</span></a></li>
+			{if $linkID}
+				<li><a href="{link controller='UrlEdit' application='shrinkr' id=$linkID}{/link}" class="button">{icon size=16 name='pen-to-square'} <span>{lang}wcf.shrinkr.special.editUrl{/lang}</span></a></li>
 			{/if}
 			{event name='contentHeaderNavigation'}
 		</ul>

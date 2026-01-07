@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\guestreaction;
+namespace shrinkr\data\guestreaction;
 
 use wcf\data\DatabaseObjectEditor;
 
@@ -8,10 +8,10 @@ use wcf\data\DatabaseObjectEditor;
  * Provides functions to edit guest reactions.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.guestreaction
  */
 class GuestReactionEditor extends DatabaseObjectEditor

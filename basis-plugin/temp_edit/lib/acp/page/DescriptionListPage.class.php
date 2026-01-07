@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\acp\page;
+namespace shrinkr\acp\page;
 
-use urlshort\data\description\DescriptionList;
+use shrinkr\data\description\DescriptionList;
 use wcf\page\MultipleLinkPage;
 use wcf\system\WCF;
 
@@ -10,10 +10,10 @@ use wcf\system\WCF;
  * ACP page for listing all descriptions.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.page
  *
  * @property DescriptionList $objectList
@@ -38,12 +38,12 @@ class DescriptionListPage extends MultipleLinkPage
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.description.list';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.description.list';
 
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageDescriptions'];
+    public $neededPermissions = ['admin.shrinkr.canManageDescriptions'];
 
     /**
      * @inheritDoc

@@ -1,18 +1,18 @@
 <?php
 
-namespace urlshort\system\option;
+namespace shrinkr\system\option;
 
 use wcf\acp\form\OptionForm;
 use wcf\system\WCF;
 
 /**
- * Handles demo data installation and deletion when the urlshort_install_demo_data option is changed.
+ * Handles demo data installation and deletion when the shrinkr_install_demo_data option is changed.
  * 
  *
- * @author      Benjaro <https://benjaro.info>
- * @copyright   2025 Benjaro
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
  * @license     Commercial License
- * @package     dev.tkirch.wsc.urlshort
+ * @package     de.sunnyc.wsc.shrinkr
  * @subpackage system.option
  */
 class OptionFormDemoDataHandler
@@ -30,9 +30,9 @@ class OptionFormDemoDataHandler
         
         // Check current value from database (option was already saved at this point)
         try {
-            $option = \wcf\data\option\Option::getOptionByName('urlshort_install_demo_data');
+            $option = \wcf\data\option\Option::getOptionByName('shrinkr_install_demo_data');
             if (!$option) {
-                $this->log('OptionFormDemoDataHandler: Option urlshort_install_demo_data does not exist, skipping');
+                $this->log('OptionFormDemoDataHandler: Option shrinkr_install_demo_data does not exist, skipping');
                 return;
             }
             
@@ -57,7 +57,7 @@ class OptionFormDemoDataHandler
             // Check if isDemo column exists
             $isDemoColumnExists = false;
             try {
-                $sql = "SHOW COLUMNS FROM urlshort1_url LIKE 'isDemo'";
+                $sql = "SHOW COLUMNS FROM shrinkr1_link LIKE 'isDemo'";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute();
                 $isDemoColumnExists = ($statement->fetchSingleColumn() !== false);
@@ -66,14 +66,14 @@ class OptionFormDemoDataHandler
             }
             
             if ($isDemoColumnExists) {
-                $sql = "SELECT COUNT(*) FROM urlshort1_url WHERE isDemo = 1";
+                $sql = "SELECT COUNT(*) FROM shrinkr1_link WHERE isDemo = 1";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute();
                 $existingCount = $statement->fetchSingleColumn();
                 $this->log('OptionFormDemoDataHandler: Existing demo URLs count (by isDemo flag): ' . $existingCount);
             } else {
                 // Fallback to hash pattern
-                $sql = "SELECT COUNT(*) FROM urlshort1_url WHERE hash LIKE 'DEMO-%'";
+                $sql = "SELECT COUNT(*) FROM shrinkr1_link WHERE hash LIKE 'DEMO-%'";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute();
                 $existingCount = $statement->fetchSingleColumn();
@@ -94,8 +94,8 @@ class OptionFormDemoDataHandler
                 $customButtonsCount = 0;
                 
                 try {
-                    $sql = "SELECT COUNT(*) FROM urlshort1_featured_link fl 
-                            INNER JOIN urlshort1_url u ON fl.urlID = u.urlID 
+                    $sql = "SELECT COUNT(*) FROM shrinkr1_featured_link fl 
+                            INNER JOIN shrinkr1_link u ON fl.linkID = u.linkID 
                             WHERE u.isDemo = 1";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute();
@@ -103,8 +103,8 @@ class OptionFormDemoDataHandler
                 } catch (\Exception $e) {
                     // Table might not exist or isDemo column might not exist - try fallback
                     try {
-                        $sql = "SELECT COUNT(*) FROM urlshort1_featured_link fl 
-                                INNER JOIN urlshort1_url u ON fl.urlID = u.urlID 
+                        $sql = "SELECT COUNT(*) FROM shrinkr1_featured_link fl 
+                                INNER JOIN shrinkr1_link u ON fl.linkID = u.linkID 
                                 WHERE u.hash LIKE 'DEMO-%'";
                         $statement = WCF::getDB()->prepareStatement($sql);
                         $statement->execute();
@@ -115,8 +115,8 @@ class OptionFormDemoDataHandler
                 }
                 
                 try {
-                    $sql = "SELECT COUNT(*) FROM urlshort1_custom_button cb 
-                            INNER JOIN urlshort1_url u ON cb.urlID = u.urlID 
+                    $sql = "SELECT COUNT(*) FROM shrinkr1_custom_button cb 
+                            INNER JOIN shrinkr1_link u ON cb.linkID = u.linkID 
                             WHERE u.isDemo = 1";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute();
@@ -124,8 +124,8 @@ class OptionFormDemoDataHandler
                 } catch (\Exception $e) {
                     // Table might not exist or isDemo column might not exist - try fallback
                     try {
-                        $sql = "SELECT COUNT(*) FROM urlshort1_custom_button cb 
-                                INNER JOIN urlshort1_url u ON cb.urlID = u.urlID 
+                        $sql = "SELECT COUNT(*) FROM shrinkr1_custom_button cb 
+                                INNER JOIN shrinkr1_link u ON cb.linkID = u.linkID 
                                 WHERE u.hash LIKE 'DEMO-%'";
                         $statement = WCF::getDB()->prepareStatement($sql);
                         $statement->execute();
@@ -142,13 +142,13 @@ class OptionFormDemoDataHandler
                 if ($featuredLinksCount == 0 || $customButtonsCount == 0) {
                     $this->log('OptionFormDemoDataHandler: Demo URLs exist but Featured Links (' . $featuredLinksCount . ') or Custom Buttons (' . $customButtonsCount . ') are missing - calling post-install script to create them');
                     
-                    $postInstallScript = WCF_DIR . 'urls/acp/install_dev.tkirch.wsc.urlshort_postInstall.php';
+                    $postInstallScript = WCF_DIR . 'urls/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
                     
                     if (file_exists($postInstallScript)) {
-                        $GLOBALS['urlshort_demo_data_from_event'] = true;
+                        $GLOBALS['shrinkr_demo_data_from_event'] = true;
                         $this->log('OptionFormDemoDataHandler: Calling post-install script to create missing Featured Links/Custom Buttons...');
                         require_once($postInstallScript);
-                        unset($GLOBALS['urlshort_demo_data_from_event']);
+                        unset($GLOBALS['shrinkr_demo_data_from_event']);
                         $this->log('OptionFormDemoDataHandler: Post-install script completed');
                     } else {
                         $this->log('OptionFormDemoDataHandler: Post-install script not found at: ' . $postInstallScript);
@@ -167,14 +167,14 @@ class OptionFormDemoDataHandler
         
         // Call the demo data installation function from the post-install script (if URLs don't exist)
         if ($existingCount == 0) {
-            $postInstallScript = WCF_DIR . 'urls/acp/install_dev.tkirch.wsc.urlshort_postInstall.php';
+            $postInstallScript = WCF_DIR . 'urls/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
             
             $this->log('OptionFormDemoDataHandler: Post-install script path: ' . $postInstallScript);
             $this->log('OptionFormDemoDataHandler: Post-install script exists: ' . (file_exists($postInstallScript) ? 'yes' : 'no'));
             
             if (file_exists($postInstallScript)) {
                 // Temporarily set a flag to indicate we're calling from the event handler
-                $GLOBALS['urlshort_demo_data_from_event'] = true;
+                $GLOBALS['shrinkr_demo_data_from_event'] = true;
                 
                 $this->log('OptionFormDemoDataHandler: Calling post-install script...');
                 
@@ -184,7 +184,7 @@ class OptionFormDemoDataHandler
                 $this->log('OptionFormDemoDataHandler: Post-install script completed');
                 
                 // Unset the flag
-                unset($GLOBALS['urlshort_demo_data_from_event']);
+                unset($GLOBALS['shrinkr_demo_data_from_event']);
             } else {
                 $this->log('OptionFormDemoDataHandler: Post-install script not found!');
             }
@@ -207,7 +207,7 @@ class OptionFormDemoDataHandler
             // Check if isDemo column exists
             $isDemoColumnExists = false;
             try {
-                $sql = "SHOW COLUMNS FROM urlshort1_url LIKE 'isDemo'";
+                $sql = "SHOW COLUMNS FROM shrinkr1_link LIKE 'isDemo'";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute();
                 $isDemoColumnExists = ($statement->fetchSingleColumn() !== false);
@@ -218,12 +218,12 @@ class OptionFormDemoDataHandler
             if ($isDemoColumnExists) {
                 // Use isDemo flag for identification (most reliable)
                 // SECURITY: Also check hash starts with DEMO- to ensure we only get demo URLs
-                $sql = "SELECT urlID, hash FROM urlshort1_url WHERE isDemo = 1 AND hash LIKE 'DEMO-%'";
+                $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE isDemo = 1 AND hash LIKE 'DEMO-%'";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute();
                 while ($row = $statement->fetchArray()) {
-                    if (!empty($row['urlID'])) {
-                        $demoUrlIDs[] = $row['urlID'];
+                    if (!empty($row['linkID'])) {
+                        $demoUrlIDs[] = $row['linkID'];
                     }
                     if (!empty($row['hash'])) {
                         $demoHashes[] = $row['hash'];
@@ -234,14 +234,14 @@ class OptionFormDemoDataHandler
             
             // Fallback: Also check by hash pattern (for backwards compatibility)
             if (empty($demoUrlIDs)) {
-                $sql = "SELECT urlID, hash FROM urlshort1_url WHERE hash LIKE 'DEMO-%'";
+                $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE hash LIKE 'DEMO-%'";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute();
                 while ($row = $statement->fetchArray()) {
                     // Double-check: hash must start with DEMO-
                     if (!empty($row['hash']) && strpos($row['hash'], 'DEMO-') === 0) {
-                        if (!empty($row['urlID']) && !in_array($row['urlID'], $demoUrlIDs)) {
-                            $demoUrlIDs[] = $row['urlID'];
+                        if (!empty($row['linkID']) && !in_array($row['linkID'], $demoUrlIDs)) {
+                            $demoUrlIDs[] = $row['linkID'];
                         }
                         if (!in_array($row['hash'], $demoHashes)) {
                             $demoHashes[] = $row['hash'];
@@ -263,21 +263,21 @@ class OptionFormDemoDataHandler
             // SECURITY CHECK: Verify all URLs have DEMO- hash pattern before deletion
             // This ensures we never delete non-demo URLs, even if isDemo flag is incorrectly set
             $verifiedDemoUrlIDs = [];
-            foreach ($demoUrlIDs as $urlID) {
+            foreach ($demoUrlIDs as $linkID) {
                 try {
-                    $sql = "SELECT hash FROM urlshort1_url WHERE urlID = ?";
+                    $sql = "SELECT hash FROM shrinkr1_link WHERE linkID = ?";
                     $statement = WCF::getDB()->prepareStatement($sql);
-                    $statement->execute([$urlID]);
+                    $statement->execute([$linkID]);
                     $hash = $statement->fetchSingleColumn();
                     
                     // Only include if hash starts with "DEMO-" (double-check for safety)
                     if ($hash && strpos($hash, 'DEMO-') === 0) {
-                        $verifiedDemoUrlIDs[] = $urlID;
+                        $verifiedDemoUrlIDs[] = $linkID;
                     } else {
-                        $this->log('OptionFormDemoDataHandler: SECURITY WARNING - URL ID ' . $urlID . ' has hash "' . ($hash ?? 'NULL') . '" which does not start with "DEMO-", skipping deletion');
+                        $this->log('OptionFormDemoDataHandler: SECURITY WARNING - URL ID ' . $linkID . ' has hash "' . ($hash ?? 'NULL') . '" which does not start with "DEMO-", skipping deletion');
                     }
                 } catch (\Exception $e) {
-                    $this->log('OptionFormDemoDataHandler: Error verifying URL ID ' . $urlID . ': ' . $e->getMessage());
+                    $this->log('OptionFormDemoDataHandler: Error verifying URL ID ' . $linkID . ': ' . $e->getMessage());
                 }
             }
             
@@ -297,7 +297,7 @@ class OptionFormDemoDataHandler
             try {
                 $featuredLinkTableExists = false;
                 try {
-                    $sql = "SHOW TABLES LIKE 'urlshort1_featured_link'";
+                    $sql = "SHOW TABLES LIKE 'shrinkr1_featured_link'";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute();
                     $featuredLinkTableExists = ($statement->fetchSingleColumn() !== false);
@@ -308,14 +308,14 @@ class OptionFormDemoDataHandler
                 if ($featuredLinkTableExists && !empty($demoUrlIDs)) {
                     // Debug: Check how many featured links exist for these URLs
                     $placeholders = str_repeat('?,', count($demoUrlIDs) - 1) . '?';
-                    $sql = "SELECT COUNT(*) FROM urlshort1_featured_link WHERE urlID IN ({$placeholders})";
+                    $sql = "SELECT COUNT(*) FROM shrinkr1_featured_link WHERE linkID IN ({$placeholders})";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute($demoUrlIDs);
                     $existingLinksCount = $statement->fetchSingleColumn();
                     $this->log('OptionFormDemoDataHandler: Found ' . $existingLinksCount . ' featured links for demo URLs');
                     
                     // Now delete them
-                    $sql = "DELETE FROM urlshort1_featured_link WHERE urlID IN ({$placeholders})";
+                    $sql = "DELETE FROM shrinkr1_featured_link WHERE linkID IN ({$placeholders})";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute($demoUrlIDs);
                     $deletedLinks = $statement->getAffectedRows();
@@ -331,7 +331,7 @@ class OptionFormDemoDataHandler
             try {
                 $customButtonTableExists = false;
                 try {
-                    $sql = "SHOW TABLES LIKE 'urlshort1_custom_button'";
+                    $sql = "SHOW TABLES LIKE 'shrinkr1_custom_button'";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute();
                     $customButtonTableExists = ($statement->fetchSingleColumn() !== false);
@@ -342,14 +342,14 @@ class OptionFormDemoDataHandler
                 if ($customButtonTableExists && !empty($demoUrlIDs)) {
                     // Debug: Check how many custom buttons exist for these URLs
                     $placeholders = str_repeat('?,', count($demoUrlIDs) - 1) . '?';
-                    $sql = "SELECT COUNT(*) FROM urlshort1_custom_button WHERE urlID IN ({$placeholders})";
+                    $sql = "SELECT COUNT(*) FROM shrinkr1_custom_button WHERE linkID IN ({$placeholders})";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute($demoUrlIDs);
                     $existingButtonsCount = $statement->fetchSingleColumn();
                     $this->log('OptionFormDemoDataHandler: Found ' . $existingButtonsCount . ' custom buttons for demo URLs');
                     
                     // Now delete them
-                    $sql = "DELETE FROM urlshort1_custom_button WHERE urlID IN ({$placeholders})";
+                    $sql = "DELETE FROM shrinkr1_custom_button WHERE linkID IN ({$placeholders})";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute($demoUrlIDs);
                     $deletedButtons = $statement->getAffectedRows();
@@ -365,7 +365,7 @@ class OptionFormDemoDataHandler
             try {
                 $specialTableExists = false;
                 try {
-                    $sql = "SHOW TABLES LIKE 'urlshort1_special'";
+                    $sql = "SHOW TABLES LIKE 'shrinkr1_special'";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute();
                     $specialTableExists = ($statement->fetchSingleColumn() !== false);
@@ -375,7 +375,7 @@ class OptionFormDemoDataHandler
                 
                 if ($specialTableExists && !empty($demoUrlIDs)) {
                     $placeholders = str_repeat('?,', count($demoUrlIDs) - 1) . '?';
-                    $sql = "DELETE FROM urlshort1_special WHERE urlID IN ({$placeholders})";
+                    $sql = "DELETE FROM shrinkr1_special WHERE linkID IN ({$placeholders})";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute($demoUrlIDs);
                     $deletedSpecials = $statement->getAffectedRows();
@@ -386,12 +386,12 @@ class OptionFormDemoDataHandler
             }
             
             // Step 5: Delete associated Discounts (by unique demo discount codes)
-            // NOTE: Discount table has NO urlID column, so we identify demo discounts by their unique codes
+            // NOTE: Discount table has NO linkID column, so we identify demo discounts by their unique codes
             // This is SAFE because we only delete discounts with specific demo codes, not all discounts for those hostnames
             try {
                 $discountTableExists = false;
                 try {
-                    $sql = "SHOW TABLES LIKE 'urlshort1_discount'";
+                    $sql = "SHOW TABLES LIKE 'shrinkr1_discount'";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute();
                     $discountTableExists = ($statement->fetchSingleColumn() !== false);
@@ -406,7 +406,7 @@ class OptionFormDemoDataHandler
                     try {
                         // Match any code starting with "DEMO-" in codes field (comma-separated list)
                         // This will match: "DEMO-XXX", "DEMO-XXX,OTHER", "OTHER,DEMO-XXX", etc.
-                        $sql = "DELETE FROM urlshort1_discount WHERE codes LIKE 'DEMO-%' OR codes LIKE '%,DEMO-%' OR codes LIKE 'DEMO-%,%'";
+                        $sql = "DELETE FROM shrinkr1_discount WHERE codes LIKE 'DEMO-%' OR codes LIKE '%,DEMO-%' OR codes LIKE 'DEMO-%,%'";
                         $statement = WCF::getDB()->prepareStatement($sql);
                         $statement->execute();
                         $deletedDiscounts = $statement->getAffectedRows();
@@ -414,7 +414,7 @@ class OptionFormDemoDataHandler
                         
                         // Also delete old example discount with BEISPIELCODE2025 (backwards compatibility)
                         try {
-                            $sql = "DELETE FROM urlshort1_discount WHERE codes = 'BEISPIELCODE2025' OR codes LIKE 'BEISPIELCODE2025,%' OR codes LIKE '%,BEISPIELCODE2025' OR codes LIKE '%,BEISPIELCODE2025,%'";
+                            $sql = "DELETE FROM shrinkr1_discount WHERE codes = 'BEISPIELCODE2025' OR codes LIKE 'BEISPIELCODE2025,%' OR codes LIKE '%,BEISPIELCODE2025' OR codes LIKE '%,BEISPIELCODE2025,%'";
                             $statement = WCF::getDB()->prepareStatement($sql);
                             $statement->execute();
                             $deletedOldExample = $statement->getAffectedRows();
@@ -437,13 +437,13 @@ class OptionFormDemoDataHandler
             // Step 6: Delete demo URLs themselves (ONLY verified demo URLs)
             try {
                 if (!empty($demoUrlIDs)) {
-                    // SECURITY: Only delete by verified urlID list (already verified to have DEMO- hash)
+                    // SECURITY: Only delete by verified linkID list (already verified to have DEMO- hash)
                     $placeholders = str_repeat('?,', count($demoUrlIDs) - 1) . '?';
-                    $sql = "DELETE FROM urlshort1_url WHERE urlID IN ({$placeholders}) AND hash LIKE 'DEMO-%'";
+                    $sql = "DELETE FROM shrinkr1_link WHERE linkID IN ({$placeholders}) AND hash LIKE 'DEMO-%'";
                     $statement = WCF::getDB()->prepareStatement($sql);
                     $statement->execute($demoUrlIDs);
                     $deletedUrls = $statement->getAffectedRows();
-                    $this->log('OptionFormDemoDataHandler: Deleted ' . $deletedUrls . ' demo URLs (by verified urlID with DEMO- hash check)');
+                    $this->log('OptionFormDemoDataHandler: Deleted ' . $deletedUrls . ' demo URLs (by verified linkID with DEMO- hash check)');
                     
                     if ($deletedUrls < count($demoUrlIDs)) {
                         $this->log('OptionFormDemoDataHandler: WARNING - Expected to delete ' . count($demoUrlIDs) . ' URLs but only deleted ' . $deletedUrls);

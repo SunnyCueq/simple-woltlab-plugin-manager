@@ -1,9 +1,9 @@
 <?php
 
-namespace urlshort\acp\form;
+namespace shrinkr\acp\form;
 
-use urlshort\data\custombutton\CustomButtonAction;
-use urlshort\data\custombutton\CustomButtonList;
+use shrinkr\data\custombutton\CustomButtonAction;
+use shrinkr\data\custombutton\CustomButtonList;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\form\builder\container\FormContainer;
@@ -19,10 +19,10 @@ use wcf\util\HeaderUtil;
  * Form for adding a new custom button.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.form
  */
 class CustomButtonAddForm extends AbstractFormBuilderForm
@@ -30,12 +30,12 @@ class CustomButtonAddForm extends AbstractFormBuilderForm
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageCustomButtons'];
+    public $neededPermissions = ['admin.shrinkr.canManageCustomButtons'];
 
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.menu';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.menu';
 
     /**
      * @inheritDoc
@@ -45,7 +45,7 @@ class CustomButtonAddForm extends AbstractFormBuilderForm
     /**
      * URL ID (required parameter from URL query)
      */
-    public int $urlID = 0;
+    public int $linkID = 0;
 
     /**
      * URL hash for display
@@ -60,19 +60,19 @@ class CustomButtonAddForm extends AbstractFormBuilderForm
     {
         parent::readParameters();
 
-        if (isset($_REQUEST['urlID'])) {
-            $this->urlID = (int) $_REQUEST['urlID'];
+        if (isset($_REQUEST['linkID'])) {
+            $this->linkID = (int) $_REQUEST['linkID'];
         }
 
         // URL ID is required
-        if ($this->urlID === 0) {
+        if ($this->linkID === 0) {
             throw new IllegalLinkException();
         }
 
         // Load URL data (hash)
-        $sql = "SELECT hash FROM urlshort1_url WHERE urlID = ?";
+        $sql = "SELECT hash FROM shrinkr1_link WHERE linkID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$this->urlID]);
+        $statement->execute([$this->linkID]);
         $this->urlHash = $statement->fetchSingleColumn();
 
         if (empty($this->urlHash)) {
@@ -92,26 +92,26 @@ class CustomButtonAddForm extends AbstractFormBuilderForm
             ->label('wcf.global.form.data');
 
         $dataContainer->appendChildren([
-            // Hidden field for urlID (submitted with form)
-            HiddenFormField::create('urlID')
-                ->value($this->urlID),
+            // Hidden field for linkID (submitted with form)
+            HiddenFormField::create('linkID')
+                ->value($this->linkID),
 
             UrlFormField::create('targetUrl')
-                ->label('wcf.urlshort.customButton.targetUrl')
-                ->description('wcf.urlshort.customButton.targetUrl.description')
+                ->label('wcf.shrinkr.customButton.targetUrl')
+                ->description('wcf.shrinkr.customButton.targetUrl.description')
                 ->required()
                 ->autoFocus()
                 ->maximumLength(255),
 
             TextFormField::create('title')
                 ->label('wcf.global.title')
-                ->description('wcf.urlshort.customButton.title.description')
+                ->description('wcf.shrinkr.customButton.title.description')
                 ->required()
                 ->maximumLength(255),
 
             IntegerFormField::create('sortOrder')
-                ->label('wcf.urlshort.customButton.sortOrder')
-                ->description('wcf.urlshort.customButton.sortOrder.description')
+                ->label('wcf.shrinkr.customButton.sortOrder')
+                ->description('wcf.shrinkr.customButton.sortOrder.description')
                 ->value(1)
                 ->minimum(1),
         ]);
@@ -127,11 +127,11 @@ class CustomButtonAddForm extends AbstractFormBuilderForm
     {
         parent::saved();
 
-        // Redirect back to add form with same urlID to allow adding another custom button
+        // Redirect back to add form with same linkID to allow adding another custom button
         $url = LinkHandler::getInstance()->getControllerLink(CustomButtonAddForm::class, [
-            'application' => 'urlshort',
+            'application' => 'shrinkr',
         ]);
-        $url .= '&urlID=' . $this->urlID;
+        $url .= '&linkID=' . $this->linkID;
         
         HeaderUtil::redirect($url);
         exit;
@@ -147,12 +147,12 @@ class CustomButtonAddForm extends AbstractFormBuilderForm
 
         // Check if there are existing custom buttons for this URL
         $customButtonList = new CustomButtonList();
-        $customButtonList->getConditionBuilder()->add('urlID = ?', [$this->urlID]);
+        $customButtonList->getConditionBuilder()->add('linkID = ?', [$this->linkID]);
         $customButtonList->readObjects();
         $hasExistingCustomButtons = $customButtonList->count() > 0;
 
         WCF::getTPL()->assign([
-            'urlID' => $this->urlID,
+            'linkID' => $this->linkID,
             'urlHash' => $this->urlHash,
             'hasExistingCustomButtons' => $hasExistingCustomButtons,
         ]);

@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\special;
+namespace shrinkr\data\special;
 
 use wcf\data\DatabaseObjectEditor;
 
@@ -8,10 +8,10 @@ use wcf\data\DatabaseObjectEditor;
  * Provides functions to edit specials.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.special
  *
  * @method static Special create(array $parameters = [])

@@ -2,7 +2,7 @@
  * Ostern Theme Styles
  * 
  * Theme-specific styles for the ostern theme.
- * Applied to .urlShortContainer when this theme is active.
+ * Applied to .shrinkrContainer when this theme is active.
  * 
  * @author      Sunny C. <https://benjaro.info>
  * @copyright   2022-2025 Benjaro
@@ -10,7 +10,7 @@
  */
 
 /* CSS Variables - Easter Hues Color Scheme from SchemeColor */
-.urlShortContainer {
+.shrinkrContainer {
     /* Light Mode (default) - Easter Hues palette */
     --ostern-bg1: #BADBD2; /* Jet Stream - light teal */
     --ostern-bg2: #F3EB9A; /* Flavescent - light yellow */
@@ -42,7 +42,7 @@
 
 /* Dark Mode adjustments for Ostern - Darker but keep Easter Hues accents */
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer {
+    .shrinkrContainer {
         --ostern-bg1: #1a2527; /* Dark teal-tinted */
         --ostern-bg2: #2a2820; /* Dark yellow-tinted */
         --ostern-ac1: #F47A97; /* Keep Cyclamen pink */
@@ -70,8 +70,8 @@
     }
 }
 
-/* Override .urlShortBox background and borders */
-.urlShortContainer > .urlShortBox {
+/* Override .shrinkrBox background and borders */
+.shrinkrContainer > .shrinkrBox {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -79,12 +79,12 @@
 }
 
 /* Apply theme colors to text elements */
-.urlShortContainer p {
+.shrinkrContainer p {
     color: var(--ostern-text);
 }
 
 /* Title styling */
-.urlShortContainer h1 {
+.shrinkrContainer h1 {
     color: var(--ostern-text);
 }
 
@@ -105,7 +105,7 @@
                 0 2px 8px rgba(244, 122, 151, .3) !important;
 }
 
-body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badge-promo-content#rabatt {
+body[data-page-identifier="de.sunnyc.wsc.shrinkr.redirect"] .badge-promo .badge-promo-content#rabatt {
     color: var(--ostern-text) !important;
 }
 
@@ -139,12 +139,12 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
     text-shadow: 0 0 5px rgba(233, 192, 95, .4);
 }
 
-body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badge-promo-right.badge#discount-countdown {
+body[data-page-identifier="de.sunnyc.wsc.shrinkr.redirect"] .badge-promo .badge-promo-right.badge#discount-countdown {
     color: var(--ostern-text) !important;
 }
 
 /* Forward Button - Ostern Style */
-.urlShortContainer .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced__content {
     background: linear-gradient(135deg, var(--ostern-ac1), var(--ostern-ac2)) !important;
     color: #1a2527 !important;
     border: 1px solid rgba(244, 122, 151, .5) !important;
@@ -152,33 +152,33 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer .forwardButtonEnhanced__content {
+    .shrinkrContainer .forwardButtonEnhanced__content {
         color: #000 !important;
     }
 }
 
-.urlShortContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
     box-shadow: 0 6px 16px rgba(244, 122, 151, .4) !important;
     filter: brightness(1.05);
 }
 
 /* Discount Codes - Ostern Style */
-.urlShortContainer .discountCodesContainer.warning {
+.shrinkrContainer .discountCodesContainer.warning {
     background-color: rgba(244, 122, 151, .25) !important;
     border: 1px solid rgba(244, 122, 151, .4) !important;
     color: var(--ostern-text) !important;
     box-shadow: inset 0 0 8px rgba(244, 122, 151, .15) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning strong {
+.shrinkrContainer .discountCodesContainer.warning strong {
     color: var(--ostern-text) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning small {
+.shrinkrContainer .discountCodesContainer.warning small {
     color: var(--ostern-text) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+.shrinkrContainer .discountCodesContainer.warning kbd.copyableCode {
     color: #312f2c !important;
     font-weight: 900;
     background-color: rgba(233, 192, 95, .12) !important;
@@ -186,13 +186,13 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
 }
 
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+    .shrinkrContainer .discountCodesContainer.warning kbd.copyableCode {
         color: unset !important;
     }
 }
 
 /* Share & React Buttons - Ostern Style */
-.urlShortContainer .urlShortBox__buttons .button {
+.shrinkrContainer .shrinkrBox__buttons .button {
     background-color: rgba(244, 122, 151, .3) !important;
     border: 1px solid rgba(244, 122, 151, .5) !important;
     color: var(--ostern-text) !important;
@@ -201,7 +201,7 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
     transition: all 0.2s ease;
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover {
+.shrinkrContainer .shrinkrBox__buttons .button:hover {
     background-color: rgba(244, 122, 151, .45) !important;
     border-color: rgba(244, 122, 151, .7) !important;
     box-shadow: inset 0 0 12px rgba(255, 255, 255, .3), 
@@ -209,23 +209,23 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
     transform: translateY(-1px);
 }
 
-.urlShortContainer .urlShortBox__buttons .button:active {
+.shrinkrContainer .shrinkrBox__buttons .button:active {
     transform: translateY(0);
     box-shadow: inset 0 0 8px rgba(255, 255, 255, .25), 
                 0 1px 4px rgba(244, 122, 151, .2) !important;
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover fa-icon {
+.shrinkrContainer .shrinkrBox__buttons .button:hover fa-icon {
     color: var(--ostern-ac3) !important; /* Teal Blue */
     filter: drop-shadow(0 0 3px rgba(54, 125, 131, .4));
 }
 
 /* Title Icon - Replace with Egg Emoji for Easter */
-.urlShortContainer .titleIcon fa-icon {
+.shrinkrContainer .titleIcon fa-icon {
     display: none !important; /* Hide Font Awesome icon */
 }
 
-.urlShortContainer .titleIcon::after {
+.shrinkrContainer .titleIcon::after {
     content: '🥚' !important; /* Egg emoji */
     font-size: 1em !important;
     display: inline-block !important;

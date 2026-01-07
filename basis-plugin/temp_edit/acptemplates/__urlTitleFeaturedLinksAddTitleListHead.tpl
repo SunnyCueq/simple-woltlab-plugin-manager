@@ -1,2 +1,0 @@
-<th class="columnTitle columnUrl{if $sortField == 'urlTitle'} active {#$sortOrder}{/if}"><a href="{link application='urlshort' controller='UrlList'}pageNo={#$pageNo}&sortField=urlTitle&sortOrder={if $sortField == 'urlTitle' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.urlshort.url.urlTitle{/lang}</a></th>
-<th class="columnTitle columnFeaturedLinks{if $sortField == 'urlTitle'} active {unsafe:$sortOrder}{/if}">{lang}wcf.urlshort.featuredLinks{/lang}</th>

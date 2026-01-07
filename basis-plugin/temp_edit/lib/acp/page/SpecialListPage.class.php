@@ -1,9 +1,9 @@
 <?php
 
-namespace urlshort\acp\page;
+namespace shrinkr\acp\page;
 
-use urlshort\data\special\SpecialList;
-use urlshort\system\special\SpecialThemeHelper;
+use shrinkr\data\special\SpecialList;
+use shrinkr\system\special\SpecialThemeHelper;
 use wcf\page\MultipleLinkPage;
 use wcf\system\WCF;
 
@@ -11,10 +11,10 @@ use wcf\system\WCF;
  * ACP page for listing all specials.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.page
  */
 class SpecialListPage extends MultipleLinkPage
@@ -37,12 +37,12 @@ class SpecialListPage extends MultipleLinkPage
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.special.list';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.special.list';
 
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageSpecials'];
+    public $neededPermissions = ['admin.shrinkr.canManageSpecials'];
 
     /**
      * @inheritDoc
@@ -130,12 +130,12 @@ class SpecialListPage extends MultipleLinkPage
 
         if ($this->shortUrlQuery) {
             if (ctype_digit($this->shortUrlQuery)) {
-                $conditions[] = 'urlID = ?';
+                $conditions[] = 'linkID = ?';
                 $parameters[] = (int) $this->shortUrlQuery;
             } else {
-                $conditions[] = 'urlID IN (
-                    SELECT urlID
-                    FROM urlshort1_url
+                $conditions[] = 'linkID IN (
+                    SELECT linkID
+                    FROM shrinkr1_link
                     WHERE hash LIKE ?
                 )';
                 $parameters[] = '%' . $this->shortUrlQuery . '%';
@@ -163,20 +163,20 @@ class SpecialListPage extends MultipleLinkPage
         // Get objects from objectList (works with MultipleLinkPage)
         $objects = $this->objectList->getObjects();
         if (!empty($objects)) {
-            $urlIDs = [];
+            $linkIDs = [];
             foreach ($objects as $special) {
-                if (isset($special->urlID) && $special->urlID > 0) {
-                    $urlIDs[] = $special->urlID;
+                if (isset($special->linkID) && $special->linkID > 0) {
+                    $linkIDs[] = $special->linkID;
                 }
             }
             
-            if (!empty($urlIDs)) {
-                $placeholders = str_repeat('?,', count($urlIDs) - 1) . '?';
-                $sql = "SELECT urlID, hash FROM urlshort1_url WHERE urlID IN ({$placeholders})";
+            if (!empty($linkIDs)) {
+                $placeholders = str_repeat('?,', count($linkIDs) - 1) . '?';
+                $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE linkID IN ({$placeholders})";
                 $statement = WCF::getDB()->prepareStatement($sql);
-                $statement->execute($urlIDs);
+                $statement->execute($linkIDs);
                 while ($row = $statement->fetchArray()) {
-                    $urlHashes[$row['urlID']] = $row['hash'];
+                    $urlHashes[$row['linkID']] = $row['hash'];
                 }
             }
         }

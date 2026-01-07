@@ -1,98 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/acpMenu.xsd">
 	<import>
-		<acpmenuitem name="urlshort.acp.menu.link.menu">
+		<acpmenuitem name="shrinkr.acp.menu.link.menu">
 			<parent>wcf.acp.menu.link.application</parent>
-			<options>urlshort_active</options>
+			<options>shrinkr_active</options>
 			<showorder>100</showorder>
 		</acpmenuitem>
-		<acpmenuitem name="urlshort.acp.menu.link.url.list">
-			<controller>urlshort\acp\page\UrlListPage</controller>
-			<parent>urlshort.acp.menu.link.menu</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageUrls</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.link.list">
+			<controller>shrinkr\acp\page\ShrinkrLinkListPage</controller>
+			<parent>shrinkr.acp.menu.link.menu</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageLinks</permissions>
 			<showorder>1</showorder>
 		</acpmenuitem>
-		<acpmenuitem name="urlshort.acp.menu.link.url.add">
-			<controller>urlshort\acp\form\UrlAddForm</controller>
-			<parent>urlshort.acp.menu.link.url.list</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageUrls</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.link.add">
+			<controller>shrinkr\acp\form\ShrinkrLinkAddForm</controller>
+			<parent>shrinkr.acp.menu.link.link.list</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageLinks</permissions>
 			<icon>plus</icon>
 			<showorder>1</showorder>
 		</acpmenuitem>
 
-		<acpmenuitem name="urlshort.acp.menu.link.discount.list">
-			<controller>urlshort\acp\page\DiscountListPage</controller>
-			<parent>urlshort.acp.menu.link.menu</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageDiscounts</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.discount.list">
+			<controller>shrinkr\acp\page\DiscountListPage</controller>
+			<parent>shrinkr.acp.menu.link.menu</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageDiscounts</permissions>
 			<showorder>2</showorder>
 		</acpmenuitem>
-		<acpmenuitem name="urlshort.acp.menu.link.discount.add">
-			<controller>urlshort\acp\form\DiscountAddForm</controller>
-			<parent>urlshort.acp.menu.link.discount.list</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageDiscounts</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.discount.add">
+			<controller>shrinkr\acp\form\DiscountAddForm</controller>
+			<parent>shrinkr.acp.menu.link.discount.list</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageDiscounts</permissions>
 			<icon>plus</icon>
 			<showorder>1</showorder>
 		</acpmenuitem>
 
-		<acpmenuitem name="urlshort.acp.menu.link.description.list">
-			<controller>urlshort\acp\page\DescriptionListPage</controller>
-			<parent>urlshort.acp.menu.link.menu</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageDescriptions</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.description.list">
+			<controller>shrinkr\acp\page\DescriptionListPage</controller>
+			<parent>shrinkr.acp.menu.link.menu</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageDescriptions</permissions>
 			<showorder>3</showorder>
 		</acpmenuitem>
-		<acpmenuitem name="urlshort.acp.menu.link.description.add">
-			<controller>urlshort\acp\form\DescriptionAddForm</controller>
-			<parent>urlshort.acp.menu.link.description.list</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageDescriptions</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.description.add">
+			<controller>shrinkr\acp\form\DescriptionAddForm</controller>
+			<parent>shrinkr.acp.menu.link.description.list</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageDescriptions</permissions>
 			<icon>plus</icon>
 			<showorder>1</showorder>
 		</acpmenuitem>
 
-		<acpmenuitem name="urlshort.acp.menu.link.special.list">
-			<controller>urlshort\acp\page\SpecialListPage</controller>
-			<parent>urlshort.acp.menu.link.menu</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageSpecials</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.special.list">
+			<controller>shrinkr\acp\page\SpecialListPage</controller>
+			<parent>shrinkr.acp.menu.link.menu</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageSpecials</permissions>
 			<showorder>6</showorder>
 		</acpmenuitem>
 
-		<acpmenuitem name="urlshort.acp.menu.link.theme.list">
-			<controller>urlshort\acp\page\ThemeListPage</controller>
-			<parent>urlshort.acp.menu.link.menu</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageThemes</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.theme.list">
+			<controller>shrinkr\acp\page\ThemeListPage</controller>
+			<parent>shrinkr.acp.menu.link.menu</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageThemes</permissions>
 			<showorder>7</showorder>
 		</acpmenuitem>
-		<acpmenuitem name="urlshort.acp.menu.link.theme.add">
-			<controller>urlshort\acp\form\ThemeAddForm</controller>
-			<parent>urlshort.acp.menu.link.theme.list</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageThemes</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.theme.add">
+			<controller>shrinkr\acp\form\ThemeAddForm</controller>
+			<parent>shrinkr.acp.menu.link.theme.list</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageThemes</permissions>
 			<icon>plus</icon>
 			<showorder>1</showorder>
 		</acpmenuitem>
 
-		<acpmenuitem name="urlshort.acp.menu.link.statistics.list">
-			<controller>urlshort\acp\page\ButtonClickListPage</controller>
-			<parent>urlshort.acp.menu.link.menu</parent>
-			<options>urlshort_active</options>
-			<permissions>admin.urlshort.canManageButtonClicks</permissions>
+		<acpmenuitem name="shrinkr.acp.menu.link.statistics.list">
+			<controller>shrinkr\acp\page\ButtonClickListPage</controller>
+			<parent>shrinkr.acp.menu.link.menu</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageButtonClicks</permissions>
 			<showorder>8</showorder>
 		</acpmenuitem>
 
-		<acpmenuitem name="urlshort.acp.menu.link.settings">
-			<controller>urlshort\acp\form\UrlshortSettingsForm</controller>
-			<parent>urlshort.acp.menu.link.menu</parent>
-			<options>urlshort_active</options>
+		<acpmenuitem name="shrinkr.acp.menu.link.settings">
+			<controller>shrinkr\acp\form\ShrinkrSettingsForm</controller>
+			<parent>shrinkr.acp.menu.link.menu</parent>
+			<options>shrinkr_active</options>
 			<permissions>admin.configuration.canManageOption</permissions>
 			<icon>gear</icon>
 			<showorder>100</showorder>
 		</acpmenuitem>
 	</import>
+
+	<delete>
+		<acpmenuitem name="urlshort.acp.menu.link.menu"/>
+		<acpmenuitem name="urlshort.acp.menu.link.url.list"/>
+		<acpmenuitem name="urlshort.acp.menu.link.url.add"/>
+		<acpmenuitem name="urlshort.acp.menu.link.discount.list"/>
+		<acpmenuitem name="urlshort.acp.menu.link.discount.add"/>
+		<acpmenuitem name="urlshort.acp.menu.link.description.list"/>
+		<acpmenuitem name="urlshort.acp.menu.link.description.add"/>
+		<acpmenuitem name="urlshort.acp.menu.link.special.list"/>
+		<acpmenuitem name="urlshort.acp.menu.link.theme.list"/>
+		<acpmenuitem name="urlshort.acp.menu.link.theme.add"/>
+		<acpmenuitem name="urlshort.acp.menu.link.statistics.list"/>
+		<acpmenuitem name="urlshort.acp.menu.link.settings"/>
+	</delete>
 </data>

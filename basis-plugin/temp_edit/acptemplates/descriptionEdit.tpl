@@ -1,1 +1,1 @@
-{include file='descriptionAdd' application='urlshort'}
+{include file='descriptionAdd' application='shrinkr'}

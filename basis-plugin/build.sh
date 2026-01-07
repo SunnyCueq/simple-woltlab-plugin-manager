@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #################################################################
-# WoltLab Plugin Builder für basis-plugin
+# WoltLab Plugin Builder für Shr1nkr
 # Pfad: /home/benny/Dokumente/affiliate-plugin/basis-plugin/build.sh
 # 
 # Usage:
@@ -32,7 +32,7 @@ if [[ ! "$VERSION_TYPE" =~ ^(patch|minor|major)$ ]]; then
 fi
 
 echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}WoltLab Plugin Builder - basis-plugin${NC}"
+echo -e "${GREEN}WoltLab Plugin Builder - Shr1nkr${NC}"
 echo -e "${GREEN}Version-Typ: $VERSION_TYPE${NC}"
 echo -e "${GREEN}========================================${NC}\n"
 

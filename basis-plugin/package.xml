@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package name="dev.tkirch.wsc.urlshort" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/tornado/package.xsd">
+<package name="de.sunnyc.wsc.shrinkr" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/tornado/package.xsd">
 	<packageinformation>
-		<packagename>URL-Shortener</packagename>
-		<packagename language="de">URL-Shortener</packagename>
-		<packagedescription>Your own short urls with the URL-Shortener in your WSC.</packagedescription>
-		<packagedescription language="de">Deine eigenen Kurz-URLs mit dem URL-Shortener im WSC.</packagedescription>
-		<version>2.0.50</version>
+		<packagename>Shr1nkr</packagename>
+		<packagename language="de">Shr1nkr</packagename>
+		<packagedescription>Create your own short links directly in your community – fast, secure and without external services.</packagedescription>
+		<packagedescription language="de">Erstelle eigene Kurz-URLs direkt in deiner Community – schnell, sicher und ohne externe Dienste.</packagedescription>
+		<version>1.0.4</version>
 		<date>2026-01-07</date>
-        <packageurl><![CDATA[https://julian-pfeil.de/r/plugins]]></packageurl>
-        <isapplication>1</isapplication>
-        <applicationdirectory>urls</applicationdirectory>
-    </packageinformation>
-    
-    <authorinformation>
-        <author>Julian Pfeil</author>
-        <authorurl>https://julian-pfeil.de</authorurl>
-    </authorinformation>
-    
-    <requiredpackages>
-        <requiredpackage minversion="6.1.0 Beta 2">com.woltlab.wcf</requiredpackage>
-    </requiredpackages>
-    
-    <excludedpackages>
-        <excludedpackage version="6.2.0 Alpha 1">com.woltlab.wcf</excludedpackage>
-        <excludedpackage version="1.0.0 Alpha 1">dev.tkirch.wsc.urlshort.ad</excludedpackage>
-    </excludedpackages>
+		<packageurl><![CDATA[https://sunnyc.de]]></packageurl>
+		<isapplication>1</isapplication>
+		<applicationdirectory>shrinkr</applicationdirectory>
+	</packageinformation>
+	
+	<authorinformation>
+		<author>Sunny C</author>
+		<authorurl>https://sunnyc.de</authorurl>
+	</authorinformation>
+	
+	<requiredpackages>
+		<requiredpackage minversion="6.1.0">com.woltlab.wcf</requiredpackage>
+	</requiredpackages>
+	
+	<excludedpackages>
+		<excludedpackage version="6.2.0 Alpha 1">com.woltlab.wcf</excludedpackage>
+	</excludedpackages>
 
 	<instructions type="install">
-        <!-- files -->
+		<!-- files -->
 		<instruction type="file"/>
-        <instruction type="file" application="wcf">files_wcf.tar</instruction>
+		<instruction type="file" application="wcf">files_wcf.tar</instruction>
 		<instruction type="template"/>
 		<instruction type="acpTemplate"/>
 
-        <instruction type="database">acp/database/install_dev.tkirch.wsc.urlshort.php</instruction>
-        <instruction type="script" application="urlshort">acp/install_dev.tkirch.wsc.urlshort_postInstall.php</instruction>
+		<instruction type="database">acp/database/install_de.sunnyc.wsc.shrinkr.php</instruction>
+		<instruction type="script" application="shrinkr">acp/install_de.sunnyc.wsc.shrinkr_postInstall.php</instruction>
 
 		<!-- xml-->
 		<instruction type="option"/>
@@ -46,9 +45,5 @@
 		<instruction type="eventListener"/>
 		<instruction type="objectType"/>
 		<instruction type="cronjob"/>
-	</instructions>
-
-	<instructions type="update" fromversion="6.0.1">
-		<instruction type="template"/>
 	</instructions>
 </package>

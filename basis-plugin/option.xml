@@ -3,219 +3,219 @@
 	<import>
 
 		<categories>
-			<category name="urlshort"></category>
+			<category name="shrinkr"></category>
 			
 			<!-- Tab 1: Allgemein -->
-			<category name="urlshort.general">
-				<parent>urlshort</parent>
+			<category name="shrinkr.general">
+				<parent>shrinkr</parent>
 				<showorder>1</showorder>
 			</category>
             
 			<!-- Tab 2: Weiterleitung -->
-			<category name="urlshort.redirect">
-				<parent>urlshort</parent>
+			<category name="shrinkr.redirect">
+				<parent>shrinkr</parent>
 				<showorder>10</showorder>
-				<options>urlshort_active</options>
+				<options>shrinkr_active</options>
 			</category>
 			
 			<!-- Tab 3: Ziel-URL -->
-			<category name="urlshort.target">
-				<parent>urlshort</parent>
+			<category name="shrinkr.target">
+				<parent>shrinkr</parent>
 				<showorder>20</showorder>
-				<options>urlshort_active</options>
+				<options>shrinkr_active</options>
 			</category>
 			
 			<!-- Tab 4: Hash-Konfiguration -->
-			<category name="urlshort.hash">
-				<parent>urlshort</parent>
+			<category name="shrinkr.hash">
+				<parent>shrinkr</parent>
 				<showorder>30</showorder>
-				<options>urlshort_active</options>
+				<options>shrinkr_active</options>
 			</category>
 
 			<!-- Tab 5: Interaktion -->
-			<category name="urlshort.interaction">
-				<parent>urlshort</parent>
+			<category name="shrinkr.interaction">
+				<parent>shrinkr</parent>
 				<showorder>40</showorder>
-				<options>urlshort_active</options>
+				<options>shrinkr_active</options>
 			</category>
 
 			<!-- Tab 6: Design -->
-			<category name="urlshort.design">
-				<parent>urlshort</parent>
+			<category name="shrinkr.design">
+				<parent>shrinkr</parent>
 				<showorder>50</showorder>
-				<options>urlshort_active</options>
+				<options>shrinkr_active</options>
 			</category>
 
 			<!-- Tab 7: Erweitert (nur wenn Expertenmodus aktiviert) -->
-			<category name="urlshort.advanced">
-				<parent>urlshort</parent>
+			<category name="shrinkr.advanced">
+				<parent>shrinkr</parent>
 				<showorder>100</showorder>
-				<options>urlshort_expertmode_active</options>
+				<options>shrinkr_expertmode_active</options>
 			</category>
 		</categories>
 
 		<options>
 			<!-- Tab 1: Allgemein -->
-			<option name="urlshort_active">
-				<categoryname>urlshort.general</categoryname>
+			<option name="shrinkr_active">
+				<categoryname>shrinkr.general</categoryname>
 				<showorder>1</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
 			</option>
-			<option name="urlshort_install_demo_data">
-				<categoryname>urlshort.general</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_install_demo_data">
+				<categoryname>shrinkr.general</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>2</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
 			</option>
-			<option name="urlshort_expertmode_active">
-				<categoryname>urlshort.general</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_expertmode_active">
+				<categoryname>shrinkr.general</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>3</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
 			</option>
 
 			<!-- Tab 2: Weiterleitung -->
-			<option name="urlshort_counter_active">
-				<categoryname>urlshort.redirect</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_counter_active">
+				<categoryname>shrinkr.redirect</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>1</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_forwarding_must_confirmed">
-				<categoryname>urlshort.redirect</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_forwarding_must_confirmed">
+				<categoryname>shrinkr.redirect</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>2</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_time_until_forwarding">
-				<categoryname>urlshort.redirect</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_time_until_forwarding">
+				<categoryname>shrinkr.redirect</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>3</showorder>
 				<optiontype>integer</optiontype>
 				<defaultvalue>0</defaultvalue>
 				<minvalue>0</minvalue>
 			</option>
-			<option name="urlshort_normal_page_mode">
-				<categoryname>urlshort.redirect</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_normal_page_mode">
+				<categoryname>shrinkr.redirect</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>4</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
 
 			<!-- Tab 2: Ziel-URL -->
-			<option name="urlshort_only_https">
-				<categoryname>urlshort.target</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_only_https">
+				<categoryname>shrinkr.target</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>1</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_deactivate_forwarding_chains">
-				<categoryname>urlshort.target</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_deactivate_forwarding_chains">
+				<categoryname>shrinkr.target</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>2</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_remove_urls_prefix">
-				<categoryname>urlshort.target</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_remove_shrinkr_prefix">
+				<categoryname>shrinkr.target</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>3</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
 			</option>
-			<option name="urlshort_url_blacklist">
-				<categoryname>urlshort.target</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_link_blacklist">
+				<categoryname>shrinkr.target</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>4</showorder>
 				<optiontype>textarea</optiontype>
 			</option>
 
 			<!-- Tab 4: Hash-Konfiguration -->
-			<option name="urlshort_hash_length">
-				<categoryname>urlshort.hash</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_hash_length">
+				<categoryname>shrinkr.hash</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>1</showorder>
 				<optiontype>integer</optiontype>
 				<defaultvalue>4</defaultvalue>
 				<minvalue>1</minvalue>
 				<maxvalue>64</maxvalue>
 			</option>
-			<option name="urlshort_hash_prefix">
-				<categoryname>urlshort.hash</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_hash_prefix">
+				<categoryname>shrinkr.hash</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>2</showorder>
 				<optiontype>text</optiontype>
 				<defaultvalue></defaultvalue>
 			</option>
 			<!-- Tab 5: Interaktion -->
-			<option name="urlshort_featuredLinks_enableReactions">
-				<categoryname>urlshort.interaction</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_enable_reactions">
+				<categoryname>shrinkr.interaction</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>1</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_featuredLinks_enableGuestReactions">
-				<categoryname>urlshort.interaction</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_enable_guest_reactions">
+				<categoryname>shrinkr.interaction</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>2</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_featuredLinks_enableShareButton">
-				<categoryname>urlshort.interaction</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_enable_share_button">
+				<categoryname>shrinkr.interaction</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>3</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_featuredLinks_enableDescriptions">
-				<categoryname>urlshort.interaction</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_enable_descriptions">
+				<categoryname>shrinkr.interaction</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>4</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_featuredLinks_enableCustomForwardButton">
-				<categoryname>urlshort.interaction</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_enable_custom_forward_button">
+				<categoryname>shrinkr.interaction</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>5</showorder>
 				<optiontype>customForwardButton</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_featuredLinks_titleIcon">
-				<categoryname>urlshort.interaction</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_title_icon">
+				<categoryname>shrinkr.interaction</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>6</showorder>
 				<optiontype>icon</optiontype>
 				<defaultvalue>star;false</defaultvalue>
 			</option>
-			<option name="urlshort_enable_qr_code">
-				<categoryname>urlshort.interaction</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_enable_qr_code">
+				<categoryname>shrinkr.interaction</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>7</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
 			</option>
 
 			<!-- Tab 6: Design -->
-			<option name="urlshort_halloween_leaves">
-				<categoryname>urlshort.design</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_enable_theme_effects">
+				<categoryname>shrinkr.design</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>1</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			<option name="urlshort_special_themes">
-				<categoryname>urlshort.design</categoryname>
-				<options>urlshort_active</options>
+			<option name="shrinkr_special_themes">
+				<categoryname>shrinkr.design</categoryname>
+				<options>shrinkr_active</options>
 				<showorder>2</showorder>
 				<optiontype>textarea</optiontype>
 				<defaultvalue>halloween:Halloween:rgba(139, 0, 0, 1):rgba(255, 140, 0, 1):rgba(255, 255, 255, 1):rgba(255, 255, 255, 1)
@@ -227,16 +227,16 @@ default:Standard:rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 25
 			</option>
 
 			<!-- Tab 7: Erweitert -->
-			<option name="urlshort_pattern">
-				<categoryname>urlshort.advanced</categoryname>
-				<options>urlshort_expertmode_active</options>
+			<option name="shrinkr_pattern">
+				<categoryname>shrinkr.advanced</categoryname>
+				<options>shrinkr_expertmode_active</options>
 				<showorder>1</showorder>
 				<optiontype>text</optiontype>
 				<defaultvalue>[0-9a-z\-]{1,64}</defaultvalue>
 			</option>
-			<option name="urlshort_external_url">
-				<categoryname>urlshort.advanced</categoryname>
-				<options>urlshort_expertmode_active</options>
+			<option name="shrinkr_external_url">
+				<categoryname>shrinkr.advanced</categoryname>
+				<options>shrinkr_expertmode_active</options>
 				<showorder>2</showorder>
 				<optiontype>URL</optiontype>
 				<defaultvalue></defaultvalue>
@@ -245,12 +245,44 @@ default:Standard:rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 25
 	</import>
 
 	<delete>
+		<category name="urlshort"/>
+		<category name="urlshort.general"/>
+		<category name="urlshort.redirect"/>
+		<category name="urlshort.target"/>
+		<category name="urlshort.hash"/>
+		<category name="urlshort.interaction"/>
+		<category name="urlshort.design"/>
+		<category name="urlshort.advanced"/>
 		<category name="urlshort.usedBy"/>
 		<category name="urlshort.general.other"/>
 		<category name="urlshort.expertmode"/>
 		<category name="urlshort.featuredLinks"/>
 		<category name="urlshort.affiliateFeatures"/>
 		<category name="urlshort.visualEffects"/>
+		<option name="urlshort_active"/>
+		<option name="urlshort_install_demo_data"/>
+		<option name="urlshort_expertmode_active"/>
+		<option name="urlshort_counter_active"/>
+		<option name="urlshort_forwarding_must_confirmed"/>
+		<option name="urlshort_time_until_forwarding"/>
+		<option name="urlshort_normal_page_mode"/>
+		<option name="urlshort_only_https"/>
+		<option name="urlshort_deactivate_forwarding_chains"/>
+		<option name="urlshort_remove_urls_prefix"/>
+		<option name="urlshort_url_blacklist"/>
+		<option name="urlshort_hash_length"/>
+		<option name="urlshort_hash_prefix"/>
+		<option name="urlshort_featuredLinks_enableReactions"/>
+		<option name="urlshort_featuredLinks_enableGuestReactions"/>
+		<option name="urlshort_featuredLinks_enableShareButton"/>
+		<option name="urlshort_featuredLinks_enableDescriptions"/>
+		<option name="urlshort_featuredLinks_enableCustomForwardButton"/>
+		<option name="urlshort_featuredLinks_titleIcon"/>
+		<option name="urlshort_enable_qr_code"/>
+		<option name="urlshort_halloween_leaves"/>
+		<option name="urlshort_special_themes"/>
+		<option name="urlshort_pattern"/>
+		<option name="urlshort_external_url"/>
 		<option name="urlshort_prevent_redirection_urls"/>
 	</delete>
 </data>

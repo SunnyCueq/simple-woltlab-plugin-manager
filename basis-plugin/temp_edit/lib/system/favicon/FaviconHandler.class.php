@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\system\favicon;
+namespace shrinkr\system\favicon;
 
 use wcf\system\io\HttpFactory;
 use wcf\system\SingletonFactory;
@@ -14,10 +14,10 @@ use wcf\util\StringUtil;
  * Policy-compliant implementation for WoltLab Plugin Store.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.favicon
  */
 class FaviconHandler extends SingletonFactory

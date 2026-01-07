@@ -1,25 +1,25 @@
-{include file='header' pageTitle='urlshort.acp.menu.link.customButton.list'}
+{include file='header' pageTitle='shrinkr.acp.menu.link.customButton.list'}
 
 <header class="contentHeader">
 	<div class="contentHeaderTitle">
 		<h1 class="contentTitle">
-			{lang}urlshort.acp.menu.link.customButton.list{/lang}
+			{lang}shrinkr.acp.menu.link.customButton.list{/lang}
 			{if $urlHash}<small class="contentTitleBadge">#{$urlHash}</small>{/if}
 		</h1>
 		<p class="contentHeaderDescription">
-			{lang}urlshort.acp.customButton.list.description{/lang}
-			{if $urlTarget}<br>{lang}wcf.urlshort.customButton.forHash{/lang}: <code>{$urlTarget}</code>{/if}
+			{lang}shrinkr.acp.customButton.list.description{/lang}
+			{if $urlTarget}<br>{lang}wcf.shrinkr.customButton.forHash{/lang}: <code>{$urlTarget}</code>{/if}
 		</p>
 	</div>
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='UrlEdit' application='urlshort' id=$urlID}{/link}"
+			<li><a href="{link controller='UrlEdit' application='shrinkr' id=$linkID}{/link}"
 					class="button buttonPrimary">{icon size=16 name='pen-to-square'}
-					<span>{lang}wcf.urlshort.customButton.backToUrl{/lang}</span></a></li>
-			<li><a href="{link controller='CustomButtonAdd' application='urlshort'}urlID={#$urlID}{/link}"
+					<span>{lang}wcf.shrinkr.customButton.backToUrl{/lang}</span></a></li>
+			<li><a href="{link controller='CustomButtonAdd' application='shrinkr'}linkID={#$linkID}{/link}"
 					class="button">{icon size=16 name='plus'}
-					<span>{lang}urlshort.acp.menu.link.customButton.add{/lang}</span></a></li>
+					<span>{lang}shrinkr.acp.menu.link.customButton.add{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
 		</ul>
 	</nav>
@@ -28,7 +28,7 @@
 {include file='formError'}
 
 {if $objects|count || $q}
-	<form action="{link controller='CustomButtonList' application='urlshort'}urlID={#$urlID}{/link}" method="POST">
+	<form action="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}{/link}" method="POST">
 		<section class="section">
 			<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
@@ -36,11 +36,11 @@
 				<dl class="col-xs-12 col-md-6">
 					<dt></dt>
 					<dd>
-						<input class="long" type="text" name="q" value="{$q}" placeholder="{lang}wcf.global.title{/lang} / {lang}wcf.urlshort.customButton.targetUrl{/lang}">
+						<input class="long" type="text" name="q" value="{$q}" placeholder="{lang}wcf.global.title{/lang} / {lang}wcf.shrinkr.customButton.targetUrl{/lang}">
 					</dd>
 				</dl>
 
-				<input type="hidden" name="urlID" value="{#$urlID}">
+				<input type="hidden" name="linkID" value="{#$linkID}">
 				{if $sortField|isset}<input type="hidden" name="sortField" value="{$sortField}">{/if}
 				{if $sortOrder|isset}<input type="hidden" name="sortOrder" value="{$sortOrder}">{/if}
 
@@ -58,34 +58,34 @@
 {hascontent}
 <div class="paginationTop">
 	{content}
-	{pages print=true assign=pagesLinks application='urlshort' controller="CustomButtonList" link="urlID=$urlID&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&q=$q"}
+	{pages print=true assign=pagesLinks application='shrinkr' controller="CustomButtonList" link="linkID=$linkID&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&q=$q"}
 	{/content}
 </div>
 {/hascontent}
 
 {if $objects|count}
 	<div class="section tabularBox">
-		<table class="table jsObjectActionContainer" data-object-action-class-name="urlshort\data\custombutton\CustomButtonAction">
+		<table class="table jsObjectActionContainer" data-object-action-class-name="shrinkr\data\custombutton\CustomButtonAction">
 			<thead>
 				<tr>
 					<th class="columnID columnCustomButtonID{if $sortField == 'customButtonID'} active {$sortOrder}{/if}" colspan="2">
-						<a href="{link controller='CustomButtonList' application='urlshort'}urlID={#$urlID}&pageNo={#$pageNo}&sortField=customButtonID&sortOrder={if $sortField == 'customButtonID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
+						<a href="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=customButtonID&sortOrder={if $sortField == 'customButtonID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
 							{lang}wcf.global.objectID{/lang}
 						</a>
 					</th>
 					<th class="columnTitle{if $sortField == 'title'} active {$sortOrder}{/if}">
-						<a href="{link controller='CustomButtonList' application='urlshort'}urlID={#$urlID}&pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
+						<a href="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
 							{lang}wcf.global.title{/lang}
 						</a>
 					</th>
 					<th class="columnText{if $sortField == 'targetUrl'} active {$sortOrder}{/if}">
-						<a href="{link controller='CustomButtonList' application='urlshort'}urlID={#$urlID}&pageNo={#$pageNo}&sortField=targetUrl&sortOrder={if $sortField == 'targetUrl' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
-							{lang}wcf.urlshort.customButton.targetUrl{/lang}
+						<a href="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=targetUrl&sortOrder={if $sortField == 'targetUrl' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
+							{lang}wcf.shrinkr.customButton.targetUrl{/lang}
 						</a>
 					</th>
 					<th class="columnDigits columnSortOrder{if $sortField == 'sortOrder'} active {$sortOrder}{/if}">
-						<a href="{link controller='CustomButtonList' application='urlshort'}urlID={#$urlID}&pageNo={#$pageNo}&sortField=sortOrder&sortOrder={if $sortField == 'sortOrder' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
-							{lang}wcf.urlshort.customButton.sortOrder{/lang}
+						<a href="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=sortOrder&sortOrder={if $sortField == 'sortOrder' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
+							{lang}wcf.shrinkr.customButton.sortOrder{/lang}
 						</a>
 					</th>
 				</tr>
@@ -94,7 +94,7 @@
 				{foreach from=$objects item=object}
 					<tr class="jsObjectActionObject" data-object-id="{#$object->customButtonID}">
 						<td class="columnIcon">
-							<a href="{link controller='CustomButtonEdit' id=$object->customButtonID application='urlshort'}{/link}"
+							<a href="{link controller='CustomButtonEdit' id=$object->customButtonID application='shrinkr'}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->getTitle()}
 							{event name='rowButtons'}
@@ -122,20 +122,20 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='CustomButtonAdd' application='urlshort'}urlID={#$urlID}{/link}"
+				<li><a href="{link controller='CustomButtonAdd' application='shrinkr'}linkID={#$linkID}{/link}"
 						class="button">{icon size=16 name='plus'}
-						<span>{lang}urlshort.acp.menu.link.customButton.add{/lang}</span></a></li>
+						<span>{lang}shrinkr.acp.menu.link.customButton.add{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
 			</ul>
 		</nav>
 	</footer>
 {else}
-	<woltlab-core-notice type="info">{lang}wcf.urlshort.customButton.noItems{/lang}</woltlab-core-notice>
+	<woltlab-core-notice type="info">{lang}wcf.shrinkr.customButton.noItems{/lang}</woltlab-core-notice>
 	
 	<div class="section">
-		<a href="{link controller='UrlList' application='urlshort'}{/link}" class="button buttonPrimary">
+		<a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button buttonPrimary">
 			{icon size=16 name='list'}
-			<span>{lang}wcf.urlshort.customButton.goToUrls{/lang}</span>
+			<span>{lang}wcf.shrinkr.customButton.goToUrls{/lang}</span>
 		</a>
 	</div>
 {/if}

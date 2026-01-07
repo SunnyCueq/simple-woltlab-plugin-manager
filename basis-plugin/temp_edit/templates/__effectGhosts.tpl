@@ -1,6 +1,6 @@
 {if $effect|isset}
 	<script data-relocate="true">
-		require(['Benjaro/Urlshort/Ui/Ghosts', 'WoltLabSuite/Core/Environment'], function(module, Environment) {
+		require(['Shrinkr/Ui/Ghosts', 'WoltLabSuite/Core/Environment'], function(module, Environment) {
 			if (!module || !module.Ghosts) {
 				return;
 			}

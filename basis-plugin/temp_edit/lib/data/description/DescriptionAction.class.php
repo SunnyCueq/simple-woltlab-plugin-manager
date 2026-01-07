@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\description;
+namespace shrinkr\data\description;
 
 use wcf\data\AbstractDatabaseObjectAction;
 
@@ -8,10 +8,10 @@ use wcf\data\AbstractDatabaseObjectAction;
  * Executes description-related actions.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.description
  *
  * @method Description       create()
@@ -23,17 +23,17 @@ class DescriptionAction extends AbstractDatabaseObjectAction
     /**
      * @inheritDoc
      */
-    protected $permissionsCreate = ['admin.urlshort.canManageDescriptions'];
+    protected $permissionsCreate = ['admin.shrinkr.canManageDescriptions'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsUpdate = ['admin.urlshort.canManageDescriptions'];
+    protected $permissionsUpdate = ['admin.shrinkr.canManageDescriptions'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsDelete = ['admin.urlshort.canManageDescriptions'];
+    protected $permissionsDelete = ['admin.shrinkr.canManageDescriptions'];
 
     /**
      * @inheritDoc

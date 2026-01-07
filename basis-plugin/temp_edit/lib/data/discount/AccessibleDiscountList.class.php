@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\discount;
+namespace shrinkr\data\discount;
 
 use wcf\system\WCF;
 use wcf\util\StringUtil;
@@ -10,10 +10,10 @@ use wcf\util\StringUtil;
  * Filters discounts by host matching and URL validation.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.discount
  */
 class AccessibleDiscountList extends ViewableDiscountList

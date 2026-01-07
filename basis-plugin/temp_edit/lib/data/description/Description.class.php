@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\description;
+namespace shrinkr\data\description;
 
 use wcf\data\DatabaseObject;
 use wcf\data\ITitledObject;
@@ -10,10 +10,10 @@ use wcf\system\WCF;
  * Represents a redirect description.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.description
  *
  * @property-read int    $descriptionID      Unique ID of the description
@@ -40,7 +40,7 @@ class Description extends DatabaseObject implements ITitledObject
      */
     public function canAdd(): bool
     {
-        return WCF::getSession()->getPermission('admin.urlshort.canManageDescriptions');
+        return WCF::getSession()->getPermission('admin.shrinkr.canManageDescriptions');
     }
 
     /**
@@ -92,7 +92,7 @@ class Description extends DatabaseObject implements ITitledObject
         $compiled = $compiler->compileString(
             'description_' . $this->descriptionID,
             $text,
-            ['application' => 'urlshort', 'data' => null, 'filename' => ''],
+            ['application' => 'shrinkr', 'data' => null, 'filename' => ''],
             true // isolated compilation
         );
 

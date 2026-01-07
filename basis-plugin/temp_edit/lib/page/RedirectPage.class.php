@@ -1,17 +1,17 @@
 <?php
 
-namespace urlshort\page;
+namespace shrinkr\page;
 
-use urlshort\data\discount\AccessibleDiscountList;
-use urlshort\data\discount\Discount;
-use urlshort\data\description\AccessibleDescriptionList;
-use urlshort\data\special\Special;
-use urlshort\data\theme\Theme;
-use urlshort\data\url\Url;
-use urlshort\data\url\UrlAction;
-use urlshort\data\url\UrlEditor;
-use urlshort\data\visit\VisitEditor;
-use urlshort\system\favicon\FaviconHandler;
+use shrinkr\data\discount\AccessibleDiscountList;
+use shrinkr\data\discount\Discount;
+use shrinkr\data\description\AccessibleDescriptionList;
+use shrinkr\data\special\Special;
+use shrinkr\data\theme\Theme;
+use shrinkr\data\shrinkrlink\ShrinkrLink;
+use shrinkr\data\shrinkrlink\ShrinkrLinkAction;
+use shrinkr\data\shrinkrlink\ShrinkrLinkEditor;
+use shrinkr\data\visit\VisitEditor;
+use shrinkr\system\favicon\FaviconHandler;
 use wcf\data\option\Option;
 use wcf\page\AbstractPage;
 use wcf\system\exception\IllegalLinkException;
@@ -21,20 +21,20 @@ use wcf\system\WCF;
 use wcf\util\StringUtil;
 
 /**
- * @author      Julian Pfeil, Titus Kirch <https://julian-pfeil.de>
- * @link        https://darkwood.design/store/user-file-list/1298-julian-pfeil/
- * @copyright   2022 Julian Pfeil Websites & Co.
- * @license     License for Commercial Plugins <https://julian-pfeil.de/lizenz/>
+ * @author      Sunny C, Sunny C <https://sunnyc.de>
+ * @link        https://sunnyc.de
+ * @copyright   2022 Sunny C Websites & Co.
+ * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage page
  */
 class RedirectPage extends AbstractPage
 {
     /**
-     * @var Url|null
+     * @var ShrinkrLink|null
      */
-    public ?Url $url = null;
+    public ?ShrinkrLink $link = null;
 
     /**
      * List of featured links for the current URL.
@@ -147,7 +147,7 @@ class RedirectPage extends AbstractPage
         
         if ($hash) {
             // Get URL by hash
-            $this->url = Url::getUrlByHash($hash);
+            $this->url = ShrinkrLink::getLinkByHash($hash);
         }
     }
 
@@ -160,7 +160,7 @@ class RedirectPage extends AbstractPage
         parent::readData();
 
         // Check if URL object is valid
-        if (!isset($this->url?->urlID) || !$this->url->urlID) {
+        if (!isset($this->url?->linkID) || !$this->link->linkID) {
             return;
         }
 
@@ -168,10 +168,10 @@ class RedirectPage extends AbstractPage
         $this->trackVisit();
 
         // Extract page title (must be done before getRandomDescription)
-        $url = $this->url->url ?? '';
+        $url = $this->link->url ?? '';
         $host = $this->extractHostFromUrl($url);
         $extractedTitle = FaviconHandler::getInstance()->extractPageTitle($url);
-        $this->extractedTitle = $extractedTitle ?: ($this->url->urlTitle ?: $host);
+        $this->extractedTitle = $extractedTitle ?: ($this->link->linkTitle ?: $host);
 
         // Get featured links
         $this->featuredLinks = $this->extractFeaturedLinks();
@@ -214,54 +214,54 @@ class RedirectPage extends AbstractPage
         parent::assignVariables();
 
         // Check if URL exists
-        if ($this->url !== null && $this->url->urlID) {
+        if ($this->url !== null && $this->link->linkID) {
             // Increase URL counter
-            UrlAction::increaseUrlCounter($this->url);
+            ShrinkrLinkAction::increaseCounter($this->url);
 
             // Check for direct forwarding
-            if (!URLSHORT_FORWARDING_MUST_CONFIRMED && URLSHORT_TIME_UNTIL_FORWARDING == 0) {
+            if (!SHRINKR_FORWARDING_MUST_CONFIRMED && SHRINKR_TIME_UNTIL_FORWARDING == 0) {
                 // Redirect
-                \header('Location: ' . $this->url->url, true, 303);
+                \header('Location: ' . $this->link->url, true, 303);
 
                 exit();
             }
             
-            $url = $this->url->url ?? '';
+            $url = $this->link->url ?? '';
 
             // Load reaction data if MODULE_LIKE is enabled and reactions are enabled via option
             $reactionData = [];
             $objectType = null;
-            $reactionsOption = Option::getOptionByName('urlshort_featuredLinks_enableReactions');
+            $reactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableReactions');
             $enableReactions = $reactionsOption ? $reactionsOption->optionValue : 1;
-            $guestReactionsOption = Option::getOptionByName('urlshort_featuredLinks_enableGuestReactions');
+            $guestReactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableGuestReactions');
             $enableGuestReactions = $guestReactionsOption ? $guestReactionsOption->optionValue : 0;
             
-            if (defined('MODULE_LIKE') && MODULE_LIKE && $enableReactions && $this->url !== null && isset($this->url->urlID) && $this->url->urlID) {
-                $objectType = ReactionHandler::getInstance()->getObjectType('dev.tkirch.wsc.urlshort.likeableUrl');
+            if (defined('MODULE_LIKE') && MODULE_LIKE && $enableReactions && $this->url !== null && isset($this->link->linkID) && $this->link->linkID) {
+                $objectType = ReactionHandler::getInstance()->getObjectType('de.sunnyc.wsc.shrinkr.likeableUrl');
                 if ($objectType !== null) {
-                    $likeObject = ReactionHandler::getInstance()->getLikeObject($objectType, $this->url->urlID);
+                    $likeObject = ReactionHandler::getInstance()->getLikeObject($objectType, $this->link->linkID);
                     if ($likeObject !== null) {
                         // Add guest reactions to likeObject if enabled
                         if ($enableGuestReactions) {
-                            $this->addGuestReactionsToLikeObject($likeObject, $objectType->objectType, $this->url->urlID);
+                            $this->addGuestReactionsToLikeObject($likeObject, $objectType->objectType, $this->link->linkID);
                         }
-                        $reactionData[$this->url->urlID] = $likeObject;
+                        $reactionData[$this->link->linkID] = $likeObject;
                     } elseif ($enableGuestReactions) {
                         // Create a minimal likeObject if only guest reactions exist
-                        $likeObject = $this->createLikeObjectWithGuestReactions($objectType, $this->url->urlID);
+                        $likeObject = $this->createLikeObjectWithGuestReactions($objectType, $this->link->linkID);
                         if ($likeObject !== null) {
-                            $reactionData[$this->url->urlID] = $likeObject;
+                            $reactionData[$this->link->linkID] = $likeObject;
                         }
                     }
                 }
             }
 
             // Get option values for templates
-            $reactionsOption = Option::getOptionByName('urlshort_featuredLinks_enableReactions');
+            $reactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableReactions');
             $enableReactions = $reactionsOption ? $reactionsOption->optionValue : 1;
-            $guestReactionsOption = Option::getOptionByName('urlshort_featuredLinks_enableGuestReactions');
+            $guestReactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableGuestReactions');
             $enableGuestReactions = $guestReactionsOption ? $guestReactionsOption->optionValue : 0;
-            $descriptionsOption = Option::getOptionByName('urlshort_featuredLinks_enableDescriptions');
+            $descriptionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableDescriptions');
             $enableDescriptions = $descriptionsOption ? $descriptionsOption->optionValue : 1;
 
             // If special is active, use special data for discount display
@@ -423,20 +423,20 @@ class RedirectPage extends AbstractPage
             // Clean share URL: getShortedUrl(true) always adds a slash,
             // even if the URL already ends with one, which leads to double slashes.
             // Solution: Use getShortedUrl(false) and then add exactly one slash.
-            $shareUrl = $this->url->getShortedUrl(false);
+            $shareUrl = $this->link->getShortedUrl(false);
             $shareUrl = \rtrim($shareUrl, '/') . '/';
 
             // Get current guest reaction (if any)
             $guestReactionTypeID = 0;
-            if ($enableGuestReactions && !WCF::getUser()->userID && $this->url !== null && isset($this->url->urlID)) {
+            if ($enableGuestReactions && !WCF::getUser()->userID && $this->url !== null && isset($this->link->linkID)) {
                 $sessionID = WCF::getSession()->sessionID;
                 $sql = "SELECT  reactionTypeID
-                        FROM    urlshort" . WCF_N . "_guest_reaction
+                        FROM    shrinkr" . WCF_N . "_guest_reaction
                         WHERE   sessionID = ?
                             AND objectType = ?
                             AND objectID = ?";
                 $statement = WCF::getDB()->prepareStatement($sql);
-                $statement->execute([$sessionID, 'dev.tkirch.wsc.urlshort.likeableUrl', $this->url->urlID]);
+                $statement->execute([$sessionID, 'de.sunnyc.wsc.shrinkr.likeableUrl', $this->link->linkID]);
                 $row = $statement->fetchArray();
                 if ($row) {
                     $guestReactionTypeID = $row['reactionTypeID'];
@@ -464,7 +464,7 @@ class RedirectPage extends AbstractPage
             }
 
             // Get title icon option and parse it
-            $titleIconOption = Option::getOptionByName('urlshort_featuredLinks_titleIcon');
+            $titleIconOption = Option::getOptionByName('shrinkr_featuredLinks_titleIcon');
             $titleIcon = '';
             $titleIconName = '';
             $titleIconForceSolid = false;
@@ -499,8 +499,8 @@ class RedirectPage extends AbstractPage
                 'countdownSeconds' => $specialCountdownSeconds, // Only specials have countdowns
                 'extractedTitle' => $this->extractedTitle, // Auto-extracted title or fallback
                 'reactionData' => $reactionData,
-                'reactionObjectType' => 'dev.tkirch.wsc.urlshort.likeableUrl',
-                'reactionObjectID' => ($this->url !== null && isset($this->url->urlID)) ? $this->url->urlID : 0,
+                'reactionObjectType' => 'de.sunnyc.wsc.shrinkr.likeableUrl',
+                'reactionObjectID' => ($this->url !== null && isset($this->link->linkID)) ? $this->link->linkID : 0,
                 'guestReactionTypeID' => $guestReactionTypeID,
                 'guestReactionTypes' => $reactionTypes,
                 'enableReactions' => $enableReactions,
@@ -545,17 +545,17 @@ class RedirectPage extends AbstractPage
      */
     private function extractFeaturedLinks(): array
     {
-        if (!isset($this->url->urlID) || !$this->url->urlID) {
+        if (!isset($this->link->linkID) || !$this->link->linkID) {
             return [];
         }
 
         // Load featured links from database, sorted by sortOrder
         $sql = "SELECT linkID, url, title, sortOrder
-                FROM urlshort1_featured_link
-                WHERE urlID = ?
+                FROM shrinkr1_featured_link
+                WHERE linkID = ?
                 ORDER BY sortOrder ASC";
         $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$this->url->urlID]);
+        $statement->execute([$this->link->linkID]);
         $links = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         if (empty($links)) {
@@ -586,17 +586,17 @@ class RedirectPage extends AbstractPage
      */
     private function extractCustomButtons(): array
     {
-        if (!isset($this->url->urlID) || !$this->url->urlID) {
+        if (!isset($this->link->linkID) || !$this->link->linkID) {
             return [];
         }
 
         // Load custom buttons from database, sorted by sortOrder
         $sql = "SELECT customButtonID, targetUrl, title, sortOrder
-                FROM urlshort1_custom_button
-                WHERE urlID = ?
+                FROM shrinkr1_custom_button
+                WHERE linkID = ?
                 ORDER BY sortOrder ASC";
         $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$this->url->urlID]);
+        $statement->execute([$this->link->linkID]);
         $buttons = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         if (empty($buttons)) {
@@ -622,13 +622,13 @@ class RedirectPage extends AbstractPage
      */
     private function loadActiveSpecial(): ?Special
     {
-        if (!isset($this->url->urlID) || !$this->url->urlID) {
+        if (!isset($this->link->linkID) || !$this->link->linkID) {
             return null;
         }
 
         $sql = "SELECT specialID
-                FROM urlshort1_special
-                WHERE urlID = ?
+                FROM shrinkr1_special
+                WHERE linkID = ?
                   AND isActive = 1
                   AND (startTime = 0 OR startTime <= ?)
                   AND (endTime = 0 OR endTime >= ?)
@@ -636,7 +636,7 @@ class RedirectPage extends AbstractPage
                 LIMIT 1";
         $statement = WCF::getDB()->prepareStatement($sql);
         $now = TIME_NOW;
-        $statement->execute([$this->url->urlID, $now, $now]);
+        $statement->execute([$this->link->linkID, $now, $now]);
         $specialID = $statement->fetchSingleColumn();
 
         if ($specialID) {
@@ -653,8 +653,8 @@ class RedirectPage extends AbstractPage
      */
     private function loadDiscount(): ?Discount
     {
-        $host = ($this->url !== null && isset($this->url->url)) ? (parse_url($this->url->url, PHP_URL_HOST) ?? '') : '';
-        $urlString = ($this->url !== null) ? ($this->url->url ?? '') : '';
+        $host = ($this->url !== null && isset($this->link->url)) ? (parse_url($this->link->url, PHP_URL_HOST) ?? '') : '';
+        $urlString = ($this->url !== null) ? ($this->link->url ?? '') : '';
         $discountList = new AccessibleDiscountList($urlString, $host);
         $discountList->readObjects();
 
@@ -683,7 +683,7 @@ class RedirectPage extends AbstractPage
         }
 
         $sql = "SELECT themeID
-                FROM urlshort1_theme
+                FROM shrinkr1_theme
                 WHERE identifier = ?
                 LIMIT 1";
         $statement = WCF::getDB()->prepareStatement($sql);
@@ -710,7 +710,7 @@ class RedirectPage extends AbstractPage
     private function getRandomDescription(): string
     {
         // Check if descriptions are enabled globally
-        $descriptionsOption = Option::getOptionByName('urlshort_featuredLinks_enableDescriptions');
+        $descriptionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableDescriptions');
         $enableDescriptions = $descriptionsOption ? $descriptionsOption->optionValue : 1;
         if (!$enableDescriptions) {
             return '';
@@ -730,7 +730,7 @@ class RedirectPage extends AbstractPage
         $randomDescription = $descriptions[array_rand($descriptions)];
 
         // Compile description text with Smarty variables
-        $urlString = ($this->url !== null) ? ($this->url->url ?? '') : '';
+        $urlString = ($this->url !== null) ? ($this->link->url ?? '') : '';
 
         return $randomDescription->getDescriptionText([
             'url' => $urlString, // Full URL string (e.g., "https://google.de")
@@ -753,7 +753,7 @@ class RedirectPage extends AbstractPage
     {
         // Get guest reactions for this object
         $sql = "SELECT  reactionTypeID, COUNT(*) as count
-                FROM    urlshort" . WCF_N . "_guest_reaction
+                FROM    shrinkr" . WCF_N . "_guest_reaction
                 WHERE   objectType = ?
                     AND objectID = ?
                 GROUP BY reactionTypeID";
@@ -814,7 +814,7 @@ class RedirectPage extends AbstractPage
     {
         // Get guest reactions for this object
         $sql = "SELECT  reactionTypeID, COUNT(*) as count
-                FROM    urlshort" . WCF_N . "_guest_reaction
+                FROM    shrinkr" . WCF_N . "_guest_reaction
                 WHERE   objectType = ?
                     AND objectID = ?
                 GROUP BY reactionTypeID";
@@ -881,7 +881,7 @@ class RedirectPage extends AbstractPage
             'settings' => [],
         ];
 
-        $globalToggle = Option::getOptionByName('urlshort_halloween_leaves');
+        $globalToggle = Option::getOptionByName('shrinkr_halloween_leaves');
         $effectsEnabled = $globalToggle ? (bool)$globalToggle->optionValue : false;
         if (!$effectsEnabled) {
             return $default;
@@ -1012,11 +1012,11 @@ class RedirectPage extends AbstractPage
      */
     private function trackVisit(): void
     {
-        if (!isset($this->url->urlID) || !$this->url->urlID) {
+        if (!isset($this->link->linkID) || !$this->link->linkID) {
             return;
         }
 
-        $urlID = $this->url->urlID;
+        $linkID = $this->link->linkID;
         $userID = null;
         $sessionID = null;
 
@@ -1027,8 +1027,8 @@ class RedirectPage extends AbstractPage
         }
 
         $timeThreshold = TIME_NOW - 1800;
-        $conditions = "urlID = ? AND visitTime >= ?";
-        $parameters = [$urlID, $timeThreshold];
+        $conditions = "linkID = ? AND visitTime >= ?";
+        $parameters = [$linkID, $timeThreshold];
 
         if ($userID) {
             $conditions .= " AND userID = ?";
@@ -1038,7 +1038,7 @@ class RedirectPage extends AbstractPage
             $parameters[] = $sessionID;
         }
 
-        $sql = "SELECT COUNT(*) FROM urlshort1_visit WHERE " . $conditions;
+        $sql = "SELECT COUNT(*) FROM shrinkr1_visit WHERE " . $conditions;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($parameters);
         $existingVisitCount = $statement->fetchSingleColumn();
@@ -1060,21 +1060,21 @@ class RedirectPage extends AbstractPage
 
         // Store visit in database
         VisitEditor::create([
-            'urlID' => $urlID,
+            'linkID' => $linkID,
             'visitTime' => TIME_NOW,
             'referrer' => $referrer,
             'userID' => $userID,
             'sessionID' => $sessionID,
         ]);
 
-        // Synchronize counter: Update urlshort1_url.counter from visit count
-        $sql = "SELECT COUNT(*) FROM urlshort1_visit WHERE urlID = ?";
+        // Synchronize counter: Update shrinkr1_link.counter from visit count
+        $sql = "SELECT COUNT(*) FROM shrinkr1_visit WHERE linkID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$urlID]);
+        $statement->execute([$linkID]);
         $visitCount = $statement->fetchSingleColumn();
 
-        // Update counter in urlshort1_url
-        $urlEditor = new UrlEditor($this->url);
+        // Update counter in shrinkr1_link
+        $urlEditor = new ShrinkrLinkEditor($this->url);
         $urlEditor->update(['counter' => $visitCount]);
     }
 }

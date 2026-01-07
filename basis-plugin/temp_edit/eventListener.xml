@@ -4,18 +4,18 @@
 		<eventlistener name="optionFormDemoData">
 			<eventclassname>wcf\acp\form\OptionForm</eventclassname>
 			<eventname>saved</eventname>
-			<listenerclassname>urlshort\system\event\listener\OptionFormDemoDataListener</listenerclassname>
+			<listenerclassname>shrinkr\system\event\listener\OptionFormDemoDataListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
 		<eventlistener name="userActionGuestReactionSync">
 			<eventclassname>wcf\data\user\UserAction</eventclassname>
 			<eventname>finalizeAction</eventname>
-			<listenerclassname>urlshort\system\event\listener\UserActionGuestReactionSyncListener</listenerclassname>
+			<listenerclassname>shrinkr\system\event\listener\UserActionGuestReactionSyncListener</listenerclassname>
 		</eventlistener>
 		<eventlistener name="reactionActionGuestReaction">
 			<eventclassname>wcf\data\reaction\ReactionAction</eventclassname>
 			<eventname>validateAction,finalizeAction</eventname>
-			<listenerclassname>urlshort\system\event\listener\ReactionActionGuestReactionListener</listenerclassname>
+			<listenerclassname>shrinkr\system\event\listener\ReactionActionGuestReactionListener</listenerclassname>
 		</eventlistener>
 	</import>
 </data>

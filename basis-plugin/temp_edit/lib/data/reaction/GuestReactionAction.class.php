@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\data\reaction;
+namespace shrinkr\data\reaction;
 
-use urlshort\data\guestreaction\GuestReactionEditor;
+use shrinkr\data\guestreaction\GuestReactionEditor;
 use wcf\data\option\Option;
 use wcf\data\reaction\ReactionAction;
 use wcf\system\exception\IllegalLinkException;
@@ -14,10 +14,10 @@ use wcf\system\WCF;
  * Guest reactions are stored in the guest_reaction table instead of the standard like table.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.reaction
  */
 class GuestReactionAction extends ReactionAction
@@ -50,7 +50,7 @@ class GuestReactionAction extends ReactionAction
         }
 
         // Check if guest reactions are enabled
-        $guestReactionsOption = Option::getOptionByName('urlshort_featuredLinks_enableGuestReactions');
+        $guestReactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableGuestReactions');
         $enableGuestReactions = $guestReactionsOption ? $guestReactionsOption->optionValue : 0;
 
         // For guests: Validate parameters manually before calling validateObjectParameters()
@@ -87,7 +87,7 @@ class GuestReactionAction extends ReactionAction
             }
             
             // Check if this is our object type
-            if ($this->parameters['data']['objectType'] === 'dev.tkirch.wsc.urlshort.likeableUrl') {
+            if ($this->parameters['data']['objectType'] === 'de.sunnyc.wsc.shrinkr.likeableUrl') {
                 // Validate object parameters (now that we've ensured they exist)
                 $this->validateObjectParameters();
                 
@@ -185,13 +185,13 @@ class GuestReactionAction extends ReactionAction
     protected function reactAsGuest()
     {
         $sessionID = WCF::getSession()->sessionID;
-        $objectType = 'dev.tkirch.wsc.urlshort.likeableUrl';
+        $objectType = 'de.sunnyc.wsc.shrinkr.likeableUrl';
         $objectID = $this->parameters['data']['objectID'];
         $reactionTypeID = isset($this->parameters['reactionTypeID']) ? (int)$this->parameters['reactionTypeID'] : 0;
 
         // Check if guest already reacted on this object
         $sql = "SELECT  guestReactionID, reactionTypeID
-                FROM    urlshort" . WCF_N . "_guest_reaction
+                FROM    shrinkr" . WCF_N . "_guest_reaction
                 WHERE   sessionID = ?
                     AND objectType = ?
                     AND objectID = ?";
@@ -203,14 +203,14 @@ class GuestReactionAction extends ReactionAction
             // Check if same reaction type - if so, remove it (toggle)
             if ($existingReaction['reactionTypeID'] == $reactionTypeID) {
                 // Remove reaction (toggle off)
-                $sql = "DELETE FROM urlshort" . WCF_N . "_guest_reaction
+                $sql = "DELETE FROM shrinkr" . WCF_N . "_guest_reaction
                         WHERE   guestReactionID = ?";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute([$existingReaction['guestReactionID']]);
                 $reactionTypeID = 0; // No reaction
             } else {
                 // Update to new reaction type
-                $sql = "UPDATE  urlshort" . WCF_N . "_guest_reaction
+                $sql = "UPDATE  shrinkr" . WCF_N . "_guest_reaction
                         SET     reactionTypeID = ?,
                                 time = ?
                         WHERE   guestReactionID = ?";
@@ -272,7 +272,7 @@ class GuestReactionAction extends ReactionAction
 
         // Get guest reactions
         $sql = "SELECT  reactionTypeID, COUNT(*) as count
-                FROM    urlshort" . WCF_N . "_guest_reaction
+                FROM    shrinkr" . WCF_N . "_guest_reaction
                 WHERE   objectType = ?
                     AND objectID = ?
                 GROUP BY reactionTypeID";
@@ -330,7 +330,7 @@ class GuestReactionAction extends ReactionAction
         // Get all guest reactions in one query
         $placeholders = str_repeat('?,', count($objectIDs) - 1) . '?';
         $sql = "SELECT  objectID, reactionTypeID, COUNT(*) as count
-                FROM    urlshort" . WCF_N . "_guest_reaction
+                FROM    shrinkr" . WCF_N . "_guest_reaction
                 WHERE   objectType = ?
                     AND objectID IN ({$placeholders})
                 GROUP BY objectID, reactionTypeID";

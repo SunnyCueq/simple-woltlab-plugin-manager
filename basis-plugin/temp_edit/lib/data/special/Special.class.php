@@ -1,24 +1,24 @@
 <?php
 
-namespace urlshort\data\special;
+namespace shrinkr\data\special;
 
 use wcf\data\DatabaseObject;
 use wcf\data\ITitledObject;
 use wcf\system\WCF;
-use urlshort\system\favicon\FaviconHandler;
+use shrinkr\system\favicon\FaviconHandler;
 
 /**
  * Represents a special promotion for a shortened URL.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.special
  *
  * @property-read int    $specialID         Unique ID of the special
- * @property-read int    $urlID              ID of the associated URL
+ * @property-read int    $linkID              ID of the associated URL
  * @property-read string $theme              Theme identifier (halloween, blackweek, etc.)
  * @property-read string $title              Display title for the overview (not shown on redirect page)
  * @property-read string $discount            Discount text (e.g. "30%") - shown on redirect page
@@ -52,7 +52,7 @@ class Special extends DatabaseObject implements ITitledObject
      */
     public function getUrlID(): int
     {
-        return $this->urlID;
+        return $this->linkID;
     }
 
     /**
@@ -136,7 +136,7 @@ class Special extends DatabaseObject implements ITitledObject
      */
     public function canAdd(): bool
     {
-        return WCF::getSession()->getPermission('admin.urlshort.canManageSpecials');
+        return WCF::getSession()->getPermission('admin.shrinkr.canManageSpecials');
     }
 
     /**

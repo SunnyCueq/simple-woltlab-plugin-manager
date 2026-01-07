@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\theme;
+namespace shrinkr\data\theme;
 
 use wcf\data\DatabaseObject;
 use wcf\data\ITitledObject;
@@ -10,10 +10,10 @@ use wcf\system\WCF;
  * Represents a theme object with color scheme and visual effects.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.theme
  *
  * @property int    $themeID
@@ -51,7 +51,7 @@ class Theme extends DatabaseObject implements ITitledObject
      */
     public function canAdd(): bool
     {
-        return WCF::getSession()->getPermission('admin.urlshort.canManageThemes');
+        return WCF::getSession()->getPermission('admin.shrinkr.canManageThemes');
     }
 
     /**
@@ -164,10 +164,10 @@ class Theme extends DatabaseObject implements ITitledObject
             return '';
         }
 
-        $primaryLabel = WCF::getLanguage()->get('wcf.urlshort.theme.color.primary');
-        $primaryTextLabel = WCF::getLanguage()->get('wcf.urlshort.theme.color.primaryText');
-        $secondaryLabel = WCF::getLanguage()->get('wcf.urlshort.theme.color.secondary');
-        $secondaryTextLabel = WCF::getLanguage()->get('wcf.urlshort.theme.color.secondaryText');
+        $primaryLabel = WCF::getLanguage()->get('wcf.shrinkr.theme.color.primary');
+        $primaryTextLabel = WCF::getLanguage()->get('wcf.shrinkr.theme.color.primaryText');
+        $secondaryLabel = WCF::getLanguage()->get('wcf.shrinkr.theme.color.secondary');
+        $secondaryTextLabel = WCF::getLanguage()->get('wcf.shrinkr.theme.color.secondaryText');
 
         $html = '<div class="themeColorPreview">';
         
@@ -230,11 +230,11 @@ class Theme extends DatabaseObject implements ITitledObject
             return null;
         }
 
-        if (!defined('URLSHORT_DIR')) {
+        if (!defined('SHRINKR_DIR')) {
             return null;
         }
         
-        $cssPath = URLSHORT_DIR . 'style/themes/' . $this->identifier . '.css';
+        $cssPath = SHRINKR_DIR . 'style/themes/' . $this->identifier . '.css';
         return file_exists($cssPath) ? $cssPath : null;
     }
 

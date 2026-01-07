@@ -11,7 +11,7 @@
  */
 
 /* CSS Variables - Applied to container */
-.urlShortContainer {
+.shrinkrContainer {
     /* Dark Mode (default) - Modern Christmas with earthy tones */
     --xmas-modern-bg1: #2E6654; /* Dark Slate Gray */
     --xmas-modern-bg2: #443159; /* Jacarta */
@@ -46,7 +46,7 @@
 
 /* Light Mode adjustments for Modern Christmas */
 @media (prefers-color-scheme: light) {
-    .urlShortContainer {
+    .shrinkrContainer {
         --xmas-modern-bg1: #E6E6D8; /* Light cream base */
         --xmas-modern-bg2: #F5F5ED; /* Lighter cream */
         --xmas-modern-stripe: #D4D4C4;
@@ -76,8 +76,8 @@
     }
 }
 
-/* Override .urlShortBox background and borders */
-.urlShortContainer > .urlShortBox {
+/* Override .shrinkrBox background and borders */
+.shrinkrContainer > .shrinkrBox {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
@@ -86,22 +86,22 @@
 }
 
 /* Apply theme colors to text elements */
-.urlShortContainer p {
+.shrinkrContainer p {
     color: var(--xmas-modern-text);
 }
 
-.urlShortContainer .urlShortBox p {
+.shrinkrContainer .shrinkrBox p {
     color: var(--xmas-modern-muted);
 }
 
 /* Title styling */
-.urlShortContainer h1 {
+.shrinkrContainer h1 {
     color: var(--xmas-modern-text);
     text-shadow: 0 0 10px rgba(250,226,183,.4), 0 0 20px rgba(209,77,83,.2);
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer h1 {
+    .shrinkrContainer h1 {
         text-shadow: 0 1px 3px rgba(46,102,84,.2), 0 2px 6px rgba(209,77,83,.15);
     }
 }
@@ -158,20 +158,20 @@
 }
 
 /* Forward Button - Modern Christmas Style */
-.urlShortContainer .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced__content {
     background: linear-gradient(180deg, var(--xmas-modern-ac1), #e85d65) !important;
     color: #1a0f0a !important;
     border: 1px solid rgba(255,255,255,.15) !important;
     box-shadow: 0 14px 34px rgba(209,77,83,.3), inset 0 1px 0 rgba(255,255,255,.4) !important;
 }
 
-.urlShortContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
     box-shadow: 0 18px 40px rgba(209,77,83,.4) !important;
     filter: saturate(1.1);
 }
 
 /* Discount Codes - Modern Christmas Style */
-.urlShortContainer .discountCodesContainer.warning {
+.shrinkrContainer .discountCodesContainer.warning {
     background-color: rgba(46,102,84,.5) !important;
     border: 1px solid rgba(209,77,83,.4) !important;
     color: var(--xmas-modern-text) !important;
@@ -179,22 +179,22 @@
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer .discountCodesContainer.warning {
+    .shrinkrContainer .discountCodesContainer.warning {
         background-color: rgba(230,230,216,.8) !important;
         border: 1px solid rgba(209,77,83,.3) !important;
         box-shadow: inset 0 0 12px rgba(209,77,83,.1) !important;
     }
 }
 
-.urlShortContainer .discountCodesContainer.warning strong {
+.shrinkrContainer .discountCodesContainer.warning strong {
     color: var(--xmas-modern-text) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning small {
+.shrinkrContainer .discountCodesContainer.warning small {
     color: var(--xmas-modern-muted) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+.shrinkrContainer .discountCodesContainer.warning kbd.copyableCode {
     color: var(--xmas-modern-ac2) !important;
     font-weight: 900;
     background-color: rgba(227,154,95,.15) !important;
@@ -202,27 +202,27 @@
 }
 
 /* Old Price (Strikethrough) */
-.urlShortContainer s {
+.shrinkrContainer s {
     color: #D14D53 !important;
     text-decoration-thickness: .14em;
     opacity: .9;
 }
 
 /* New Price / Highlight */
-.urlShortContainer .deal-bw__new {
+.shrinkrContainer .deal-bw__new {
     color: var(--xmas-modern-ac2) !important;
     font-weight: 900;
 }
 
 /* Note Text */
-.urlShortContainer .deal-bw__note {
+.shrinkrContainer .deal-bw__note {
     margin-left: .35rem;
     opacity: .85;
     color: var(--xmas-modern-muted) !important;
 }
 
 /* Share & React Buttons - Modern Christmas Style */
-.urlShortContainer .urlShortBox__buttons .button {
+.shrinkrContainer .shrinkrBox__buttons .button {
     background-color: rgba(46, 102, 84, 0.5) !important;
     border: 1px solid rgba(209,77,83,.4) !important;
     color: var(--xmas-modern-text) !important;
@@ -232,7 +232,7 @@
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer .urlShortBox__buttons .button {
+    .shrinkrContainer .shrinkrBox__buttons .button {
         background-color: rgba(230,230,216,.7) !important;
         border: 1px solid rgba(209,77,83,.3) !important;
         box-shadow: inset 0 0 8px rgba(209,77,83,.1), 
@@ -240,7 +240,7 @@
     }
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover {
+.shrinkrContainer .shrinkrBox__buttons .button:hover {
     background-color: rgba(209,77,83,.4) !important;
     border-color: rgba(209,77,83,.6) !important;
     box-shadow: inset 0 0 12px rgba(209,77,83,.2), 
@@ -249,17 +249,17 @@
     transform: translateY(-1px);
 }
 
-.urlShortContainer .urlShortBox__buttons .button:active {
+.shrinkrContainer .shrinkrBox__buttons .button:active {
     transform: translateY(0);
     box-shadow: inset 0 0 8px rgba(209,77,83,.25), 
                 0 1px 4px rgba(0,0,0,.5) !important;
 }
 
-.urlShortContainer .urlShortBox__buttons .button fa-icon {
+.shrinkrContainer .shrinkrBox__buttons .button fa-icon {
     color: var(--xmas-modern-ac1) !important;
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover fa-icon {
+.shrinkrContainer .shrinkrBox__buttons .button:hover fa-icon {
     color: var(--xmas-modern-text) !important;
     filter: drop-shadow(0 0 4px rgba(250,226,183,.6));
 }

@@ -1,0 +1,2 @@
+<th class="columnTitle columnUrl{if $sortField == 'linkTitle'} active {#$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={#$pageNo}&sortField=linkTitle&sortOrder={if $sortField == 'linkTitle' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url.linkTitle{/lang}</a></th>
+<th class="columnTitle columnFeaturedLinks{if $sortField == 'linkTitle'} active {unsafe:$sortOrder}{/if}">{lang}wcf.shrinkr.featuredLinks{/lang}</th>

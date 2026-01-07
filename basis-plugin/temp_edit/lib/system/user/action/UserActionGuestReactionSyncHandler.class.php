@@ -1,9 +1,9 @@
 <?php
 
-namespace urlshort\system\user\action;
+namespace shrinkr\system\user\action;
 
-use urlshort\data\guestreaction\GuestReactionEditor;
-use urlshort\data\guestreaction\GuestReactionList;
+use shrinkr\data\guestreaction\GuestReactionEditor;
+use shrinkr\data\guestreaction\GuestReactionList;
 use wcf\data\like\Like;
 use wcf\data\reaction\ReactionAction;
 use wcf\data\user\User;
@@ -16,10 +16,10 @@ use wcf\system\WCF;
  * 
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.user.action
  */
 class UserActionGuestReactionSyncHandler

@@ -1,16 +1,16 @@
 <?php
 
-namespace urlshort\system\exception;
+namespace shrinkr\system\exception;
 
 /**
  * Class HashException
  *
- * @author      Julian Pfeil, Titus Kirch <https://julian-pfeil.de>
- * @link        https://darkwood.design/store/user-file-list/1298-julian-pfeil/
- * @copyright   2022 Julian Pfeil Websites & Co.
- * @license     License for Commercial Plugins <https://julian-pfeil.de/lizenz/>
+ * @author      Sunny C, Sunny C <https://sunnyc.de>
+ * @link        https://sunnyc.de
+ * @copyright   2022 Sunny C Websites & Co.
+ * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.exception
  */
 class HashException extends \Exception

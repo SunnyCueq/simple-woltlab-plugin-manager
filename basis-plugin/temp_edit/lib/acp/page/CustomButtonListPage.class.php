@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\acp\page;
+namespace shrinkr\acp\page;
 
-use urlshort\data\custombutton\CustomButtonList;
+use shrinkr\data\custombutton\CustomButtonList;
 use wcf\page\MultipleLinkPage;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\WCF;
@@ -12,10 +12,10 @@ use wcf\util\StringUtil;
  * ACP page for listing custom buttons for a specific URL.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.page
  *
  * @property CustomButtonList $objectList
@@ -40,12 +40,12 @@ class CustomButtonListPage extends MultipleLinkPage
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.menu';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.menu';
 
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageCustomButtons'];
+    public $neededPermissions = ['admin.shrinkr.canManageCustomButtons'];
 
     /**
      * @inheritDoc
@@ -55,7 +55,7 @@ class CustomButtonListPage extends MultipleLinkPage
     /**
      * URL ID (required parameter from URL query)
      */
-    public int $urlID = 0;
+    public int $linkID = 0;
 
     /**
      * Hash of the short URL.
@@ -90,18 +90,18 @@ class CustomButtonListPage extends MultipleLinkPage
             $this->sortOrder = $sortOrder;
         }
 
-        // Read urlID parameter
-        $this->urlID = \intval($_REQUEST['urlID'] ?? 0);
+        // Read linkID parameter
+        $this->linkID = \intval($_REQUEST['linkID'] ?? 0);
 
         // URL ID is required
-        if ($this->urlID === 0) {
+        if ($this->linkID === 0) {
             throw new IllegalLinkException();
         }
 
         // Load URL metadata
-        $sql = "SELECT hash, url FROM urlshort1_url WHERE urlID = ?";
+        $sql = "SELECT hash, url FROM shrinkr1_link WHERE linkID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$this->urlID]);
+        $statement->execute([$this->linkID]);
         $row = $statement->fetchArray();
         if (!$row) {
             throw new IllegalLinkException();
@@ -121,8 +121,8 @@ class CustomButtonListPage extends MultipleLinkPage
     {
         parent::initObjectList();
 
-        // Filter by urlID (required)
-        $this->objectList->getConditionBuilder()->add('urlID = ?', [$this->urlID]);
+        // Filter by linkID (required)
+        $this->objectList->getConditionBuilder()->add('linkID = ?', [$this->linkID]);
 
         // Apply sorting
         if (in_array($this->sortField, $this->validSortFields)) {
@@ -151,7 +151,7 @@ class CustomButtonListPage extends MultipleLinkPage
         WCF::getTPL()->assign([
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
-            'urlID' => $this->urlID,
+            'linkID' => $this->linkID,
             'q' => $this->q,
             'urlHash' => $this->urlHash,
             'urlTarget' => $this->urlTarget,

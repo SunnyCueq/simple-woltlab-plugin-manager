@@ -1,9 +1,9 @@
 <?php
 
-namespace urlshort\acp\form;
+namespace shrinkr\acp\form;
 
-use urlshort\data\special\SpecialAction;
-use urlshort\system\special\SpecialThemeHelper;
+use shrinkr\data\special\SpecialAction;
+use shrinkr\system\special\SpecialThemeHelper;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\form\builder\container\FormContainer;
@@ -22,10 +22,10 @@ use wcf\system\WCF;
  * Form for adding a new special.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.form
  */
 class SpecialAddForm extends AbstractFormBuilderForm
@@ -33,12 +33,12 @@ class SpecialAddForm extends AbstractFormBuilderForm
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageSpecials'];
+    public $neededPermissions = ['admin.shrinkr.canManageSpecials'];
 
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.special.list';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.special.list';
 
     /**
      * @inheritDoc
@@ -53,7 +53,7 @@ class SpecialAddForm extends AbstractFormBuilderForm
     /**
      * URL ID (required parameter from URL query)
      */
-    public int $urlID = 0;
+    public int $linkID = 0;
 
     /**
      * URL hash for display
@@ -68,19 +68,19 @@ class SpecialAddForm extends AbstractFormBuilderForm
     {
         parent::readParameters();
 
-        if (isset($_REQUEST['urlID'])) {
-            $this->urlID = (int) $_REQUEST['urlID'];
+        if (isset($_REQUEST['linkID'])) {
+            $this->linkID = (int) $_REQUEST['linkID'];
         }
 
         // URL ID is required
-        if ($this->urlID === 0) {
+        if ($this->linkID === 0) {
             throw new IllegalLinkException();
         }
 
         // Load URL data (hash)
-        $sql = "SELECT hash FROM urlshort1_url WHERE urlID = ?";
+        $sql = "SELECT hash FROM shrinkr1_link WHERE linkID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$this->urlID]);
+        $statement->execute([$this->linkID]);
         $this->urlHash = $statement->fetchSingleColumn();
 
         if (empty($this->urlHash)) {
@@ -114,38 +114,38 @@ class SpecialAddForm extends AbstractFormBuilderForm
         $defaultTextColor = $styleVariables['wcfHeaderText'] ?? 'rgba(255, 255, 255, 1)';
 
         $dataContainer->appendChildren([
-            // Hidden field for urlID
-            HiddenFormField::create('urlID')
-                ->value($this->urlID),
+            // Hidden field for linkID
+            HiddenFormField::create('linkID')
+                ->value($this->linkID),
 
             // === BASIC SETTINGS ===
             BooleanFormField::create('isActive')
-                ->label('wcf.urlshort.special.isActive')
-                ->description('wcf.urlshort.special.isActive.description')
+                ->label('wcf.shrinkr.special.isActive')
+                ->description('wcf.shrinkr.special.isActive.description')
                 ->value(true),
 
             SelectFormField::create('theme')
-                ->label('wcf.urlshort.special.theme')
-                ->description('wcf.urlshort.special.theme.description')
+                ->label('wcf.shrinkr.special.theme')
+                ->description('wcf.shrinkr.special.theme.description')
                 ->options($themeOptions)
                 ->value(''),
 
             TextFormField::create('title')
                 ->label('wcf.global.title')
-                ->description('wcf.urlshort.special.title.description')
+                ->description('wcf.shrinkr.special.title.description')
                 ->required()
                 ->maximumLength(255),
 
             TextFormField::create('discount')
-                ->label('wcf.urlshort.special.discount')
-                ->description('wcf.urlshort.special.discount.description')
+                ->label('wcf.shrinkr.special.discount')
+                ->description('wcf.shrinkr.special.discount.description')
                 ->required()
                 ->maximumLength(255)
                 ->placeholder('z.B. 30%'),
 
             ItemListFormField::create('codes')
-                ->label('wcf.urlshort.codes')
-                ->description('wcf.urlshort.special.codes.description')
+                ->label('wcf.shrinkr.codes')
+                ->description('wcf.shrinkr.special.codes.description')
                 ->value('BENJARO'),
         ]);
         
@@ -155,22 +155,22 @@ class SpecialAddForm extends AbstractFormBuilderForm
             ->description('Primäre Farben (linke Seite) und Sekundäre Farben (rechte Seite) des Promo Badges')
             ->appendChildren([
                 ColorFormField::create('primaryColor')
-                    ->label('wcf.urlshort.primaryColor')
+                    ->label('wcf.shrinkr.primaryColor')
                     ->value($defaultPrimaryColor)
                     ->required(),
 
                 ColorFormField::create('primaryTextColor')
-                    ->label('wcf.urlshort.primaryTextColor')
+                    ->label('wcf.shrinkr.primaryTextColor')
                     ->value($defaultTextColor)
                     ->required(),
 
                 ColorFormField::create('secondaryColor')
-                    ->label('wcf.urlshort.secondaryColor')
+                    ->label('wcf.shrinkr.secondaryColor')
                     ->value($defaultSecondaryColor)
                     ->required(),
 
                 ColorFormField::create('secondaryTextColor')
-                    ->label('wcf.urlshort.secondaryTextColor')
+                    ->label('wcf.shrinkr.secondaryTextColor')
                     ->value($defaultTextColor)
                     ->required(),
             ]);
@@ -181,15 +181,15 @@ class SpecialAddForm extends AbstractFormBuilderForm
             ->description('Zeitraum für das Special (optional)')
             ->appendChildren([
                 DateFormField::create('startTime')
-                    ->label('wcf.urlshort.special.startTime')
-                    ->description('wcf.urlshort.special.startTime.description')
+                    ->label('wcf.shrinkr.special.startTime')
+                    ->description('wcf.shrinkr.special.startTime.description')
                     ->saveValueFormat('U')
                     ->supportTime(true)
                     ->value(TIME_NOW),
 
                 DateFormField::create('endTime')
-                    ->label('wcf.urlshort.special.endTime')
-                    ->description('wcf.urlshort.special.endTime.description')
+                    ->label('wcf.shrinkr.special.endTime')
+                    ->description('wcf.shrinkr.special.endTime.description')
                     ->saveValueFormat('U')
                     ->supportTime(true)
                     ->value(TIME_NOW + 86400),
@@ -199,7 +199,7 @@ class SpecialAddForm extends AbstractFormBuilderForm
         $wysiwygContainer = WysiwygFormContainer::create('additionalText')
             ->label('Zusätzlicher Text')
             ->description('Zusätzlicher HTML-Text für das Special (überschreibt normalen Zusatztext)')
-            ->messageObjectType('dev.tkirch.wsc.urlshort.special.additionalText');
+            ->messageObjectType('de.sunnyc.wsc.shrinkr.special.additionalText');
 
         $this->form->appendChild($dataContainer);
         $this->form->appendChild($colorContainer);
@@ -283,7 +283,7 @@ class SpecialAddForm extends AbstractFormBuilderForm
             $upcastProcessor = new HtmlUpcastProcessor();
             $upcastProcessor->process(
                 $this->formObject->additionalText ?? '',
-                'dev.tkirch.wsc.urlshort.special.additionalText',
+                'de.sunnyc.wsc.shrinkr.special.additionalText',
                 $this->formObject->specialID
             );
             WCF::getTPL()->assign('additionalText', $upcastProcessor->getHtml());
@@ -297,7 +297,7 @@ class SpecialAddForm extends AbstractFormBuilderForm
         }
 
         WCF::getTPL()->assign([
-            'urlID' => $this->urlID,
+            'linkID' => $this->linkID,
             'urlHash' => $this->urlHash ?? '',
             'themes' => $themes,
         ]);

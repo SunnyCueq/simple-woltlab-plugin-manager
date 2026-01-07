@@ -1,4 +1,4 @@
-{include file='header' pageTitle='urlshort.acp.menu.link.theme.edit'}
+{include file='header' pageTitle='shrinkr.acp.menu.link.theme.edit'}
 
 {assign var='theme' value=$formObject}
 {assign var='hasCssFile' value=$theme->hasCssFile()}
@@ -8,7 +8,7 @@
         <nav class="tabMenu">
             <ul>
                 <li><a href="#themeData">{lang}wcf.global.form.data{/lang}</a></li>
-                <li><a href="#themeCss">{lang}wcf.urlshort.theme.css.edit{/lang}</a></li>
+                <li><a href="#themeCss">{lang}wcf.shrinkr.theme.css.edit{/lang}</a></li>
             </ul>
         </nav>
         

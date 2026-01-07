@@ -1,9 +1,9 @@
 <?php
 
-namespace urlshort\acp\form;
+namespace shrinkr\acp\form;
 
-use urlshort\data\featuredlink\FeaturedLinkAction;
-use urlshort\data\featuredlink\FeaturedLinkList;
+use shrinkr\data\featuredlink\FeaturedLinkAction;
+use shrinkr\data\featuredlink\FeaturedLinkList;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\form\builder\container\FormContainer;
@@ -19,10 +19,10 @@ use wcf\util\HeaderUtil;
  * Form for adding a new featured link.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.form
  */
 class FeaturedLinkAddForm extends AbstractFormBuilderForm
@@ -30,12 +30,12 @@ class FeaturedLinkAddForm extends AbstractFormBuilderForm
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageFeaturedLinks'];
+    public $neededPermissions = ['admin.shrinkr.canManageFeaturedLinks'];
 
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.menu';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.menu';
 
     /**
      * @inheritDoc
@@ -45,7 +45,7 @@ class FeaturedLinkAddForm extends AbstractFormBuilderForm
     /**
      * URL ID (required parameter from URL query)
      */
-    public int $urlID = 0;
+    public int $linkID = 0;
 
     /**
      * URL hash for display
@@ -60,19 +60,19 @@ class FeaturedLinkAddForm extends AbstractFormBuilderForm
     {
         parent::readParameters();
 
-        if (isset($_REQUEST['urlID'])) {
-            $this->urlID = (int) $_REQUEST['urlID'];
+        if (isset($_REQUEST['linkID'])) {
+            $this->linkID = (int) $_REQUEST['linkID'];
         }
 
         // URL ID is required
-        if ($this->urlID === 0) {
+        if ($this->linkID === 0) {
             throw new IllegalLinkException();
         }
 
         // Load URL data (hash)
-        $sql = "SELECT hash FROM urlshort1_url WHERE urlID = ?";
+        $sql = "SELECT hash FROM shrinkr1_link WHERE linkID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$this->urlID]);
+        $statement->execute([$this->linkID]);
         $this->urlHash = $statement->fetchSingleColumn();
 
         if (empty($this->urlHash)) {
@@ -92,26 +92,26 @@ class FeaturedLinkAddForm extends AbstractFormBuilderForm
             ->label('wcf.global.form.data');
 
         $dataContainer->appendChildren([
-            // Hidden field for urlID (submitted with form)
-            HiddenFormField::create('urlID')
-                ->value($this->urlID),
+            // Hidden field for linkID (submitted with form)
+            HiddenFormField::create('linkID')
+                ->value($this->linkID),
 
             UrlFormField::create('url')
-                ->label('wcf.urlshort.featuredLink.url')
-                ->description('wcf.urlshort.featuredLink.url.description')
+                ->label('wcf.shrinkr.featuredLink.url')
+                ->description('wcf.shrinkr.featuredLink.url.description')
                 ->required()
                 ->autoFocus()
                 ->maximumLength(255),
 
             TextFormField::create('title')
                 ->label('wcf.global.title')
-                ->description('wcf.urlshort.featuredLink.title.description')
+                ->description('wcf.shrinkr.featuredLink.title.description')
                 ->required()
                 ->maximumLength(255),
 
             IntegerFormField::create('sortOrder')
-                ->label('wcf.urlshort.featuredLink.sortOrder')
-                ->description('wcf.urlshort.featuredLink.sortOrder.description')
+                ->label('wcf.shrinkr.featuredLink.sortOrder')
+                ->description('wcf.shrinkr.featuredLink.sortOrder.description')
                 ->value(1)
                 ->minimum(1),
         ]);
@@ -127,11 +127,11 @@ class FeaturedLinkAddForm extends AbstractFormBuilderForm
     {
         parent::saved();
 
-        // Redirect back to add form with same urlID to allow adding another featured link
+        // Redirect back to add form with same linkID to allow adding another featured link
         $url = LinkHandler::getInstance()->getControllerLink(FeaturedLinkAddForm::class, [
-            'application' => 'urlshort',
+            'application' => 'shrinkr',
         ]);
-        $url .= '&urlID=' . $this->urlID;
+        $url .= '&linkID=' . $this->linkID;
         
         HeaderUtil::redirect($url);
         exit;
@@ -147,12 +147,12 @@ class FeaturedLinkAddForm extends AbstractFormBuilderForm
 
         // Check if there are existing featured links for this URL
         $featuredLinkList = new FeaturedLinkList();
-        $featuredLinkList->getConditionBuilder()->add('urlID = ?', [$this->urlID]);
+        $featuredLinkList->getConditionBuilder()->add('linkID = ?', [$this->linkID]);
         $featuredLinkList->readObjects();
         $hasExistingFeaturedLinks = $featuredLinkList->count() > 0;
 
         WCF::getTPL()->assign([
-            'urlID' => $this->urlID,
+            'linkID' => $this->linkID,
             'urlHash' => $this->urlHash,
             'hasExistingFeaturedLinks' => $hasExistingFeaturedLinks,
         ]);

@@ -1,9 +1,9 @@
 <?php
 
-namespace urlshort\acp\form;
+namespace shrinkr\acp\form;
 
 use CuyZ\Valinor\Mapper\MappingError;
-use urlshort\data\theme\Theme;
+use shrinkr\data\theme\Theme;
 use wcf\http\Helper;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\form\builder\container\FormContainer;
@@ -15,10 +15,10 @@ use wcf\system\WCF;
  * Form for editing an existing theme.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.form
  */
 
@@ -82,19 +82,19 @@ class ThemeEditForm extends ThemeAddForm
             }
             
             $cssContainer = FormContainer::create('css')
-                ->label('wcf.urlshort.theme.css.edit')
+                ->label('wcf.shrinkr.theme.css.edit')
                 ->description(
-                    WCF::getLanguage()->get('wcf.urlshort.theme.css.edit.description') . 
+                    WCF::getLanguage()->get('wcf.shrinkr.theme.css.edit.description') . 
                     '<p class="warning">' . 
-                    WCF::getLanguage()->get('wcf.urlshort.theme.css.edit.warning') . 
+                    WCF::getLanguage()->get('wcf.shrinkr.theme.css.edit.warning') . 
                     '</p>'
                 );
 
             // Use SourceCodeFormField for CSS editing (like WoltLab's style editor)
             $cssContainer->appendChildren([
                 SourceCodeFormField::create('cssContent')
-                    ->label('wcf.urlshort.theme.css.content')
-                    ->description('wcf.urlshort.theme.css.content.description')
+                    ->label('wcf.shrinkr.theme.css.content')
+                    ->description('wcf.shrinkr.theme.css.content.description')
                     ->language('css')
                     ->value($cssContent),
             ]);

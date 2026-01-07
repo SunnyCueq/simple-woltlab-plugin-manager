@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\buttonclick;
+namespace shrinkr\data\buttonclick;
 
 use wcf\data\DatabaseObject;
 
@@ -8,14 +8,14 @@ use wcf\data\DatabaseObject;
  * Represents a button click tracking entry.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.buttonclick
  *
  * @property-read int    $clickID      Unique ID of the click
- * @property-read int    $urlID        ID of the associated URL
+ * @property-read int    $linkID        ID of the associated URL
  * @property-read string $buttonType   Type of button ('forward', 'featured_link', 'custom')
  * @property-read int|null $linkID     ID of the featured link (if buttonType is 'featured_link')
  * @property-read int    $clickTime    Timestamp of the click
@@ -51,7 +51,7 @@ class ButtonClick extends DatabaseObject
      */
     public function getUrlID(): int
     {
-        return $this->urlID;
+        return $this->linkID;
     }
 
     /**

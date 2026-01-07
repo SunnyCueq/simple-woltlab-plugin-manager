@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\acp\form;
+namespace shrinkr\acp\form;
 
-use urlshort\data\discount\DiscountAction;
+use shrinkr\data\discount\DiscountAction;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
@@ -22,10 +22,10 @@ use wcf\system\WCF;
  * Form for adding a new discount.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.form
  */
 
@@ -34,12 +34,12 @@ class DiscountAddForm extends AbstractFormBuilderForm
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageDiscounts'];
+    public $neededPermissions = ['admin.shrinkr.canManageDiscounts'];
 
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.discount.add';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.discount.add';
 
     /**
     * @inheritDoc
@@ -61,31 +61,31 @@ class DiscountAddForm extends AbstractFormBuilderForm
         /* append to dataContainer */
         $dataContainer->appendChildren([
             TextFormField::create('discountValue')
-                ->label('wcf.urlshort.discount')
-                ->description('wcf.urlshort.discount.description')
-                ->placeholder('wcf.urlshort.discount.placeholder')
+                ->label('wcf.shrinkr.discount')
+                ->description('wcf.shrinkr.discount.description')
+                ->placeholder('wcf.shrinkr.discount.placeholder')
                 ->required()
                 ->autoFocus()
                 ->maximumLength(255),
                 
             UploadFormField::create('favicon')
                 ->label('wcf.acp.style.general.favicon')
-                ->description('wcf.urlshort.discount.favicon.description')
+                ->description('wcf.shrinkr.discount.favicon.description')
                 ->maximum(1)
                 ->imageOnly(true),
 
             ItemListFormField::create('hosts')
                 ->required()
-                ->label('wcf.urlshort.hosts')
-                ->description('wcf.urlshort.hosts.description'),
+                ->label('wcf.shrinkr.hosts')
+                ->description('wcf.shrinkr.hosts.description'),
 
             BooleanFormField::create('special')
-                ->label('wcf.urlshort.special')
+                ->label('wcf.shrinkr.special')
                 ->value(false),
 
             TextFormField::create('specialIdentifier')
-                ->label('wcf.urlshort.special.identifier')
-                ->description('wcf.urlshort.special.identifier.description')
+                ->label('wcf.shrinkr.special.identifier')
+                ->description('wcf.shrinkr.special.identifier.description')
                 ->required()
                 ->maximumLength(255)
                 ->addDependency(
@@ -94,8 +94,8 @@ class DiscountAddForm extends AbstractFormBuilderForm
                 ),
 
             ItemListFormField::create('codes')
-                ->label('wcf.urlshort.codes')
-                ->description('wcf.urlshort.codes.description')
+                ->label('wcf.shrinkr.codes')
+                ->description('wcf.shrinkr.codes.description')
                 ->value('BENJARO')
                 ->required(),
         ]);
@@ -117,26 +117,26 @@ class DiscountAddForm extends AbstractFormBuilderForm
             ->description('Primäre Farben (linke Seite) und Sekundäre Farben (rechte Seite) des Promo Badges')
             ->appendChildren([
                 ColorFormField::create('primaryColor')
-                    ->label('wcf.urlshort.primaryColor')
-                    ->description('wcf.urlshort.primaryColor.description')
+                    ->label('wcf.shrinkr.primaryColor')
+                    ->description('wcf.shrinkr.primaryColor.description')
                     ->value($defaultPrimaryColor)
                     ->required(),
 
                 ColorFormField::create('primaryTextColor')
-                    ->label('wcf.urlshort.primaryTextColor')
-                    ->description('wcf.urlshort.primaryTextColor.description')
+                    ->label('wcf.shrinkr.primaryTextColor')
+                    ->description('wcf.shrinkr.primaryTextColor.description')
                     ->value($defaultTextColor)
                     ->required(),
 
                 ColorFormField::create('secondaryColor')
-                    ->label('wcf.urlshort.secondaryColor')
-                    ->description('wcf.urlshort.secondaryColor.description')
+                    ->label('wcf.shrinkr.secondaryColor')
+                    ->description('wcf.shrinkr.secondaryColor.description')
                     ->value($defaultSecondaryColor)
                     ->required(),
 
                 ColorFormField::create('secondaryTextColor')
-                    ->label('wcf.urlshort.secondaryTextColor')
-                    ->description('wcf.urlshort.secondaryTextColor.description')
+                    ->label('wcf.shrinkr.secondaryTextColor')
+                    ->description('wcf.shrinkr.secondaryTextColor.description')
                     ->value($defaultTextColor)
                     ->required(),
             ]);
@@ -147,15 +147,15 @@ class DiscountAddForm extends AbstractFormBuilderForm
             ->description('Zeitraum für den Rabatt (optional, für zeitlich begrenzte Aktionen)')
             ->appendChildren([
                 DateFormField::create('countdownStart')
-                    ->label('wcf.urlshort.countdownStart')
-                    ->description('wcf.urlshort.countdownStart.description')
+                    ->label('wcf.shrinkr.countdownStart')
+                    ->description('wcf.shrinkr.countdownStart.description')
                     ->saveValueFormat('U')
                     ->supportTime(true)
                     ->value(strtotime('today')),
 
                 DateFormField::create('countdownEnd')
-                    ->label('wcf.urlshort.countdownEnd')
-                    ->description('wcf.urlshort.countdownEnd.description')
+                    ->label('wcf.shrinkr.countdownEnd')
+                    ->description('wcf.shrinkr.countdownEnd.description')
                     ->saveValueFormat('U')
                     ->supportTime(true)
                     ->value(strtotime('today 23:59:59')),
@@ -165,7 +165,7 @@ class DiscountAddForm extends AbstractFormBuilderForm
         $wysiwygContainer = WysiwygFormContainer::create('additionalText')
             ->label('Zusätzlicher Text')
             ->description('Zusätzlicher HTML-Text für den Rabatt (wird unter dem Promo Badge angezeigt)')
-            ->messageObjectType('dev.tkirch.wsc.urlshort.discount.additionalText');
+            ->messageObjectType('de.sunnyc.wsc.shrinkr.discount.additionalText');
 
         // Append all containers to form
         $this->form->appendChild($dataContainer);
@@ -198,7 +198,7 @@ class DiscountAddForm extends AbstractFormBuilderForm
             $upcastProcessor = new HtmlUpcastProcessor();
             $upcastProcessor->process(
                 $this->formObject->additionalText ?? '',
-                'dev.tkirch.wsc.urlshort.discount.additionalText',
+                'de.sunnyc.wsc.shrinkr.discount.additionalText',
                 $this->formObject->discountID
             );
             WCF::getTPL()->assign('additionalText', $upcastProcessor->getHtml());

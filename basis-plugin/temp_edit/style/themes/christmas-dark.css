@@ -12,7 +12,7 @@
 
 /* CSS Variables - Applied to container */
 /* Dark Christmas Color Palette */
-.urlShortContainer {
+.shrinkrContainer {
     /* Dark Mode (default) - Elegant luxurious Dark Christmas */
     --xmas-dark-bg1: #691515; /* Organ Blood - deep dark red */
     --xmas-dark-bg2: #5C564D; /* Wenge - dark brown */
@@ -34,7 +34,7 @@
 
 /* Light Mode adjustments for Dark Christmas */
 @media (prefers-color-scheme: light) {
-    .urlShortContainer {
+    .shrinkrContainer {
         --xmas-dark-bg1: #E8D4D4; /* Light red-tinted */
         --xmas-dark-bg2: #E0DDD8; /* Light brown-tinted */
         --xmas-dark-stripe: #D8C8C8;
@@ -65,8 +65,8 @@
     }
 }
 
-/* Override .urlShortBox background and borders */
-.urlShortContainer > .urlShortBox {
+/* Override .shrinkrBox background and borders */
+.shrinkrContainer > .shrinkrBox {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
@@ -75,31 +75,31 @@
 }
 
 /* Apply theme colors to text elements */
-.urlShortContainer p {
+.shrinkrContainer p {
     color: var(--xmas-dark-text);
 }
 
-/* .urlShortBox p color only in dark mode */
+/* .shrinkrBox p color only in dark mode */
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer .urlShortBox p {
+    .shrinkrContainer .shrinkrBox p {
         color: var(--xmas-dark-muted);
     }
 }
 
 /* Title styling */
-.urlShortContainer h1 {
+.shrinkrContainer h1 {
     color: var(--xmas-dark-text);
 }
 
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer h1 {
+    .shrinkrContainer h1 {
         text-shadow: 0 0 10px rgba(128,42,44,.4), 
                      0 0 20px rgba(47,74,29,.2);
     }
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer h1 {
+    .shrinkrContainer h1 {
         text-shadow: 0 1px 3px rgba(92,86,77,.2), 
                      0 2px 6px rgba(128,42,44,.15);
     }
@@ -184,7 +184,7 @@
 
 /* Light Mode - Countdown */
 @media (prefers-color-scheme: light) {
-    body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo-right.badge#discount-countdown {
+    body[data-page-identifier="de.sunnyc.wsc.shrinkr.redirect"] .badge-promo-right.badge#discount-countdown {
         color: rgb(223, 218, 209) !important;
     }
     .badge-promo .badge-promo-right.badge#discount-countdown {
@@ -194,107 +194,107 @@
 }
 
 /* Forward Button - Dark Christmas Style */
-.urlShortContainer .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced__content {
     background: linear-gradient(180deg, var(--xmas-dark-ac1), #9a3a3d) !important;
     border: 1px solid rgba(255,255,255,.1) !important;
     box-shadow: 0 14px 34px rgba(128,42,44,.4), inset 0 1px 0 rgba(255,255,255,.2) !important;
 }
 
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer .forwardButtonEnhanced__content {
+    .shrinkrContainer .forwardButtonEnhanced__content {
         color: var(--xmas-dark-ac3) !important;
     }
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer .forwardButtonEnhanced__content {
+    .shrinkrContainer .forwardButtonEnhanced__content {
         color: #FFFFFF !important;
     }
 }
 
-.urlShortContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
     background: linear-gradient(180deg, var(--xmas-dark-ac2), #3d5a2a) !important;
     box-shadow: 0 18px 40px rgba(47,74,29,.5) !important;
     filter: saturate(1.1);
 }
 
 /* Discount Codes - Dark Christmas Style */
-.urlShortContainer .discountCodesContainer.warning {
+.shrinkrContainer .discountCodesContainer.warning {
     border: 1px solid rgba(128,42,44,.4) !important;
     color: var(--xmas-dark-text) !important;
 }
 
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer .discountCodesContainer.warning {
+    .shrinkrContainer .discountCodesContainer.warning {
         background-color: rgba(105,21,21,.5) !important;
         box-shadow: inset 0 0 12px rgba(128,42,44,.15) !important;
     }
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer .discountCodesContainer.warning {
+    .shrinkrContainer .discountCodesContainer.warning {
         background-color: rgba(232,212,212,.7) !important;
         box-shadow: inset 0 0 12px rgba(128,42,44,.1) !important;
     }
 }
 
-.urlShortContainer .discountCodesContainer.warning strong {
+.shrinkrContainer .discountCodesContainer.warning strong {
     color: var(--xmas-dark-text) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning small {
+.shrinkrContainer .discountCodesContainer.warning small {
     color: var(--xmas-dark-muted) !important;
 }
 
 /* Discount Code Highlight (kbd) */
-.urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+.shrinkrContainer .discountCodesContainer.warning kbd.copyableCode {
     font-weight: 900;
     border: 1px solid rgba(128,42,44,.4) !important;
 }
 
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+    .shrinkrContainer .discountCodesContainer.warning kbd.copyableCode {
         color: var(--xmas-dark-ac3) !important;
         background-color: rgba(128,42,44,.2) !important;
     }
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+    .shrinkrContainer .discountCodesContainer.warning kbd.copyableCode {
         color: var(--xmas-dark-ac1) !important;
         background-color: rgba(128,42,44,.15) !important;
     }
 }
 
 /* Old Price (Strikethrough) */
-.urlShortContainer s {
+.shrinkrContainer s {
     color: var(--xmas-dark-ac1) !important;
     text-decoration-thickness: .14em;
     opacity: .85;
 }
 
 /* New Price / Highlight */
-.urlShortContainer .deal-bw__new {
+.shrinkrContainer .deal-bw__new {
     color: var(--xmas-dark-ac2) !important;
     font-weight: 900;
 }
 
 /* Note Text */
-.urlShortContainer .deal-bw__note {
+.shrinkrContainer .deal-bw__note {
     margin-left: .35rem;
     opacity: .85;
     color: var(--xmas-dark-muted) !important;
 }
 
 /* Share & React Buttons - Dark Christmas Style */
-.urlShortContainer .urlShortBox__buttons .button {
+.shrinkrContainer .shrinkrBox__buttons .button {
     border: 1px solid rgba(128,42,44,.4) !important;
     color: var(--xmas-dark-text) !important;
     transition: all 0.2s ease;
 }
 
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer .urlShortBox__buttons .button {
+    .shrinkrContainer .shrinkrBox__buttons .button {
         background-color: rgba(105,21,21,.5) !important;
         box-shadow: inset 0 0 8px rgba(128,42,44,.15), 
                     0 2px 8px rgba(0,0,0,.6) !important;
@@ -302,14 +302,14 @@
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer .urlShortBox__buttons .button {
+    .shrinkrContainer .shrinkrBox__buttons .button {
         background-color: rgba(232,212,212,.6) !important;
         box-shadow: inset 0 0 8px rgba(128,42,44,.1), 
                     0 2px 8px rgba(0,0,0,.15) !important;
     }
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover {
+.shrinkrContainer .shrinkrBox__buttons .button:hover {
     background-color: rgba(128,42,44,.4) !important;
     border-color: rgba(128,42,44,.6) !important;
     box-shadow: inset 0 0 12px rgba(128,42,44,.2), 
@@ -318,28 +318,28 @@
     transform: translateY(-1px);
 }
 
-.urlShortContainer .urlShortBox__buttons .button:active {
+.shrinkrContainer .shrinkrBox__buttons .button:active {
     transform: translateY(0);
     box-shadow: inset 0 0 8px rgba(128,42,44,.25), 
                 0 1px 4px rgba(0,0,0,.6) !important;
 }
 
-.urlShortContainer .urlShortBox__buttons .button fa-icon {
+.shrinkrContainer .shrinkrBox__buttons .button fa-icon {
     color: var(--xmas-dark-ac1) !important;
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover fa-icon {
+.shrinkrContainer .shrinkrBox__buttons .button:hover fa-icon {
     filter: drop-shadow(0 0 4px rgba(184,179,170,.6));
 }
 
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer .urlShortBox__buttons .button:hover fa-icon {
+    .shrinkrContainer .shrinkrBox__buttons .button:hover fa-icon {
         color: var(--xmas-dark-ac3) !important;
     }
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer .urlShortBox__buttons .button:hover fa-icon {
+    .shrinkrContainer .shrinkrBox__buttons .button:hover fa-icon {
         color: var(--xmas-dark-ac2) !important;
         filter: drop-shadow(0 0 3px rgba(47,74,29,.5));
     }

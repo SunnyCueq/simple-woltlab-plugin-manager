@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\buttonclick;
+namespace shrinkr\data\buttonclick;
 
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\WCF;
@@ -9,10 +9,10 @@ use wcf\system\WCF;
  * Executes button click-related actions.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.buttonclick
  *
  * @method      ButtonClickEditor[]    getObjects()
@@ -28,7 +28,7 @@ class ButtonClickAction extends AbstractDatabaseObjectAction
     /**
      * @inheritDoc
      */
-    protected $permissionsDelete = ['admin.urlshort.canManageButtonClicks'];
+    protected $permissionsDelete = ['admin.shrinkr.canManageButtonClicks'];
 
     /**
      * @inheritDoc
@@ -45,7 +45,7 @@ class ButtonClickAction extends AbstractDatabaseObjectAction
      */
     public function validateTrackClick()
     {
-        $this->readInteger('urlID');
+        $this->readInteger('linkID');
         $this->readString('buttonType');
         $this->readInteger('linkID', true); // optional
     }
@@ -57,11 +57,11 @@ class ButtonClickAction extends AbstractDatabaseObjectAction
      */
     public function trackClick()
     {
-        $urlID = $this->parameters['urlID'];
+        $linkID = $this->parameters['linkID'];
         $buttonType = $this->parameters['buttonType'];
         $linkID = isset($this->parameters['linkID']) ? $this->parameters['linkID'] : null;
 
-        $click = self::trackClickStatic($urlID, $buttonType, $linkID);
+        $click = self::trackClickStatic($linkID, $buttonType, $linkID);
 
         return [
             'success' => true,
@@ -72,12 +72,12 @@ class ButtonClickAction extends AbstractDatabaseObjectAction
     /**
      * Tracks a button click (static method for direct calls).
      *
-     * @param   int     $urlID      The URL ID
+     * @param   int     $linkID      The URL ID
      * @param   string  $buttonType The button type ('forward', 'featured_link', 'custom')
      * @param   int|null $linkID    The link ID (for featured links)
      * @return  ButtonClick The created button click entry
      */
-    public static function trackClickStatic(int $urlID, string $buttonType, ?int $linkID = null): ButtonClick
+    public static function trackClickStatic(int $linkID, string $buttonType, ?int $linkID = null): ButtonClick
     {
         $userID = null;
         $sessionID = null;
@@ -89,7 +89,7 @@ class ButtonClickAction extends AbstractDatabaseObjectAction
         }
 
         $click = ButtonClickEditor::create([
-            'urlID' => $urlID,
+            'linkID' => $linkID,
             'buttonType' => $buttonType,
             'linkID' => $linkID,
             'clickTime' => TIME_NOW,

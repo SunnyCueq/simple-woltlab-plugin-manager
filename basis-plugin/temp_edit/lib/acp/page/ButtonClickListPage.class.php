@@ -1,9 +1,9 @@
 <?php
 
-namespace urlshort\acp\page;
+namespace shrinkr\acp\page;
 
-use urlshort\data\buttonclick\ButtonClickList;
-use urlshort\data\visit\VisitList;
+use shrinkr\data\buttonclick\ButtonClickList;
+use shrinkr\data\visit\VisitList;
 use wcf\page\MultipleLinkPage;
 use wcf\system\WCF;
 
@@ -11,10 +11,10 @@ use wcf\system\WCF;
  * ACP page for listing all button clicks.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.page
  */
 class ButtonClickListPage extends MultipleLinkPage
@@ -37,22 +37,22 @@ class ButtonClickListPage extends MultipleLinkPage
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.statistics.list';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.statistics.list';
 
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageButtonClicks'];
+    public $neededPermissions = ['admin.shrinkr.canManageButtonClicks'];
 
     /**
      * @inheritDoc
      */
-    public $validSortFields = ['clickID', 'urlID', 'buttonType', 'clickTime'];
+    public $validSortFields = ['clickID', 'linkID', 'buttonType', 'clickTime'];
 
     /**
      * Filter: URL ID
      */
-    public $urlID;
+    public $linkID;
 
     /**
      * Filter: Button Type
@@ -89,8 +89,8 @@ class ButtonClickListPage extends MultipleLinkPage
             $this->sortOrder = $_REQUEST['sortOrder'];
         }
 
-        if (isset($_REQUEST['urlID']) && $_REQUEST['urlID']) {
-            $this->urlID = (int) $_REQUEST['urlID'];
+        if (isset($_REQUEST['linkID']) && $_REQUEST['linkID']) {
+            $this->linkID = (int) $_REQUEST['linkID'];
         }
         if (isset($_REQUEST['buttonType']) && $_REQUEST['buttonType']) {
             $this->buttonType = $_REQUEST['buttonType'];
@@ -125,9 +125,9 @@ class ButtonClickListPage extends MultipleLinkPage
         $conditions = [];
         $parameters = [];
 
-        if ($this->urlID) {
-            $conditions[] = 'urlID = ?';
-            $parameters[] = $this->urlID;
+        if ($this->linkID) {
+            $conditions[] = 'linkID = ?';
+            $parameters[] = $this->linkID;
         }
 
         if ($this->buttonType) {
@@ -163,21 +163,21 @@ class ButtonClickListPage extends MultipleLinkPage
         // Load URL hashes for all clicks
         $urlHashes = [];
         if (isset($this->objects) && is_array($this->objects) && !empty($this->objects)) {
-            $urlIDs = [];
+            $linkIDs = [];
             foreach ($this->objects as $click) {
-                if (isset($click->urlID)) {
-                    $urlIDs[] = $click->urlID;
+                if (isset($click->linkID)) {
+                    $linkIDs[] = $click->linkID;
                 }
             }
             
-            if (!empty($urlIDs)) {
-                $urlIDs = array_unique($urlIDs);
-                $placeholders = str_repeat('?,', count($urlIDs) - 1) . '?';
-                $sql = "SELECT urlID, hash FROM urlshort1_url WHERE urlID IN ({$placeholders})";
+            if (!empty($linkIDs)) {
+                $linkIDs = array_unique($linkIDs);
+                $placeholders = str_repeat('?,', count($linkIDs) - 1) . '?';
+                $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE linkID IN ({$placeholders})";
                 $statement = WCF::getDB()->prepareStatement($sql);
-                $statement->execute($urlIDs);
+                $statement->execute($linkIDs);
                 while ($row = $statement->fetchArray()) {
-                    $urlHashes[$row['urlID']] = $row['hash'];
+                    $urlHashes[$row['linkID']] = $row['hash'];
                 }
             }
         }
@@ -186,7 +186,7 @@ class ButtonClickListPage extends MultipleLinkPage
         $this->calculateStatistics();
 
         WCF::getTPL()->assign([
-            'urlID' => $this->urlID ?? 0,
+            'linkID' => $this->linkID ?? 0,
             'buttonType' => $this->buttonType ?? '',
             'dateFrom' => $this->dateFrom ? date('Y-m-d', $this->dateFrom) : '',
             'dateTo' => $this->dateTo ? date('Y-m-d', $this->dateTo) : '',
@@ -205,9 +205,9 @@ class ButtonClickListPage extends MultipleLinkPage
         $conditions = [];
         $parameters = [];
 
-        if ($this->urlID) {
-            $conditions[] = 'urlID = ?';
-            $parameters[] = $this->urlID;
+        if ($this->linkID) {
+            $conditions[] = 'linkID = ?';
+            $parameters[] = $this->linkID;
         }
 
         if ($this->buttonType) {
@@ -231,14 +231,14 @@ class ButtonClickListPage extends MultipleLinkPage
         }
 
         // Total clicks
-        $sql = "SELECT COUNT(*) as total FROM urlshort1_button_click {$whereClause}";
+        $sql = "SELECT COUNT(*) as total FROM shrinkr1_button_click {$whereClause}";
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($parameters);
         $this->statistics['total'] = $statement->fetchSingleColumn();
 
         // Clicks by button type
         $sql = "SELECT buttonType, COUNT(*) as count 
-                FROM urlshort1_button_click 
+                FROM shrinkr1_button_click 
                 {$whereClause}
                 GROUP BY buttonType
                 ORDER BY count DESC";
@@ -270,7 +270,7 @@ class ButtonClickListPage extends MultipleLinkPage
             if (!empty($conds)) {
                 $where = 'WHERE ' . implode(' AND ', $conds);
             }
-            $sql = "SELECT COUNT(*) AS cnt FROM urlshort1_button_click {$where}";
+            $sql = "SELECT COUNT(*) AS cnt FROM shrinkr1_button_click {$where}";
             $stmt = WCF::getDB()->prepareStatement($sql);
             $stmt->execute($params);
             return (int) $stmt->fetchSingleColumn();
@@ -281,10 +281,10 @@ class ButtonClickListPage extends MultipleLinkPage
         $this->statistics['last7'] = $countWithRange($conditions, $parameters, $sevenDaysStart, null);
 
         // Top URLs (Top 5)
-        $sql = "SELECT urlID, COUNT(*) as count 
-                FROM urlshort1_button_click 
+        $sql = "SELECT linkID, COUNT(*) as count 
+                FROM shrinkr1_button_click 
                 {$whereClause}
-                GROUP BY urlID
+                GROUP BY linkID
                 ORDER BY count DESC
                 LIMIT 5";
         $statement = WCF::getDB()->prepareStatement($sql);
@@ -292,19 +292,19 @@ class ButtonClickListPage extends MultipleLinkPage
         $topUrlIDs = [];
         $this->statistics['topUrls'] = [];
         while ($row = $statement->fetchArray()) {
-            $this->statistics['topUrls'][$row['urlID']] = $row['count'];
-            $topUrlIDs[] = $row['urlID'];
+            $this->statistics['topUrls'][$row['linkID']] = $row['count'];
+            $topUrlIDs[] = $row['linkID'];
         }
         
         // Load URL hashes for top URLs
         $topUrlHashes = [];
         if (!empty($topUrlIDs)) {
             $placeholders = str_repeat('?,', count($topUrlIDs) - 1) . '?';
-            $sql = "SELECT urlID, hash FROM urlshort1_url WHERE urlID IN ({$placeholders})";
+            $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE linkID IN ({$placeholders})";
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute($topUrlIDs);
             while ($row = $statement->fetchArray()) {
-                $topUrlHashes[$row['urlID']] = $row['hash'];
+                $topUrlHashes[$row['linkID']] = $row['hash'];
             }
         }
         $this->statistics['topUrlHashes'] = $topUrlHashes;
@@ -332,10 +332,10 @@ class ButtonClickListPage extends MultipleLinkPage
         $visitConditions = [];
         $visitParameters = [];
 
-        // Map urlID filter to visits
-        if ($this->urlID) {
-            $visitConditions[] = 'urlID = ?';
-            $visitParameters[] = $this->urlID;
+        // Map linkID filter to visits
+        if ($this->linkID) {
+            $visitConditions[] = 'linkID = ?';
+            $visitParameters[] = $this->linkID;
         }
 
         // Map date filters to visits
@@ -355,7 +355,7 @@ class ButtonClickListPage extends MultipleLinkPage
         }
 
         // Total visits
-        $sql = "SELECT COUNT(*) FROM urlshort1_visit {$whereClause}";
+        $sql = "SELECT COUNT(*) FROM shrinkr1_visit {$whereClause}";
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($visitParameters);
         $this->statistics['visits']['total'] = $statement->fetchSingleColumn();
@@ -380,7 +380,7 @@ class ButtonClickListPage extends MultipleLinkPage
             if (!empty($conds)) {
                 $where = 'WHERE ' . implode(' AND ', $conds);
             }
-            $sql = "SELECT COUNT(*) FROM urlshort1_visit {$where}";
+            $sql = "SELECT COUNT(*) FROM shrinkr1_visit {$where}";
             $stmt = WCF::getDB()->prepareStatement($sql);
             $stmt->execute($params);
             return (int) $stmt->fetchSingleColumn();
@@ -391,10 +391,10 @@ class ButtonClickListPage extends MultipleLinkPage
         $this->statistics['visits']['last7'] = $countWithRange($visitConditions, $visitParameters, $sevenDaysStart, null);
 
         // Top URLs by visits (Top 5)
-        $sql = "SELECT urlID, COUNT(*) as count 
-                FROM urlshort1_visit 
+        $sql = "SELECT linkID, COUNT(*) as count 
+                FROM shrinkr1_visit 
                 {$whereClause}
-                GROUP BY urlID
+                GROUP BY linkID
                 ORDER BY count DESC
                 LIMIT 5";
         $statement = WCF::getDB()->prepareStatement($sql);
@@ -402,19 +402,19 @@ class ButtonClickListPage extends MultipleLinkPage
         $this->statistics['visits']['topUrls'] = [];
         $topVisitUrlIDs = [];
         while ($row = $statement->fetchArray()) {
-            $this->statistics['visits']['topUrls'][$row['urlID']] = $row['count'];
-            $topVisitUrlIDs[] = $row['urlID'];
+            $this->statistics['visits']['topUrls'][$row['linkID']] = $row['count'];
+            $topVisitUrlIDs[] = $row['linkID'];
         }
 
         // Load URL hashes for top visit URLs
         if (!empty($topVisitUrlIDs)) {
             $placeholders = str_repeat('?,', count($topVisitUrlIDs) - 1) . '?';
-            $sql = "SELECT urlID, hash FROM urlshort1_url WHERE urlID IN ({$placeholders})";
+            $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE linkID IN ({$placeholders})";
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute($topVisitUrlIDs);
             $this->statistics['visits']['topUrlHashes'] = [];
             while ($row = $statement->fetchArray()) {
-                $this->statistics['visits']['topUrlHashes'][$row['urlID']] = $row['hash'];
+                $this->statistics['visits']['topUrlHashes'][$row['linkID']] = $row['hash'];
             }
         }
     }
@@ -432,9 +432,9 @@ class ButtonClickListPage extends MultipleLinkPage
         $visitConditions = ['referrer IS NOT NULL AND referrer != ?'];
         $visitParameters = [''];
 
-        if ($this->urlID) {
-            $visitConditions[] = 'urlID = ?';
-            $visitParameters[] = $this->urlID;
+        if ($this->linkID) {
+            $visitConditions[] = 'linkID = ?';
+            $visitParameters[] = $this->linkID;
         }
 
         if ($this->dateFrom) {
@@ -451,7 +451,7 @@ class ButtonClickListPage extends MultipleLinkPage
 
         // Top Referrers (Top 10, grouped by full URL)
         $sql = "SELECT referrer, COUNT(*) as count 
-                FROM urlshort1_visit 
+                FROM shrinkr1_visit 
                 {$whereClause}
                 GROUP BY referrer
                 ORDER BY count DESC
@@ -465,7 +465,7 @@ class ButtonClickListPage extends MultipleLinkPage
 
         // Top Referrer Domains (extract domain from referrer)
         $sql = "SELECT referrer, COUNT(*) as count 
-                FROM urlshort1_visit 
+                FROM shrinkr1_visit 
                 {$whereClause}
                 GROUP BY referrer
                 ORDER BY count DESC";

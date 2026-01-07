@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\discount;
+namespace shrinkr\data\discount;
 
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\exception\UserInputException;
@@ -10,10 +10,10 @@ use wcf\system\file\upload\UploadFile;
  * Executes discount-related actions.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.discount
  */
 class DiscountAction extends AbstractDatabaseObjectAction
@@ -21,17 +21,17 @@ class DiscountAction extends AbstractDatabaseObjectAction
     /**
      * @inheritDoc
      */
-    protected $permissionsCreate = ['admin.urlshort.canManageDiscounts'];
+    protected $permissionsCreate = ['admin.shrinkr.canManageDiscounts'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsUpdate = ['admin.urlshort.canManageDiscounts'];
+    protected $permissionsUpdate = ['admin.shrinkr.canManageDiscounts'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsDelete = ['admin.urlshort.canManageDiscounts'];
+    protected $permissionsDelete = ['admin.shrinkr.canManageDiscounts'];
 
     /**
      * @inheritDoc

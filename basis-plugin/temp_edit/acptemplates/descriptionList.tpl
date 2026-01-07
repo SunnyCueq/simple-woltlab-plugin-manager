@@ -1,15 +1,15 @@
-{include file='header' pageTitle='urlshort.acp.menu.link.description.list'}
+{include file='header' pageTitle='shrinkr.acp.menu.link.description.list'}
 
 <header class="contentHeader">
 	<div class="contentHeaderTitle">
-		<h1 class="contentTitle">{lang}urlshort.acp.menu.link.description.list{/lang}</h1>
+		<h1 class="contentTitle">{lang}shrinkr.acp.menu.link.description.list{/lang}</h1>
 	</div>
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='DescriptionAdd' application='urlshort'}{/link}"
+			<li><a href="{link controller='DescriptionAdd' application='shrinkr'}{/link}"
 					class="button">{icon size=16 name='plus'}
-					<span>{lang}urlshort.acp.menu.link.description.add{/lang}</span></a></li>
+					<span>{lang}shrinkr.acp.menu.link.description.add{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
 		</ul>
 	</nav>
@@ -18,7 +18,7 @@
 {include file='formError'}
 
 {if $objects|count || $title || $descriptionText}
-	<form action="{link controller='DescriptionList' application='urlshort'}{/link}" method="POST">
+	<form action="{link controller='DescriptionList' application='shrinkr'}{/link}" method="POST">
 		<section class="section">
 			<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
@@ -31,19 +31,19 @@
 				</dl>
 
 				<dl class="col-xs-12 col-md-4">
-					<dt><label for="descriptionText">{lang}wcf.urlshort.description.descriptionText{/lang}</label></dt>
+					<dt><label for="descriptionText">{lang}wcf.shrinkr.description.descriptionText{/lang}</label></dt>
 					<dd>
-						<input class="long" type="text" id="descriptionText" name="descriptionText" value="{$descriptionText}" placeholder="{lang}wcf.urlshort.description.descriptionText{/lang}">
+						<input class="long" type="text" id="descriptionText" name="descriptionText" value="{$descriptionText}" placeholder="{lang}wcf.shrinkr.description.descriptionText{/lang}">
 					</dd>
 				</dl>
 
 				<dl class="col-xs-12 col-md-4">
-					<dt><label for="isActive">{lang}wcf.urlshort.description.isActive{/lang}</label></dt>
+					<dt><label for="isActive">{lang}wcf.shrinkr.description.isActive{/lang}</label></dt>
 					<dd>
 						<select id="isActive" name="isActive" class="long">
 							<option value="">{lang}wcf.global.noSelection{/lang}</option>
-							<option value="1" {if $isActiveFilter === 1}selected{/if}>{lang}wcf.urlshort.yes{/lang}</option>
-							<option value="0" {if $isActiveFilter === 0}selected{/if}>{lang}wcf.urlshort.no{/lang}</option>
+							<option value="1" {if $isActiveFilter === 1}selected{/if}>{lang}wcf.shrinkr.yes{/lang}</option>
+							<option value="0" {if $isActiveFilter === 0}selected{/if}>{lang}wcf.shrinkr.no{/lang}</option>
 						</select>
 					</dd>
 				</dl>
@@ -65,32 +65,32 @@
 {hascontent}
 <div class="paginationTop">
 	{content}
-{pages print=true assign=pagesLinks application='urlshort' controller="DescriptionList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&descriptionText=$descriptionText&isActive=$isActiveFilter"}
+{pages print=true assign=pagesLinks application='shrinkr' controller="DescriptionList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&descriptionText=$descriptionText&isActive=$isActiveFilter"}
 	{/content}
 </div>
 {/hascontent}
 
 {if $objects|count}
 	<div class="section tabularBox">
-		<table class="table jsObjectActionContainer" data-object-action-class-name="urlshort\data\description\DescriptionAction">
+		<table class="table jsObjectActionContainer" data-object-action-class-name="shrinkr\data\description\DescriptionAction">
 			<thead>
 				<tr>
 					<th class="columnID columnDescriptionID{if $sortField == 'descriptionID'} active {unsafe:$sortOrder}{/if}" colspan="2">
-						<a href="{link controller='DescriptionList' application='urlshort'}pageNo={#$pageNo}&sortField=descriptionID&sortOrder={if $sortField == 'descriptionID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
+						<a href="{link controller='DescriptionList' application='shrinkr'}pageNo={#$pageNo}&sortField=descriptionID&sortOrder={if $sortField == 'descriptionID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
 							{lang}wcf.global.objectID{/lang}
 						</a>
 					</th>
 					<th class="columnTitle{if $sortField == 'title'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='DescriptionList' application='urlshort'}pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
+						<a href="{link controller='DescriptionList' application='shrinkr'}pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
 							{lang}wcf.global.title{/lang}
 						</a>
 					</th>
 					<th class="columnText">
-						{lang}wcf.urlshort.description.preview{/lang}
+						{lang}wcf.shrinkr.description.preview{/lang}
 					</th>
 					<th class="columnDigits columnIsActive{if $sortField == 'isActive'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='DescriptionList' application='urlshort'}pageNo={#$pageNo}&sortField=isActive&sortOrder={if $sortField == 'isActive' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
-							{lang}wcf.urlshort.description.status{/lang}
+						<a href="{link controller='DescriptionList' application='shrinkr'}pageNo={#$pageNo}&sortField=isActive&sortOrder={if $sortField == 'isActive' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
+							{lang}wcf.shrinkr.description.status{/lang}
 						</a>
 					</th>
 				</tr>
@@ -99,7 +99,7 @@
 				{foreach from=$objects item=object}
 					<tr class="jsObjectActionObject" data-object-id="{#$object->descriptionID}">
 						<td class="columnIcon">
-							<a href="{link controller='DescriptionEdit' id=$object->descriptionID application='urlshort'}{/link}"
+							<a href="{link controller='DescriptionEdit' id=$object->descriptionID application='shrinkr'}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->getTitle()}
 							{event name='rowButtons'}
@@ -115,9 +115,9 @@
 						</td>
 						<td class="columnDigits">
 							{if $object->isActive()}
-								<span class="badge green">{lang}wcf.urlshort.description.isActive.yes{/lang}</span>
+								<span class="badge green">{lang}wcf.shrinkr.description.isActive.yes{/lang}</span>
 							{else}
-								<span class="badge red">{lang}wcf.urlshort.description.isActive.no{/lang}</span>
+								<span class="badge red">{lang}wcf.shrinkr.description.isActive.no{/lang}</span>
 							{/if}
 						</td>
 					</tr>
@@ -135,9 +135,9 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='DescriptionAdd' application='urlshort'}{/link}"
+				<li><a href="{link controller='DescriptionAdd' application='shrinkr'}{/link}"
 						class="button">{icon size=16 name='plus'}
-						<span>{lang}urlshort.acp.menu.link.description.add{/lang}</span></a></li>
+						<span>{lang}shrinkr.acp.menu.link.description.add{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
 			</ul>
 		</nav>

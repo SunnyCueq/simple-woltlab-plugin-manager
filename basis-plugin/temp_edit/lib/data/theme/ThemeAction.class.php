@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\theme;
+namespace shrinkr\data\theme;
 
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\exception\UserInputException;
@@ -9,10 +9,10 @@ use wcf\system\exception\UserInputException;
  * Executes theme-related actions.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.theme
  */
 class ThemeAction extends AbstractDatabaseObjectAction
@@ -22,17 +22,17 @@ class ThemeAction extends AbstractDatabaseObjectAction
     /**
      * @inheritDoc
      */
-    protected $permissionsCreate = ['admin.urlshort.canManageThemes'];
+    protected $permissionsCreate = ['admin.shrinkr.canManageThemes'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsUpdate = ['admin.urlshort.canManageThemes'];
+    protected $permissionsUpdate = ['admin.shrinkr.canManageThemes'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsDelete = ['admin.urlshort.canManageThemes'];
+    protected $permissionsDelete = ['admin.shrinkr.canManageThemes'];
 
     /**
      * @inheritDoc
@@ -110,7 +110,7 @@ class ThemeAction extends AbstractDatabaseObjectAction
         
         // Check if identifier already exists (excluding current theme in update)
         $sql = "SELECT  COUNT(*) as count
-                FROM    urlshort1_theme
+                FROM    shrinkr1_theme
                 WHERE   identifier = ?";
         $params = [$identifier];
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\data\discount;
+namespace shrinkr\data\discount;
 
-use urlshort\system\favicon\FaviconHandler;
+use shrinkr\system\favicon\FaviconHandler;
 use wcf\data\DatabaseObject;
 use wcf\data\ITitledObject;
 use wcf\system\WCF;
@@ -11,10 +11,10 @@ use wcf\system\WCF;
  * Represents a discount object with associated data.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2023 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.discount
  *
  * @property int    $discountID
@@ -55,7 +55,7 @@ class Discount extends DatabaseObject implements ITitledObject
      */
     public function canAdd(): bool
     {
-        return WCF::getSession()->getPermission('admin.urlshort.canManageDiscounts');
+        return WCF::getSession()->getPermission('admin.shrinkr.canManageDiscounts');
     }
 
     /**

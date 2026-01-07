@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\acp\form;
+namespace shrinkr\acp\form;
 
-use urlshort\data\theme\ThemeAction;
+use shrinkr\data\theme\ThemeAction;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\field\BooleanFormField;
@@ -16,10 +16,10 @@ use wcf\system\WCF;
  * Form for adding a new theme.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.form
  */
 
@@ -28,12 +28,12 @@ class ThemeAddForm extends AbstractFormBuilderForm
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageThemes'];
+    public $neededPermissions = ['admin.shrinkr.canManageThemes'];
 
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.theme.add';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.theme.add';
 
     /**
     * @inheritDoc
@@ -50,41 +50,41 @@ class ThemeAddForm extends AbstractFormBuilderForm
 
         // === BASIC SETTINGS ===
         $basicContainer = FormContainer::create('basic')
-            ->label('wcf.urlshort.form.section.basic')
-            ->description('wcf.urlshort.form.section.basic.description')
+            ->label('wcf.shrinkr.form.section.basic')
+            ->description('wcf.shrinkr.form.section.basic.description')
             ->appendChildren([
                 TextFormField::create('identifier')
-                    ->label('wcf.urlshort.theme.identifier')
-                    ->description('wcf.urlshort.theme.identifier.description')
+                    ->label('wcf.shrinkr.theme.identifier')
+                    ->description('wcf.shrinkr.theme.identifier.description')
                     ->required()
                     ->autoFocus()
                     ->maximumLength(255),
 
                 TextFormField::create('title')
-                    ->label('wcf.urlshort.theme.title')
-                    ->description('wcf.urlshort.theme.title.description')
+                    ->label('wcf.shrinkr.theme.title')
+                    ->description('wcf.shrinkr.theme.title.description')
                     ->required()
                     ->maximumLength(255),
 
                 SingleSelectionFormField::create('effectIdentifier')
-                    ->label('wcf.urlshort.theme.effect')
-                    ->description('wcf.urlshort.theme.effect.description')
+                    ->label('wcf.shrinkr.theme.effect')
+                    ->description('wcf.shrinkr.theme.effect.description')
                     ->options([
-                        'none' => 'wcf.urlshort.theme.effect.none',
-                        'autumnLeaves' => 'wcf.urlshort.theme.effect.autumnLeaves',
-                        'snow' => 'wcf.urlshort.theme.effect.snow',
-                        'ghosts' => 'wcf.urlshort.theme.effect.ghosts',
+                        'none' => 'wcf.shrinkr.theme.effect.none',
+                        'autumnLeaves' => 'wcf.shrinkr.theme.effect.autumnLeaves',
+                        'snow' => 'wcf.shrinkr.theme.effect.snow',
+                        'ghosts' => 'wcf.shrinkr.theme.effect.ghosts',
                     ])
                     ->value('none'),
 
                 BooleanFormField::create('isActive')
-                    ->label('wcf.urlshort.theme.isActive')
-                    ->description('wcf.urlshort.theme.isActive.description')
+                    ->label('wcf.shrinkr.theme.isActive')
+                    ->description('wcf.shrinkr.theme.isActive.description')
                     ->value(true),
 
                 IntegerFormField::create('sortOrder')
-                    ->label('wcf.urlshort.theme.sortOrder')
-                    ->description('wcf.urlshort.theme.sortOrder.description')
+                    ->label('wcf.shrinkr.theme.sortOrder')
+                    ->description('wcf.shrinkr.theme.sortOrder.description')
                     ->value(0)
                     ->minimum(0),
             ]);
@@ -102,30 +102,30 @@ class ThemeAddForm extends AbstractFormBuilderForm
         
         // === COLOR SECTION for Promo Badge ===
         $colorContainer = FormContainer::create('colors')
-            ->label('wcf.urlshort.form.section.colors')
-            ->description('wcf.urlshort.form.section.colors.description')
+            ->label('wcf.shrinkr.form.section.colors')
+            ->description('wcf.shrinkr.form.section.colors.description')
             ->appendChildren([
                 ColorFormField::create('primaryColor')
-                    ->label('wcf.urlshort.primaryColor')
-                    ->description('wcf.urlshort.theme.primaryColor.description')
+                    ->label('wcf.shrinkr.primaryColor')
+                    ->description('wcf.shrinkr.theme.primaryColor.description')
                     ->value($defaultPrimaryColor)
                     ->required(),
 
                 ColorFormField::create('primaryTextColor')
-                    ->label('wcf.urlshort.primaryTextColor')
-                    ->description('wcf.urlshort.theme.primaryTextColor.description')
+                    ->label('wcf.shrinkr.primaryTextColor')
+                    ->description('wcf.shrinkr.theme.primaryTextColor.description')
                     ->value($defaultTextColor)
                     ->required(),
 
                 ColorFormField::create('secondaryColor')
-                    ->label('wcf.urlshort.secondaryColor')
-                    ->description('wcf.urlshort.theme.secondaryColor.description')
+                    ->label('wcf.shrinkr.secondaryColor')
+                    ->description('wcf.shrinkr.theme.secondaryColor.description')
                     ->value($defaultSecondaryColor)
                     ->required(),
 
                 ColorFormField::create('secondaryTextColor')
-                    ->label('wcf.urlshort.secondaryTextColor')
-                    ->description('wcf.urlshort.theme.secondaryTextColor.description')
+                    ->label('wcf.shrinkr.secondaryTextColor')
+                    ->description('wcf.shrinkr.theme.secondaryTextColor.description')
                     ->value($defaultTextColor)
                     ->required(),
             ]);

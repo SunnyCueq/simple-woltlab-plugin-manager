@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\featuredlink;
+namespace shrinkr\data\featuredlink;
 
 use wcf\data\DatabaseObject;
 use wcf\data\ITitledObject;
@@ -10,14 +10,14 @@ use wcf\system\WCF;
  * Represents a featured link for a shortened URL.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.featuredlink
  *
  * @property-read int    $linkID         Unique ID of the featured link
- * @property-read int    $urlID          ID of the associated URL
+ * @property-read int    $linkID          ID of the associated URL
  * @property-read string $url            The featured link URL
  * @property-read string $title          Display title for the link
  * @property-read int    $sortOrder      Sort order (lower = higher priority)
@@ -71,7 +71,7 @@ class FeaturedLink extends DatabaseObject implements ITitledObject
      */
     public function getUrlID(): int
     {
-        return $this->urlID;
+        return $this->linkID;
     }
 
     /**
@@ -102,7 +102,7 @@ class FeaturedLink extends DatabaseObject implements ITitledObject
      */
     public function canAdd(): bool
     {
-        return WCF::getSession()->getPermission('admin.urlshort.canManageFeaturedLinks');
+        return WCF::getSession()->getPermission('admin.shrinkr.canManageFeaturedLinks');
     }
 
     /**

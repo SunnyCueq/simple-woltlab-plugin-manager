@@ -1,18 +1,18 @@
 <?php
 
-namespace urlshort\system\event\listener;
+namespace shrinkr\system\event\listener;
 
 use wcf\data\option\OptionAction;
 use wcf\system\event\listener\AbstractEventListener;
 use wcf\system\WCF;
 
 /**
- * Listens to option changes and installs demo data when urlshort_install_demo_data is enabled.
+ * Listens to option changes and installs demo data when shrinkr_install_demo_data is enabled.
  *
- * @author      Benjaro <https://benjaro.info>
- * @copyright   2025 Benjaro
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
  * @license     Commercial License
- * @package     dev.tkirch.wsc.urlshort
+ * @package     de.sunnyc.wsc.shrinkr
  */
 class OptionActionDemoDataListener extends AbstractEventListener
 {
@@ -35,9 +35,9 @@ class OptionActionDemoDataListener extends AbstractEventListener
             // (finalizeAction is called after the action, but transaction might not be committed yet)
             usleep(100000); // 100ms delay
             
-            $option = \wcf\data\option\Option::getOptionByName('urlshort_install_demo_data');
+            $option = \wcf\data\option\Option::getOptionByName('shrinkr_install_demo_data');
             if (!$option) {
-                $this->log('Option urlshort_install_demo_data does not exist, skipping');
+                $this->log('Option shrinkr_install_demo_data does not exist, skipping');
                 return;
             }
             
@@ -57,7 +57,7 @@ class OptionActionDemoDataListener extends AbstractEventListener
         
         // Check if demo data already exists
         try {
-            $sql = "SELECT COUNT(*) FROM urlshort1_url WHERE hash LIKE 'DEMO-%'";
+            $sql = "SELECT COUNT(*) FROM shrinkr1_link WHERE hash LIKE 'DEMO-%'";
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute();
             $existingCount = $statement->fetchSingleColumn();
@@ -77,7 +77,7 @@ class OptionActionDemoDataListener extends AbstractEventListener
         // Call the demo data installation function from the post-install script
         // We'll include the post-install script which contains the installation logic
         // The script checks if demo data already exists, so it's safe to call multiple times
-        $postInstallScript = WCF_DIR . 'urls/acp/install_dev.tkirch.wsc.urlshort_postInstall.php';
+        $postInstallScript = WCF_DIR . 'urls/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
         
         $this->log('Post-install script path: ' . $postInstallScript);
         $this->log('Post-install script exists: ' . (file_exists($postInstallScript) ? 'yes' : 'no'));
@@ -86,7 +86,7 @@ class OptionActionDemoDataListener extends AbstractEventListener
             // Temporarily set a flag to indicate we're calling from the event listener
             // This allows the post-install script to know it's being called from here
             // and not during initial installation
-            $GLOBALS['urlshort_demo_data_from_event'] = true;
+            $GLOBALS['shrinkr_demo_data_from_event'] = true;
             
             $this->log('Calling post-install script...');
             
@@ -98,7 +98,7 @@ class OptionActionDemoDataListener extends AbstractEventListener
             $this->log('Post-install script completed');
             
             // Unset the flag
-            unset($GLOBALS['urlshort_demo_data_from_event']);
+            unset($GLOBALS['shrinkr_demo_data_from_event']);
         } else {
             $this->log('Post-install script not found!');
         }

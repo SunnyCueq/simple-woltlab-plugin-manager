@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\system\option;
+namespace shrinkr\system\option;
 
 use wcf\data\option\Option;
 use wcf\system\exception\UserInputException;
@@ -14,10 +14,10 @@ use wcf\system\WCF;
  * and shows a static preview of how the button will look.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.option
  */
 class CustomForwardButtonOptionType extends AbstractOptionType
@@ -34,7 +34,7 @@ class CustomForwardButtonOptionType extends AbstractOptionType
         ]);
         
         // Render using custom template for option type
-        return WCF::getTPL()->fetch('customForwardButtonOptionType', 'urlshort');
+        return WCF::getTPL()->fetch('customForwardButtonOptionType', 'shrinkr');
     }
 
     /**

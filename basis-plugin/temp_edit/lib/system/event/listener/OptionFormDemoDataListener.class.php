@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\system\event\listener;
+namespace shrinkr\system\event\listener;
 
-use urlshort\system\option\OptionFormDemoDataHandler;
+use shrinkr\system\option\OptionFormDemoDataHandler;
 use wcf\acp\form\OptionForm;
 use wcf\system\event\listener\IParameterizedEventListener;
 
@@ -10,10 +10,10 @@ use wcf\system\event\listener\IParameterizedEventListener;
  * Event listener for OptionForm::saved event.
  * Delegates to OptionFormDemoDataHandler for demo data installation.
  *
- * @author      Benjaro <https://benjaro.info>
- * @copyright   2025 Benjaro
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
  * @license     Commercial License
- * @package     dev.tkirch.wsc.urlshort
+ * @package     de.sunnyc.wsc.shrinkr
  * @subpackage  system.event.listener
  */
 class OptionFormDemoDataListener implements IParameterizedEventListener

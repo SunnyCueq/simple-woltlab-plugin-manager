@@ -2,7 +2,7 @@
  * Black Week Theme Styles
  * 
  * Theme-specific styles for the blackweek theme.
- * Applied to .urlShortContainer when this theme is active.
+ * Applied to .shrinkrContainer when this theme is active.
  * 
  * @author      Sunny C. <https://benjaro.info>
  * @copyright   2022-2025 Benjaro
@@ -10,7 +10,7 @@
  */
 
 /* CSS Variables - Applied to container */
-.urlShortContainer {
+.shrinkrContainer {
     /* Dark Mode (default) - Classic Black Week */
     --bw-bg1: #07080a;
     --bw-bg2: #0b0e14;
@@ -40,7 +40,7 @@
 
 /* Light Mode adjustments for Black Week - Still dark but with lighter accents */
 @media (prefers-color-scheme: light) {
-    .urlShortContainer {
+    .shrinkrContainer {
         --bw-bg1: #1a1d24; /* Darker gray - still dark for Black Week */
         --bw-bg2: #252932;
         --bw-stripe: #2d3138;
@@ -66,8 +66,8 @@
     }
 }
 
-/* Override .urlShortBox background and borders */
-.urlShortContainer > .urlShortBox {
+/* Override .shrinkrBox background and borders */
+.shrinkrContainer > .shrinkrBox {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -75,21 +75,21 @@
 }
 
 /* Apply theme colors to text elements */
-.urlShortContainer p {
+.shrinkrContainer p {
     color: var(--bw-text);
 }
 
-.urlShortContainer .urlShortBox p {
+.shrinkrContainer .shrinkrBox p {
     color: var(--bw-muted);
 }
 
 /* Glitch Effect for h1 Title */
-.urlShortContainer h1 {
+.shrinkrContainer h1 {
     color: var(--bw-text);
 }
 
-.urlShortContainer h1 .deal-bw__glitch,
-.urlShortContainer h1 > span.deal-bw__glitch {
+.shrinkrContainer h1 .deal-bw__glitch,
+.shrinkrContainer h1 > span.deal-bw__glitch {
     display: inline-block;
     position: relative;
     font-weight: 900;
@@ -97,10 +97,10 @@
     text-shadow: 0 0 5px rgba(124, 92, 255, .45);
 }
 
-.urlShortContainer h1 .deal-bw__glitch::before,
-.urlShortContainer h1 .deal-bw__glitch::after,
-.urlShortContainer h1 > span.deal-bw__glitch::before,
-.urlShortContainer h1 > span.deal-bw__glitch::after {
+.shrinkrContainer h1 .deal-bw__glitch::before,
+.shrinkrContainer h1 .deal-bw__glitch::after,
+.shrinkrContainer h1 > span.deal-bw__glitch::before,
+.shrinkrContainer h1 > span.deal-bw__glitch::after {
     content: attr(data-text);
     position: absolute;
     left: 0;
@@ -109,8 +109,8 @@
     clip-path: inset(0 0 50% 0);
 }
 
-.urlShortContainer h1 .deal-bw__glitch::before,
-.urlShortContainer h1 > span.deal-bw__glitch::before {
+.shrinkrContainer h1 .deal-bw__glitch::before,
+.shrinkrContainer h1 > span.deal-bw__glitch::before {
     color: var(--bw-ac1);
     transform: translate(1.5px, -0.5px);
     mix-blend-mode: screen;
@@ -118,8 +118,8 @@
     clip-path: inset(0 0 50% 0);
 }
 
-.urlShortContainer h1 .deal-bw__glitch::after,
-.urlShortContainer h1 > span.deal-bw__glitch::after {
+.shrinkrContainer h1 .deal-bw__glitch::after,
+.shrinkrContainer h1 > span.deal-bw__glitch::after {
     color: var(--bw-ac3);
     transform: translate(-1.5px, 0.5px);
     mix-blend-mode: screen;
@@ -128,8 +128,8 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    .urlShortContainer h1 .deal-bw__glitch,
-    .urlShortContainer h1 > span.deal-bw__glitch {
+    .shrinkrContainer h1 .deal-bw__glitch,
+    .shrinkrContainer h1 > span.deal-bw__glitch {
         animation: glitch-jitter 2.4s ease-in-out infinite;
     }
 }
@@ -145,8 +145,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .urlShortContainer h1 .deal-bw__glitch,
-    .urlShortContainer h1 > span.deal-bw__glitch {
+    .shrinkrContainer h1 .deal-bw__glitch,
+    .shrinkrContainer h1 > span.deal-bw__glitch {
         animation: none !important;
     }
 }
@@ -209,42 +209,42 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badge-promo-right.badge#discount-countdown {
+    body[data-page-identifier="de.sunnyc.wsc.shrinkr.redirect"] .badge-promo .badge-promo-right.badge#discount-countdown {
         color: unset !important;
     }
 }
 
 /* Forward Button - Black Week Style */
-.urlShortContainer .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced__content {
     background: linear-gradient(180deg, var(--bw-ac2), #7fffea) !important;
     color: #061012 !important;
     border: 1px solid rgba(255,255,255,.2) !important;
     box-shadow: 0 14px 34px rgba(0,255,210,.28), inset 0 1px 0 rgba(255,255,255,.45) !important;
 }
 
-.urlShortContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
     box-shadow: 0 18px 40px rgba(0,255,210,.34) !important;
     filter: saturate(1.05);
 }
 
 /* Discount Codes - Black Week Style */
-.urlShortContainer .discountCodesContainer.warning {
+.shrinkrContainer .discountCodesContainer.warning {
     background-color: rgba(255, 122, 122, .32) !important; /* Transparent red for subtle background */
     border: 1px solid rgba(255, 122, 122, .4) !important;
     color: var(--bw-text) !important;
     box-shadow: inset 0 0 12px rgba(255, 122, 122, .15) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning strong {
+.shrinkrContainer .discountCodesContainer.warning strong {
     color: var(--bw-text) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning small {
+.shrinkrContainer .discountCodesContainer.warning small {
     color: var(--bw-muted) !important;
 }
 
 /* Discount Code Highlight (kbd) */
-.urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+.shrinkrContainer .discountCodesContainer.warning kbd.copyableCode {
     color: var(--bw-ac2) !important;
     font-weight: 900;
     background-color: rgba(0, 255, 210, .1) !important;
@@ -252,27 +252,27 @@
 }
 
 /* Old Price (Strikethrough) */
-.urlShortContainer s {
+.shrinkrContainer s {
     color: #ff7a7a !important;
     text-decoration-thickness: .14em;
     opacity: .95;
 }
 
 /* New Price / Highlight */
-.urlShortContainer .deal-bw__new {
+.shrinkrContainer .deal-bw__new {
     color: var(--bw-ac2) !important;
     font-weight: 900;
 }
 
 /* Note Text */
-.urlShortContainer .deal-bw__note {
+.shrinkrContainer .deal-bw__note {
     margin-left: .35rem;
     opacity: .85;
     color: var(--bw-muted) !important;
 }
 
 /* Share & React Buttons - Black Week Style */
-.urlShortContainer .urlShortBox__buttons .button {
+.shrinkrContainer .shrinkrBox__buttons .button {
     background-color: rgba(124, 92, 255, .31) !important; /* Purple background */
     border: 1px solid rgba(124, 92, 255, .5) !important; /* Purple border */
     color: var(--bw-text) !important;
@@ -281,7 +281,7 @@
     transition: all 0.2s ease;
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover {
+.shrinkrContainer .shrinkrBox__buttons .button:hover {
     background-color: rgba(124, 92, 255, .45) !important;
     border-color: rgba(124, 92, 255, .7) !important;
     box-shadow: inset 0 0 12px rgba(124, 92, 255, .25), 
@@ -290,17 +290,17 @@
     transform: translateY(-1px);
 }
 
-.urlShortContainer .urlShortBox__buttons .button:active {
+.shrinkrContainer .shrinkrBox__buttons .button:active {
     transform: translateY(0);
     box-shadow: inset 0 0 8px rgba(124, 92, 255, .25), 
                 0 1px 4px rgba(0, 0, 0, .3) !important;
 }
 
-.urlShortContainer .urlShortBox__buttons .button fa-icon {
+.shrinkrContainer .shrinkrBox__buttons .button fa-icon {
     color: #bfb1f9 !important; /* Light purple icon color */
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover fa-icon {
+.shrinkrContainer .shrinkrBox__buttons .button:hover fa-icon {
     color: var(--bw-ac2) !important; /* Cyan icon color on hover */
     filter: drop-shadow(0 0 4px rgba(0, 255, 210, .5));
 }

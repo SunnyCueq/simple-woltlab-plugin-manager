@@ -1,9 +1,9 @@
 <?php
 
-namespace urlshort\system\event\listener;
+namespace shrinkr\system\event\listener;
 
-use urlshort\acp\form\DiscountAddForm;
-use urlshort\acp\form\DiscountEditForm;
+use shrinkr\acp\form\DiscountAddForm;
+use shrinkr\acp\form\DiscountEditForm;
 use wcf\system\event\listener\AbstractEventListener;
 use wcf\system\form\builder\data\processor\VoidFormDataProcessor;
 
@@ -11,10 +11,10 @@ use wcf\system\form\builder\data\processor\VoidFormDataProcessor;
  * Event listener to remove obsolete "special" fields from discount forms.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.event.listener
  */
 class DiscountFormListener extends AbstractEventListener

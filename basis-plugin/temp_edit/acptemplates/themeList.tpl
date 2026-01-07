@@ -1,16 +1,16 @@
-{include file='header' pageTitle='urlshort.acp.menu.link.theme.list'}
+{include file='header' pageTitle='shrinkr.acp.menu.link.theme.list'}
 
 <header class="contentHeader">
 	<div class="contentHeaderTitle">
-		<h1 class="contentTitle">{lang}urlshort.acp.menu.link.theme.list{/lang}</h1>
-		<p class="contentHeaderDescription">{lang}urlshort.acp.theme.list.description{/lang}</p>
+		<h1 class="contentTitle">{lang}shrinkr.acp.menu.link.theme.list{/lang}</h1>
+		<p class="contentHeaderDescription">{lang}shrinkr.acp.theme.list.description{/lang}</p>
 	</div>
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='ThemeAdd' application='urlshort'}{/link}"
+			<li><a href="{link controller='ThemeAdd' application='shrinkr'}{/link}"
 					class="button">{icon size=16 name='plus'}
-					<span>{lang}urlshort.acp.menu.link.theme.add{/lang}</span></a></li>
+					<span>{lang}shrinkr.acp.menu.link.theme.add{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
 		</ul>
 	</nav>
@@ -19,32 +19,32 @@
 {include file='formError'}
 
 {if $objects|count || $title || $identifier}
-	<form action="{link controller='ThemeList' application='urlshort'}{/link}" method="POST">
+	<form action="{link controller='ThemeList' application='shrinkr'}{/link}" method="POST">
 		<section class="section">
 			<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
 			<div class="row rowColGap formGrid">
 				<dl class="col-xs-12 col-md-4">
-					<dt><label for="title">{lang}wcf.urlshort.theme.title{/lang}</label></dt>
+					<dt><label for="title">{lang}wcf.shrinkr.theme.title{/lang}</label></dt>
 					<dd>
-						<input class="long" type="text" id="title" name="title" value="{$title}" placeholder="{lang}wcf.urlshort.theme.title{/lang}">
+						<input class="long" type="text" id="title" name="title" value="{$title}" placeholder="{lang}wcf.shrinkr.theme.title{/lang}">
 					</dd>
 				</dl>
 
 				<dl class="col-xs-12 col-md-4">
-					<dt><label for="identifier">{lang}wcf.urlshort.theme.identifier{/lang}</label></dt>
+					<dt><label for="identifier">{lang}wcf.shrinkr.theme.identifier{/lang}</label></dt>
 					<dd>
-						<input class="long" type="text" id="identifier" name="identifier" value="{$identifier}" placeholder="{lang}wcf.urlshort.theme.identifier{/lang}">
+						<input class="long" type="text" id="identifier" name="identifier" value="{$identifier}" placeholder="{lang}wcf.shrinkr.theme.identifier{/lang}">
 					</dd>
 				</dl>
 
 				<dl class="col-xs-12 col-md-4">
-					<dt><label for="isActive">{lang}wcf.urlshort.theme.isActive{/lang}</label></dt>
+					<dt><label for="isActive">{lang}wcf.shrinkr.theme.isActive{/lang}</label></dt>
 					<dd>
 						<select id="isActive" name="isActive" class="long">
 							<option value="">{lang}wcf.global.noSelection{/lang}</option>
-							<option value="1" {if $isActiveFilter === 1}selected{/if}>{lang}wcf.urlshort.yes{/lang}</option>
-							<option value="0" {if $isActiveFilter === 0}selected{/if}>{lang}wcf.urlshort.no{/lang}</option>
+							<option value="1" {if $isActiveFilter === 1}selected{/if}>{lang}wcf.shrinkr.yes{/lang}</option>
+							<option value="0" {if $isActiveFilter === 0}selected{/if}>{lang}wcf.shrinkr.no{/lang}</option>
 						</select>
 					</dd>
 				</dl>
@@ -67,9 +67,9 @@
 <div class="paginationTop">
 	{content}
 {if $sortField == 'sortOrder'}
-	{pages print=true assign=pagesLinks application='urlshort' controller="ThemeList" link="pageNo=%d&sortField=themeID&sortOrder=ASC&title=$title&identifier=$identifier&isActive=$isActiveFilter"}
+	{pages print=true assign=pagesLinks application='shrinkr' controller="ThemeList" link="pageNo=%d&sortField=themeID&sortOrder=ASC&title=$title&identifier=$identifier&isActive=$isActiveFilter"}
 {else}
-	{pages print=true assign=pagesLinks application='urlshort' controller="ThemeList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&identifier=$identifier&isActive=$isActiveFilter"}
+	{pages print=true assign=pagesLinks application='shrinkr' controller="ThemeList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&identifier=$identifier&isActive=$isActiveFilter"}
 {/if}
 	{/content}
 </div>
@@ -77,34 +77,34 @@
 
 {if $objects|count}
 	<div class="section tabularBox">
-		<table class="table jsObjectActionContainer" data-object-action-class-name="urlshort\data\theme\ThemeAction">
+		<table class="table jsObjectActionContainer" data-object-action-class-name="shrinkr\data\theme\ThemeAction">
 			<thead>
 				<tr>
 					<th class="columnID columnThemeID{if $sortField == 'themeID'} active {unsafe:$sortOrder}{/if}" colspan="2">
-						<a href="{link controller='ThemeList' application='urlshort'}pageNo={unsafe:$pageNo}&sortField=themeID&sortOrder={if $sortField == 'themeID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
+						<a href="{link controller='ThemeList' application='shrinkr'}pageNo={unsafe:$pageNo}&sortField=themeID&sortOrder={if $sortField == 'themeID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
 							{lang}wcf.global.objectID{/lang}
 						</a>
 					</th>
 					<th class="columnTitle columnThemeIdentifier{if $sortField == 'identifier'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='ThemeList' application='urlshort'}pageNo={unsafe:$pageNo}&sortField=identifier&sortOrder={if $sortField == 'identifier' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
-							{lang}wcf.urlshort.theme.identifier{/lang}
+						<a href="{link controller='ThemeList' application='shrinkr'}pageNo={unsafe:$pageNo}&sortField=identifier&sortOrder={if $sortField == 'identifier' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
+							{lang}wcf.shrinkr.theme.identifier{/lang}
 						</a>
 					</th>
 					<th class="columnTitle columnThemeTitle{if $sortField == 'title'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='ThemeList' application='urlshort'}pageNo={unsafe:$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
-							{lang}wcf.urlshort.theme.title{/lang}
+						<a href="{link controller='ThemeList' application='shrinkr'}pageNo={unsafe:$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
+							{lang}wcf.shrinkr.theme.title{/lang}
 						</a>
 					</th>
-					<th class="columnText">{lang}wcf.urlshort.theme.colors{/lang}</th>
-					<th class="columnText">{lang}wcf.urlshort.theme.effect{/lang}</th>
-					<th class="columnDigits">{lang}wcf.urlshort.theme.status{/lang}</th>
+					<th class="columnText">{lang}wcf.shrinkr.theme.colors{/lang}</th>
+					<th class="columnText">{lang}wcf.shrinkr.theme.effect{/lang}</th>
+					<th class="columnDigits">{lang}wcf.shrinkr.theme.status{/lang}</th>
 				</tr>
 			</thead>
 			<tbody class="jsReloadPageWhenEmpty">
 				{foreach from=$objects item=object}
 					<tr class="jsObjectActionObject" data-object-id="{#$object->themeID}">
 						<td class="columnIcon">
-							<a href="{link controller='ThemeEdit' id=$object->themeID application='urlshort'}{/link}"
+							<a href="{link controller='ThemeEdit' id=$object->themeID application='shrinkr'}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->title}
 							{event name='rowButtons'}
@@ -117,16 +117,16 @@
 						</td>
 						<td class="columnText">
 							{if $object->effectIdentifier|isset && $object->effectIdentifier !== ''}
-								{lang}wcf.urlshort.theme.effect.{$object->effectIdentifier}{/lang}
+								{lang}wcf.shrinkr.theme.effect.{$object->effectIdentifier}{/lang}
 							{else}
-								{lang}wcf.urlshort.theme.effect.none{/lang}
+								{lang}wcf.shrinkr.theme.effect.none{/lang}
 							{/if}
 						</td>
 						<td class="columnDigits">
 							{if $object->isActive}
-								<span class="badge green">{lang}wcf.urlshort.theme.isActive.yes{/lang}</span>
+								<span class="badge green">{lang}wcf.shrinkr.theme.isActive.yes{/lang}</span>
 							{else}
-								<span class="badge red">{lang}wcf.urlshort.theme.isActive.no{/lang}</span>
+								<span class="badge red">{lang}wcf.shrinkr.theme.isActive.no{/lang}</span>
 							{/if}
 						</td>
 					</tr>
@@ -144,9 +144,9 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='ThemeAdd' application='urlshort'}{/link}"
+				<li><a href="{link controller='ThemeAdd' application='shrinkr'}{/link}"
 						class="button">{icon size=16 name='plus'}
-						<span>{lang}urlshort.acp.menu.link.theme.add{/lang}</span></a></li>
+						<span>{lang}shrinkr.acp.menu.link.theme.add{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
 			</ul>
 		</nav>
@@ -157,9 +157,9 @@
 	<footer class="contentFooter">
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='ThemeAdd' application='urlshort'}{/link}"
+				<li><a href="{link controller='ThemeAdd' application='shrinkr'}{/link}"
 						class="button">{icon size=16 name='plus'}
-						<span>{lang}urlshort.acp.menu.link.theme.add{/lang}</span></a></li>
+						<span>{lang}shrinkr.acp.menu.link.theme.add{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
 			</ul>
 		</nav>

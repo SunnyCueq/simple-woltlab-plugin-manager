@@ -30,7 +30,7 @@
     <span id="top"></span>
 
     <div id="pageContainer" class="pageContainer">
-        {if URLSHORT_NORMAL_PAGE_MODE}
+        {if SHRINKR_NORMAL_PAGE_MODE}
             {* Fix Missing DOM Elements (nice: -1000) - Zuerst *}
             {* Vollständige Dummy-Struktur für WoltLab's JavaScript *}
             {* Versteckt, aber vollständig, um JavaScript-Fehler zu vermeiden *}
@@ -67,7 +67,7 @@
             {* Theme Stylesheet (nice: -50) *}
             {if $activeThemeIdentifier|isset && $activeThemeIdentifier}
                 {* Load theme-specific CSS file *}
-                <link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('urlshort')}style/themes/{$activeThemeIdentifier}.css" />
+                <link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('shrinkr')}style/themes/{$activeThemeIdentifier}.css" />
             {/if}
 
             {event name='beforePageHeader'}
@@ -142,7 +142,7 @@
 
         <section id="main" class="main" role="main"{if !$__mainItemScope|empty} {unsafe:$__mainItemScope}{/if}>
             <div class="layoutBoundary">
-                {if URLSHORT_NORMAL_PAGE_MODE}
+                {if SHRINKR_NORMAL_PAGE_MODE}
                     {hascontent}
                         {if !$__sidebarLeftShow|isset}{assign var='__sidebarLeftShow' value='wcf.global.button.showSidebarLeft'|phrase}{/if}
                         {if !$__sidebarLeftHide|isset}{assign var='__sidebarLeftHide' value='wcf.global.button.hideSidebar'|phrase}{/if}
@@ -212,7 +212,7 @@
                 {/if}
 			
                 <div id="content" class="content">
-                    {if URLSHORT_NORMAL_PAGE_MODE}
+                    {if SHRINKR_NORMAL_PAGE_MODE}
                         {if MODULE_WCF_AD && $__disableAds|empty}{unsafe:$__wcf->getAdHandler()->getAds('com.woltlab.wcf.header.content')}{/if}
                         
                         {include file='userNotice'}
@@ -237,7 +237,7 @@
                     {include file='contentInteraction'}
 
                     {if MODULE_WCF_AD && $__disableAds|empty}
-                        {unsafe:$__wcf->getAdHandler()->getAds('dev.tkirch.wsc.urlshort.beforeRedirectContainer')}
+                        {unsafe:$__wcf->getAdHandler()->getAds('de.sunnyc.wsc.shrinkr.beforeRedirectContainer')}
                     {/if}
 
                     {* Featured Links Promo Badge (nice: default 0) *}
@@ -273,18 +273,18 @@
                                 {* Initial value will be set by JavaScript *}
                             </span>
                             <script data-relocate="true">
-                                require(["Benjaro/Urlshort/DiscountCountdown"], function(DiscountCountdown) {
+                                require(["Shrinkr/DiscountCountdown"], function(DiscountCountdown) {
                                     DiscountCountdown.init("discount-countdown", {unsafe:$countdownSeconds});
                                 });
                             </script>
                         {elseif $discount && $countdownSeconds|isset}
-                            <span class="badge-promo-content badge-promo-right badge">{lang}wcf.urlshort.countdown.expired{/lang}</span>
+                            <span class="badge-promo-content badge-promo-right badge">{lang}wcf.shrinkr.countdown.expired{/lang}</span>
                         {/if}
                     </div>
 
                     {event name='beforeRedirectContainer'}
 
-                    {include application="urlshort" file='__redirectContainer'}
+                    {include application="shrinkr" file='__redirectContainer'}
 
                     {* Featured Links (nice: -1) *}
                     {if $featuredLinks|count > 0}
@@ -295,11 +295,11 @@
                                     <span class="featuredLinksHeadline__icon" aria-hidden="true">
                                         {icon size=16 name="star"}
                                     </span>
-                                    <h2 class="featuredLinksHeadline__title">{lang}urlshort.featured.texts.recommended{/lang}</h2>
+                                    <h2 class="featuredLinksHeadline__title">{lang}shrinkr.featured.texts.recommended{/lang}</h2>
                                 </div>
                             </dt>
                             <dd class="featuredLinksContainer__description small">
-                                {lang}urlshort.featured.texts.discount{/lang}
+                                {lang}shrinkr.featured.texts.discount{/lang}
                             </dd>
                             <dd id="sectionResult" class="featuredLinksContainer__content">
                                 <ul class="containerList featuredLinksList">
@@ -309,7 +309,7 @@
                                     {foreach from=$featuredLinks key=featuredLink item=linkData}
                                         {event name='featuredLinkItem'}
                                                 <li>
-                                                    <a class="button small featuredLinkButton" href="{$featuredLink}" rel="noopener" aria-label="{$linkData.title}" data-link-id="{if $linkData.linkID|isset}{$linkData.linkID}{/if}" data-url-id="{if $url|isset && $url->urlID|isset}{$url->urlID}{/if}">
+                                                    <a class="button small featuredLinkButton" href="{$featuredLink}" rel="noopener" aria-label="{$linkData.title}" data-link-id="{if $linkData.linkID|isset}{$linkData.linkID}{/if}" data-url-id="{if $link|isset && $link->linkID|isset}{$link->linkID}{/if}">
                                             <span class="badge badgeUpdate">{$linkData.host}</span>
                                                 {icon size=16 name="star"} <span>{$linkData.title}</span>
                                             </a>
@@ -325,12 +325,12 @@
                         </dl>
                         
                         {* Track featured link clicks *}
-                        {if $url|isset && $url->urlID|isset}
+                        {if $link|isset && $link->linkID|isset}
                         <script data-relocate="true">
                         (function() {
                             // Track button click function
-                            function trackButtonClick(urlID, buttonType, linkID) {
-                                if (!urlID) return;
+                            function trackButtonClick(linkID, buttonType, linkID) {
+                                if (!linkID) return;
                                 
                                 // Use WoltLab's Legacy AJAX API
                                 // https://docs.woltlab.com/6.0/javascript/new-api_ajax/
@@ -339,9 +339,9 @@
                                         Ajax.apiOnce({
                                             data: {
                                                 actionName: 'trackClick',
-                                                className: 'urlshort\\data\\buttonclick\\ButtonClickAction',
+                                                className: 'shrinkr\\data\\buttonclick\\ButtonClickAction',
                                                 parameters: {
-                                                    urlID: urlID,
+                                                    linkID: linkID,
                                                     buttonType: buttonType,
                                                     linkID: linkID || null
                                                 }
@@ -362,10 +362,10 @@
                                             return;
                                         }
                                         e.preventDefault();
-                                        const urlID = parseInt(this.getAttribute('data-url-id')) || 0;
+                                        const linkID = parseInt(this.getAttribute('data-url-id')) || 0;
                                         const linkID = parseInt(this.getAttribute('data-link-id')) || null;
-                                        if (urlID > 0) {
-                                            trackButtonClick(urlID, 'featured_link', linkID);
+                                        if (linkID > 0) {
+                                            trackButtonClick(linkID, 'featured_link', linkID);
                                         }
                                         const targetUrl = this.getAttribute('href') || '#';
                                         setTimeout(() => {
@@ -383,22 +383,22 @@
                     {* Theme effects template *}
                     {if $activeThemeEffect|isset && $activeThemeEffect.identifier !== 'none'}
                         {if $activeThemeEffect.identifier === 'autumnLeaves'}
-                            {include file='__effectAutumnLeaves' application='urlshort' effect=$activeThemeEffect.settings}
+                            {include file='__effectAutumnLeaves' application='shrinkr' effect=$activeThemeEffect.settings}
                         {elseif $activeThemeEffect.identifier === 'snow'}
-                            {include file='__effectSnow' application='urlshort' effect=$activeThemeEffect.settings}
+                            {include file='__effectSnow' application='shrinkr' effect=$activeThemeEffect.settings}
                         {elseif $activeThemeEffect.identifier === 'ghosts'}
-                            {include file='__effectGhosts' application='urlshort' effect=$activeThemeEffect.settings}
+                            {include file='__effectGhosts' application='shrinkr' effect=$activeThemeEffect.settings}
                         {/if}
                         
                         {* Load additional effects (e.g. autumn leaves for Halloween) *}
                         {if $activeThemeEffect.additionalEffects|isset}
                             {foreach from=$activeThemeEffect.additionalEffects item=additionalEffect}
                                 {if $additionalEffect.identifier === 'autumnLeaves'}
-                                    {include file='__effectAutumnLeaves' application='urlshort' effect=$additionalEffect.settings}
+                                    {include file='__effectAutumnLeaves' application='shrinkr' effect=$additionalEffect.settings}
                                 {elseif $additionalEffect.identifier === 'snow'}
-                                    {include file='__effectSnow' application='urlshort' effect=$additionalEffect.settings}
+                                    {include file='__effectSnow' application='shrinkr' effect=$additionalEffect.settings}
                                 {elseif $additionalEffect.identifier === 'ghosts'}
-                                    {include file='__effectGhosts' application='urlshort' effect=$additionalEffect.settings}
+                                    {include file='__effectGhosts' application='shrinkr' effect=$additionalEffect.settings}
                                 {/if}
                             {/foreach}
                         {/if}
@@ -407,10 +407,10 @@
                     {event name='afterRedirectContainer'}
 
                     {if MODULE_WCF_AD && $__disableAds|empty}
-                        {unsafe:$__wcf->getAdHandler()->getAds('dev.tkirch.wsc.urlshort.afterRedirectContainer')}
+                        {unsafe:$__wcf->getAdHandler()->getAds('de.sunnyc.wsc.shrinkr.afterRedirectContainer')}
                     {/if}
                     
-                    {if URLSHORT_NORMAL_PAGE_MODE}
+                    {if SHRINKR_NORMAL_PAGE_MODE}
                         {include file='footer'}
                     {else}
                     <!-- {$__wcf->getRequestNonce('JAVASCRIPT_RELOCATE_POSITION')} -->

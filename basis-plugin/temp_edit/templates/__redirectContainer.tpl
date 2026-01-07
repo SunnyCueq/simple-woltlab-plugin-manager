@@ -1,5 +1,5 @@
-<div class="urlShortContainer">
-	<div class="urlShortBox">
+<div class="shrinkrContainer">
+	<div class="shrinkrBox">
 		<h1>
             {hascontent}
                 {content}
@@ -17,8 +17,8 @@
                     {* URL Title Show In Template (nice: default 0) *}
                     {if $activeThemeIdentifier|isset && $activeThemeIdentifier === 'blackweek'}
                         {* Black Week Theme: Apply glitch effect *}
-                        {if $url->urlTitle}
-                            {assign var="titleText" value=$url->urlTitle}
+                        {if $link->linkTitle}
+                            {assign var="titleText" value=$link->linkTitle}
                         {elseif $extractedTitle|isset}
                             {assign var="titleText" value=$extractedTitle}
                         {else}
@@ -29,13 +29,13 @@
                         {/if}
                     {else}
                         {* Normal theme: Plain text *}
-                        {if $url->urlTitle}{unsafe:$url->urlTitle}{elseif $extractedTitle|isset}{$extractedTitle}{/if}
+                        {if $link->linkTitle}{unsafe:$link->linkTitle}{elseif $extractedTitle|isset}{$extractedTitle}{/if}
                     {/if}
                     
                     {event name='redirectTitle'}
                 {/content}
             {hascontentelse}
-                {lang}urlshort.redirect.headline{/lang}
+                {lang}shrinkr.redirect.headline{/lang}
             {/hascontent}
         </h1>
 		<p>
@@ -47,30 +47,30 @@
                     {event name='redirectDescription'}
                 {/content}
             {hascontentelse}
-                {lang}urlshort.redirect.text.{if URLSHORT_FORWARDING_MUST_CONFIRMED}confirm{else}timer{/if}{/lang}
+                {lang}shrinkr.redirect.text.{if SHRINKR_FORWARDING_MUST_CONFIRMED}confirm{else}timer{/if}{/lang}
             {/hascontent}
         </p>
-		{if URLSHORT_FORWARDING_MUST_CONFIRMED}
+		{if SHRINKR_FORWARDING_MUST_CONFIRMED}
 			<div class="buttons">
-				<a href="{$url->url}" id="forwardButton" class="button buttonPrimary{if URLSHORT_TIME_UNTIL_FORWARDING > 0} disabled{/if}">
-					{if URLSHORT_TIME_UNTIL_FORWARDING == 1}
-						{lang}urlshort.redirect.forwardingIn{/lang} {URLSHORT_TIME_UNTIL_FORWARDING} {lang}urlshort.redirect.second{/lang}
-					{elseif URLSHORT_TIME_UNTIL_FORWARDING > 1}
-						{lang}urlshort.redirect.forwardingIn{/lang} {URLSHORT_TIME_UNTIL_FORWARDING} {lang}urlshort.redirect.seconds{/lang}
+				<a href="{$link->url}" id="forwardButton" class="button buttonPrimary{if SHRINKR_TIME_UNTIL_FORWARDING > 0} disabled{/if}">
+					{if SHRINKR_TIME_UNTIL_FORWARDING == 1}
+						{lang}shrinkr.redirect.forwardingIn{/lang} {SHRINKR_TIME_UNTIL_FORWARDING} {lang}shrinkr.redirect.second{/lang}
+					{elseif SHRINKR_TIME_UNTIL_FORWARDING > 1}
+						{lang}shrinkr.redirect.forwardingIn{/lang} {SHRINKR_TIME_UNTIL_FORWARDING} {lang}shrinkr.redirect.seconds{/lang}
 					{else}
-						{lang}urlshort.redirect.confirm{/lang}
+						{lang}shrinkr.redirect.confirm{/lang}
 					{/if}
 				</a>
 			</div>
 		{else}
 			<div class="timerContainer">
 				<a id="timer">
-					{if URLSHORT_TIME_UNTIL_FORWARDING == 1}
-						{lang}urlshort.redirect.forwardingIn{/lang} {URLSHORT_TIME_UNTIL_FORWARDING} {lang}urlshort.redirect.second{/lang}
-					{elseif URLSHORT_TIME_UNTIL_FORWARDING > 1}
-						{lang}urlshort.redirect.forwardingIn{/lang} {URLSHORT_TIME_UNTIL_FORWARDING} {lang}urlshort.redirect.seconds{/lang}
+					{if SHRINKR_TIME_UNTIL_FORWARDING == 1}
+						{lang}shrinkr.redirect.forwardingIn{/lang} {SHRINKR_TIME_UNTIL_FORWARDING} {lang}shrinkr.redirect.second{/lang}
+					{elseif SHRINKR_TIME_UNTIL_FORWARDING > 1}
+						{lang}shrinkr.redirect.forwardingIn{/lang} {SHRINKR_TIME_UNTIL_FORWARDING} {lang}shrinkr.redirect.seconds{/lang}
 					{else}
-						{lang}urlshort.redirect.forwardingNow{/lang}
+						{lang}shrinkr.redirect.forwardingNow{/lang}
 					{/if}
 				</a>
 			</div>
@@ -84,7 +84,7 @@
                     {foreach from=$customButtons item=buttonData}
                         {event name='customButtonItem'}
                         <li>
-                            <a class="button small customButton" href="{$buttonData.targetUrl}" rel="noopener" aria-label="{$buttonData.title}" data-button-id="{$buttonData.customButtonID}" data-url-id="{if $url|isset && $url->urlID|isset}{$url->urlID}{/if}">
+                            <a class="button small customButton" href="{$buttonData.targetUrl}" rel="noopener" aria-label="{$buttonData.title}" data-button-id="{$buttonData.customButtonID}" data-url-id="{if $link|isset && $link->linkID|isset}{$link->linkID}{/if}">
                                 <span>{$buttonData.title}</span>
                             </a>
                         </li>
@@ -96,12 +96,12 @@
             </div>
             
             {* Track custom button clicks *}
-            {if $url|isset && $url->urlID|isset}
+            {if $link|isset && $link->linkID|isset}
             <script data-relocate="true">
             (function() {
                 // Track button click function
-                function trackButtonClick(urlID, buttonType, linkID) {
-                    if (!urlID) return;
+                function trackButtonClick(linkID, buttonType, linkID) {
+                    if (!linkID) return;
                     
                     // Use WoltLab's Legacy AJAX API
                     // https://docs.woltlab.com/6.0/javascript/new-api_ajax/
@@ -110,9 +110,9 @@
                             Ajax.apiOnce({
                                 data: {
                                     actionName: 'trackClick',
-                                    className: 'urlshort\\data\\buttonclick\\ButtonClickAction',
+                                    className: 'shrinkr\\data\\buttonclick\\ButtonClickAction',
                                     parameters: {
-                                        urlID: urlID,
+                                        linkID: linkID,
                                         buttonType: buttonType,
                                         linkID: linkID || null
                                     }
@@ -133,10 +133,10 @@
                                 return;
                             }
                             e.preventDefault();
-                            const urlID = parseInt(this.getAttribute('data-url-id')) || 0;
+                            const linkID = parseInt(this.getAttribute('data-url-id')) || 0;
                             const buttonID = parseInt(this.getAttribute('data-button-id')) || null;
-                            if (urlID > 0) {
-                                trackButtonClick(urlID, 'custom', buttonID);
+                            if (linkID > 0) {
+                                trackButtonClick(linkID, 'custom', buttonID);
                             }
                             const targetUrl = this.getAttribute('href') || '#';
                             setTimeout(() => {
@@ -169,8 +169,8 @@
                         <small>{$codeData.label}</small>
                         <kbd class="copyableCode" data-code="{$codeData.code}">{$codeData.code}</kbd>
                         <button class="copyUrlButton" data-copy-link="{$codeData.code}"
-                                data-tooltip="{lang}wcf.urlshort.copySpecialData{/lang}"
-                                aria-label="{lang}wcf.urlshort.copySpecialData{/lang}">
+                                data-tooltip="{lang}wcf.shrinkr.copySpecialData{/lang}"
+                                aria-label="{lang}wcf.shrinkr.copySpecialData{/lang}">
                                 {icon name='copy'}
                             </button>
                         </p>
@@ -179,11 +179,11 @@
 
             {* Initialize copy functionality for discount codes *}
             <script data-relocate="true">
-                require(["JulianPfeil/Urlshort/Ui/CopyLinkButton", "Benjaro/Urlshort/Ui/DiscountCodes", "Language"],
+                require(["Shrinkr/Ui/CopyLinkButton", "Shrinkr/Ui/DiscountCodes", "Language"],
                 (CopyLinkButton, DiscountCodes, Language) => {
                     Language.addObject({
-                        'wcf.urlshort.copyUrl.success': '{jslang}wcf.urlshort.copyCode.success{/jslang}',
-                        'wcf.urlshort.copyUrl.error': '{jslang}wcf.urlshort.copyCode.error{/jslang}'
+                        'wcf.shrinkr.copyUrl.success': '{jslang}wcf.shrinkr.copyCode.success{/jslang}',
+                        'wcf.shrinkr.copyUrl.error': '{jslang}wcf.shrinkr.copyCode.error{/jslang}'
                     });
 
                     CopyLinkButton.setup();
@@ -196,8 +196,8 @@
         <script data-relocate="true">
         (function() {
             // Track button click function (shared with __forwardButton.tpl)
-            function trackButtonClick(urlID, buttonType, linkID) {
-                if (!urlID) return;
+            function trackButtonClick(linkID, buttonType, linkID) {
+                if (!linkID) return;
                 
                 // Use WoltLab's Legacy AJAX API
                 // https://docs.woltlab.com/6.0/javascript/new-api_ajax/
@@ -206,9 +206,9 @@
                         Ajax.apiOnce({
                             data: {
                                 actionName: 'trackClick',
-                                className: 'urlshort\\data\\buttonclick\\ButtonClickAction',
+                                className: 'shrinkr\\data\\buttonclick\\ButtonClickAction',
                                 parameters: {
-                                    urlID: urlID,
+                                    linkID: linkID,
                                     buttonType: buttonType,
                                     linkID: linkID || null
                                 }
@@ -246,9 +246,9 @@
                         return;
                     }
                     
-                    {if $url|isset && $url->urlID|isset}
+                    {if $link|isset && $link->linkID|isset}
                     event.preventDefault();
-                    trackButtonClick({$url->urlID}, 'forward');
+                    trackButtonClick({$link->linkID}, 'forward');
                     setTimeout(function() {
                         window.location.href = buttonUrl;
                     }, 120);
@@ -271,7 +271,7 @@
         </script>
 
         {* Enhance Forward Button (nice: 1) *}
-        {if URLSHORT_FEATUREDLINKS_ENABLECUSTOMFORWARDBUTTON}
+        {if SHRINKR_FEATUREDLINKS_ENABLECUSTOMFORWARDBUTTON}
         {* Enhanced forward button with 3D effect *}
         <script data-relocate="true">
         (function() {
@@ -362,13 +362,13 @@
                 // Replace old button
                 button.parentNode.replaceChild(newButton, button);
 
-                {if $url|isset && $url->urlID|isset}
+                {if $link|isset && $link->linkID|isset}
                 newButton.addEventListener('click', function(event) {
                     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
                         return;
                     }
                     event.preventDefault();
-                    trackButtonClick({$url->urlID}, 'forward');
+                    trackButtonClick({$link->linkID}, 'forward');
                     setTimeout(function() {
                         window.location.href = buttonUrl;
                     }, 120);
@@ -379,8 +379,8 @@
             }
             
             // Track button click function
-            function trackButtonClick(urlID, buttonType, linkID) {
-                if (!urlID) return;
+            function trackButtonClick(linkID, buttonType, linkID) {
+                if (!linkID) return;
                 
                 // Use WoltLab's Legacy AJAX API
                 // https://docs.woltlab.com/6.0/javascript/new-api_ajax/
@@ -389,9 +389,9 @@
                         Ajax.apiOnce({
                             data: {
                                 actionName: 'trackClick',
-                                className: 'urlshort\\data\\buttonclick\\ButtonClickAction',
+                                className: 'shrinkr\\data\\buttonclick\\ButtonClickAction',
                                 parameters: {
-                                    urlID: urlID,
+                                    linkID: linkID,
                                     buttonType: buttonType,
                                     linkID: linkID || null
                                 }
@@ -422,9 +422,9 @@
         {* Reaction Button (nice: 2) - Zuletzt *}
         {* Buttons: Share links, Reaktionen rechts *}
         {if MODULE_LIKE && $enableReactions && $reactionObjectID}
-            <div class="urlShortBox__footer" data-object-id="{#$reactionObjectID}">
+            <div class="shrinkrBox__footer" data-object-id="{#$reactionObjectID}">
                 {* WoltLab-Standard Layout: Wie comment__footer mit Grid *}
-                <div class="urlShortBox__reactions">
+                <div class="shrinkrBox__reactions">
                     {if $__wcf->session->getPermission('user.like.canViewLike')}
                         {* Eigenes Template mit guestReactionTypeID Support *}
                         {assign var='__reactionSummaryJson' value='[]'}
@@ -450,9 +450,9 @@
                 </div>
 
                 {* Buttons rechts (wie comment__buttons) *}
-                <div class="urlShortBox__buttons">
-                    {if URLSHORT_FEATUREDLINKS_ENABLESHAREBUTTON}
-                            <button type="button" class="button small shareButton jsTooltip" title="{lang}wcf.message.share{/lang}" aria-label="{lang}wcf.message.share{/lang}" data-link="{$shareUrl}" data-link-title="{if $url->urlTitle|isset && $url->urlTitle}{$url->urlTitle}{elseif $url->extractedTitle|isset}{$url->extractedTitle}{else}{$url->hash}{/if}">
+                <div class="shrinkrBox__buttons">
+                    {if SHRINKR_FEATUREDLINKS_ENABLESHAREBUTTON}
+                            <button type="button" class="button small shareButton jsTooltip" title="{lang}wcf.message.share{/lang}" aria-label="{lang}wcf.message.share{/lang}" data-link="{$shareUrl}" data-link-title="{if $link->linkTitle|isset && $link->linkTitle}{$link->linkTitle}{elseif $link->extractedTitle|isset}{$link->extractedTitle}{else}{$link->hash}{/if}">
                                 {icon name='share-nodes'}
                                 <span class="invisible">{lang}wcf.message.share{/lang}</span>
                             </button>
@@ -484,16 +484,16 @@
                         {* Logged-in users: Use WoltLab's standard UiReactionHandler *}
                         require(['WoltLabSuite/Core/Ui/Reaction/Handler'], function(UiReactionHandler) {
                             new UiReactionHandler('{$reactionObjectType}', {
-                                containerSelector: '.urlShortBox__footer',
+                                containerSelector: '.shrinkrBox__footer',
                                 buttonSelector: '.reactButton'
                             });
                         });
                     {elseif $enableGuestReactions}
                         {* Guests: Use GuestReactionHandler.createHandler() *}
-                        require(['Benjaro/Urlshort/Ui/GuestReactionHandler'], function(GuestReactionHandler) {
+                        require(['Shrinkr/Ui/GuestReactionHandler'], function(GuestReactionHandler) {
                             GuestReactionHandler.createHandler({
                                 objectType: '{$reactionObjectType}',
-                                containerSelector: '.urlShortBox__footer',
+                                containerSelector: '.shrinkrBox__footer',
                                 buttonSelector: '.jsGuestReactButton'
                             });
                         });
@@ -501,7 +501,7 @@
                 {/if}
 
                 {* Initialize share dialog if enabled *}
-                {if URLSHORT_FEATUREDLINKS_ENABLESHAREBUTTON}
+                {if SHRINKR_FEATUREDLINKS_ENABLESHAREBUTTON}
                 require(['WoltLabSuite/Core/Ui/Message/Share/Dialog'], function(UiMessageShareDialog) {
                     UiMessageShareDialog.setup();
                 });
@@ -515,23 +515,23 @@
 </div>
 
 
-{if URLSHORT_TIME_UNTIL_FORWARDING > 0 1}
+{if SHRINKR_TIME_UNTIL_FORWARDING > 0 1}
 <script>
-	var seconds = {URLSHORT_TIME_UNTIL_FORWARDING};
+	var seconds = {SHRINKR_TIME_UNTIL_FORWARDING};
 	
-	{if URLSHORT_FORWARDING_MUST_CONFIRMED}
+	{if SHRINKR_FORWARDING_MUST_CONFIRMED}
 		var forwardButton = document.getElementById('forwardButton');
 		var countdown = setInterval(function() {
 			seconds = seconds - 1;
 			
 			if(seconds <= 0) {
-				forwardButton.innerHTML = "{lang}urlshort.redirect.confirm{/lang}";
+				forwardButton.innerHTML = "{lang}shrinkr.redirect.confirm{/lang}";
 				forwardButton.classList.remove("disabled");
 				clearInterval(countdown);
 			} else if(seconds == 1) {
-				forwardButton.innerHTML = "{lang}urlshort.redirect.forwardingIn{/lang} " + seconds + " {lang}urlshort.redirect.second{/lang}";
+				forwardButton.innerHTML = "{lang}shrinkr.redirect.forwardingIn{/lang} " + seconds + " {lang}shrinkr.redirect.second{/lang}";
 			} else {
-				forwardButton.innerHTML = "{lang}urlshort.redirect.forwardingIn{/lang} " + seconds + " {lang}urlshort.redirect.seconds{/lang}";
+				forwardButton.innerHTML = "{lang}shrinkr.redirect.forwardingIn{/lang} " + seconds + " {lang}shrinkr.redirect.seconds{/lang}";
 			}
 		}, 1000);
 	{else}
@@ -540,13 +540,13 @@
 			seconds = seconds - 1;
 			
 			if(seconds <= 0) {
-				timer.innerHTML = "{lang}urlshort.redirect.forwardingNow{/lang}";
-				window.location.href = "{$url->url}";
+				timer.innerHTML = "{lang}shrinkr.redirect.forwardingNow{/lang}";
+				window.location.href = "{$link->url}";
 				clearInterval(countdown);
 			} else if(seconds == 1) {
-				timer.innerHTML = "{lang}urlshort.redirect.forwardingIn{/lang} " + seconds + " {lang}urlshort.redirect.second{/lang}";
+				timer.innerHTML = "{lang}shrinkr.redirect.forwardingIn{/lang} " + seconds + " {lang}shrinkr.redirect.second{/lang}";
 			} else {
-				timer.innerHTML = "{lang}urlshort.redirect.forwardingIn{/lang} " + seconds + " {lang}urlshort.redirect.seconds{/lang}";
+				timer.innerHTML = "{lang}shrinkr.redirect.forwardingIn{/lang} " + seconds + " {lang}shrinkr.redirect.seconds{/lang}";
 			}
 		}, 1000);
 	{/if}

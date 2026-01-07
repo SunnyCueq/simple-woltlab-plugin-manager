@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\custombutton;
+namespace shrinkr\data\custombutton;
 
 use wcf\data\DatabaseObject;
 use wcf\data\ITitledObject;
@@ -10,14 +10,14 @@ use wcf\system\WCF;
  * Represents a custom button for a shortened URL.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.custombutton
  *
  * @property-read int    $customButtonID  Unique ID of the custom button
- * @property-read int    $urlID          ID of the associated URL
+ * @property-read int    $linkID          ID of the associated URL
  * @property-read string $targetUrl      The target URL for the button
  * @property-read string $title          Display title for the button
  * @property-read int    $sortOrder      Sort order (lower = higher priority)
@@ -71,7 +71,7 @@ class CustomButton extends DatabaseObject implements ITitledObject
      */
     public function getUrlID(): int
     {
-        return $this->urlID;
+        return $this->linkID;
     }
 
     /**
@@ -79,7 +79,7 @@ class CustomButton extends DatabaseObject implements ITitledObject
      */
     public function canAdd(): bool
     {
-        return WCF::getSession()->getPermission('admin.urlshort.canManageCustomButtons');
+        return WCF::getSession()->getPermission('admin.shrinkr.canManageCustomButtons');
     }
 
     /**

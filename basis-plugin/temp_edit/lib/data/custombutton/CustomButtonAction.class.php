@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\custombutton;
+namespace shrinkr\data\custombutton;
 
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\ISortableAction;
@@ -12,10 +12,10 @@ use wcf\system\WCF;
  * Executes custom button-related actions.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.custombutton
  *
  * @method CustomButton       create()
@@ -27,17 +27,17 @@ class CustomButtonAction extends AbstractDatabaseObjectAction implements ISortab
     /**
      * @inheritDoc
      */
-    protected $permissionsCreate = ['admin.urlshort.canManageCustomButtons'];
+    protected $permissionsCreate = ['admin.shrinkr.canManageCustomButtons'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsUpdate = ['admin.urlshort.canManageCustomButtons'];
+    protected $permissionsUpdate = ['admin.shrinkr.canManageCustomButtons'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsDelete = ['admin.urlshort.canManageCustomButtons'];
+    protected $permissionsDelete = ['admin.shrinkr.canManageCustomButtons'];
 
     /**
      * @inheritDoc
@@ -50,7 +50,7 @@ class CustomButtonAction extends AbstractDatabaseObjectAction implements ISortab
     public function validateUpdatePosition()
     {
         // Check ACP permission
-        if (!WCF::getSession()->getPermission('admin.urlshort.canManageCustomButtons')) {
+        if (!WCF::getSession()->getPermission('admin.shrinkr.canManageCustomButtons')) {
             throw new PermissionDeniedException();
         }
 
@@ -74,7 +74,7 @@ class CustomButtonAction extends AbstractDatabaseObjectAction implements ISortab
         $offset = intval($this->parameters['data']['offset']);
 
         // Update sortOrder for each custom button
-        $sql = "UPDATE  urlshort1_custom_button
+        $sql = "UPDATE  shrinkr1_custom_button
                 SET     sortOrder = ?
                 WHERE   customButtonID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);

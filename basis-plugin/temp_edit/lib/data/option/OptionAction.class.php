@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\option;
+namespace shrinkr\data\option;
 
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\application\ApplicationHandler;
@@ -9,12 +9,12 @@ use wcf\system\WCF;
 /**
  * Handles option-related actions.
  *
- * @author      Julian Pfeil, Titus Kirch <https://julian-pfeil.de>
- * @link        https://darkwood.design/store/user-file-list/1298-julian-pfeil/
- * @copyright   2022 Julian Pfeil Websites & Co.
- * @license     License for Commercial Plugins <https://julian-pfeil.de/lizenz/>
+ * @author      Sunny C, Sunny C <https://sunnyc.de>
+ * @link        https://sunnyc.de
+ * @copyright   2022 Sunny C Websites & Co.
+ * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.option
  */
 class OptionAction extends AbstractDatabaseObjectAction
@@ -49,7 +49,7 @@ class OptionAction extends AbstractDatabaseObjectAction
      */
     public function validateGenerateRewriteRules()
     {
-        WCF::getSession()->checkPermissions(['admin.urlshort.canManageUrls']);
+        WCF::getSession()->checkPermissions(['admin.shrinkr.canManageUrls']);
     }
 
     /**
@@ -87,7 +87,7 @@ class OptionAction extends AbstractDatabaseObjectAction
             ];
         }
 
-        return WCF::getTPL()->fetch('__urlshortRewriteRulesOutput', 'urlshort', [
+        return WCF::getTPL()->fetch('__shrinkrRewriteRulesOutput', 'shrinkr', [
             'rewriteRules' => $rulesArray,
             'detectedWebserver' => $detectedWebserver,
         ]);
@@ -177,7 +177,7 @@ SNIPPET;
     {
         parent::finalizeAction();
 
-        // Listen to option changes and install demo data when urlshort_install_demo_data is enabled
+        // Listen to option changes and install demo data when shrinkr_install_demo_data is enabled
         $this->log('Event listener called for OptionAction');
         $this->log('Action name: ' . $this->getActionName());
         
@@ -191,9 +191,9 @@ SNIPPET;
             // (finalizeAction is called after the action, but transaction might not be committed yet)
             usleep(100000); // 100ms delay
             
-            $option = \wcf\data\option\Option::getOptionByName('urlshort_install_demo_data');
+            $option = \wcf\data\option\Option::getOptionByName('shrinkr_install_demo_data');
             if (!$option) {
-                $this->log('Option urlshort_install_demo_data does not exist, skipping');
+                $this->log('Option shrinkr_install_demo_data does not exist, skipping');
                 return;
             }
             
@@ -213,7 +213,7 @@ SNIPPET;
         
         // Check if demo data already exists
         try {
-            $sql = "SELECT COUNT(*) FROM urlshort1_url WHERE hash LIKE 'DEMO-%'";
+            $sql = "SELECT COUNT(*) FROM shrinkr1_link WHERE hash LIKE 'DEMO-%'";
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute();
             $existingCount = $statement->fetchSingleColumn();
@@ -233,7 +233,7 @@ SNIPPET;
         // Call the demo data installation function from the post-install script
         // We'll include the post-install script which contains the installation logic
         // The script checks if demo data already exists, so it's safe to call multiple times
-        $postInstallScript = WCF_DIR . 'urls/acp/install_dev.tkirch.wsc.urlshort_postInstall.php';
+        $postInstallScript = WCF_DIR . 'urls/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
         
         $this->log('Post-install script path: ' . $postInstallScript);
         $this->log('Post-install script exists: ' . (file_exists($postInstallScript) ? 'yes' : 'no'));
@@ -242,7 +242,7 @@ SNIPPET;
             // Temporarily set a flag to indicate we're calling from the event listener
             // This allows the post-install script to know it's being called from here
             // and not during initial installation
-            $GLOBALS['urlshort_demo_data_from_event'] = true;
+            $GLOBALS['shrinkr_demo_data_from_event'] = true;
             
             $this->log('Calling post-install script...');
             
@@ -254,7 +254,7 @@ SNIPPET;
             $this->log('Post-install script completed');
             
             // Unset the flag
-            unset($GLOBALS['urlshort_demo_data_from_event']);
+            unset($GLOBALS['shrinkr_demo_data_from_event']);
         } else {
             $this->log('Post-install script not found!');
         }

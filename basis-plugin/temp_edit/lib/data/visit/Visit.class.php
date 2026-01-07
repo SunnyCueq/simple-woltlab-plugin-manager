@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\visit;
+namespace shrinkr\data\visit;
 
 use wcf\data\DatabaseObject;
 
@@ -8,14 +8,14 @@ use wcf\data\DatabaseObject;
  * Represents a visit tracking entry.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.visit
  *
  * @property-read int    $visitID      Unique ID of the visit
- * @property-read int    $urlID        ID of the associated URL
+ * @property-read int    $linkID        ID of the associated URL
  * @property-read int    $visitTime    Timestamp of the visit
  * @property-read string|null $referrer Referrer URL (if available)
  * @property-read int|null $userID     ID of the user (if logged in)
@@ -30,7 +30,7 @@ class Visit extends DatabaseObject
      */
     public function getUrlID(): int
     {
-        return $this->urlID;
+        return $this->linkID;
     }
 
     /**

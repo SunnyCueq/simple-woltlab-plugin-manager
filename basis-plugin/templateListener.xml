@@ -2,18 +2,18 @@
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/templateListener.xsd">
 	<import>
 		<!-- admin -->
-		<templatelistener name="urlshortACPCSS">
+		<templatelistener name="shrinkrACPCSS">
 			<environment>admin</environment>
 			<templatename>header</templatename>
 			<eventname>stylesheets</eventname>
-			<templatecode><![CDATA[{if ($templateName == "urlList" || $templateName == "descriptionAdd" || $templateName == "descriptionEdit") && $__urlshort->isActiveApplication()}<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('urlshort')}acp/style/urlshort.css" />{/if}]]></templatecode>
+			<templatecode><![CDATA[{if ($templateName == "shrinkrLinkList" || $templateName == "descriptionAdd" || $templateName == "descriptionEdit") && $__shrinkr->isActiveApplication()}<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('shrinkr')}acp/style/shrinkr.css" />{/if}]]></templatecode>
 		</templatelistener>
 
-		<templatelistener name="urlshortOptionFormReloadLink">
+		<templatelistener name="shrinkrOptionFormReloadLink">
 			<environment>admin</environment>
 			<templatename>option</templatename>
 			<eventname>javascriptInclude</eventname>
-			<templatecode><![CDATA[{include file='__urlshortOptionReloadButton' application='urlshort'}]]></templatecode>
+			<templatecode><![CDATA[{include file='__shrinkrOptionReloadButton' application='shrinkr'}]]></templatecode>
 		</templatelistener>
 
 
@@ -37,15 +37,15 @@
 			<nice>1000</nice>
 		</templatelistener>
 
-		<templatelistener name="affiliateAcpStylesheet">
+		<templatelistener name="shrinkrAcpStylesheet">
 			<environment>admin</environment>
 			<templatename>header</templatename>
 			<eventname>stylesheets</eventname>
-			<templatecode><![CDATA[<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('urlshort')}acp/style/urlshort.css" />
+			<templatecode><![CDATA[<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('shrinkr')}acp/style/shrinkr.css" />
 {* Hide QR code column if option is disabled *}
-{if !URLSHORT_ENABLE_QR_CODE}
+{if !SHRINKR_ENABLE_QR_CODE}
 <style>
-    /* Hide QR code column in URL list - uses class columnQR from base plugin template */
+    /* Hide QR code column in Link list - uses class columnQR from base plugin template */
     .columnQR,
     th.columnQR,
     td.columnQR {
@@ -56,4 +56,10 @@
 		</templatelistener>
 
 	</import>
+
+	<delete>
+		<templatelistener name="urlshortACPCSS"/>
+		<templatelistener name="urlshortOptionFormReloadLink"/>
+		<templatelistener name="affiliateAcpStylesheet"/>
+	</delete>
 </data>

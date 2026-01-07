@@ -2,7 +2,7 @@
  * Valentinstag Theme Styles
  * 
  * Theme-specific styles for the valentinstag theme.
- * Applied to .urlShortContainer when this theme is active.
+ * Applied to .shrinkrContainer when this theme is active.
  * 
  * Color Palette: Rose red, Indian red, Light coral, Cherry blossom pink, Pale dogwood
  * Hex Codes: #C00645, #D05D65, #E1848C, #EAA8AC, #E7CDCE
@@ -13,7 +13,7 @@
  */
 
 /* CSS Variables - Valentine Color Palette */
-.urlShortContainer {
+.shrinkrContainer {
     /* Light Mode (default) - Romantic rose tones */
     --valentine-bg1: #E7CDCE; /* Pale dogwood - lightest */
     --valentine-bg2: #EAA8AC; /* Cherry blossom pink - light */
@@ -46,7 +46,7 @@
 
 /* Dark Mode adjustments for Valentinstag - Darker but keep romantic rose */
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer {
+    .shrinkrContainer {
         --valentine-bg1: #1a0f12; /* Dark rose-tinted */
         --valentine-bg2: #1a0f14; /* Dark rose-tinted */
         --valentine-ac1: #C00645; /* Keep Rose red */
@@ -75,8 +75,8 @@
     }
 }
 
-/* Override .urlShortBox background and borders */
-.urlShortContainer > .urlShortBox {
+/* Override .shrinkrBox background and borders */
+.shrinkrContainer > .shrinkrBox {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -84,12 +84,12 @@
 }
 
 /* Apply theme colors to text elements */
-.urlShortContainer p {
+.shrinkrContainer p {
     color: var(--valentine-text);
 }
 
 /* Title styling */
-.urlShortContainer h1 {
+.shrinkrContainer h1 {
     color: var(--valentine-text);
 }
 
@@ -110,7 +110,7 @@
                 0 4px 12px rgba(192, 6, 69, .4) !important;
 }
 
-body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badge-promo-content#rabatt {
+body[data-page-identifier="de.sunnyc.wsc.shrinkr.redirect"] .badge-promo .badge-promo-content#rabatt {
     color: var(--valentine-text) !important;
 }
 
@@ -144,12 +144,12 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
     text-shadow: 0 0 5px rgba(225, 132, 140, .4);
 }
 
-body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badge-promo-right.badge#discount-countdown {
+body[data-page-identifier="de.sunnyc.wsc.shrinkr.redirect"] .badge-promo .badge-promo-right.badge#discount-countdown {
     color: var(--valentine-text) !important;
 }
 
 /* Forward Button - Valentinstag Style */
-.urlShortContainer .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced__content {
     background: linear-gradient(180deg, var(--valentine-ac1), var(--valentine-ac2)) !important;
     color: #1a0f12 !important;
     border: 1px solid rgba(192, 6, 69, .5) !important;
@@ -157,33 +157,33 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
 }
 
 @media (prefers-color-scheme: light) {
-    .urlShortContainer .forwardButtonEnhanced__content {
+    .shrinkrContainer .forwardButtonEnhanced__content {
         color: #000 !important;
     }
 }
 
-.urlShortContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
+.shrinkrContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
     box-shadow: 0 10px 24px rgba(192, 6, 69, .45) !important;
     filter: brightness(1.1);
 }
 
 /* Discount Codes - Valentinstag Style */
-.urlShortContainer .discountCodesContainer.warning {
+.shrinkrContainer .discountCodesContainer.warning {
     background-color: rgba(192, 6, 69, .2) !important;
     border: 1px solid rgba(192, 6, 69, .4) !important;
     color: var(--valentine-text) !important;
     box-shadow: inset 0 0 10px rgba(192, 6, 69, .15) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning strong {
+.shrinkrContainer .discountCodesContainer.warning strong {
     color: var(--valentine-text) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning small {
+.shrinkrContainer .discountCodesContainer.warning small {
     color: var(--valentine-text) !important;
 }
 
-.urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+.shrinkrContainer .discountCodesContainer.warning kbd.copyableCode {
     color: #312f2c !important;
     font-weight: 900;
     background-color: rgba(225, 132, 140, .12) !important;
@@ -191,13 +191,13 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
 }
 
 @media (prefers-color-scheme: dark) {
-    .urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+    .shrinkrContainer .discountCodesContainer.warning kbd.copyableCode {
         color: unset !important;
     }
 }
 
 /* Share & React Buttons - Valentinstag Style */
-.urlShortContainer .urlShortBox__buttons .button {
+.shrinkrContainer .shrinkrBox__buttons .button {
     background-color: rgba(192, 6, 69, .3) !important;
     border: 1px solid rgba(192, 6, 69, .5) !important;
     color: var(--valentine-text) !important;
@@ -206,7 +206,7 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
     transition: all 0.2s ease;
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover {
+.shrinkrContainer .shrinkrBox__buttons .button:hover {
     background-color: rgba(192, 6, 69, .45) !important;
     border-color: rgba(192, 6, 69, .7) !important;
     box-shadow: inset 0 0 12px rgba(255, 255, 255, .2), 
@@ -215,23 +215,23 @@ body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badg
     transform: translateY(-1px);
 }
 
-.urlShortContainer .urlShortBox__buttons .button:active {
+.shrinkrContainer .shrinkrBox__buttons .button:active {
     transform: translateY(0);
     box-shadow: inset 0 0 8px rgba(255, 255, 255, .2), 
                 0 1px 4px rgba(192, 6, 69, .3) !important;
 }
 
-.urlShortContainer .urlShortBox__buttons .button:hover fa-icon {
+.shrinkrContainer .shrinkrBox__buttons .button:hover fa-icon {
     color: var(--valentine-ac3) !important; /* Light coral */
     filter: drop-shadow(0 0 4px rgba(225, 132, 140, .6));
 }
 
 /* Title Icon - Replace with Heart Emoji for Valentine's Day */
-.urlShortContainer .titleIcon fa-icon {
+.shrinkrContainer .titleIcon fa-icon {
     display: none !important; /* Hide Font Awesome icon */
 }
 
-.urlShortContainer .titleIcon::after {
+.shrinkrContainer .titleIcon::after {
     content: '💕' !important; /* Heart emoji */
     font-size: 1em !important;
     display: inline-block !important;

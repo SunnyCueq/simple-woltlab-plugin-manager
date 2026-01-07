@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\acp\page;
+namespace shrinkr\acp\page;
 
 use wcf\page\AbstractPage;
 use wcf\system\application\ApplicationHandler;
@@ -9,12 +9,12 @@ use wcf\system\WCF;
 /**
  * Displays rewrite rules in a dialog.
  *
- * @author      Julian Pfeil, Titus Kirch <https://julian-pfeil.de>
- * @link        https://darkwood.design/store/user-file-list/1298-julian-pfeil/
- * @copyright   2022 Julian Pfeil Websites & Co.
- * @license     License for Commercial Plugins <https://julian-pfeil.de/lizenz/>
+ * @author      Sunny C, Sunny C <https://sunnyc.de>
+ * @link        https://sunnyc.de
+ * @copyright   2022 Sunny C Websites & Co.
+ * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.page
  */
 class RewriteRulesPage extends AbstractPage
@@ -22,17 +22,17 @@ class RewriteRulesPage extends AbstractPage
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.urlshort.canManageUrls'];
+    public $neededPermissions = ['admin.shrinkr.canManageUrls'];
     
     /**
      * @inheritDoc
      */
-    public $templateName = '__urlshortRewriteRulesOutput';
+    public $templateName = '__shrinkrRewriteRulesOutput';
     
     /**
      * @inheritDoc
      */
-    public $templateNameApplication = 'urlshort';
+    public $templateNameApplication = 'shrinkr';
     
     /**
      * @inheritDoc

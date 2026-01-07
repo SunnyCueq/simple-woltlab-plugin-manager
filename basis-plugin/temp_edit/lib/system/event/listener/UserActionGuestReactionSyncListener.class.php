@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\system\event\listener;
+namespace shrinkr\system\event\listener;
 
-use urlshort\system\user\action\UserActionGuestReactionSyncHandler;
+use shrinkr\system\user\action\UserActionGuestReactionSyncHandler;
 use wcf\data\user\UserAction;
 use wcf\system\event\listener\IParameterizedEventListener;
 
@@ -12,10 +12,10 @@ use wcf\system\event\listener\IParameterizedEventListener;
  * 
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.event.listener
  */
 class UserActionGuestReactionSyncListener implements IParameterizedEventListener

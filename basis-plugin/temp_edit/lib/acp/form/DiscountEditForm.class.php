@@ -1,9 +1,9 @@
 <?php
 
-namespace urlshort\acp\form;
+namespace shrinkr\acp\form;
 
 use CuyZ\Valinor\Mapper\MappingError;
-use urlshort\data\discount\Discount;
+use shrinkr\data\discount\Discount;
 use wcf\http\Helper;
 use wcf\system\exception\IllegalLinkException;
 
@@ -11,10 +11,10 @@ use wcf\system\exception\IllegalLinkException;
  * Form for editing an existing discount.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.form
  */
 

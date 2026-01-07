@@ -1,6 +1,6 @@
 <?php
 
-namespace urlshort\data\featuredlink;
+namespace shrinkr\data\featuredlink;
 
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\ISortableAction;
@@ -12,10 +12,10 @@ use wcf\system\WCF;
  * Executes featured link-related actions.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.featuredlink
  *
  * @method FeaturedLink       create()
@@ -27,17 +27,17 @@ class FeaturedLinkAction extends AbstractDatabaseObjectAction implements ISortab
     /**
      * @inheritDoc
      */
-    protected $permissionsCreate = ['admin.urlshort.canManageFeaturedLinks'];
+    protected $permissionsCreate = ['admin.shrinkr.canManageFeaturedLinks'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsUpdate = ['admin.urlshort.canManageFeaturedLinks'];
+    protected $permissionsUpdate = ['admin.shrinkr.canManageFeaturedLinks'];
 
     /**
      * @inheritDoc
      */
-    protected $permissionsDelete = ['admin.urlshort.canManageFeaturedLinks'];
+    protected $permissionsDelete = ['admin.shrinkr.canManageFeaturedLinks'];
 
     /**
      * @inheritDoc
@@ -50,7 +50,7 @@ class FeaturedLinkAction extends AbstractDatabaseObjectAction implements ISortab
     public function validateUpdatePosition()
     {
         // Check ACP permission
-        if (!WCF::getSession()->getPermission('admin.urlshort.canManageFeaturedLinks')) {
+        if (!WCF::getSession()->getPermission('admin.shrinkr.canManageFeaturedLinks')) {
             throw new PermissionDeniedException();
         }
 
@@ -74,7 +74,7 @@ class FeaturedLinkAction extends AbstractDatabaseObjectAction implements ISortab
         $offset = intval($this->parameters['data']['offset']);
 
         // Update sortOrder for each featured link
-        $sql = "UPDATE  urlshort1_featured_link
+        $sql = "UPDATE  shrinkr1_featured_link
                 SET     sortOrder = ?
                 WHERE   linkID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);

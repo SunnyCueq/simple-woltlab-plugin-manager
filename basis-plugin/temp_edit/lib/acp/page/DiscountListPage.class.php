@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\acp\page;
+namespace shrinkr\acp\page;
 
-use urlshort\data\discount\DiscountList;
+use shrinkr\data\discount\DiscountList;
 use wcf\page\MultipleLinkPage;
 use wcf\system\WCF;
 
@@ -10,10 +10,10 @@ use wcf\system\WCF;
  * ACP page for listing all discounts.
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.page
  */
 
@@ -42,7 +42,7 @@ class DiscountListPage extends MultipleLinkPage
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'urlshort.acp.menu.link.discount.list';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.discount.list';
 
     /**
      * Filter: Discount value

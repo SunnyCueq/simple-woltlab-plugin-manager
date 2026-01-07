@@ -1,8 +1,8 @@
 <?php
 
-namespace urlshort\system\reaction\action;
+namespace shrinkr\system\reaction\action;
 
-use urlshort\data\guestreaction\GuestReactionEditor;
+use shrinkr\data\guestreaction\GuestReactionEditor;
 use wcf\data\like\object\LikeObject;
 use wcf\data\option\Option;
 use wcf\data\reaction\ReactionAction;
@@ -16,10 +16,10 @@ use wcf\util\JSON;
  * 
  *
  * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
+ * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins <https://benjaro.info>
  *
- * @package    dev.tkirch.wsc.urlshort
+ * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.reaction.action
  */
 class ReactionActionGuestReactionHandler
@@ -27,7 +27,7 @@ class ReactionActionGuestReactionHandler
     /**
      * Object type for likeable URLs
      */
-    private const OBJECT_TYPE = 'dev.tkirch.wsc.urlshort.likeableUrl';
+    private const OBJECT_TYPE = 'de.sunnyc.wsc.shrinkr.likeableUrl';
 
     /**
      * Handles the ReactionAction::validateAction event for react action.
@@ -59,7 +59,7 @@ class ReactionActionGuestReactionHandler
             isset($action->parameters['data']['objectType']) &&
             $action->parameters['data']['objectType'] === self::OBJECT_TYPE) {
             
-            $guestReactionsOption = Option::getOptionByName('urlshort_featuredLinks_enableGuestReactions');
+            $guestReactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableGuestReactions');
             $enableGuestReactions = $guestReactionsOption ? $guestReactionsOption->optionValue : 0;
             
             if ($enableGuestReactions) {
@@ -84,7 +84,7 @@ class ReactionActionGuestReactionHandler
         }
 
         // Check if guest reactions are enabled
-        $guestReactionsOption = Option::getOptionByName('urlshort_featuredLinks_enableGuestReactions');
+        $guestReactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableGuestReactions');
         $enableGuestReactions = $guestReactionsOption ? $guestReactionsOption->optionValue : 0;
 
         if (!$enableGuestReactions) {
@@ -131,7 +131,7 @@ class ReactionActionGuestReactionHandler
 
         // Check if guest already reacted on this object
         $sql = "SELECT  guestReactionID, reactionTypeID
-                FROM    urlshort" . WCF_N . "_guest_reaction
+                FROM    shrinkr" . WCF_N . "_guest_reaction
                 WHERE   sessionID = ?
                     AND objectType = ?
                     AND objectID = ?";
@@ -143,14 +143,14 @@ class ReactionActionGuestReactionHandler
             // Check if same reaction type - if so, remove it (toggle)
             if ($existingReaction['reactionTypeID'] == $reactionTypeID) {
                 // Remove reaction (toggle off)
-                $sql = "DELETE FROM urlshort" . WCF_N . "_guest_reaction
+                $sql = "DELETE FROM shrinkr" . WCF_N . "_guest_reaction
                         WHERE   guestReactionID = ?";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute([$existingReaction['guestReactionID']]);
                 $reactionTypeID = 0; // No reaction
             } else {
                 // Update to new reaction type
-                $sql = "UPDATE  urlshort" . WCF_N . "_guest_reaction
+                $sql = "UPDATE  shrinkr" . WCF_N . "_guest_reaction
                         SET     reactionTypeID = ?,
                                 time = ?
                         WHERE   guestReactionID = ?";
@@ -212,7 +212,7 @@ class ReactionActionGuestReactionHandler
 
         // Get guest reactions
         $sql = "SELECT  reactionTypeID, COUNT(*) as count
-                FROM    urlshort" . WCF_N . "_guest_reaction
+                FROM    shrinkr" . WCF_N . "_guest_reaction
                 WHERE   objectType = ?
                     AND objectID = ?
                 GROUP BY reactionTypeID";
