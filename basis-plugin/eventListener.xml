@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/eventListener.xsd">
+	<import>
+		<eventlistener name="urlAdd">
+			<eventclassname>urlshort\acp\form\UrlAddForm</eventclassname>
+			<eventname>readFormParameters,assignVariables,save,readData</eventname>
+			<listenerclassname>urlshort\system\event\listener\UrlAddEventListener</listenerclassname>
+			<inherit>1</inherit>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="urlEditSpecialHint">
+			<eventclassname>urlshort\acp\form\UrlEditForm</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>urlshort\system\event\listener\UrlEditFormSpecialHintListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="urlEditCustomButtons">
+			<eventclassname>urlshort\acp\form\UrlAddForm</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>urlshort\system\event\listener\UrlEditCustomButtonsListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="discountFormRemoveSpecialFields">
+			<eventclassname>urlshort\acp\form\DiscountAddForm</eventclassname>
+			<eventname>createForm</eventname>
+			<listenerclassname>urlshort\system\event\listener\DiscountFormListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="discountEditFormRemoveSpecialFields">
+			<eventclassname>urlshort\acp\form\DiscountEditForm</eventclassname>
+			<eventname>createForm</eventname>
+			<listenerclassname>urlshort\system\event\listener\DiscountFormListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="acpHeaderBeforeDisplay">
+			<eventclassname>wcf\system\template\TemplateEngine</eventclassname>
+			<eventname>beforeDisplay</eventname>
+			<listenerclassname>urlshort\system\event\listener\AcpHeaderBeforeDisplayListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="userActionGuestReactionSync">
+			<eventclassname>wcf\data\user\UserAction</eventclassname>
+			<eventname>finalizeAction</eventname>
+			<listenerclassname>urlshort\system\event\listener\UserActionGuestReactionSyncListener</listenerclassname>
+		</eventlistener>
+		<eventlistener name="reactionActionGuestReaction">
+			<eventclassname>wcf\data\reaction\ReactionAction</eventclassname>
+			<eventname>validateAction,finalizeAction</eventname>
+			<listenerclassname>urlshort\system\event\listener\ReactionActionGuestReactionListener</listenerclassname>
+		</eventlistener>
+		<eventlistener name="optionActionDemoData">
+			<eventclassname>wcf\data\option\OptionAction</eventclassname>
+			<eventname>finalizeAction</eventname>
+			<listenerclassname>urlshort\system\event\listener\OptionActionDemoDataListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="optionFormDemoData">
+			<eventclassname>wcf\acp\form\OptionForm</eventclassname>
+			<eventname>saved</eventname>
+			<listenerclassname>urlshort\system\event\listener\OptionFormDemoDataListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+	</import>
+</data>

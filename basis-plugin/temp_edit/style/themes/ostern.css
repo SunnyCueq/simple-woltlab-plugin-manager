@@ -1,0 +1,233 @@
+/**
+ * Ostern Theme Styles
+ * 
+ * Theme-specific styles for the ostern theme.
+ * Applied to .urlShortContainer when this theme is active.
+ * 
+ * @author      Sunny C. <https://benjaro.info>
+ * @copyright   2022-2025 Benjaro
+ * @license     License for Commercial Plugins <https://benjaro.info>
+ */
+
+/* CSS Variables - Easter Hues Color Scheme from SchemeColor */
+.urlShortContainer {
+    /* Light Mode (default) - Easter Hues palette */
+    --ostern-bg1: #BADBD2; /* Jet Stream - light teal */
+    --ostern-bg2: #F3EB9A; /* Flavescent - light yellow */
+    --ostern-ac1: #F47A97; /* Cyclamen - pink */
+    --ostern-ac2: #E9C05F; /* Sunray - golden yellow */
+    --ostern-ac3: #367D83; /* Teal Blue - teal */
+    --ostern-text: #2a2a2a; /* Dark text */
+
+    /* Container Background - Easter egg circles pattern with Easter Hues colors */
+    background: 
+                radial-gradient(circle 60px at 20% 30%, rgba(244, 122, 151, .25) 0%, transparent 50%),
+                radial-gradient(circle 50px at 80% 20%, rgba(243, 235, 154, .25) 0%, transparent 50%),
+                radial-gradient(circle 55px at 40% 70%, rgba(233, 192, 95, .2) 0%, transparent 50%),
+                radial-gradient(circle 45px at 90% 80%, rgba(54, 125, 131, .2) 0%, transparent 50%),
+                radial-gradient(circle 65px at 60% 50%, rgba(244, 122, 151, .15) 0%, transparent 50%),
+                repeating-conic-gradient(from 0deg at 50% 50%,
+                    var(--ostern-bg1) 0deg 60deg,
+                    var(--ostern-bg2) 60deg 120deg,
+                    var(--ostern-bg1) 120deg 180deg,
+                    var(--ostern-bg2) 180deg 240deg,
+                    var(--ostern-bg1) 240deg 300deg,
+                    var(--ostern-bg2) 300deg 360deg) !important;
+    background-color: transparent !important;
+    
+    /* Subtle box shadow */
+    box-shadow: 0 0 0 1px rgba(244, 122, 151, .2), 0 8px 24px rgba(244, 122, 151, .15);
+    isolation: isolate;
+}
+
+/* Dark Mode adjustments for Ostern - Darker but keep Easter Hues accents */
+@media (prefers-color-scheme: dark) {
+    .urlShortContainer {
+        --ostern-bg1: #1a2527; /* Dark teal-tinted */
+        --ostern-bg2: #2a2820; /* Dark yellow-tinted */
+        --ostern-ac1: #F47A97; /* Keep Cyclamen pink */
+        --ostern-ac2: #E9C05F; /* Keep Sunray golden yellow */
+        --ostern-ac3: #367D83; /* Keep Teal Blue */
+        --ostern-text: #BADBD2; /* Jet Stream - light teal text */
+
+        /* Darker background but keep Easter egg pattern */
+        background: 
+                    radial-gradient(circle 60px at 20% 30%, rgba(244, 122, 151, .18) 0%, transparent 50%),
+                    radial-gradient(circle 50px at 80% 20%, rgba(243, 235, 154, .18) 0%, transparent 50%),
+                    radial-gradient(circle 55px at 40% 70%, rgba(233, 192, 95, .15) 0%, transparent 50%),
+                    radial-gradient(circle 45px at 90% 80%, rgba(54, 125, 131, .15) 0%, transparent 50%),
+                    radial-gradient(circle 65px at 60% 50%, rgba(244, 122, 151, .12) 0%, transparent 50%),
+                    repeating-conic-gradient(from 0deg at 50% 50%,
+                        var(--ostern-bg1) 0deg 60deg,
+                        var(--ostern-bg2) 60deg 120deg,
+                        var(--ostern-bg1) 120deg 180deg,
+                        var(--ostern-bg2) 180deg 240deg,
+                        var(--ostern-bg1) 240deg 300deg,
+                        var(--ostern-bg2) 300deg 360deg) !important;
+        
+        /* Stronger shadow for Dark Mode */
+        box-shadow: 0 0 0 1px rgba(244, 122, 151, .3), 0 12px 32px rgba(0, 0, 0, .5);
+    }
+}
+
+/* Override .urlShortBox background and borders */
+.urlShortContainer > .urlShortBox {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--ostern-text);
+}
+
+/* Apply theme colors to text elements */
+.urlShortContainer p {
+    color: var(--ostern-text);
+}
+
+/* Title styling */
+.urlShortContainer h1 {
+    color: var(--ostern-text);
+}
+
+/* Promo Badge - Ostern Style */
+.badge-promo {
+    background: linear-gradient(135deg, rgba(244, 122, 151, .4), rgba(243, 235, 154, .4)) !important;
+    color: var(--ostern-text) !important;
+    border: 1px solid rgba(244, 122, 151, .5) !important;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, .3), 
+                0 4px 12px rgba(244, 122, 151, .25) !important;
+}
+
+.badge-promo .badge-promo-content#rabatt {
+    background: linear-gradient(135deg, rgba(244, 122, 151, .5), rgba(243, 235, 154, .4)) !important;
+    border: 1px solid rgba(244, 122, 151, .6) !important;
+    color: var(--ostern-text) !important;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, .3), 
+                0 2px 8px rgba(244, 122, 151, .3) !important;
+}
+
+body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badge-promo-content#rabatt {
+    color: var(--ostern-text) !important;
+}
+
+.badge-promo .badge-promo-content#rabatt .rabatt-number {
+    color: var(--ostern-text) !important;
+    font-weight: 900;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, .8);
+}
+
+@media (prefers-color-scheme: dark) {
+    .badge-promo .badge-promo-content#rabatt .rabatt-number {
+        text-shadow: none !important;
+    }
+}
+
+.badge-promo .badge-promo-right.badge#discount-countdown {
+    background: linear-gradient(135deg, rgba(233, 192, 95, .4), rgba(54, 125, 131, .4)) !important;
+    border: 1px solid rgba(233, 192, 95, .6) !important;
+    color: var(--ostern-ac3) !important; /* Teal Blue */
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, .3), 
+                0 2px 8px rgba(233, 192, 95, .3) !important;
+    font-weight: 700;
+}
+
+/* Center: Theme name (OSTERN, etc.) */
+.badge-promo .badge-promo-center {
+    background: linear-gradient(135deg, rgba(244, 122, 151, .25), rgba(233, 192, 95, .2)) !important;
+    border: 1px solid rgba(244, 122, 151, .4) !important;
+    color: var(--ostern-text) !important;
+    box-shadow: inset 0 0 10px rgba(244, 122, 151, .15) !important;
+    text-shadow: 0 0 5px rgba(233, 192, 95, .4);
+}
+
+body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badge-promo-right.badge#discount-countdown {
+    color: var(--ostern-text) !important;
+}
+
+/* Forward Button - Ostern Style */
+.urlShortContainer .forwardButtonEnhanced__content {
+    background: linear-gradient(135deg, var(--ostern-ac1), var(--ostern-ac2)) !important;
+    color: #1a2527 !important;
+    border: 1px solid rgba(244, 122, 151, .5) !important;
+    box-shadow: 0 4px 12px rgba(244, 122, 151, .3), inset 0 1px 0 rgba(255, 255, 255, .5) !important;
+}
+
+@media (prefers-color-scheme: light) {
+    .urlShortContainer .forwardButtonEnhanced__content {
+        color: #000 !important;
+    }
+}
+
+.urlShortContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
+    box-shadow: 0 6px 16px rgba(244, 122, 151, .4) !important;
+    filter: brightness(1.05);
+}
+
+/* Discount Codes - Ostern Style */
+.urlShortContainer .discountCodesContainer.warning {
+    background-color: rgba(244, 122, 151, .25) !important;
+    border: 1px solid rgba(244, 122, 151, .4) !important;
+    color: var(--ostern-text) !important;
+    box-shadow: inset 0 0 8px rgba(244, 122, 151, .15) !important;
+}
+
+.urlShortContainer .discountCodesContainer.warning strong {
+    color: var(--ostern-text) !important;
+}
+
+.urlShortContainer .discountCodesContainer.warning small {
+    color: var(--ostern-text) !important;
+}
+
+.urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+    color: #312f2c !important;
+    font-weight: 900;
+    background-color: rgba(233, 192, 95, .12) !important;
+    border: 1px solid #367D83a3 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+        color: unset !important;
+    }
+}
+
+/* Share & React Buttons - Ostern Style */
+.urlShortContainer .urlShortBox__buttons .button {
+    background-color: rgba(244, 122, 151, .3) !important;
+    border: 1px solid rgba(244, 122, 151, .5) !important;
+    color: var(--ostern-text) !important;
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, .2), 
+                0 2px 8px rgba(244, 122, 151, .2) !important;
+    transition: all 0.2s ease;
+}
+
+.urlShortContainer .urlShortBox__buttons .button:hover {
+    background-color: rgba(244, 122, 151, .45) !important;
+    border-color: rgba(244, 122, 151, .7) !important;
+    box-shadow: inset 0 0 12px rgba(255, 255, 255, .3), 
+                0 4px 12px rgba(244, 122, 151, .35) !important;
+    transform: translateY(-1px);
+}
+
+.urlShortContainer .urlShortBox__buttons .button:active {
+    transform: translateY(0);
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, .25), 
+                0 1px 4px rgba(244, 122, 151, .2) !important;
+}
+
+.urlShortContainer .urlShortBox__buttons .button:hover fa-icon {
+    color: var(--ostern-ac3) !important; /* Teal Blue */
+    filter: drop-shadow(0 0 3px rgba(54, 125, 131, .4));
+}
+
+/* Title Icon - Replace with Egg Emoji for Easter */
+.urlShortContainer .titleIcon fa-icon {
+    display: none !important; /* Hide Font Awesome icon */
+}
+
+.urlShortContainer .titleIcon::after {
+    content: '🥚' !important; /* Egg emoji */
+    font-size: 1em !important;
+    display: inline-block !important;
+}
+

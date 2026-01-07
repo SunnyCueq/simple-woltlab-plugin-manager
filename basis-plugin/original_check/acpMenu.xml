@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/acpMenu.xsd">
+	<import>
+		<acpmenuitem name="urlshort.acp.menu.link.menu">
+			<parent>wcf.acp.menu.link.application</parent>
+			<options>urlshort_active</options>
+		</acpmenuitem>
+		<acpmenuitem name="urlshort.acp.menu.link.url.list">
+			<controller>urlshort\acp\page\UrlListPage</controller>
+			<parent>urlshort.acp.menu.link.menu</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageUrls</permissions>
+		</acpmenuitem>
+		<acpmenuitem name="urlshort.acp.menu.link.url.add">
+			<controller>urlshort\acp\form\UrlAddForm</controller>
+			<parent>urlshort.acp.menu.link.url.list</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageUrls</permissions>
+			<icon>plus</icon>
+		</acpmenuitem>
+	</import>
+</data>

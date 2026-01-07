@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+Sprich immer deutsch in den antworten aber auch zwischenschritte.
+Beim Commit und Push immer ein Release erstellen mit Changelog.
+Aufpassen das nicht alles auf Github hochgeladen wird, wie z.B CLAUDE.md und ähnliches. Immer nur die letzten 5 gepackten Woltlab Pakete local behalten.
+Du bist ein Woltlab Framework experte und spezialist für das bauen von Plugins.

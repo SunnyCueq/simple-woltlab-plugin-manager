@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/templateListener.xsd">
+	<import>
+		<!-- admin -->
+		<templatelistener name="urlshortACPCSS">
+			<environment>admin</environment>
+			<templatename>header</templatename>
+			<eventname>stylesheets</eventname>
+			<templatecode><![CDATA[{if ($templateName == "urlList" || $templateName == "descriptionAdd" || $templateName == "descriptionEdit") && $__urlshort->isActiveApplication()}<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('urlshort')}acp/style/urlshort.css" />{/if}]]></templatecode>
+		</templatelistener>
+
+		<templatelistener name="urlshortOptionFormReloadLink">
+			<environment>admin</environment>
+			<templatename>option</templatename>
+			<eventname>javascriptInclude</eventname>
+			<templatecode><![CDATA[{include file='__urlshortOptionReloadButton' application='urlshort'}]]></templatecode>
+		</templatelistener>
+
+
+		<templatelistener name="acpHeaderReactionTypesAfterFirstScript">
+			<environment>admin</environment>
+			<templatename>header</templatename>
+			<eventname>stylesheets</eventname>
+			<templatecode><![CDATA[{if MODULE_LIKE}
+<script data-eager="true">
+	// Define REACTION_TYPES directly after the first script block, but BEFORE WebComponent.min.js
+	// This follows the same pattern as the frontend (headIncludeJavaScript.tpl)
+	// The script with data-eager="true" is executed immediately, before WebComponent.min.js loads
+	{if $reactionTypesJS|isset}
+		var REACTION_TYPES = {unsafe:$reactionTypesJS};
+	{else}
+		// Fallback: Load directly from ReactionHandler if variable not set
+		var REACTION_TYPES = {unsafe:$__wcf->getReactionHandler()->getReactionsJSVariable()};
+	{/if}
+</script>
+{/if}]]></templatecode>
+			<nice>1000</nice>
+		</templatelistener>
+
+		<templatelistener name="affiliateAcpStylesheet">
+			<environment>admin</environment>
+			<templatename>header</templatename>
+			<eventname>stylesheets</eventname>
+			<templatecode><![CDATA[<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('urlshort')}acp/style/urlshort.css" />
+{* Hide QR code column if option is disabled *}
+{if !URLSHORT_ENABLE_QR_CODE}
+<style>
+    /* Hide QR code column in URL list - uses class columnQR from base plugin template */
+    .columnQR,
+    th.columnQR,
+    td.columnQR {
+        display: none !important;
+    }
+</style>
+{/if}]]></templatecode>
+		</templatelistener>
+
+	</import>
+</data>

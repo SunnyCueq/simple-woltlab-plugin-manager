@@ -1,0 +1,92 @@
+# WoltLab Suite Plugin
+
+# Entpackte TAR-Dateien (werden generiert, nicht committen)
+_extracted/
+
+# TAR-Archive werden committet (für GitHub Releases)
+# *.tar
+# *.tar.gz
+
+# IDE
+.idea/
+.vscode/
+.woltlab/
+.intelephense/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+*.cache
+*.bak
+*.backup
+*.old
+
+# Composer (falls verwendet)
+vendor/
+composer.lock
+
+# Node Modules (falls Frontend-Build)
+node_modules/
+package-lock.json
+npm-debug.log
+package.json
+rollup.config.js
+
+# Build-Artefakte
+dist/
+build/
+_build_temp/
+
+# WoltLab-spezifisch
+cache/
+tmp/
+
+# Sensitive Daten
+*.key
+*.pem
+config.inc.php
+
+# Extract-Script-Output
+extract-plugin-files.log
+
+# Lokale Entwicklungs-Dokumentation (nur lokal, nicht für GitHub)
+GEDANKEN.md
+TODO.md
+PLANUNG.md
+ROADMAP.md
+TEMPLATE-ANALYSE.md
+TEMPLATE-ZUSAMMENFASSUNG.md
+IDE-SETUP.md
+GH_LOGIN_GUIDE.md
+GITHUB_SETUP.md
+QUICKSTART.md
+
+# Build-Scripts (nur lokal)
+update-tars.sh
+extract-plugin-files.sh
+CREATE_RELEASE.sh
+
+# TAR-Backups
+.tar-backups/
+
+# SQL-Fix-Scripts (nur lokal, nicht für GitHub)
+FIX_COLUMN_OWNERSHIP*.sql
+README_COLUMN_FIX.md
+BUILD_RECOVERY_TOOL.md
+REAKTIONEN_PROBLEM.md
+DEBUG_REACTION.md
+
+# Alte Package-Versionen (nur die letzten 3 behalten)
+de.julian-pfeil.urlshort.featuredLinks_v*.tar.gz
+PLUGIN_STORE_DESCRIPTION.md

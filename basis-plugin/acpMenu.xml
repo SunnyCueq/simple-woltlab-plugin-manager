@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/acpMenu.xsd">
+	<import>
+		<acpmenuitem name="urlshort.acp.menu.link.menu">
+			<parent>wcf.acp.menu.link.application</parent>
+			<options>urlshort_active</options>
+			<showorder>100</showorder>
+		</acpmenuitem>
+		<acpmenuitem name="urlshort.acp.menu.link.url.list">
+			<controller>urlshort\acp\page\UrlListPage</controller>
+			<parent>urlshort.acp.menu.link.menu</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageUrls</permissions>
+			<showorder>1</showorder>
+		</acpmenuitem>
+		<acpmenuitem name="urlshort.acp.menu.link.url.add">
+			<controller>urlshort\acp\form\UrlAddForm</controller>
+			<parent>urlshort.acp.menu.link.url.list</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageUrls</permissions>
+			<icon>plus</icon>
+			<showorder>1</showorder>
+		</acpmenuitem>
+
+		<acpmenuitem name="urlshort.acp.menu.link.discount.list">
+			<controller>urlshort\acp\page\DiscountListPage</controller>
+			<parent>urlshort.acp.menu.link.menu</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageDiscounts</permissions>
+			<showorder>2</showorder>
+		</acpmenuitem>
+		<acpmenuitem name="urlshort.acp.menu.link.discount.add">
+			<controller>urlshort\acp\form\DiscountAddForm</controller>
+			<parent>urlshort.acp.menu.link.discount.list</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageDiscounts</permissions>
+			<icon>plus</icon>
+			<showorder>1</showorder>
+		</acpmenuitem>
+
+		<acpmenuitem name="urlshort.acp.menu.link.description.list">
+			<controller>urlshort\acp\page\DescriptionListPage</controller>
+			<parent>urlshort.acp.menu.link.menu</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageDescriptions</permissions>
+			<showorder>3</showorder>
+		</acpmenuitem>
+		<acpmenuitem name="urlshort.acp.menu.link.description.add">
+			<controller>urlshort\acp\form\DescriptionAddForm</controller>
+			<parent>urlshort.acp.menu.link.description.list</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageDescriptions</permissions>
+			<icon>plus</icon>
+			<showorder>1</showorder>
+		</acpmenuitem>
+
+		<acpmenuitem name="urlshort.acp.menu.link.special.list">
+			<controller>urlshort\acp\page\SpecialListPage</controller>
+			<parent>urlshort.acp.menu.link.menu</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageSpecials</permissions>
+			<showorder>6</showorder>
+		</acpmenuitem>
+
+		<acpmenuitem name="urlshort.acp.menu.link.theme.list">
+			<controller>urlshort\acp\page\ThemeListPage</controller>
+			<parent>urlshort.acp.menu.link.menu</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageThemes</permissions>
+			<showorder>7</showorder>
+		</acpmenuitem>
+		<acpmenuitem name="urlshort.acp.menu.link.theme.add">
+			<controller>urlshort\acp\form\ThemeAddForm</controller>
+			<parent>urlshort.acp.menu.link.theme.list</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageThemes</permissions>
+			<icon>plus</icon>
+			<showorder>1</showorder>
+		</acpmenuitem>
+
+		<acpmenuitem name="urlshort.acp.menu.link.statistics.list">
+			<controller>urlshort\acp\page\ButtonClickListPage</controller>
+			<parent>urlshort.acp.menu.link.menu</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.urlshort.canManageButtonClicks</permissions>
+			<showorder>8</showorder>
+		</acpmenuitem>
+
+		<acpmenuitem name="urlshort.acp.menu.link.settings">
+			<controller>urlshort\acp\form\UrlshortSettingsForm</controller>
+			<parent>urlshort.acp.menu.link.menu</parent>
+			<options>urlshort_active</options>
+			<permissions>admin.configuration.canManageOption</permissions>
+			<icon>gear</icon>
+			<showorder>100</showorder>
+		</acpmenuitem>
+	</import>
+</data>

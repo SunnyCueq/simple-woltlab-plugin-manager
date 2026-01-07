@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/page.xsd">
+    <import>
+        <page identifier="dev.tkirch.wsc.urlshort.redirect">
+            <pageType>system</pageType>
+            <controller>urlshort\page\RedirectPage</controller>
+            <name language="de">URL-Shortener: Redirect</name>
+            <name language="en">URL-Shortener: Weiterleitung</name>
+			<options>urlshort_active</options>
+			<allowSpidersToIndex>0</allowSpidersToIndex>
+            <content language="en">
+                <title>URL-Redirect</title>
+            </content>
+            <content language="de">
+                <title>URL-Weiterleitung</title>
+            </content>
+        </page>
+    </import>
+
+    <delete>
+        <page identifier="dev.tkirch.wsc.urlshort.Redirect"/>>
+    </delete>
+</data>

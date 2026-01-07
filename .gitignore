@@ -1,0 +1,32 @@
+# Credentials und lokale Konfigurationen
+.vscode/woltlab-credentials.local.json
+*.local.json
+.env.local
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+
+# DDEV (nur generierte Dateien ignorieren)
+woltlab-dev/.ddev/.ddev-docker-compose-*
+woltlab-dev/.ddev/import.yaml
+woltlab-dev/.ddev/docker-compose.yaml
+woltlab-dev/.ddev/.gitignore
+woltlab-dev/public/
+
+# WICHTIG: Diese Verzeichnisse NIEMALS committen oder ändern!
+# WoltLab Core - nur lesen, niemals schreiben!
+woltlab-github/
+woltlab-doku-6.1/

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/cronjob.xsd">
+	<import>
+		<cronjob name="dev.tkirch.wsc.urlshort.discountCountdownCleanup">
+			<classname>urlshort\system\cronjob\DiscountCountdownCleanupCronjob</classname>
+			<description>Entfernt abgelaufene Countdowns (2 Tage nach Ablauf)</description>
+			<description language="en">Removes expired countdowns (2 days after expiration)</description>
+			<expression>30 3 * * *</expression>
+		</cronjob>
+	</import>
+</data>

@@ -1,0 +1,41 @@
+# WoltLab Plugin Development
+
+## Regeln
+
+1. **Sprache:** Deutsch
+2. **WoltLab Docs:** `/home/benny/Dokumente/docs.woltlab.com-6.0/` vor Implementierung prüfen
+3. **Keine externen Services** (Plugin Store Richtlinien)
+4. **Version erhöhen** bei jeder Änderung
+5. **Nur 5 Pakete** behalten
+
+## Workflow
+
+```bash
+./unpack.sh   # Root → _extracted/
+./build.sh    # _extracted/ → Root + Package
+```
+
+- **Root:** Package (committed)
+- **_extracted/:** Entwicklung (nicht committen)
+
+## Smarty Templates
+
+```smarty
+{#$count}              Formatierte Zahlen
+{@$timestamp}          Rohe Ausgabe (JS, data-*)
+{link id=$obj->id}     Objekt-IDs OHNE {#...}
+{$title}               Strings
+```
+
+## SCSS
+
+```scss
+@include screen-xs { }  // Smartphones
+@include screen-sm { }  // Tablets
+@include screen-lg { }  // Desktop
+```
+
+## TypeScript
+
+- `_extracted/ts/` → `_extracted/files/js/` (AMD)
+- Build kompiliert automatisch

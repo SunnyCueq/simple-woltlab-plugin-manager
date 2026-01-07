@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com https://www.woltlab.com/XSD/2019/language.xsd" languagecode="de">
+	<import>
+		<category name="wcf.urlshort">
+        <!-- Allgemeine Begriffe -->
+        <item name="wcf.urlshort.yes"><![CDATA[Ja]]></item>
+        <item name="wcf.urlshort.no"><![CDATA[Nein]]></item>
+        <item name="wcf.urlshort.button.sort"><![CDATA[Sortieren]]></item>
+        
+        <item name="wcf.urlshort.featured"><![CDATA[Dazu empfohlen]]></item>
+        <item name="wcf.urlshort.featuredLinks"><![CDATA[Empfohlene Links]]></item>
+        <item name="wcf.urlshort.hosts"><![CDATA[Host-Namen]]></item>
+        <item name="wcf.urlshort.hosts.description"><![CDATA[Geben Sie einen oder mehrere Host-Namen ein (z.B. amazon.de, ebay.de, mediamarkt.de)]]></item>
+        <item name="wcf.urlshort.special"><![CDATA[Special]]></item>
+        <item name="wcf.urlshort.special.identifier"><![CDATA[Special-Identifier]]></item>
+        <item name="wcf.urlshort.special.identifier.description"><![CDATA[Über diesen Wert nach "&special=" ist das Special verfügbar]]></item>
+		<item name="wcf.urlshort.special.manage"><![CDATA[Specials verwalten]]></item>
+		<item name="wcf.urlshort.special.edit"><![CDATA[Special bearbeiten]]></item>
+		<item name="wcf.urlshort.special.add"><![CDATA[Special hinzufügen]]></item>
+        <item name="wcf.urlshort.special.manage.description"><![CDATA[Verwalten Sie temporäre Specials für diese URL]]></item>
+		<item name="wcf.urlshort.special.noItems"><![CDATA[Es wurden keine Specials gefunden.]]></item>
+		<item name="wcf.urlshort.special.noItems.howToAdd.title"><![CDATA[Wie füge ich Specials hinzu?]]></item>
+		<item name="wcf.urlshort.special.noItems.howToAdd.text"><![CDATA[Specials können auf zwei Arten erstellt werden:]]></item>
+		<item name="wcf.urlshort.special.noItems.howToAdd.viaUrlList"><![CDATA[In der URL-Liste über den \"+\"-Button in der Special-Spalte]]></item>
+		<item name="wcf.urlshort.special.noItems.howToAdd.viaUrlEdit"><![CDATA[Über die URL-Bearbeitung im Navigationsmenü]]></item>
+		<item name="wcf.urlshort.special.noItems.dependencies.title"><![CDATA[Wovon sind Specials abhängig?]]></item>
+		<item name="wcf.urlshort.special.noItems.dependencies.text"><![CDATA[Specials benötigen eine existierende URL. Jedes Special ist einer bestimmten URL zugeordnet und wird auf der entsprechenden Redirect-Seite angezeigt.]]></item>
+		<item name="wcf.urlshort.special.noItems.impact.title"><![CDATA[Wovon hängen andere Funktionen ab?]]></item>
+		<item name="wcf.urlshort.special.noItems.impact.text"><![CDATA[Specials werden auf der Redirect-Seite angezeigt und können mit Themes, Rabatt-Codes und Countdown-Timern kombiniert werden. Featured Links können optional mit Specials verknüpft werden.]]></item>
+        <item name="wcf.urlshort.special.saveFirst"><![CDATA[Bitte speichern Sie die URL zuerst, bevor Sie Specials verwalten können.]]></item>
+        <item name="wcf.urlshort.special.deleteConfirm"><![CDATA[Möchten Sie dieses Special wirklich löschen?]]></item>
+        <item name="wcf.urlshort.special.noSpecials"><![CDATA[Noch keine Specials vorhanden]]></item>
+        <item name="wcf.urlshort.special.theme"><![CDATA[Thema]]></item>
+        <item name="wcf.urlshort.special.theme.description"><![CDATA[Wählen Sie ein Thema aus, um vorgegebene Farben zu verwenden]]></item>
+        <item name="wcf.urlshort.special.title"><![CDATA[Titel]]></item>
+        <item name="wcf.urlshort.special.title.description"><![CDATA[Titel des Specials (nur für die Übersichtsseite)]]></item>
+        <item name="wcf.urlshort.special.discount"><![CDATA[Rabatt]]></item>
+        <item name="wcf.urlshort.special.discount.description"><![CDATA[Rabatt, der auf der Weiterleitungsseite angezeigt wird (z.B. "30%")]]></item>
+        <item name="wcf.urlshort.special.codes.description"><![CDATA[Rabattcodes für das Special (überschreibt normale Codes)]]></item>
+        <item name="wcf.urlshort.special.additionalText.description"><![CDATA[Zusätzlicher HTML-Text für das Special (überschreibt normalen Zusatztext)]]></item>
+        <item name="wcf.urlshort.special.startTime"><![CDATA[Startzeit]]></item>
+        <item name="wcf.urlshort.special.startTime.description"><![CDATA[Startzeitpunkt des Specials (Datum und Uhrzeit)]]></item>
+        <item name="wcf.urlshort.special.endTime"><![CDATA[Endzeit]]></item>
+        <item name="wcf.urlshort.special.endTime.description"><![CDATA[Endzeitpunkt des Specials (Datum und Uhrzeit)]]></item>
+        <item name="wcf.urlshort.special.isActive"><![CDATA[Aktiv]]></item>
+        <item name="wcf.urlshort.special.isActive.description"><![CDATA[Das Special ist aktiviert. Der Countdown läuft weiter, auch wenn deaktiviert.]]></item>
+        <item name="wcf.urlshort.special.urlHash"><![CDATA[Kurz-URL]]></item>
+        <item name="wcf.urlshort.special.shortUrl"><![CDATA[Kurz-URL / Hash]]></item>
+        <item name="wcf.urlshort.special.shortUrl.placeholder"><![CDATA[z.B. #42 oder benjaro]]></item>
+        <item name="wcf.urlshort.special.timeRange"><![CDATA[Zeitplan]]></item>
+        <item name="wcf.urlshort.special.timeRange.start"><![CDATA[Start]]></item>
+        <item name="wcf.urlshort.special.timeRange.end"><![CDATA[Ende]]></item>
+        <item name="wcf.urlshort.special.timeRange.notConfigured"><![CDATA[Kein Zeitplan konfiguriert]]></item>
+        <item name="wcf.urlshort.special.urlList"><![CDATA[Kurz-URLs öffnen]]></item>
+        <item name="wcf.urlshort.special.refresh"><![CDATA[Liste neu laden]]></item>
+        <item name="wcf.urlshort.special.status"><![CDATA[Status]]></item>
+        <item name="wcf.urlshort.special.status.active"><![CDATA[Aktiv]]></item>
+        <item name="wcf.urlshort.special.status.expired"><![CDATA[Abgelaufen]]></item>
+        <item name="wcf.urlshort.special.status.scheduled"><![CDATA[Geplant]]></item>
+        <item name="wcf.urlshort.special.status.inactive"><![CDATA[Inaktiv]]></item>
+        <item name="wcf.urlshort.special.editUrl"><![CDATA[Kurz-URL bearbeiten]]></item>
+        <item name="wcf.urlshort.special.edit"><![CDATA[Special bearbeiten]]></item>
+        <item name="wcf.urlshort.additionalText"><![CDATA[Zusätzlicher Text]]></item>
+        <item name="wcf.urlshort.additionalText.description"><![CDATA[HTML-formatierter Text, der unter den Rabattcodes angezeigt wird]]></item>
+        <item name="wcf.urlshort.codes"><![CDATA[Rabattcodes]]></item>
+        <item name="wcf.urlshort.codes.description"><![CDATA[Ein oder mehrere Rabattcodes (Standard: BENJARO). Weitere Codes können hinzugefügt werden.]]></item>
+        <item name="wcf.urlshort.copyCode"><![CDATA[Rabattcode kopieren]]></item>
+        <item name="wcf.urlshort.copyCode.success"><![CDATA[Rabattcode wurde erfolgreich kopiert.]]></item>
+        <item name="wcf.urlshort.copyCode.error"><![CDATA[Beim Kopieren des Codes ist ein Fehler aufgetreten.]]></item>
+        <item name="wcf.urlshort.codes.single"><![CDATA[Rabattcode]]></item>
+        <item name="wcf.urlshort.codes.multiple"><![CDATA[Rabattcodes]]></item>
+        <item name="wcf.urlshort.code.clickToCopy"><![CDATA[Klicken zum Kopieren]]></item>
+        <item name="wcf.urlshort.copySpecialData"><![CDATA[Special-Daten kopieren]]></item>
+        <item name="wcf.urlshort.discount"><![CDATA[Rabatt]]></item>
+        <item name="wcf.urlshort.discount.description"><![CDATA[Geben Sie den Rabatt an, der auf der Weiterleitungsseite angezeigt werden soll.]]></item>
+        <item name="wcf.urlshort.discount.placeholder"><![CDATA[z.B. 30%, 10€ oder Black Friday]]></item>
+        <item name="wcf.urlshort.discount.favicon.description"><![CDATA[Das Favicon wird automatisch von der Ziel-URL geladen. Wenn Sie ein Favicon manuell hochladen, hat dieses Vorrang.]]></item>
+        <item name="wcf.urlshort.discount.special"><![CDATA[Special-Vorlage]]></item>
+        <item name="wcf.urlshort.discount.specialIdentifier"><![CDATA[Identifier]]></item>
+        <item name="wcf.urlshort.discount.countdown.active"><![CDATA[Aktiv]]></item>
+        <item name="wcf.urlshort.discount.countdown.expired"><![CDATA[Abgelaufen]]></item>
+        <item name="wcf.urlshort.discount.countdown.notConfigured"><![CDATA[Nicht konfiguriert]]></item>
+        <item name="wcf.urlshort.colors.primary"><![CDATA[Primäre Farben]]></item>
+        <item name="wcf.urlshort.colors.secondary"><![CDATA[Sekundäre Farben]]></item>
+        <item name="wcf.urlshort.primaryColor"><![CDATA[Hintergrundfarbe]]></item>
+        <item name="wcf.urlshort.primaryColor.description"><![CDATA[Hauptfarbe für Hintergründe und große Flächen]]></item>
+        <item name="wcf.urlshort.secondaryColor"><![CDATA[Akzentfarbe]]></item>
+        <item name="wcf.urlshort.secondaryColor.description"><![CDATA[Farbe für Akzente, Buttons und Hervorhebungen]]></item>
+        <item name="wcf.urlshort.primaryTextColor"><![CDATA[Textfarbe (Primär)]]></item>
+        <item name="wcf.urlshort.primaryTextColor.description"><![CDATA[Textfarbe auf der Hintergrundfarbe]]></item>
+        <item name="wcf.urlshort.secondaryTextColor"><![CDATA[Textfarbe (Sekundär)]]></item>
+        <item name="wcf.urlshort.secondaryTextColor.description"><![CDATA[Textfarbe auf der Akzentfarbe]]></item>
+        
+        <!-- Theme Management -->
+        <item name="wcf.urlshort.theme"><![CDATA[Theme]]></item>
+        <item name="wcf.urlshort.theme.identifier"><![CDATA[Identifier]]></item>
+        <item name="wcf.urlshort.theme.identifier.description"><![CDATA[Eindeutiger Schlüssel für das Theme (z.B. "halloween", "christmas"). Wird in der URL verwendet.]]></item>
+        <item name="wcf.urlshort.theme.identifier.error.notUnique"><![CDATA[Dieser Identifier wird bereits verwendet. Bitte wählen Sie einen anderen.]]></item>
+        <item name="wcf.urlshort.theme.title"><![CDATA[Titel]]></item>
+        <item name="wcf.urlshort.theme.title.description"><![CDATA[Anzeigename des Themes (z.B. "Halloween", "Weihnachten")]]></item>
+        <item name="wcf.urlshort.theme.effect"><![CDATA[Spezialeffekt]]></item>
+        <item name="wcf.urlshort.theme.effect.description"><![CDATA[Bestimmt, welcher visuelle Effekt bei Specials mit diesem Theme ausgeführt wird.]]></item>
+        <item name="wcf.urlshort.theme.effect.none"><![CDATA[Kein Effekt]]></item>
+        <item name="wcf.urlshort.theme.effect.autumnLeaves"><![CDATA[Herbstblätter]]></item>
+        <item name="wcf.urlshort.theme.effect.snow"><![CDATA[Schneefall]]></item>
+        <item name="wcf.urlshort.theme.effect.ghosts"><![CDATA[Halloween-Geister]]></item>
+        <item name="wcf.urlshort.theme.colors"><![CDATA[Farben]]></item>
+        <item name="wcf.urlshort.theme.color.primary"><![CDATA[Hauptfarbe]]></item>
+        <item name="wcf.urlshort.theme.color.primaryText"><![CDATA[Hauptfarbe Text]]></item>
+        <item name="wcf.urlshort.theme.color.secondary"><![CDATA[Akzentfarbe]]></item>
+        <item name="wcf.urlshort.theme.color.secondaryText"><![CDATA[Akzentfarbe Text]]></item>
+        <item name="wcf.urlshort.theme.primaryColor.description"><![CDATA[Hauptfarbe des Themes (z.B. für Hintergrund)]]></item>
+        <item name="wcf.urlshort.theme.secondaryColor.description"><![CDATA[Sekundärfarbe des Themes (z.B. für Akzente)]]></item>
+        <item name="wcf.urlshort.theme.primaryTextColor.description"><![CDATA[Textfarbe auf der Hauptfarbe]]></item>
+        <item name="wcf.urlshort.theme.secondaryTextColor.description"><![CDATA[Textfarbe auf der Sekundärfarbe]]></item>
+        <item name="wcf.urlshort.theme.isActive"><![CDATA[Aktiv]]></item>
+        <item name="wcf.urlshort.theme.isActive.yes"><![CDATA[Aktiv]]></item>
+        <item name="wcf.urlshort.theme.isActive.no"><![CDATA[Deaktiviert]]></item>
+        <item name="wcf.urlshort.theme.status"><![CDATA[Status]]></item>
+        <item name="wcf.urlshort.theme.isActive.description"><![CDATA[Nur aktive Themes können in Specials ausgewählt werden.]]></item>
+        <item name="wcf.urlshort.theme.sortOrder"><![CDATA[Sortierung]]></item>
+        <item name="wcf.urlshort.theme.sortOrder.description"><![CDATA[Reihenfolge in der Theme-Auswahl (niedrigere Werte zuerst)]]></item>
+        <item name="wcf.urlshort.theme.css.edit"><![CDATA[CSS bearbeiten]]></item>
+        <item name="wcf.urlshort.theme.css.edit.description"><![CDATA[Bearbeiten Sie die CSS-Datei dieses Themes direkt im ACP. Änderungen werden in die CSS-Datei und die Datenbank geschrieben.]]></item>
+        <item name="wcf.urlshort.theme.css.edit.warning"><![CDATA[Achtung: Bearbeiten Sie diese CSS-Datei nur, wenn Sie wissen, was Sie tun. Änderungen an vorgefertigten Themes können das Design beeinträchtigen.]]></item>
+        <item name="wcf.urlshort.theme.css.content"><![CDATA[CSS-Inhalt]]></item>
+        <item name="wcf.urlshort.theme.css.content.description"><![CDATA[Der vollständige CSS-Code für dieses Theme.]]></item>
+        
+        <!-- Form Sections -->
+        <item name="wcf.urlshort.form.section.basic"><![CDATA[Grundeinstellungen]]></item>
+        <item name="wcf.urlshort.form.section.basic.description"><![CDATA[Identifier, Titel, Effekt und Status des Themes]]></item>
+        <item name="wcf.urlshort.form.section.basic.description.description"><![CDATA[Titel und Beschreibungstext]]></item>
+        <item name="wcf.urlshort.form.section.colors"><![CDATA[Farben für Promo Badge]]></item>
+        <item name="wcf.urlshort.form.section.colors.description"><![CDATA[Primäre Farben (linke Seite) und Sekundäre Farben (rechte Seite) des Promo Badges]]></item>
+        <item name="wcf.urlshort.form.section.settings"><![CDATA[Einstellungen]]></item>
+        <item name="wcf.urlshort.form.section.settings.description"><![CDATA[Status und Sichtbarkeit]]></item>
+        <item name="wcf.urlshort.countdownStart"><![CDATA[Countdown Start]]></item>
+        <item name="wcf.urlshort.countdownStart.description"><![CDATA[Startzeit der Countdown-Aktion (Datum und Uhrzeit)]]></item>
+        <item name="wcf.urlshort.countdownEnd"><![CDATA[Countdown]]></item>
+        <item name="wcf.urlshort.countdownEnd.description"><![CDATA[Endzeit der Countdown-Aktion (Datum und Uhrzeit)]]></item>
+        <item name="wcf.urlshort.countdown.expired"><![CDATA[BEENDET]]></item>
+        <item name="wcf.urlshort.countdown.textColor"><![CDATA[Countdown Textfarbe]]></item>
+        <item name="wcf.urlshort.countdown.textColor.description"><![CDATA[Textfarbe für den Countdown-Timer]]></item>
+        <item name="wcf.urlshort.countdown.backgroundColor"><![CDATA[Countdown Hintergrundfarbe]]></item>
+        <item name="wcf.urlshort.countdown.backgroundColor.description"><![CDATA[Hintergrundfarbe für den Countdown-Timer]]></item>
+        <item name="wcf.urlshort.badge.textColor"><![CDATA[Badge Textfarbe]]></item>
+        <item name="wcf.urlshort.badge.textColor.description"><![CDATA[Textfarbe für das Badge]]></item>
+        <item name="wcf.urlshort.badge.backgroundColor"><![CDATA[Badge Hintergrundfarbe]]></item>
+        <item name="wcf.urlshort.badge.backgroundColor.description"><![CDATA[Hintergrundfarbe für das Badge]]></item>
+        
+        <item name="wcf.urlshort.url.urlTitle"><![CDATA[Titel der Ziel-URL]]></item>
+        <item name="wcf.urlshort.url.urlTitle.description"><![CDATA[Titel, der auf der Weiterleitungsseite angezeigt wird]]></item>
+        <item name="wcf.urlshort.redirect.description1"><![CDATA[Danke für dein Vertrauen, dass du dir meine Empfehlung von <a href="{$url->url}">{if $discount|isset && $discount->getImageTag(16, $url->url)}{@$discount->getImageTag(16, $url->url)} {/if}{$extractedTitle}</a> anschauen und vielleicht ausprobieren möchtest. Wichtig zu wissen wäre, dass ich sehr bewusst die Produkte aussuche von denen ich selbst überzeugt bin. Gerne kannst du dein Feedback bei uns in der Community hinterlassen.]]></item>
+        <item name="wcf.urlshort.redirect.description2"><![CDATA[Vielen Dank für dein Vertrauen! Ich lade dich herzlich dazu ein, <a href="{$url->url}">{if $discount|isset && $discount->getImageTag(16, $url->url)}{@$discount->getImageTag(16, $url->url)} {/if}{$extractedTitle}</a> zu besuchen und meine Empfehlung in Betracht zu ziehen. Es ist mir ein persönliches Anliegen, nur Produkte auszuwählen, von denen ich absolut überzeugt bin. Dein Feedback ist in meiner Community jederzeit willkommen. Probier es aus und überzeuge dich selbst!]]></item>
+        <item name="wcf.urlshort.redirect.description3"><![CDATA[Vielen Dank für dein Vertrauen, dass du dir meine Empfehlung von <a href="{$url->url}">{if $discount|isset && $discount->getImageTag(16, $url->url)}{@$discount->getImageTag(16, $url->url)} {/if}{$extractedTitle}</a> anschauen und vielleicht ausprobieren möchtest. Wichtig zu wissen ist, dass ich sehr bewusst die Produkte aussuche, von denen ich selbst überzeugt bin. Gerne kannst du dein Feedback bei mir hinterlassen. Ich lade dich herzlich ein, es auszuprobieren und dich selbst zu überzeugen!]]></item>
+        <item name="wcf.urlshort.redirect.description4"><![CDATA[Vielen Dank für dein Vertrauen! Ich lade dich herzlich dazu ein, <a href="{$url->url}">{if $discount|isset && $discount->getImageTag(16, $url->url)}{@$discount->getImageTag(16, $url->url)} {/if}{$extractedTitle}</a> zu besuchen und meine Empfehlung in Betracht zu ziehen. Ich wähle sorgfältig Produkte aus, von denen ich selbst überzeugt bin. Dein Feedback ist mir besonders wichtig, daher freue ich mich, wenn du es in der Community und unter Freunden und Familie teilst.]]></item>
+        <item name="wcf.urlshort.redirect.description5"><![CDATA[Ich schätze dein Vertrauen und möchte dich herzlich dazu einladen, <a href="{$url->url}">{if $discount|isset && $discount->getImageTag(16, $url->url)}{@$discount->getImageTag(16, $url->url)} {/if}{$extractedTitle}</a> zu besuchen und meine Empfehlungen zu entdecken. Ich wähle bewusst Produkte aus, die mich persönlich überzeugen. Teile gerne dein Feedback mit mir, denn deine Meinung ist mir sehr wichtig!]]></item>
+        <item name="wcf.urlshort.redirect.description6"><![CDATA[Ein herzliches Dankeschön für dein Vertrauen! Ich möchte dich einladen, <a href="{$url->url}">{if $discount|isset && $discount->getImageTag(16, $url->url)}{@$discount->getImageTag(16, $url->url)} {/if}{$extractedTitle}</a> zu besuchen und meine sorgfältig ausgewählten Empfehlungen in Betracht zu ziehen. Als überzeugter Nutzer dieser Produkte ist es mir ein Anliegen, dass du sie ebenfalls kennenlernst. Lass mich gerne dein Feedback in der Community wissen!]]></item>
+        <item name="wcf.urlshort.redirect.description7"><![CDATA[Dank deines Vertrauens möchte ich dich gerne dazu ermutigen, <a href="{$url->url}">{if $discount|isset && $discount->getImageTag(16, $url->url)}{@$discount->getImageTag(16, $url->url)} {/if}{$extractedTitle}</a> zu besuchen und meine Empfehlungen zu erkunden. Ich wähle nur Produkte aus, die mich persönlich überzeugt haben. Dein Feedback ist mir wichtig, daher freue ich mich, wenn du es mit mir in der Community teilst.]]></item>
+        <item name="wcf.urlshort.redirect.description8"><![CDATA[Dein Vertrauen bedeutet mir viel, daher lade ich dich herzlich dazu ein, <a href="{$url->url}">{if $discount|isset && $discount->getImageTag(16, $url->url)}{@$discount->getImageTag(16, $url->url)} {/if}{$extractedTitle}</a> zu besuchen und meine ausgewählten Empfehlungen zu entdecken. Als überzeugter Befürworter dieser Produkte ist es mir ein Anliegen, dass du sie ebenfalls in Betracht ziehst. Teile gerne dein Feedback mit mir in der Community, denn ich schätze deine Meinung!]]></item>
+        <item name="wcf.urlshort.likeableUrl.notification"><![CDATA[Jemand hat auf deine Kurz-URL reagiert]]></item>
+        <item name="wcf.urlshort.likeableUrl.notification.title"><![CDATA[Reaktion auf Kurz-URL]]></item>
+        <item name="wcf.urlshort.qrCode"><![CDATA[QR-Code]]></item>
+        <item name="wcf.urlshort.qrCode.download"><![CDATA[Herunterladen]]></item>
+        <item name="wcf.urlshort.url"><![CDATA[Kurz-URL]]></item>
+        <item name="wcf.urlshort.copyUrl"><![CDATA[Kurz-URL kopieren]]></item>
+        <item name="wcf.urlshort.copyUrl.success"><![CDATA[URL wurde erfolgreich kopiert]]></item>
+    </category>
+
+	<category name="urlshort.featured.texts">
+        <item name="urlshort.featured.texts.recommended2"><![CDATA[🫵 Beachte auch die Empfohlenen Links 👇]]></item>
+        <item name="urlshort.featured.texts.recommended"><![CDATA[Dazu empfohlen]]></item>
+        <item name="urlshort.featured.texts.discount"><![CDATA[Die weiteren Empfehlungen können unter Umständen zu günstigeren Preisen führen. Daher lohnt sich immer ein Blick.]]></item>
+    </category>
+
+	<category name="wcf.acp.group">
+		<item name="wcf.acp.group.option.admin.urlshort.canManageDiscounts"><![CDATA[Kann Rabatte verwalten]]></item>
+		<item name="wcf.acp.group.option.admin.urlshort.canManageDescriptions"><![CDATA[Kann Beschreibungen verwalten]]></item>
+		<item name="wcf.acp.group.option.admin.urlshort.canManageFeaturedLinks"><![CDATA[Kann Featured Links verwalten]]></item>
+		<item name="wcf.acp.group.option.admin.urlshort.canManageSpecials"><![CDATA[Kann Specials verwalten]]></item>
+		<item name="wcf.acp.group.option.admin.urlshort.canManageThemes"><![CDATA[Kann Themes verwalten]]></item>
+	</category>
+
+	<category name="urlshort.acp.menu">
+		<item name="urlshort.acp.menu.link.discount.list"><![CDATA[Rabatte]]></item>
+		<item name="urlshort.acp.menu.link.discount.add"><![CDATA[Rabatt hinzufügen]]></item>
+		<item name="urlshort.acp.menu.link.discount.edit"><![CDATA[Rabatt bearbeiten]]></item>
+		<item name="urlshort.acp.menu.link.description.list"><![CDATA[Beschreibungen]]></item>
+		<item name="urlshort.acp.menu.link.description.add"><![CDATA[Beschreibung hinzufügen]]></item>
+		<item name="urlshort.acp.menu.link.description.edit"><![CDATA[Beschreibung bearbeiten]]></item>
+		<item name="urlshort.acp.menu.link.featuredLink.list"><![CDATA[Featured Links]]></item>
+		<item name="urlshort.acp.menu.link.featuredLink.add"><![CDATA[Featured Link hinzufügen]]></item>
+		<item name="urlshort.acp.menu.link.featuredLink.edit"><![CDATA[Featured Link bearbeiten]]></item>
+		<item name="urlshort.acp.menu.link.customButton.list"><![CDATA[Custom Buttons]]></item>
+		<item name="urlshort.acp.menu.link.customButton.add"><![CDATA[Custom Button hinzufügen]]></item>
+		<item name="urlshort.acp.menu.link.customButton.edit"><![CDATA[Custom Button bearbeiten]]></item>
+		<item name="urlshort.acp.menu.link.settings"><![CDATA[Einstellungen]]></item>
+		<item name="urlshort.acp.menu.link.special.list"><![CDATA[Specials]]></item>
+		<item name="urlshort.acp.menu.link.special.add"><![CDATA[Special hinzufügen]]></item>
+		<item name="urlshort.acp.menu.link.special.edit"><![CDATA[Special bearbeiten]]></item>
+		<item name="urlshort.acp.menu.link.theme.list"><![CDATA[Themes]]></item>
+		<item name="urlshort.acp.menu.link.theme.add"><![CDATA[Theme hinzufügen]]></item>
+		<item name="urlshort.acp.menu.link.theme.edit"><![CDATA[Theme bearbeiten]]></item>
+	</category>
+	
+	<category name="urlshort.acp.theme">
+		<item name="urlshort.acp.theme.list.description"><![CDATA[Verwalten Sie Themes für Specials. Themes definieren Farbschemata, die in Specials verwendet werden können.]]></item>
+	</category>
+
+	<category name="wcf.acp.option">
+		<item name="wcf.acp.option.category.urlshort.featuredLinks"><![CDATA[Affiliate System]]></item>
+		<item name="wcf.acp.option.category.urlshort.featuredLinks.description"><![CDATA[Globale Einstellungen für Rabatte, Specials, Themes, Beschreibungen und visuelle Effekte]]></item>
+		
+		<!-- Reactions Category -->
+		<item name="wcf.acp.option.category.urlshort.featuredLinks.reactions"><![CDATA[Reaktionen]]></item>
+		<item name="wcf.acp.option.category.urlshort.featuredLinks.reactions.description"><![CDATA[Einstellungen für das Reaktionssystem auf Weiterleitungsseiten]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableReactions"><![CDATA[Reaktionen aktivieren]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableReactions.description"><![CDATA[Aktiviert das Reaktionssystem für Kurz-URLs auf der Weiterleitungsseite.]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableGuestReactions"><![CDATA[Gäste-Reaktionen aktivieren]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableGuestReactions.description"><![CDATA[Ermöglicht es Gästen, auf Kurz-URLs zu reagieren. Gäste-Reaktionen werden gespeichert und bei Registrierung mit dem Benutzerkonto synchronisiert.]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableShareButton"><![CDATA[Teilen-Button aktivieren]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableShareButton.description"><![CDATA[Zeigt den Teilen-Button auf der Weiterleitungsseite an.]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableCustomForwardButton"><![CDATA[3D-Button-Stil aktivieren]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableCustomForwardButton.label"><![CDATA[Weiterleitungs-Button überschreiben]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableCustomForwardButton.description"><![CDATA[Der Button passt sich automatisch an die Farben des Promo-Badges an.]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableCustomForwardButton.preview"><![CDATA[Vorschau:]]></item>
+		
+		<!-- Descriptions Category -->
+		<item name="wcf.acp.option.category.urlshort.featuredLinks.descriptions"><![CDATA[Beschreibungen]]></item>
+		<item name="wcf.acp.option.category.urlshort.featuredLinks.descriptions.description"><![CDATA[Einstellungen für Beschreibungstexte auf Weiterleitungsseiten]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableDescriptions"><![CDATA[Beschreibungen aktivieren]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_enableDescriptions.description"><![CDATA[Aktiviert die Anzeige von Beschreibungen auf der Weiterleitungsseite. Diese Einstellung überschreibt die individuelle Aktivierung/Deaktivierung einzelner Beschreibungen.]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_titleIcon"><![CDATA[Titel-Icon]]></item>
+		<item name="wcf.acp.option.urlshort_featuredLinks_titleIcon.description"><![CDATA[Wählen Sie ein Font-Awesome-Icon aus, das vor dem h1-Titel auf der Weiterleitungsseite angezeigt wird.]]></item>
+		
+		<!-- Demo Data Category -->
+		<item name="wcf.acp.option.urlshort_install_demo_data"><![CDATA[Demo-Daten installieren]]></item>
+		<item name="wcf.acp.option.urlshort_install_demo_data.description"><![CDATA[Installiert Demo-URLs (DEMO-1 bis DEMO-7) mit Beispiel-Rabatten, Specials, Featured Links und Custom Buttons für Testzwecke.]]></item>
+		
+		<!-- QR Code Option -->
+		<item name="wcf.acp.option.urlshort_enable_qr_code"><![CDATA[QR-Code-Generierung aktivieren]]></item>
+		<item name="wcf.acp.option.urlshort_enable_qr_code.description"><![CDATA[Aktiviert die Generierung und Anzeige von QR-Codes in der URL-Liste im ACP.]]></item>
+		
+		<!-- Effects Category -->
+		<item name="wcf.acp.option.category.urlshort.featuredLinks.effects"><![CDATA[Visuelle Effekte]]></item>
+		<item name="wcf.acp.option.category.urlshort.featuredLinks.effects.description"><![CDATA[Einstellungen für animierte Effekte und visuelle Anpassungen]]></item>
+		
+		<!-- Deprecated -->
+		<item name="wcf.acp.option.urlshort_special_themes"><![CDATA[Special-Themes (Veraltet)]]></item>
+		<item name="wcf.acp.option.urlshort_special_themes.description"><![CDATA[Diese Option ist veraltet. Themes werden jetzt über die Theme-Verwaltung verwaltet.]]></item>
+		<item name="wcf.acp.option.urlshort_halloween_leaves"><![CDATA[Spezialeffekte aktivieren]]></item>
+		<item name="wcf.acp.option.urlshort_halloween_leaves.description"><![CDATA[Schaltet alle themenbasierten Effekte wie Herbstblätter, Schnee oder Geister frei.]]></item>
+	</category>
+
+	<category name="wcf.urlshort.description">
+		<item name="wcf.urlshort.description.title.description"><![CDATA[Ein kurzer Titel für diese Beschreibung (nur im ACP sichtbar)]]></item>
+		<item name="wcf.urlshort.description.descriptionText"><![CDATA[Beschreibungstext]]></item>
+		<item name="wcf.urlshort.description.descriptionText.description"><![CDATA[Beschreibungstext für die Weiterleitungsseite (HTML & Smarty erlaubt).<br><br><strong>Variablen (klicken zum Einfügen):</strong><br><span class="badge descriptionVariable" data-variable="{literal}{$url}{/literal}"><fa-icon size="16" name="plus"></fa-icon> Ziel-URL</span> <span class="badge descriptionVariable" data-variable="{literal}{$extractedTitle}{/literal}"><fa-icon size="16" name="plus"></fa-icon> Seitentitel</span> <span class="badge descriptionVariable" data-variable="{literal}{$discount->discountValue}{/literal}"><fa-icon size="16" name="plus"></fa-icon> Rabatt-Titel</span><br><br><strong>Platzhalter:</strong><br><span class="badge descriptionVariable" data-variable="[[FAV_URL_LINK]]"><fa-icon size="16" name="plus"></fa-icon> Link mit Favicon</span><br><br><strong>Beispiel:</strong><br><code>Besuche {literal}{$extractedTitle}{/literal} für mehr Infos: [[FAV_URL_LINK]]</code>]]></item>
+        <item name="wcf.urlshort.description.isActive"><![CDATA[Aktiv]]></item>
+        <item name="wcf.urlshort.description.preview"><![CDATA[Vorschau]]></item>
+		<item name="wcf.urlshort.description.isActive.description"><![CDATA[Nur aktive Beschreibungen werden auf der Weiterleitungsseite zufällig angezeigt.]]></item>
+		<item name="wcf.urlshort.description.isActive.yes"><![CDATA[Aktiv]]></item>
+		<item name="wcf.urlshort.description.isActive.no"><![CDATA[Inaktiv]]></item>
+		<item name="wcf.urlshort.description.status"><![CDATA[Status]]></item>
+	</category>
+
+	<category name="wcf.urlshort.featuredLink">
+		<item name="wcf.urlshort.featuredLink.add"><![CDATA[Featured Link hinzufügen]]></item>
+		<item name="wcf.urlshort.featuredLink.addAnother"><![CDATA[Weiteren Featured Link hinzufügen]]></item>
+		<item name="wcf.urlshort.featuredLink.manage"><![CDATA[Featured Links verwalten]]></item>
+		<item name="wcf.urlshort.featuredLink.manage.description"><![CDATA[Verwalten Sie empfohlene Links für diese URL]]></item>
+		<item name="wcf.urlshort.featuredLink.noItems"><![CDATA[Es wurden keine Featured Links gefunden. Featured Links können nur über die URL-Bearbeitung hinzugefügt werden.]]></item>
+		<item name="wcf.urlshort.featuredLink.goToUrls"><![CDATA[Zu den Kurz-URLs]]></item>
+		<item name="wcf.urlshort.featuredLink.section"><![CDATA[Featured Links]]></item>
+		<item name="wcf.urlshort.featuredLink.section.description"><![CDATA[Empfohlene Links die auf der Weiterleitungsseite angezeigt werden]]></item>
+		<item name="wcf.urlshort.featuredLink.noItemsInUrl"><![CDATA[Für diese URL wurden noch keine Featured Links hinzugefügt.]]></item>
+		<item name="wcf.urlshort.featuredLink.saveFirst"><![CDATA[Bitte speichern Sie die URL zuerst, bevor Sie Featured Links verwalten können.]]></item>
+		<item name="wcf.urlshort.featuredLink.deleteConfirm"><![CDATA[Möchten Sie diesen Featured Link wirklich löschen?]]></item>
+		<item name="wcf.urlshort.featuredLink.noLinks"><![CDATA[Noch keine Featured Links vorhanden]]></item>
+		<item name="wcf.urlshort.featuredLink.url"><![CDATA[URL]]></item>
+		<item name="wcf.urlshort.featuredLink.url.description"><![CDATA[Die vollständige URL des empfohlenen Links (z.B. https://amazon.de/produkt)]]></item>
+		<item name="wcf.urlshort.featuredLink.title.description"><![CDATA[Titel des empfohlenen Links, der auf der Weiterleitungsseite angezeigt wird]]></item>
+		<item name="wcf.urlshort.featuredLink.sortOrder"><![CDATA[Sortierung]]></item>
+		<item name="wcf.urlshort.featuredLink.sortOrder.description"><![CDATA[Reihenfolge der Anzeige (niedrigere Werte werden zuerst angezeigt)]]></item>
+		<item name="wcf.urlshort.featuredLink.urlInfo"><![CDATA[Kurz-URL]]></item>
+		<item name="wcf.urlshort.featuredLink.urlInfo.description"><![CDATA[Klicken Sie auf den Hash, um zur Kurz-URL zu gelangen]]></item>
+		<item name="wcf.urlshort.featuredLink.backToUrl"><![CDATA[Zur Kurz-URL]]></item>
+		<item name="wcf.urlshort.featuredLink.forHash"><![CDATA[Ziel]]></item>
+		<item name="wcf.urlshort.featuredLink.editUrl"><![CDATA[Kurz-URL bearbeiten]]></item>
+	</category>
+
+	<category name="wcf.urlshort.url">
+		<item name="wcf.urlshort.url.targetUrl"><![CDATA[Ziel-URL]]></item>
+		<item name="wcf.urlshort.url.title"><![CDATA[Titel]]></item>
+		<item name="wcf.urlshort.url.hash"><![CDATA[Kurz-URL Hash]]></item>
+		<item name="wcf.urlshort.url.problems.brokenLink"><![CDATA[⚠️ Link könnte defekt sein]]></item>
+		<item name="wcf.urlshort.url.problems.noTitle"><![CDATA[⚠️ Kein Titel extrahiert]]></item>
+		<item name="wcf.urlshort.url.problems.checkLink"><![CDATA[Weiterleitungsseite öffnen]]></item>
+	</category>
+
+	<category name="urlshort.acp.featuredLink">
+		<item name="urlshort.acp.featuredLink.list.description"><![CDATA[Verwalten Sie empfohlene Links, die auf der Weiterleitungsseite angezeigt werden.]]></item>
+	</category>
+
+	<category name="wcf.urlshort.customButton">
+		<item name="wcf.urlshort.customButton.targetUrl"><![CDATA[Ziel-URL]]></item>
+		<item name="wcf.urlshort.customButton.targetUrl.description"><![CDATA[Die URL, zu der der Button weiterleitet]]></item>
+		<item name="wcf.urlshort.customButton.title"><![CDATA[Titel]]></item>
+		<item name="wcf.urlshort.customButton.title.description"><![CDATA[Titel des Buttons, der auf der Weiterleitungsseite angezeigt wird]]></item>
+		<item name="wcf.urlshort.customButton.sortOrder"><![CDATA[Sortierung]]></item>
+		<item name="wcf.urlshort.customButton.sortOrder.description"><![CDATA[Reihenfolge der Anzeige (niedrigere Werte werden zuerst angezeigt)]]></item>
+		<item name="wcf.urlshort.customButton.urlInfo"><![CDATA[Kurz-URL]]></item>
+		<item name="wcf.urlshort.customButton.urlInfo.description"><![CDATA[Klicken Sie auf den Hash, um zur Kurz-URL zu gelangen]]></item>
+		<item name="wcf.urlshort.customButton.backToUrl"><![CDATA[Zur Kurz-URL]]></item>
+		<item name="wcf.urlshort.customButton.forHash"><![CDATA[Ziel]]></item>
+		<item name="wcf.urlshort.customButton.editUrl"><![CDATA[Kurz-URL bearbeiten]]></item>
+		<item name="wcf.urlshort.customButton.noItems"><![CDATA[Es wurden keine Custom Buttons gefunden.]]></item>
+		<item name="wcf.urlshort.customButton.noItemsInUrl"><![CDATA[Für diese Kurz-URL wurden noch keine Custom Buttons angelegt.]]></item>
+		<item name="wcf.urlshort.customButton.goToUrls"><![CDATA[Zur URL-Liste]]></item>
+		<item name="wcf.urlshort.customButton.section"><![CDATA[Custom Buttons]]></item>
+		<item name="wcf.urlshort.customButton.section.description"><![CDATA[Verwalten Sie Custom Buttons, die direkt unter dem Forward-Button angezeigt werden.]]></item>
+		<item name="wcf.urlshort.customButton.add"><![CDATA[Custom Button hinzufügen]]></item>
+		<item name="wcf.urlshort.customButton.addAnother"><![CDATA[Weiteren Custom Button hinzufügen]]></item>
+	</category>
+
+	<category name="urlshort.acp.customButton">
+		<item name="urlshort.acp.customButton.list.description"><![CDATA[Verwalten Sie Custom Buttons, die direkt unter dem Forward-Button angezeigt werden.]]></item>
+	</category>
+
+	<category name="urlshort.acp.menu">
+		<item name="urlshort.acp.menu.link.statistics.list"><![CDATA[Statistik]]></item>
+	</category>
+
+	<category name="wcf.urlshort.buttonClick">
+		<item name="wcf.urlshort.buttonClick.total"><![CDATA[Button-Klicks]]></item>
+		<item name="wcf.urlshort.buttonClick.buttonType"><![CDATA[Button-Typ]]></item>
+		<item name="wcf.urlshort.buttonClick.type.forward"><![CDATA[Weiter-Button]]></item>
+		<item name="wcf.urlshort.buttonClick.type.featured_link"><![CDATA[Empfohlener Link]]></item>
+		<item name="wcf.urlshort.buttonClick.type.custom"><![CDATA[Benutzerdefiniert]]></item>
+		<item name="wcf.urlshort.buttonClick.clickTime"><![CDATA[Zeitpunkt]]></item>
+		<item name="wcf.urlshort.buttonClick.user"><![CDATA[Benutzer]]></item>
+		<item name="wcf.urlshort.buttonClick.user.loggedIn"><![CDATA[Eingeloggt]]></item>
+		<item name="wcf.urlshort.buttonClick.user.guest"><![CDATA[Gast]]></item>
+		<item name="wcf.urlshort.buttonClick.buttonID"><![CDATA[Button-ID]]></item>
+		<item name="wcf.urlshort.buttonClick.buttonID.tooltip"><![CDATA[Button-ID (bei Featured Links und Custom Buttons relevant)]]></item>
+		<item name="wcf.urlshort.buttonClick.clicks"><![CDATA[Klicks]]></item>
+		<item name="wcf.urlshort.buttonClick.noItems"><![CDATA[Es wurden keine Button-Klicks gefunden.]]></item>
+		<item name="wcf.urlshort.buttonClick.filter.urlID"><![CDATA[URL-ID]]></item>
+		<item name="wcf.urlshort.buttonClick.filter.dateFrom"><![CDATA[Von]]></item>
+		<item name="wcf.urlshort.buttonClick.filter.dateTo"><![CDATA[Bis]]></item>
+		<item name="wcf.urlshort.buttonClick.statistics"><![CDATA[Statistiken]]></item>
+		<item name="wcf.urlshort.buttonClick.statistics.total"><![CDATA[Gesamt]]></item>
+		<item name="wcf.urlshort.buttonClick.statistics.today"><![CDATA[Heute]]></item>
+		<item name="wcf.urlshort.buttonClick.statistics.yesterday"><![CDATA[Gestern]]></item>
+		<item name="wcf.urlshort.buttonClick.statistics.last7"><![CDATA[Letzte 7 Tage]]></item>
+		<item name="wcf.urlshort.buttonClick.statistics.period"><![CDATA[Zeitraum]]></item>
+		<item name="wcf.urlshort.buttonClick.statistics.topUrls"><![CDATA[Top URLs]]></item>
+	</category>
+	
+	<category name="wcf.urlshort.statistics">
+		<item name="wcf.urlshort.statistics.visits"><![CDATA[Besuche]]></item>
+		<item name="wcf.urlshort.statistics.visits.total"><![CDATA[Gesamt]]></item>
+		<item name="wcf.urlshort.statistics.visits.today"><![CDATA[Heute]]></item>
+		<item name="wcf.urlshort.statistics.visits.yesterday"><![CDATA[Gestern]]></item>
+		<item name="wcf.urlshort.statistics.visits.last7"><![CDATA[Letzte 7 Tage]]></item>
+		<item name="wcf.urlshort.statistics.referrer"><![CDATA[Referrer]]></item>
+		<item name="wcf.urlshort.statistics.referrer.top"><![CDATA[Top Referrer]]></item>
+		<item name="wcf.urlshort.statistics.referrer.topDomains"><![CDATA[Top Domains]]></item>
+		<item name="wcf.urlshort.statistics.combined"><![CDATA[Kombiniert]]></item>
+		<item name="wcf.urlshort.statistics.combined.total"><![CDATA[Gesamt (Button-Klicks + Besuche)]]></item>
+	</category>
+	</import>
+</language>

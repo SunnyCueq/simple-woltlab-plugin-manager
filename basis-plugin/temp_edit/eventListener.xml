@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/eventListener.xsd">
+	<import>
+		<eventlistener name="optionFormDemoData">
+			<eventclassname>wcf\acp\form\OptionForm</eventclassname>
+			<eventname>saved</eventname>
+			<listenerclassname>urlshort\system\event\listener\OptionFormDemoDataListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="userActionGuestReactionSync">
+			<eventclassname>wcf\data\user\UserAction</eventclassname>
+			<eventname>finalizeAction</eventname>
+			<listenerclassname>urlshort\system\event\listener\UserActionGuestReactionSyncListener</listenerclassname>
+		</eventlistener>
+		<eventlistener name="reactionActionGuestReaction">
+			<eventclassname>wcf\data\reaction\ReactionAction</eventclassname>
+			<eventname>validateAction,finalizeAction</eventname>
+			<listenerclassname>urlshort\system\event\listener\ReactionActionGuestReactionListener</listenerclassname>
+		</eventlistener>
+	</import>
+</data>

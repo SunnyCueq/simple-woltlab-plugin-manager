@@ -1,0 +1,25 @@
+# Build artifacts
+_build_temp/
+*.tar.gz
+*.tar
+
+# Old packages
+dev.tkirch.wsc.urlshort.6.0.2.tar.gz
+dev.tkirch.wsc.urlshort_v*.tar.gz
+
+# Old/unused files
+*.md
+!README.md
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*~

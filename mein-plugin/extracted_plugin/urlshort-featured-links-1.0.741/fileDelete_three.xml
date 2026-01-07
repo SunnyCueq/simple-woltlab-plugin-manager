@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="https://www.woltlab.com">
+    <import>
+        <file>js/3rdParty/three.min.js</file>
+    </import>
+</data>
+
+

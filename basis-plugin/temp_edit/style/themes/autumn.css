@@ -1,0 +1,271 @@
+/**
+ * Autumn / Herbst Theme Styles
+ * 
+ * Theme-specific styles for the autumn theme.
+ * Applied to .urlShortContainer when this theme is active.
+ * 
+ * @author      Sunny C. <https://benjaro.info>
+ * @copyright   2022-2025 Benjaro
+ * @license     License for Commercial Plugins <https://benjaro.info>
+ */
+
+/* CSS Variables - Color Palette #2595 from Screenshot */
+.urlShortContainer {
+    /* Dark Mode (default) - Elegant autumn palette */
+    --autumn-bg1: #2e161d; /* Very dark reddish-brown */
+    --autumn-bg2: #5b2337; /* Burgundy */
+    --autumn-stripe: #3d1a25;
+    --autumn-text: #f5e6d3; /* Warm cream text */
+    --autumn-muted: #a67871; /* Dusty rose / beige-brown */
+    --autumn-ac1: #ab4f01; /* Burnt orange / rust */
+    --autumn-ac2: #f39933; /* Golden-orange / ochre */
+
+    /* Container Background - Falling leaves diagonal pattern with Color Palette #2595 */
+    background: 
+                repeating-linear-gradient(135deg,
+                    var(--autumn-bg1) 0px,
+                    var(--autumn-bg1) 3px,
+                    var(--autumn-stripe) 3px,
+                    var(--autumn-stripe) 6px,
+                    var(--autumn-bg2) 6px,
+                    var(--autumn-bg2) 9px,
+                    transparent 9px,
+                    transparent 24px),
+                radial-gradient(ellipse 1000px 400px at 70% 25%, rgba(171, 79, 1, .18), transparent 65%),
+                radial-gradient(ellipse 900px 350px at 30% 75%, rgba(243, 153, 51, .15), transparent 65%),
+                conic-gradient(from 45deg at 50% 50%,
+                    var(--autumn-bg1) 0deg 90deg,
+                    var(--autumn-bg2) 90deg 180deg,
+                    var(--autumn-bg1) 180deg 270deg,
+                    var(--autumn-bg2) 270deg 360deg) !important;
+    background-color: transparent !important;
+    
+    /* Box shadow with warm glow */
+    box-shadow: 0 0 0 1px rgba(171, 79, 1, .3), 0 18px 40px rgba(0, 0, 0, .6);
+    isolation: isolate;
+}
+
+/* Light Mode adjustments for Autumn - Lighter but keep warm tones */
+@media (prefers-color-scheme: light) {
+    .urlShortContainer {
+        --autumn-bg1: #f5e6d3; /* Warm cream */
+        --autumn-bg2: #e8d4c4; /* Light beige */
+        --autumn-stripe: #d9c4b5;
+        --autumn-text: #5b2337; /* Burgundy text */
+        --autumn-muted: #8a5a4f; /* Muted dusty rose */
+        --autumn-ac1: #ab4f01; /* Burnt orange */
+        --autumn-ac2: #f39933; /* Golden-orange */
+
+        /* Lighter background for Light Mode - Keep falling leaves pattern */
+        background: 
+                    repeating-linear-gradient(135deg,
+                        var(--autumn-bg1) 0px,
+                        var(--autumn-bg1) 3px,
+                        var(--autumn-stripe) 3px,
+                        var(--autumn-stripe) 6px,
+                        var(--autumn-bg2) 6px,
+                        var(--autumn-bg2) 9px,
+                        transparent 9px,
+                        transparent 24px),
+                    radial-gradient(ellipse 950px 380px at 70% 25%, rgba(171, 79, 1, .12), transparent 70%),
+                    radial-gradient(ellipse 850px 330px at 30% 75%, rgba(243, 153, 51, .1), transparent 70%),
+                    conic-gradient(from 45deg at 50% 50%,
+                        var(--autumn-bg1) 0deg 90deg,
+                        var(--autumn-bg2) 90deg 180deg,
+                        var(--autumn-bg1) 180deg 270deg,
+                        var(--autumn-bg2) 270deg 360deg) !important;
+        
+        /* Softer shadow for Light Mode */
+        box-shadow: 0 0 0 1px rgba(171, 79, 1, .2), 0 12px 32px rgba(0, 0, 0, .15);
+    }
+}
+
+/* Override .urlShortBox background and borders */
+.urlShortContainer > .urlShortBox {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--autumn-text);
+}
+
+/* Apply theme colors to text elements */
+.urlShortContainer p {
+    color: var(--autumn-text);
+}
+
+/* Title styling - warm glow effect */
+.urlShortContainer h1 {
+    color: var(--autumn-text);
+    text-shadow: 0 0 10px rgba(243, 153, 51, .3);
+}
+
+/* Promo Badge - Autumn Style */
+.badge-promo {
+    /* Harmonized gradient background using Color Palette #2595 */
+    background: linear-gradient(160deg, rgba(171, 79, 1, .3), rgba(243, 153, 51, .25)),
+                linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02)) !important;
+    color: var(--autumn-text) !important;
+    border: 1px solid rgba(171, 79, 1, .3) !important;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, .1), 
+                0 10px 26px rgba(0, 0, 0, .5),
+                inset 0 0 20px rgba(171, 79, 1, .08) !important;
+}
+
+.badge-promo .badge-promo-content#rabatt {
+    background: linear-gradient(160deg, rgba(171, 79, 1, .4), rgba(243, 153, 51, .3)) !important;
+    border: 1px solid rgba(171, 79, 1, .5) !important;
+    color: var(--autumn-text) !important;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, .12), 
+                0 4px 12px rgba(171, 79, 1, .25),
+                inset 0 0 12px rgba(171, 79, 1, .2) !important;
+}
+
+body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badge-promo-content#rabatt {
+    color: var(--autumn-text) !important;
+}
+
+.badge-promo .badge-promo-content#rabatt .rabatt-number {
+    color: var(--autumn-text) !important;
+    font-weight: 900;
+    text-shadow: 0 0 10px rgba(243, 153, 51, .6), 
+                 0 0 20px rgba(243, 153, 51, .4),
+                 0 2px 4px rgba(0, 0, 0, .5);
+}
+
+.badge-promo .badge-promo-right.badge#discount-countdown {
+    background: linear-gradient(160deg, rgba(243, 153, 51, .25), rgba(166, 120, 113, .2)) !important;
+    border: 1px solid rgba(243, 153, 51, .5) !important;
+    color: var(--autumn-ac2) !important; /* Golden-orange */
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, .12), 
+                0 4px 12px rgba(243, 153, 51, .3),
+                inset 0 0 12px rgba(243, 153, 51, .2),
+                0 0 20px rgba(243, 153, 51, .25) !important;
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(243, 153, 51, .5), 
+                 0 0 16px rgba(243, 153, 51, .3),
+                 0 2px 4px rgba(0, 0, 0, .5);
+}
+
+/* Center: Theme name (HERBST, etc.) */
+.badge-promo .badge-promo-center {
+    background: linear-gradient(160deg, rgba(166, 120, 113, .25), rgba(217, 119, 85, .2)) !important;
+    border: 1px solid rgba(166, 120, 113, .4) !important;
+    color: var(--autumn-text) !important;
+    box-shadow: inset 0 0 10px rgba(166, 120, 113, .15) !important;
+    text-shadow: 0 0 5px rgba(243, 153, 51, .4);
+}
+
+body[data-page-identifier="dev.tkirch.wsc.urlshort.redirect"] .badge-promo .badge-promo-right.badge#discount-countdown {
+    color: var(--autumn-text) !important;
+}
+
+/* Forward Button - Autumn Style */
+.urlShortContainer .forwardButtonEnhanced__content {
+    background: linear-gradient(180deg, var(--autumn-ac1), var(--autumn-ac2)) !important;
+    color: #2e161d !important;
+    border: 1px solid rgba(255, 255, 255, .15) !important;
+    box-shadow: 0 14px 34px rgba(243, 153, 51, .25), inset 0 1px 0 rgba(255, 255, 255, .4) !important;
+}
+
+@media (prefers-color-scheme: light) {
+    .urlShortContainer .forwardButtonEnhanced__content {
+        color: #000 !important;
+    }
+}
+
+.urlShortContainer .forwardButtonEnhanced:hover .forwardButtonEnhanced__content {
+    box-shadow: 0 18px 40px rgba(243, 153, 51, .3) !important;
+    filter: saturate(1.05);
+}
+
+/* Discount Codes - Autumn Style */
+.urlShortContainer .discountCodesContainer.warning {
+    background-color: rgba(171, 79, 1, .3) !important;
+    border: 1px solid rgba(171, 79, 1, .4) !important;
+    color: var(--autumn-text) !important;
+    box-shadow: inset 0 0 12px rgba(171, 79, 1, .12) !important;
+}
+
+.urlShortContainer .discountCodesContainer.warning strong {
+    color: var(--autumn-text) !important;
+}
+
+.urlShortContainer .discountCodesContainer.warning small {
+    color: var(--autumn-text) !important;
+}
+
+/* Discount Code Highlight (kbd) */
+.urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+    color: #312f2c !important;
+    font-weight: 900;
+    background-color: rgba(243, 153, 51, .12) !important;
+    border: 1px solid #2e161da3 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .urlShortContainer .discountCodesContainer.warning kbd.copyableCode {
+        color: unset !important;
+    }
+}
+
+/* Old Price (Strikethrough) */
+.urlShortContainer s {
+    color: var(--autumn-ac1) !important;
+    text-decoration-thickness: .14em;
+    opacity: .9;
+}
+
+/* New Price / Highlight */
+.urlShortContainer .deal-bw__new {
+    color: var(--autumn-ac2) !important;
+    font-weight: 900;
+}
+
+/* Note Text */
+.urlShortContainer .deal-bw__note {
+    margin-left: .35rem;
+    opacity: .85;
+    color: var(--autumn-muted) !important;
+}
+
+/* Share & React Buttons - Autumn Style */
+.urlShortContainer .urlShortBox__buttons .button {
+    background-color: rgba(171, 79, 1, .3) !important;
+    border: 1px solid rgba(171, 79, 1, .4) !important;
+    color: var(--autumn-text) !important;
+    box-shadow: inset 0 0 8px rgba(171, 79, 1, .15), 
+                0 2px 8px rgba(0, 0, 0, .3) !important;
+    transition: all 0.2s ease;
+}
+
+.urlShortContainer .urlShortBox__buttons .button:hover {
+    background-color: rgba(171, 79, 1, .45) !important;
+    border-color: rgba(171, 79, 1, .6) !important;
+    box-shadow: inset 0 0 12px rgba(171, 79, 1, .2), 
+                0 4px 12px rgba(171, 79, 1, .4),
+                0 0 20px rgba(171, 79, 1, .25) !important;
+    transform: translateY(-1px);
+}
+
+.urlShortContainer .urlShortBox__buttons .button:active {
+    transform: translateY(0);
+    box-shadow: inset 0 0 8px rgba(171, 79, 1, .2), 
+                0 1px 4px rgba(0, 0, 0, .3) !important;
+}
+
+.urlShortContainer .urlShortBox__buttons .button:hover fa-icon {
+    color: var(--autumn-ac2) !important;
+    filter: drop-shadow(0 0 4px rgba(243, 153, 51, .5));
+}
+
+/* Title Icon - Replace with Leaf Emoji for Autumn */
+.urlShortContainer .titleIcon fa-icon {
+    display: none !important; /* Hide Font Awesome icon */
+}
+
+.urlShortContainer .titleIcon::after {
+    content: '🍂' !important; /* Leaf emoji */
+    font-size: 1em !important;
+    display: inline-block !important;
+}
+

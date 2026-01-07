@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/option.xsd">
+	<import>
+		<options>
+			<!-- Hidden Branding Option -->
+			<option name="urlshort_brandingfree">
+				<categoryname>urlshort.general</categoryname>
+				<showorder>100</showorder>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+				<hidden>1</hidden>
+			</option>
+
+			<!-- Reactions -->
+			<option name="urlshort_featuredLinks_enableReactions">
+				<categoryname>urlshort.featuredLinks</categoryname>
+				<showorder>10</showorder>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+			</option>
+			<option name="urlshort_featuredLinks_enableGuestReactions">
+				<categoryname>urlshort.featuredLinks</categoryname>
+				<showorder>11</showorder>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+			</option>
+			<option name="urlshort_featuredLinks_enableShareButton">
+				<categoryname>urlshort.featuredLinks</categoryname>
+				<showorder>12</showorder>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+			</option>
+
+		<!-- Descriptions -->
+		<option name="urlshort_featuredLinks_enableDescriptions">
+			<categoryname>urlshort.featuredLinks</categoryname>
+			<showorder>20</showorder>
+			<optiontype>boolean</optiontype>
+			<defaultvalue>1</defaultvalue>
+		</option>
+
+		<!-- Title Icon -->
+		<option name="urlshort_featuredLinks_titleIcon">
+			<categoryname>urlshort.featuredLinks</categoryname>
+			<showorder>30</showorder>
+			<optiontype>icon</optiontype>
+			<defaultvalue>star;false</defaultvalue>
+		</option>
+
+		<!-- Custom Forward Button Style -->
+		<option name="urlshort_featuredLinks_enableCustomForwardButton">
+			<categoryname>urlshort.featuredLinks</categoryname>
+			<showorder>25</showorder>
+			<optiontype>customForwardButton</optiontype>
+			<defaultvalue>1</defaultvalue>
+		</option>
+
+		<!-- DEPRECATED: Will be replaced by Theme Management System -->
+			<option name="urlshort_special_themes">
+				<categoryname>urlshort.featuredLinks</categoryname>
+				<showorder>40</showorder>
+				<optiontype>textarea</optiontype>
+				<defaultvalue>halloween:Halloween:rgba(139, 0, 0, 1):rgba(255, 140, 0, 1):rgba(255, 255, 255, 1):rgba(255, 255, 255, 1)
+blackweek:Black Week:rgba(0, 0, 0, 1):rgba(255, 215, 0, 1):rgba(255, 255, 255, 1):rgba(0, 0, 0, 1)
+christmas:Weihnachten:rgba(220, 20, 60, 1):rgba(34, 139, 34, 1):rgba(255, 255, 255, 1):rgba(255, 255, 255, 1)
+summer:Sommer:rgba(255, 215, 0, 1):rgba(135, 206, 250, 1):rgba(0, 0, 0, 1):rgba(0, 0, 0, 1)
+default:Standard:rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 255, 1)</defaultvalue>
+				<hidden>1</hidden>
+			</option>
+
+			<!-- Halloween Leaves Effect -->
+			<option name="urlshort_halloween_leaves">
+				<categoryname>urlshort.featuredLinks</categoryname>
+				<showorder>50</showorder>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+			</option>
+
+			<!-- Demo Data Installation -->
+			<option name="urlshort_install_demo_data">
+				<categoryname>urlshort.featuredLinks</categoryname>
+				<showorder>1</showorder>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>0</defaultvalue>
+			</option>
+
+			<!-- QR Code Generation -->
+			<option name="urlshort_enable_qr_code">
+				<categoryname>urlshort.featuredLinks</categoryname>
+				<showorder>110</showorder>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>0</defaultvalue>
+			</option>
+
+		</options>
+
+		<categories>
+			<category name="urlshort.featuredLinks">
+				<parent>urlshort.general</parent>
+				<showorder>200</showorder>
+			</category>
+		</categories>
+	</import>
+</data>
