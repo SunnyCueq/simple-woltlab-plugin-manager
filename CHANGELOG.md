@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.1] - 2026-01-08
+
+### Fixed
+- **WSL2 Ubuntu 24 compatibility**: Fixed `local: can only be used in a function` error in `install.sh` (line 641-647)
+  - Removed incorrect use of `local` keyword outside function scope
+  - Bug reported by user running WSL2 - Ubuntu 24
+
+### Added
+- `scripts/test-wsl-ubuntu.sh` - Docker-based Ubuntu 24 compatibility testing
+- `scripts/simple-bash-test.sh` - Quick Bash syntax and compatibility check
+- `docs/TESTING-WSL.md` - WSL2/Ubuntu testing guide for CachyOS/Arch users
+- `scripts/README.md` - Overview of all available scripts
+
+### Changed
+- Improved test infrastructure for cross-platform compatibility testing
+
+---
+
 ## [1.5.0] - 2025-11-26
 
 ### Added

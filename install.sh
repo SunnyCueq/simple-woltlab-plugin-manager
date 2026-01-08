@@ -638,13 +638,13 @@ if [ -n "$PLUGIN_DIR" ] && [ -d "$PLUGIN_DIR" ]; then
     echo "📋 Kopiere Build-Scripts ins Plugin-Verzeichnis..."
 
     # Prüfe ob Script-Dateien existieren
-    local scripts_to_copy=(
+    scripts_to_copy=(
         "extract-plugin-files.sh"
         "update-tars.sh"
         "create-release.sh"
     )
 
-    local copy_success=true
+    copy_success=true
     for script in "${scripts_to_copy[@]}"; do
         if [ -f "$SCRIPT_DIR/scripts/$script" ]; then
             if cp "$SCRIPT_DIR/scripts/$script" "$PLUGIN_DIR/" 2>/dev/null; then
