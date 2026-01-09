@@ -378,3 +378,4 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 [⬆️ Back to top](#simple-woltlab-plugin-manager) | [🇩🇪 Deutsche Version](README_DE.md)
 
 </div>
+
