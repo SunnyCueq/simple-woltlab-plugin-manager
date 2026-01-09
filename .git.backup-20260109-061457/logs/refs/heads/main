@@ -1,0 +1,76 @@
+0000000000000000000000000000000000000000 5a8751f29f8d970e22ebc54d0e50b5a6dbadd7b0 SunnyCueq <sunny.cueq@gmail.com> 1762593550 +0100	commit (initial): Initial commit: Simple WoltLab Plugin Manager
+5a8751f29f8d970e22ebc54d0e50b5a6dbadd7b0 5a8751f29f8d970e22ebc54d0e50b5a6dbadd7b0 SunnyCueq <sunny.cueq@gmail.com> 1762593550 +0100	Branch: renamed refs/heads/master to refs/heads/main
+5a8751f29f8d970e22ebc54d0e50b5a6dbadd7b0 5a8751f29f8d970e22ebc54d0e50b5a6dbadd7b0 SunnyCueq <sunny.cueq@gmail.com> 1762593607 +0100	Branch: renamed refs/heads/main to refs/heads/main
+5a8751f29f8d970e22ebc54d0e50b5a6dbadd7b0 70468400044a0c0b48ae46ecf5a7db336715b03e SunnyCueq <sunny.cueq@gmail.com> 1762593615 +0100	commit: Update: Repository-URLs auf SunnyCueq aktualisiert
+70468400044a0c0b48ae46ecf5a7db336715b03e 9782e69f5206e99af515bd0cb348a8e3e26a0d16 SunnyCueq <sunny.cueq@gmail.com> 1762594669 +0100	commit: feat: Erweiterte README, automatische Installation und Copyright-Hinweise
+9782e69f5206e99af515bd0cb348a8e3e26a0d16 df5dfd050b6266726f8c73cb8e470a9a8ccc2f76 SunnyCueq <sunny.cueq@gmail.com> 1762595137 +0100	commit: feat: Versionsverwaltung, Plugin-Namenskonventionen und Entwickler-Werkzeuge
+df5dfd050b6266726f8c73cb8e470a9a8ccc2f76 fad3fbb178f04820032e5bbbc24411c8ef291bd4 SunnyCueq <sunny.cueq@gmail.com> 1762595355 +0100	commit: feat: Automatische Plugin-Versionsverwaltung und Backup-Funktionalität
+fad3fbb178f04820032e5bbbc24411c8ef291bd4 1b6aa0eb7c719b35a8d09717333db58c6285fac2 SunnyCueq <sunny.cueq@gmail.com> 1762596306 +0100	commit: docs: INSTALLATION.md überarbeitet, Mac-Anleitung, Changelog und RULES erweitert
+1b6aa0eb7c719b35a8d09717333db58c6285fac2 99e8b3bb9146188c32747cec0a9045f9c8a69c84 SunnyCueq <sunny.cueq@gmail.com> 1762596318 +0100	commit: chore: Version auf 1.0.1 erhöht
+99e8b3bb9146188c32747cec0a9045f9c8a69c84 4ebb95159424974beb4420726a2b068f1e007b5d SunnyCueq <sunny.cueq@gmail.com> 1762596349 +0100	commit: chore: README_EN.md Version und Changelog aktualisiert
+4ebb95159424974beb4420726a2b068f1e007b5d 753d47dda32ad4ca8d167289e2fbd02d1b65d684 SunnyCueq <sunny.cueq@gmail.com> 1762596650 +0100	commit: docs: WORKSPACE-SETUP, IDE-SETUP-CURSOR und IDE-SETUP-VSCODE überarbeitet
+753d47dda32ad4ca8d167289e2fbd02d1b65d684 89943dda7757544c1710b0b8b54d68ed07fa9b44 SunnyCueq <sunny.cueq@gmail.com> 1762596706 +0100	commit: docs: DEVELOPER-TOOLS, VERSIONING und PLUGIN-NAMING auf Per-Du umgestellt
+89943dda7757544c1710b0b8b54d68ed07fa9b44 71aaa93881ac0ca55a1d6411fb1d2fdc49315b13 SunnyCueq <sunny.cueq@gmail.com> 1762596729 +0100	commit: docs: Restliche Dokumentationen auf Per-Du umgestellt (PLUGIN-NAMING, VERSIONING, LINUX-CACHYOS, WINDOWS-WSL)
+71aaa93881ac0ca55a1d6411fb1d2fdc49315b13 7c67cdfe1950b45881db54822734951cc2b9b264 SunnyCueq <sunny.cueq@gmail.com> 1762597113 +0100	commit: docs: Analyse von wspackager hinzugefügt
+7c67cdfe1950b45881db54822734951cc2b9b264 3bbf0e83045e3a46ca12235b18bd2d6ff01caca3 SunnyCueq <sunny.cueq@gmail.com> 1762597200 +0100	commit: chore: WSPACKAGER-ANALYSE.md aus Git entfernt (nur intern)
+3bbf0e83045e3a46ca12235b18bd2d6ff01caca3 d54d1d66508160e78402a996d090190c5a8d09ae SunnyCueq <sunny.cueq@gmail.com> 1762597219 +0100	commit: chore: WSPACKAGER-ANALYSE.md zu .gitignore hinzugefügt
+d54d1d66508160e78402a996d090190c5a8d09ae af2a69c7ee578f9fae2bf74f0cfc05451c541329 SunnyCueq <sunny.cueq@gmail.com> 1762597267 +0100	commit: feat: Dynamisches package.xml Parsing implementiert
+af2a69c7ee578f9fae2bf74f0cfc05451c541329 fb6773a9dfe5065370cd5b342bf1dfe874986bdc SunnyCueq <sunny.cueq@gmail.com> 1762597431 +0100	commit: docs: Umfassende Dokumentations-Updates
+fb6773a9dfe5065370cd5b342bf1dfe874986bdc da0d8ee3726a91ad0e951e1962f911749a1bba3e SunnyCueq <sunny.cueq@gmail.com> 1762597629 +0100	commit: docs: README_EN.md vervollständigt mit neuen Dokumentationen
+da0d8ee3726a91ad0e951e1962f911749a1bba3e 4d31c4cd8604d15943c6c1befa6b4cc1eb69d422 SunnyCueq <sunny.cueq@gmail.com> 1762597824 +0100	commit: docs: PIP-TYPES.md gekürzt - nur Toolkit-Fokus, keine WoltLab-Doku wiederholt
+4d31c4cd8604d15943c6c1befa6b4cc1eb69d422 7b20cdaa8a534e9c8b355c7b4111b885a84a5f56 SunnyCueq <sunny.cueq@gmail.com> 1762597985 +0100	commit: refactor: README_ADVANCED.md nach docs/ verschoben
+7b20cdaa8a534e9c8b355c7b4111b885a84a5f56 28fb0b1eb1e3394b277480010ea34cf6ca99c291 SunnyCueq <sunny.cueq@gmail.com> 1762598041 +0100	commit: docs: ZUSAMMENFASSUNG.md erstellt - Projekt-Analyse und Verbesserungsvorschläge
+28fb0b1eb1e3394b277480010ea34cf6ca99c291 57bd8db5f76639d48e944585a7e4ac37d4a13257 SunnyCueq <sunny.cueq@gmail.com> 1762598308 +0100	commit: fix: Alle Probleme behoben
+57bd8db5f76639d48e944585a7e4ac37d4a13257 b0e81e7b18d0e04d9cb3c27ac408439f12b70d65 SunnyCueq <sunny.cueq@gmail.com> 1762598337 +0100	commit: refactor: setup-workspace.sh entfernt und Backup-System korrigiert
+b0e81e7b18d0e04d9cb3c27ac408439f12b70d65 dfdba216035040083c1cb268a8e3cd139dd6f917 SunnyCueq <sunny.cueq@gmail.com> 1762598370 +0100	commit: fix: GITHUB_REPO_INFO.md und GITHUB_SETUP.md aus Git entfernt (sind in .gitignore)
+dfdba216035040083c1cb268a8e3cd139dd6f917 849ea219bf7ec56701db7d486b2f7177451f93e7 SunnyCueq <sunny.cueq@gmail.com> 1762598451 +0100	commit: fix: README_ADVANCED.md aus Root entfernt (ist bereits in docs/)
+849ea219bf7ec56701db7d486b2f7177451f93e7 a516ef8ee6cb129da4cd2fe21d951f0dad96bf60 SunnyCueq <sunny.cueq@gmail.com> 1762598638 +0100	commit: feat: .cursorrules Datei erstellt und Changelog aus READMEs entfernt
+a516ef8ee6cb129da4cd2fe21d951f0dad96bf60 23b22a7087e6b65696d5e4e1733ead0118dd9231 SunnyCueq <sunny.cueq@gmail.com> 1762598805 +0100	commit: fix: Alle 'Sie' durch 'Du' ersetzt - vollständige Prüfung abgeschlossen
+23b22a7087e6b65696d5e4e1733ead0118dd9231 f9af38fa30ce8c9556eb5f0dcd673e2d88bb5d0c SunnyCueq <sunny.cueq@gmail.com> 1762598822 +0100	commit: fix: Letzte 'Sie' durch 'Du' in install.sh ersetzt
+f9af38fa30ce8c9556eb5f0dcd673e2d88bb5d0c 5b3f18b5bd86e3bc245cab4a16e3993c02c7fd39 SunnyCueq <sunny.cueq@gmail.com> 1762598889 +0100	commit: feat: GitHub Workflow modernisiert - dynamisches Parsing implementiert
+5b3f18b5bd86e3bc245cab4a16e3993c02c7fd39 91134ff7bb7155a7602239ab6d1ed89454c4f5cb SunnyCueq <sunny.cueq@gmail.com> 1762600132 +0100	commit: feat: Validierungen und Plugin-Template Generator implementiert
+91134ff7bb7155a7602239ab6d1ed89454c4f5cb 5b9c8f2b1317ff01d02c41ee1f4458f711586643 SunnyCueq <sunny.cueq@gmail.com> 1762600141 +0100	commit: fix: Package-Identifier in create-plugin.sh Template korrigiert
+5b9c8f2b1317ff01d02c41ee1f4458f711586643 b9f33c001340046c081a4c2a72f0e9e5ac595398 SunnyCueq <sunny.cueq@gmail.com> 1762600155 +0100	commit: fix: Variablen-Expansion in create-plugin.sh Templates korrigiert
+b9f33c001340046c081a4c2a72f0e9e5ac595398 2edb65b2636133034208a406140f80d28f6e575a SunnyCueq <sunny.cueq@gmail.com> 1762600228 +0100	commit: docs: Dokumentation für neue Features aktualisiert
+2edb65b2636133034208a406140f80d28f6e575a 51a17bf1565b8ee530f0c7768133917ab3d88ace SunnyCueq <sunny.cueq@gmail.com> 1762600245 +0100	commit: docs: PACKAGING.md aktualisiert - create-plugin.sh und Validierungen dokumentiert
+51a17bf1565b8ee530f0c7768133917ab3d88ace e243415b17e5009922959b9e9f39e568fa050daa SunnyCueq <sunny.cueq@gmail.com> 1762600261 +0100	commit: docs: PACKAGING.md - Validierungen vollständig dokumentiert
+e243415b17e5009922959b9e9f39e568fa050daa 6bd799ccc30231558f7e78cf7327fdcb7a629fa1 SunnyCueq <sunny.cueq@gmail.com> 1762600398 +0100	commit: fix: Letzte 'Sie' durch 'Du' in allen Scripts ersetzt
+6bd799ccc30231558f7e78cf7327fdcb7a629fa1 6d3bb4b577e94c6c9f19867ebf8aaa88a01b5224 SunnyCueq <sunny.cueq@gmail.com> 1762600404 +0100	commit: chore: Version auf 1.1.0 erhöht
+6d3bb4b577e94c6c9f19867ebf8aaa88a01b5224 93d4eab26bc21dd27cdb172c5350306e8c0853be SunnyCueq <sunny.cueq@gmail.com> 1762600515 +0100	commit: fix: GitHub Workflow - Script-Pfade korrigiert
+93d4eab26bc21dd27cdb172c5350306e8c0853be b4aad22ff028828bbd87c9594061e8ca41f68bfd SunnyCueq <sunny.cueq@gmail.com> 1762600526 +0100	commit: fix: GitHub Workflow - package.xml Suche verbessert
+b4aad22ff028828bbd87c9594061e8ca41f68bfd 4b2c41d17a5f640943c63762492f6789b3fc1a16 SunnyCueq <sunny.cueq@gmail.com> 1762600681 +0100	commit: fix: GitHub Workflow - YAML-Syntax korrigiert + example-plugin README auf Du umgestellt
+4b2c41d17a5f640943c63762492f6789b3fc1a16 8bba9646e6ba09b9c866b2695cb4455df4927656 SunnyCueq <sunny.cueq@gmail.com> 1762600703 +0100	commit: docs: Finale Prüfung V2 abgeschlossen
+8bba9646e6ba09b9c866b2695cb4455df4927656 9ff2c699c04b29f115b133bf72b8d19e71b16e98 SunnyCueq <sunny.cueq@gmail.com> 1762600794 +0100	commit: chore: FINALE-PRUEFUNG-V2.md zu .gitignore hinzugefügt
+9ff2c699c04b29f115b133bf72b8d19e71b16e98 cf44a7dc7d86ecae3e46ba878ec8c43a4d0cb8ec SunnyCueq <sunny.cueq@gmail.com> 1762600806 +0100	commit: docs: GitHub Workflow Test-Anleitung + FINALE-PRUEFUNG-V2.md zu .gitignore
+cf44a7dc7d86ecae3e46ba878ec8c43a4d0cb8ec 7873e01c5fa689a0513616a06b8fe68b5a22e9ee SunnyCueq <sunny.cueq@gmail.com> 1762600863 +0100	commit: chore: docs/GITHUB-WORKFLOW-TEST.md aus Git entfernt und zu .gitignore hinzugefügt
+7873e01c5fa689a0513616a06b8fe68b5a22e9ee 22beab19c119a49812eece1f93dc39ed8bcdadb7 SunnyCueq <sunny.cueq@gmail.com> 1762601047 +0100	commit: fix: docs/WSPACKAGER-ANALYSE.md zu .gitignore + FINALE-PRUEFUNG-V2.md aus Git entfernt
+22beab19c119a49812eece1f93dc39ed8bcdadb7 f6e087b625ad9ce90ca75164efb8a97099b4bea9 SunnyCueq <sunny.cueq@gmail.com> 1762601067 +0100	commit: chore: ANALYSE-ALLE-DATEIEN.md zu .gitignore hinzugefügt
+f6e087b625ad9ce90ca75164efb8a97099b4bea9 d5ecbf34a17e345590e5722c10e1ff3b40dc599c SunnyCueq <sunny.cueq@gmail.com> 1762601119 +0100	commit: chore: Alte/unnötige Dateien gelöscht + .gitignore aufgeräumt
+d5ecbf34a17e345590e5722c10e1ff3b40dc599c ed2cda8686de0ab986a1171b176fbc6a2f41deb4 SunnyCueq <sunny.cueq@gmail.com> 1762601141 +0100	commit: fix: .gitignore Duplikate entfernt
+ed2cda8686de0ab986a1171b176fbc6a2f41deb4 f5c7bf8cb20d733e6c477b10f63b1669214af812 SunnyCueq <sunny.cueq@gmail.com> 1762601318 +0100	commit: refactor: Dateien zusammengeführt und aufgeräumt
+f5c7bf8cb20d733e6c477b10f63b1669214af812 00acd8a9212ec544f0164cbe4a3c91ec405c3f9f SunnyCueq <sunny.cueq@gmail.com> 1762601504 +0100	commit: refactor: Interne MD-Dateien aufgeräumt und umbenannt
+00acd8a9212ec544f0164cbe4a3c91ec405c3f9f 682852503f88ba07a27e6785d15981d2eb4cba41 SunnyCueq <sunny.cueq@gmail.com> 1762602496 +0100	commit: feat: Install-Script massiv verbessert + Troubleshooting-Dokumentation erweitert
+682852503f88ba07a27e6785d15981d2eb4cba41 4de874c0954db007c84489492a85ea439aaaccf8 SunnyCueq <sunny.cueq@gmail.com> 1762602769 +0100	commit: docs: Englische Troubleshooting-Sektion zu INSTALLATION_EN.md hinzugefügt
+4de874c0954db007c84489492a85ea439aaaccf8 9774d52b16972bdcca0641dddff72318a8fd616c SunnyCueq <sunny.cueq@gmail.com> 1762603692 +0100	commit: feat: Alle Scripts mit Logging und Fehlerbehandlung erweitert + validate-plugin.sh hinzugefügt
+9774d52b16972bdcca0641dddff72318a8fd616c c9868c170cfd029ea3e8bac7806707ac7a12b81e SunnyCueq <sunny.cueq@gmail.com> 1762603879 +0100	commit: chore: Neue Projekt-Regel hinzugefügt und Qualitätssicherung durchgeführt
+c9868c170cfd029ea3e8bac7806707ac7a12b81e 5cae32e6d7ff272cff26a068c86f2410e0c6d26c SunnyCueq <sunny.cueq@gmail.com> 1762604099 +0100	rebase (finish): refs/heads/main onto 4de874c0954db007c84489492a85ea439aaaccf8
+5cae32e6d7ff272cff26a068c86f2410e0c6d26c eaa386e04c16e90daa68bc38ec3c185ba02c63d5 SunnyCueq <sunny.cueq@gmail.com> 1762604381 +0100	commit: refactor: Git-Historie bereinigt und Referenz-Dateien vereinfacht
+eaa386e04c16e90daa68bc38ec3c185ba02c63d5 772825b64cac906894b2366c5a60ef89bda568cb SunnyCueq <sunny.cueq@gmail.com> 1762604666 +0100	commit: fix: GitHub Actions Workflow-Fehler behoben
+772825b64cac906894b2366c5a60ef89bda568cb b637606d6d4af2c99b82792f4361cff0ebfb02f2 SunnyCueq <sunny.cueq@gmail.com> 1762604809 +0100	rebase (finish): refs/heads/main onto 12c49ee65a2c15f250cb49010260f482b5133162
+b637606d6d4af2c99b82792f4361cff0ebfb02f2 cba61147a1a260da41ea683dd1862537447304eb SunnyCueq <sunny.cueq@gmail.com> 1762609014 +0100	commit: chore: .cursorrules aus Repository entfernen (nur lokal)
+cba61147a1a260da41ea683dd1862537447304eb b0a2d9d23d29ab68f51e2f1af27a78aaa320cc2d SunnyCueq <sunny.cueq@gmail.com> 1762633047 +0100	commit: feat: Mehrsprachige Issue-Templates und CONTRIBUTING.md hinzugefügt
+b0a2d9d23d29ab68f51e2f1af27a78aaa320cc2d 9144fce46293d30e4e2033cb670f222dc68492f0 SunnyCueq <sunny.cueq@gmail.com> 1762633108 +0100	commit: chore: Frage-Template entfernt
+9144fce46293d30e4e2033cb670f222dc68492f0 29b7cf4ac3835ca472f2b681bb13105b5c3dd879 SunnyCueq <sunny.cueq@gmail.com> 1762633174 +0100	commit: chore: Version und Datum in README-Dateien aktualisiert (1.4.1, 2025-11-08)
+29b7cf4ac3835ca472f2b681bb13105b5c3dd879 5a0d09e0034ff0aed7b1e80edc6fbec5fb3a16ee SunnyCueq <sunny.cueq@gmail.com> 1762633261 +0100	commit: chore: Version auf 1.4.2 erhöht und alle Daten auf 2025-11-08 aktualisiert
+5a0d09e0034ff0aed7b1e80edc6fbec5fb3a16ee c6a3b49e369d131d10d0e06e99ef453788a6305f SunnyCueq <sunny.cueq@gmail.com> 1762633630 +0100	commit: fix: GitHub Actions Workflow für Toolkit-Repository angepasst
+c6a3b49e369d131d10d0e06e99ef453788a6305f 08c77af665acd2b145eca0ba44d171a0ecaaab5f SunnyCueq <sunny.cueq@gmail.com> 1762633852 +0100	commit: chore: Version auf 1.4.3 erhöht (Workflow-Test)
+08c77af665acd2b145eca0ba44d171a0ecaaab5f cfbc90728c78b807cd7e7defae8aa93f1aade3eb SunnyCueq <sunny.cueq@gmail.com> 1764160041 +0100	commit: feat: WoltLab 6.0/6.1/6.2 Kompatibilität und Plugin Store Validierung
+cfbc90728c78b807cd7e7defae8aa93f1aade3eb 3703b63dfe2ea7c27dce56184de051f8e797cfda SunnyCueq <sunny.cueq@gmail.com> 1764160937 +0100	commit: docs: Multilingual documentation cleanup and CHANGELOG
+3703b63dfe2ea7c27dce56184de051f8e797cfda d79d6cf3e7ccb4c91419194f7151f822b991c487 SunnyCueq <sunny.cueq@gmail.com> 1764161350 +0100	commit: chore: Release 1.5.0 - English as primary language
+d79d6cf3e7ccb4c91419194f7151f822b991c487 7c7efa6ba1d36c5a81ece97204da7f9874a57f11 SunnyCueq <sunny.cueq@gmail.com> 1767884675 +0100	commit: fix: WSL2 Ubuntu 24 compatibility - remove global 'local' usage
+7c7efa6ba1d36c5a81ece97204da7f9874a57f11 a5a10cecdb55e3b1dd11305828f8e23c51865a35 SunnyCueq <sunny.cueq@gmail.com> 1767884718 +0100	commit: chore: bump version to 1.5.1
+a5a10cecdb55e3b1dd11305828f8e23c51865a35 3496002bf5d5d5c1320b91bcce3cac21a3ba5993 SunnyCueq <sunny.cueq@gmail.com> 1767885066 +0100	commit: docs: modernize README with badges and improved structure
+3496002bf5d5d5c1320b91bcce3cac21a3ba5993 a27ada2bb9063e57502c1bd860790c190925f35a SunnyCueq <sunny.cueq@gmail.com> 1767885245 +0100	commit: docs: remove version and test badges from README
+a27ada2bb9063e57502c1bd860790c190925f35a 984afd5778ba180671c0a61a47d1e862e1f6cf34 SunnyCueq <sunny.cueq@gmail.com> 1767885599 +0100	commit: chore: cleanup - remove GitHub Actions and copyright notices
+984afd5778ba180671c0a61a47d1e862e1f6cf34 9b957fb47e6bee4509c471bef3b234c6e0d352b9 SunnyCueq <sunny.cueq@gmail.com> 1767885833 +0100	commit: fix: restore copyright notices (MIT License compliance)
+9b957fb47e6bee4509c471bef3b234c6e0d352b9 a355dffa42b2ed4ee6da0fc1924929af4a141a36 SunnyCueq <sunny.cueq@gmail.com> 1767935611 +0100	commit: chore: remove developer-only files

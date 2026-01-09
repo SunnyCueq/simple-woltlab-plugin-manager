@@ -1,0 +1,48 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+*.cache
+*.bak
+*.backup
+*.old
+
+# WoltLab-spezifisch
+.woltlab-config.local
+_extracted/
+*.tar
+*.tar.gz
+.tar-backups/
+.package-backups/
+package.xml.bak
+
+# User-spezifische Workspaces
+*-workspace.code-workspace
+!templates/workspace.code-workspace
+
+# Interne Dokumentation (nicht für GitHub)
+RULES.md
+PROJEKT-STATUS.md
+REFERENZ-WSPACKAGER.md
+docs/GITHUB-WORKFLOW-TEST.md
+docs/WSPACKAGER-ANALYSE.md
+
+# Cursor-spezifisch (intern - nur lokal, nicht auf GitHub)
+.cursorrules
+
+# Claude Code Verweis (intern - nur lokal, nicht auf GitHub)
+CLAUDE.md

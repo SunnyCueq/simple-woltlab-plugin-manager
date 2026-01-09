@@ -1,0 +1,8 @@
+chore: remove developer-only files
+
+- Removed WSL2-BUG-FIXED.md (temporary file)
+- Removed test scripts (test-wsl-ubuntu.sh, simple-bash-test.sh)
+- Removed TESTING-WSL.md (developer documentation)
+- Removed scripts/README.md (developer documentation)
+
+These files are for maintainers/developers only, not for end users.
