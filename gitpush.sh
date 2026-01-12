@@ -196,8 +196,8 @@ if [ -z "$(git status --porcelain)" ]; then
     exit 0
 fi
 
-# Use mein-plugin version as main version
-VERSION="${MEIN_VERSION}"
+# Use basis-plugin version as main version
+VERSION="${BASIS_VERSION}"
 DATE=$(date +%Y-%m-%d)
 
 # Check if changelog entry exists

@@ -1,21 +1,4 @@
-# Changelog - URL-Shortener: Featured Links
-
-**Aktuelle Version:** unknown
-**Status:** Produktionsbereit ✅
-
----
-
-## Version unknown (2026-01-12)
-
-### 🔧 Änderungen
-
-- Migration zu WoltLab Suite 6.1
-- SEO-optimierte URLs: /r/{hash}/
-- basis-plugin v1.0.41
-- mein-plugin vunknown
-
----
-
+# Changelog - Shr1nkr Plugin
 
 **Aktuelle Version:** 1.0.41
 **Status:** Produktionsbereit ✅
