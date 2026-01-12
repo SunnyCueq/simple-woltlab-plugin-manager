@@ -12,15 +12,20 @@ use wcf\system\WCF;
 /**
  * Form for editing an existing special.
  *
- * @author      Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @license     License for Commercial Plugins
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.form
  */
 class SpecialEditForm extends SpecialAddForm
 {
+    /**
+     * @inheritDoc
+     */
+    public $activeMenuItem = 'shrinkr.acp.menu.link.special.edit';
+
     /**
      * @inheritDoc
      */
@@ -135,6 +140,7 @@ class SpecialEditForm extends SpecialAddForm
         WCF::getTPL()->assign([
             'urlHash' => $urlHash ?? '',
             'themes' => $themes,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.special.list'
         ]);
     }
 }

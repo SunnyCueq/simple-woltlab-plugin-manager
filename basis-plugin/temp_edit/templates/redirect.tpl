@@ -362,8 +362,7 @@
                                             return;
                                         }
                                         e.preventDefault();
-                                        const linkID = parseInt(this.getAttribute('data-url-id')) || 0;
-                                        const linkID = parseInt(this.getAttribute('data-link-id')) || null;
+                                        const linkID = parseInt(this.getAttribute('data-link-id')) || 0;
                                         if (linkID > 0) {
                                             trackButtonClick(linkID, 'featured_link', linkID);
                                         }

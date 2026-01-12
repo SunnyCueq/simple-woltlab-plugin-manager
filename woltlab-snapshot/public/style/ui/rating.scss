@@ -1,0 +1,11 @@
+.ratingList {
+	font-size: 0;
+
+	> li {
+		display: inline-block;
+	}
+
+	fa-icon[name="star"][solid] {
+		color: #f90;
+	}
+}

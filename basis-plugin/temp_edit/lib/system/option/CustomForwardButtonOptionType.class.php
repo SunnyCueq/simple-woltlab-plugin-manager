@@ -13,9 +13,9 @@ use wcf\system\WCF;
  * Provides a checkbox to enable/disable the custom 3D button style
  * and shows a static preview of how the button will look.
  *
- * @author      Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @license     License for Commercial Plugins
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.option

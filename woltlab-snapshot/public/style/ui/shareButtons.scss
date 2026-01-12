@@ -1,0 +1,72 @@
+.messageShareButtons {
+	.inlineList {
+		gap: 5px;
+
+		> li:not(:last-child) {
+			margin-right: 0;
+		}
+	}
+
+	.button {
+		align-items: center;
+		display: flex;
+
+		span {
+			margin-left: 3px;
+		}
+
+		@include screen-sm-down {
+			span {
+				display: none;
+			}
+		}
+	}
+
+	.messageShareProvider {
+		--background-color-facebook-rgb: 59 89 153;
+		--background-color-twitter-rgb: 20 23 26;
+		--background-color-reddit-rgb: 255 69 0;
+		--background-color-whatsapp-rgb: 37 211 102;
+		--background-color-linkedin-rgb: 0 122 182;
+		--background-color-pinterest-rgb: 189 33 37;
+		--background-color-xing-rgb: 0 101 103;
+		--color: #fff;
+
+		background-color: rgb(var(--background-color-rgb, --wcfButtonBackground-rgb));
+		color: var(--color);
+
+		&[data-identifier="Facebook"] {
+			--background-color-rgb: var(--background-color-facebook-rgb);
+		}
+
+		&[data-identifier="Twitter"] {
+			--background-color-rgb: var(--background-color-twitter-rgb);
+		}
+
+		&[data-identifier="Reddit"] {
+			--background-color-rgb: var(--background-color-reddit-rgb);
+		}
+
+		&[data-identifier="WhatsApp"] {
+			--background-color-rgb: var(--background-color-whatsapp-rgb);
+		}
+
+		&[data-identifier="LinkedIn"] {
+			--background-color-rgb: var(--background-color-linkedin-rgb);
+		}
+
+		&[data-identifier="Pinterest"] {
+			--background-color-rgb: var(--background-color-pinterest-rgb);
+		}
+
+		&[data-identifier="XING"] {
+			--background-color-rgb: var(--background-color-xing-rgb);
+		}
+	}
+}
+
+/* hover states are only applied to non-touch devices to avoid "leftover" hover states after taps */
+html:not(.touch) .messageShareButtons .messageShareProvider:hover {
+	background-color: rgba(var(--background-color-rgb) / 0.87);
+	color: var(--color);
+}

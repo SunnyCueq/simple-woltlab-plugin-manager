@@ -1,11 +1,9 @@
 /**
  * Discount countdown timer - Updates countdown display every second.
  *
- * @author      Julian Pfeil <https://julian-pfeil.de>
- * @copyright   2025 Julian Pfeil
- * @license     Commercial License
- * @package     de.julian-pfeil.shrinkr.featuredLinks
- * @since       6.3.2
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;

@@ -7,7 +7,7 @@ namespace shrinkr\system\exception;
  *
  * @author      Sunny C, Sunny C <https://sunnyc.de>
  * @link        https://sunnyc.de
- * @copyright   2022 Sunny C Websites & Co.
+ * @copyright   2026 Sunny C Websites & Co.
  * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
  *
  * @package    de.sunnyc.wsc.shrinkr

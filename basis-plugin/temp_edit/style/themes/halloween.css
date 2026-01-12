@@ -2,11 +2,10 @@
  * Halloween Theme Styles
  * 
  * Theme-specific styles for the halloween theme.
- * Based on CodePen: https://codepen.io/ecemgo/pen/ZEwYqMQ
  * 
- * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  */
 
 /* Creepster Font - Local TTF */
@@ -18,13 +17,11 @@
     font-display: swap;
 }
 
-/* CSS Variables - Halloween Color Palette from CodePen */
 :root {
     --hw-text-white: #FFFFFF; /* White text - global for all modes */
 }
 
 .shrinkrContainer {
-    /* Dark Mode (default) - Halloween from CodePen */
     --hw-bg-dark: #0D0D0D; /* Dark gray background */
     --hw-orange: #FF4500; /* Orangered */
     --hw-orange-light: #FF6347; /* Tomato */
@@ -36,7 +33,6 @@
     --hw-ac2: var(--hw-orange-light);
     --hw-ac3: var(--hw-gold);
 
-    /* Container Background - Halloween gradient from CodePen */
     background: linear-gradient(318deg, rgba(253, 182, 87, 1) 4%, rgba(222, 117, 89, 1) 25%, rgba(117, 43, 91, 1) 53%, rgba(46, 24, 71, 1) 81%) !important;
     background-color: rgba(46, 24, 71, 1) !important;
     

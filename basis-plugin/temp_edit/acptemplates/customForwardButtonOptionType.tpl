@@ -8,7 +8,7 @@
  * WoltLab's AbstractOptionListForm wraps it in <dl><dt><dd> automatically.
  * Styles must be inline because Option Templates don't have access to ACP stylesheets.
  *
- * @author Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @since 2.3.8
  *}
 <style>

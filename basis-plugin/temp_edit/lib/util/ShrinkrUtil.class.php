@@ -13,22 +13,23 @@ use wcf\util\ArrayUtil;
 use wcf\util\StringUtil;
 
 /**
- * @author      Sunny C, Sunny C <https://sunnyc.de>
- * @link        https://sunnyc.de
- * @copyright   2022 Sunny C Websites & Co.
- * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
+ * Utility class for Shr1nkr link management and validation.
+ * Provides methods for URL/hash validation and link generation.
  *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage util
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
+ * @package     de.sunnyc.wsc.shrinkr
  */
 final class ShrinkrUtil
 {
     /**
-     * Returns true if the given URL is a valid URL
+     * Validates a given URL for use as target URL.
+     * Checks length, format, HTTPS requirement, blacklist, and forwarding chains.
      *
-     * @param	string      $url
-     *
-     * @return	bool
+     * @param   string  $url    The URL to validate
+     * @return  bool    True if valid
+     * @throws  UserInputException  If URL is invalid
      */
     public static function isValidUrl(string $url): bool
     {
@@ -87,14 +88,15 @@ final class ShrinkrUtil
     }
 
     /**
-     * Returns true if the given hash is a valid hash
+     * Validates a given hash for use as short link identifier.
+     * Checks length, pattern match, and uniqueness.
      *
-     * @param	string      $hash
-     * @param   Url|null    $url
-     *
-     * @return	bool
+     * @param   string          $hash   The hash to validate
+     * @param   ShrinkrLink|null $link  Optional existing link for update validation
+     * @return  bool            True if valid
+     * @throws  UserInputException  If hash is invalid or already exists
      */
-    public static function(ShrinkrLink $url = null): bool
+    public static function isValidHash(string $hash, ShrinkrLink $link = null): bool
     {
         if (empty($hash)) {
             throw new UserInputException('hash');
@@ -109,7 +111,7 @@ final class ShrinkrUtil
         }
 
         $linkID = ShrinkrLink::getLinkByHash($hash)->linkID;
-        if ($linkID && ($url == null || $linkID != $url->linkID)) {
+        if ($linkID && ($link == null || $linkID != $link->linkID)) {
             throw new UserInputException('hash', 'alreadyExists');
         }
 
@@ -117,45 +119,42 @@ final class ShrinkrUtil
     }
 
     /**
-     * Adds a URL (as interface for third party developments)
+     * Creates a new shortened link (API for third-party integrations).
+     * Validates URL and hash, generates hash if not provided.
      *
-     * @param   string      $url        URL you want to add
-     * @param   string      $hash       Hash you want to use
-     * @param   string      $prefix     Hash prefix you want to use
-     *
-     * @return  Url
+     * @param   string  $url        Target URL to shorten
+     * @param   string  $hash       Custom hash (optional, auto-generated if empty)
+     * @param   string  $prefix     Hash prefix (optional)
+     * @return  ShrinkrLink         The created link object
+     * @throws  UrlException        If URL is invalid
+     * @throws  HashException       If hash is invalid or not unique
      */
-    public static function add(string $url, string $hash = '', string $prefix = ''): Url
+    public static function add(string $url, string $hash = '', string $prefix = ''): ShrinkrLink
     {
-        //validate url
+        // Validate URL
         try {
             self::isValidUrl($url);
         } catch(UserInputException $e) {
             throw new UrlException('Url is not valid.');
         }
         
-        //get hash
+        // Get or generate hash
         if (empty($hash)) {
-            //try to generate unique hash, if no hash is passed
             $hash = self::generateHash($prefix);
         } else {
-            //add prefix to hash
             $hash = $prefix . $hash;
 
-            //validate hash
             try {
                 self::isValidHash($hash);
             } catch(UserInputException $e) {
                 throw new HashException('Hash is not valid.');
             }
 
-            //check if hash is not unique
             if (ShrinkrLink::getLinkByHash($hash)->linkID) {
                 throw new HashException('Hash is not unique.');
             }
         }
 
-        //save url and give it back
         return ShrinkrLinkEditor::create([
             'url' => $url,
             'hash' => $hash,
@@ -163,21 +162,21 @@ final class ShrinkrUtil
     }
 
     /**
-     * Generate a unique random hash
+     * Generates a unique random hash.
+     * Uses cryptographically secure random bytes for hash generation.
      *
-     * @param   string  $prefix         Prefix of the hash
-     * @param   int     $length         Length of the hash
-     * @param   int     $maxAttempts    Number of maximum attempts to generate unique hashes
-     *
-     * @return  string
+     * @param   string  $prefix         Hash prefix (uses SHRINKR_HASH_PREFIX if empty)
+     * @param   int     $length         Hash length (uses SHRINKR_HASH_LENGTH if 0)
+     * @param   int     $maxAttempts    Maximum generation attempts before throwing exception
+     * @return  string                  The generated unique hash with prefix
+     * @throws  HashException           If maximum attempts reached without unique hash
      */
     public static function generateHash(string $prefix = '', int $length = 0, int $maxAttempts = 10): string
     {
-        //setup
         $unique = false;
         $numberOfAttempts = 0;
 
-        //check if the parameters are valid and if the default values must be used
+        // Use default values if parameters are invalid
         if (empty($prefix)) {
             $prefix = SHRINKR_HASH_PREFIX;
         }
@@ -188,36 +187,30 @@ final class ShrinkrUtil
             $prefix = '';
         }
 
-        //try to generate unique hash
+        // Generate unique hash
         while (!$unique) {
-            //increasing the number of attempts
             $numberOfAttempts++;
 
-            //generate hash
             $hashBytes = \random_bytes(\ceil($length / 2));
             $hash = \substr(\bin2hex($hashBytes), 0, $length);
 
-            //check if hash is unique
             if (!ShrinkrLink::getLinkByHash($hash)->linkID) {
                 $unique = true;
             }
 
-            //check if the maximum number of attempts was reached and if so, throw an error
             if ($numberOfAttempts >= $maxAttempts) {
                 throw new HashException('Hash could not be generated, because the maximum number of attempts was reached (maximum attempts: ' . $maxAttempts . ')');
             }
         }
 
-        //return generated hash with prefix
         return $prefix . $hash;
     }
 
     /**
-     * forbid creation of ShrinkrUtil objects.
-     * copied from https://github.com/WoltLab/WCF/blob/d24be33172c0479f35e2f1bd4e82180f2054d7c1/wcfsetup/install/files/lib/util/UserUtil.class.php#L275
+     * Prevents instantiation of utility class.
      */
     private function __construct()
     {
-        //does nothing
+        // Utility class, no instances allowed
     }
 }

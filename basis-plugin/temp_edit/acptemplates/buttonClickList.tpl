@@ -149,9 +149,9 @@
 										<tr>
 											<td class="columnTitle">
 												{if $statistics.visits.topUrlHashes|isset && $statistics.visits.topUrlHashes[$linkID]|isset}
-													<a href="{link controller='UrlEdit' application='shrinkr' id=$linkID}{/link}">{$statistics.visits.topUrlHashes[$linkID]}</a>
+													<a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$linkID}{/link}">{$statistics.visits.topUrlHashes[$linkID]}</a>
 												{else}
-													<a href="{link controller='UrlEdit' application='shrinkr' id=$linkID}{/link}">URL #{#$linkID}</a>
+													<a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$linkID}{/link}">URL #{#$linkID}</a>
 												{/if}
 											</td>
 											<td class="columnDigits">{#$count}</td>
@@ -271,9 +271,9 @@
 									<tr>
 										<td class="columnTitle">
 											{if $statistics.topUrlHashes|isset && $statistics.topUrlHashes[$linkID]|isset}
-												<a href="{link controller='UrlEdit' application='shrinkr' id=$linkID}{/link}">{$statistics.topUrlHashes[$linkID]}</a>
+												<a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$linkID}{/link}">{$statistics.topUrlHashes[$linkID]}</a>
 											{else}
-												<a href="{link controller='UrlEdit' application='shrinkr' id=$linkID}{/link}">URL #{#$linkID}</a>
+												<a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$linkID}{/link}">URL #{#$linkID}</a>
 											{/if}
 										</td>
 										<td class="columnDigits">{#$count}</td>
@@ -289,58 +289,6 @@
 		{event name='statisticsContents'}
 		</div>
 	{/if}
-
-	{* Filter Section *}
-<form action="{link controller='ButtonClickList' application='shrinkr'}{/link}" method="POST">
-	<section class="section">
-		<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
-
-		<div class="row rowColGap formGrid">
-			<dl class="col-xs-12 col-md-3">
-				<dt><label for="linkID">{lang}wcf.shrinkr.special.urlHash{/lang}</label></dt>
-				<dd>
-					<input class="long" type="number" id="linkID" name="linkID" value="{$linkID}" placeholder="{lang}wcf.shrinkr.buttonClick.filter.linkID{/lang}">
-				</dd>
-			</dl>
-
-			<dl class="col-xs-12 col-md-3">
-				<dt><label for="buttonType">{lang}wcf.shrinkr.buttonClick.buttonType{/lang}</label></dt>
-				<dd>
-					<select id="buttonType" name="buttonType" class="long">
-						<option value="">{lang}wcf.global.noSelection{/lang}</option>
-						<option value="forward" {if $buttonType == 'forward'}selected{/if}>{lang}wcf.shrinkr.buttonClick.type.forward{/lang}</option>
-						<option value="featured_link" {if $buttonType == 'featured_link'}selected{/if}>{lang}wcf.shrinkr.buttonClick.type.featured_link{/lang}</option>
-						<option value="custom" {if $buttonType == 'custom'}selected{/if}>{lang}wcf.shrinkr.buttonClick.type.custom{/lang}</option>
-					</select>
-				</dd>
-			</dl>
-
-			<dl class="col-xs-12 col-md-3">
-				<dt><label for="dateFrom">{lang}wcf.shrinkr.buttonClick.filter.dateFrom{/lang}</label></dt>
-				<dd>
-					<input class="long" type="date" id="dateFrom" name="dateFrom" value="{$dateFrom}">
-				</dd>
-			</dl>
-
-			<dl class="col-xs-12 col-md-3">
-				<dt><label for="dateTo">{lang}wcf.shrinkr.buttonClick.filter.dateTo{/lang}</label></dt>
-				<dd>
-					<input class="long" type="date" id="dateTo" name="dateTo" value="{$dateTo}">
-				</dd>
-			</dl>
-
-			{if $sortField|isset}<input type="hidden" name="sortField" value="{$sortField}">{/if}
-			{if $sortOrder|isset}<input type="hidden" name="sortOrder" value="{$sortOrder}">{/if}
-
-			{event name='filterFields'}
-		</div>
-
-		<div class="formSubmit">
-			<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s">
-			{csrfToken}
-		</div>
-	</section>
-</form>
 
 {hascontent}
 <div class="paginationTop">
@@ -390,7 +338,7 @@
 						<td class="columnID">{#$object->clickID}</td>
 						<td class="columnText">
 							{if $object->linkID}
-								<a href="{link controller='UrlEdit' application='shrinkr' id=$object->linkID}{/link}" class="badge badgeInverse">
+								<a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$object->linkID}{/link}" class="badge badgeInverse">
 									{if $urlHashes|isset && $urlHashes[$object->linkID]|isset}
 										{$urlHashes[$object->linkID]}
 									{else}
@@ -406,7 +354,7 @@
 						</td>
 						<td class="columnDigits">
 							{if $object->linkID|isset && $object->linkID && ($object->buttonType == 'featured_link' || $object->buttonType == 'custom') && $object->linkID}
-								<a href="{link controller='UrlEdit' application='shrinkr' id=$object->linkID}{/link}" title="{lang}wcf.shrinkr.buttonClick.buttonID.tooltip{/lang}" class="jsTooltip">#{#$object->linkID}</a>
+								<a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$object->linkID}{/link}" title="{lang}wcf.shrinkr.buttonClick.buttonID.tooltip{/lang}" class="jsTooltip">#{#$object->linkID}</a>
 							{elseif $object->linkID|isset && $object->linkID}
 								#{#$object->linkID}
 							{else}
@@ -438,8 +386,6 @@
 			</div>
 		{/hascontent}
 	</footer>
-{else}
-	<p class="info">{lang}wcf.shrinkr.buttonClick.noItems{/lang}</p>
 {/if}
 
 {include file='footer'}

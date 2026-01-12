@@ -21,9 +21,9 @@ use wcf\system\WCF;
 /**
  * Form for adding a new special.
  *
- * @author      Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @license     License for Commercial Plugins
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage acp.form
@@ -146,7 +146,7 @@ class SpecialAddForm extends AbstractFormBuilderForm
             ItemListFormField::create('codes')
                 ->label('wcf.shrinkr.codes')
                 ->description('wcf.shrinkr.special.codes.description')
-                ->value('BENJARO'),
+                ->value('SHRINKR'),
         ]);
         
         // === COLOR SECTION for Promo Badge ===

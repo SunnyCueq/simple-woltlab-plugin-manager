@@ -14,7 +14,7 @@
 		<ul>
 			<li><a href="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.customButton.list{/lang}</span></a></li>
 			{if $linkID}
-			<li><a href="{link controller='UrlEdit' application='shrinkr' id=$linkID}{/link}" class="button">{icon size=16 name='pen-to-square'} <span>{lang}wcf.shrinkr.customButton.editUrl{/lang}</span></a></li>
+			<li><a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$linkID}{/link}" class="button">{icon size=16 name='pen-to-square'} <span>{lang}wcf.shrinkr.customButton.editUrl{/lang}</span></a></li>
 			{/if}
 			{event name='contentHeaderNavigation'}
 		</ul>

@@ -1,0 +1,292 @@
+[2026-01-08T08:26:24.799507+00:00]
+sequenceNo: 0
+nodeType: start
+nodeData:
+	currentPackageVersion: 
+------------------------------
+
+[2026-01-08T08:26:24.872808+00:00]
+sequenceNo: 0
+nodeType: package
+nodeData:
+	package: com.woltlab.wcf
+	packageName: WoltLab Suite Core
+	packageDescription: Freies CMS und Web-Framework, das eindrucksvolle Websites und Communities ermöglicht.
+	packageVersion: 6.1.15
+	packageDate: 1763593200
+	packageURL: 
+	isApplication: 1
+	author: WoltLab GmbH
+	authorURL: https://www.woltlab.com
+	installDate: 1767860784
+	updateDate: 1767860784
+	requirements: []
+	applicationDirectory: 
+------------------------------
+
+[2026-01-08T08:26:24.960968+00:00]
+sequenceNo: 1
+nodeType: pip
+nodeData:
+	attributes: {"type":"packageInstallationPlugin"}
+	pip: packageInstallationPlugin
+	value: 
+------------------------------
+
+[2026-01-08T08:26:24.990124+00:00]
+sequenceNo: 2
+nodeType: pip
+nodeData:
+	attributes: {"type":"acpMenu"}
+	pip: acpMenu
+	value: 
+------------------------------
+
+[2026-01-08T08:26:25.136427+00:00]
+sequenceNo: 3
+nodeType: pip
+nodeData:
+	attributes: {"type":"userGroupOption"}
+	pip: userGroupOption
+	value: 
+------------------------------
+
+[2026-01-08T08:26:25.406582+00:00]
+sequenceNo: 4
+nodeType: pip
+nodeData:
+	attributes: {"type":"option"}
+	pip: option
+	value: 
+------------------------------
+
+[2026-01-08T08:26:25.730782+00:00]
+sequenceNo: 0
+nodeType: pip
+nodeData:
+	attributes: {"type":"template","run":"standalone"}
+	pip: template
+	value: 
+------------------------------
+
+[2026-01-08T08:26:25.884487+00:00]
+sequenceNo: 1
+nodeType: pip
+nodeData:
+	attributes: {"type":"eventListener"}
+	pip: eventListener
+	value: 
+------------------------------
+
+[2026-01-08T08:26:25.972506+00:00]
+sequenceNo: 0
+nodeType: pip
+nodeData:
+	attributes: {"type":"script","run":"standalone"}
+	pip: script
+	value: acp/install_com.woltlab.wcf_step1.php
+------------------------------
+
+[2026-01-08T08:26:26.095172+00:00]
+sequenceNo: 1
+nodeType: pip
+nodeData:
+	attributes: {"type":"cronjob"}
+	pip: cronjob
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.149045+00:00]
+sequenceNo: 2
+nodeType: pip
+nodeData:
+	attributes: {"type":"coreObject"}
+	pip: coreObject
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.162396+00:00]
+sequenceNo: 3
+nodeType: pip
+nodeData:
+	attributes: {"type":"clipboardAction"}
+	pip: clipboardAction
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.204897+00:00]
+sequenceNo: 4
+nodeType: pip
+nodeData:
+	attributes: {"type":"objectTypeDefinition"}
+	pip: objectTypeDefinition
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.239075+00:00]
+sequenceNo: 5
+nodeType: pip
+nodeData:
+	attributes: {"type":"objectType"}
+	pip: objectType
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.463770+00:00]
+sequenceNo: 6
+nodeType: pip
+nodeData:
+	attributes: {"type":"acpSearchProvider"}
+	pip: acpSearchProvider
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.471722+00:00]
+sequenceNo: 7
+nodeType: pip
+nodeData:
+	attributes: {"type":"style"}
+	pip: style
+	value: defaultStyle.tar
+------------------------------
+
+[2026-01-08T08:26:26.561219+00:00]
+sequenceNo: 0
+nodeType: pip
+nodeData:
+	attributes: {"type":"userOption","run":"standalone"}
+	pip: userOption
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.886285+00:00]
+sequenceNo: 1
+nodeType: pip
+nodeData:
+	attributes: {"type":"bbcode"}
+	pip: bbcode
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.925576+00:00]
+sequenceNo: 2
+nodeType: pip
+nodeData:
+	attributes: {"type":"smiley"}
+	pip: smiley
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.951825+00:00]
+sequenceNo: 3
+nodeType: pip
+nodeData:
+	attributes: {"type":"userProfileMenu"}
+	pip: userProfileMenu
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.957837+00:00]
+sequenceNo: 4
+nodeType: pip
+nodeData:
+	attributes: {"type":"userMenu"}
+	pip: userMenu
+	value: 
+------------------------------
+
+[2026-01-08T08:26:26.980752+00:00]
+sequenceNo: 5
+nodeType: pip
+nodeData:
+	attributes: {"type":"userNotificationEvent"}
+	pip: userNotificationEvent
+	value: 
+------------------------------
+
+[2026-01-08T08:26:27.006500+00:00]
+sequenceNo: 6
+nodeType: pip
+nodeData:
+	attributes: {"type":"aclOption"}
+	pip: aclOption
+	value: 
+------------------------------
+
+[2026-01-08T08:26:27.012476+00:00]
+sequenceNo: 7
+nodeType: pip
+nodeData:
+	attributes: {"type":"page"}
+	pip: page
+	value: 
+------------------------------
+
+[2026-01-08T08:26:27.386140+00:00]
+sequenceNo: 8
+nodeType: pip
+nodeData:
+	attributes: {"type":"menu"}
+	pip: menu
+	value: 
+------------------------------
+
+[2026-01-08T08:26:27.402178+00:00]
+sequenceNo: 9
+nodeType: pip
+nodeData:
+	attributes: {"type":"menuItem"}
+	pip: menuItem
+	value: 
+------------------------------
+
+[2026-01-08T08:26:27.430877+00:00]
+sequenceNo: 10
+nodeType: pip
+nodeData:
+	attributes: {"type":"box"}
+	pip: box
+	value: 
+------------------------------
+
+[2026-01-08T08:26:27.465124+00:00]
+sequenceNo: 11
+nodeType: pip
+nodeData:
+	attributes: {"type":"mediaProvider"}
+	pip: mediaProvider
+	value: 
+------------------------------
+
+[2026-01-08T08:26:27.479957+00:00]
+sequenceNo: 12
+nodeType: pip
+nodeData:
+	attributes: {"type":"templateListener"}
+	pip: templateListener
+	value: 
+------------------------------
+
+[2026-01-08T08:26:27.485079+00:00]
+sequenceNo: 13
+nodeType: pip
+nodeData:
+	attributes: {"type":"script"}
+	pip: script
+	value: acp/install_com.woltlab.wcf_step2.php
+------------------------------
+
+[2026-01-08T08:26:27.642471+00:00]
+sequenceNo: 0
+nodeType: end
+nodeData:
+------------------------------
+
+[2026-01-08T08:26:27.643650+00:00]
+additional information: start cleanup
+------------------------------
+
+[2026-01-08T08:26:27.916162+00:00]
+additional information: finished cleanup
+------------------------------
+

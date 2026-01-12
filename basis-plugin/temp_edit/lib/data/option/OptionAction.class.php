@@ -11,7 +11,7 @@ use wcf\system\WCF;
  *
  * @author      Sunny C, Sunny C <https://sunnyc.de>
  * @link        https://sunnyc.de
- * @copyright   2022 Sunny C Websites & Co.
+ * @copyright   2026 Sunny C Websites & Co.
  * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
  *
  * @package    de.sunnyc.wsc.shrinkr
@@ -49,7 +49,7 @@ class OptionAction extends AbstractDatabaseObjectAction
      */
     public function validateGenerateRewriteRules()
     {
-        WCF::getSession()->checkPermissions(['admin.shrinkr.canManageUrls']);
+        WCF::getSession()->checkPermissions(['admin.shrinkr.canManageLinks']);
     }
 
     /**
@@ -141,27 +141,30 @@ class OptionAction extends AbstractDatabaseObjectAction
     protected function fetchRewriteRules()
     {
         $apacheRules = <<<'SNIPPET'
-# URL-Shortener: /r/ auf /urls/r/ umschreiben
+# Shr1nkr: /r/ auf /shrinkr/r/ umschreiben
 RewriteCond %{SCRIPT_FILENAME} !-d
 RewriteCond %{SCRIPT_FILENAME} !-f
-RewriteRule ^r/(.*)$ urls/r/$1 [L,QSA]
+RewriteRule ^r/(.*)$ shrinkr/r/$1 [L,QSA]
 SNIPPET;
         
-        $nginxRules = <<<'SNIPPET'
-# URL-Shortener: /r/ auf /urls/r/ umschreiben
-# Diese Regeln müssen in den server-Block Ihrer nginx.conf eingefügt werden
-# WICHTIG: Die /r/ Regel muss VOR den Standard-WoltLab-Regeln stehen!
+        $nginxInstructions = WCF::getLanguage()->get('shrinkr.acp.url.rewrite.nginx.instructions');
+        $nginxImportant = WCF::getLanguage()->get('shrinkr.acp.url.rewrite.nginx.important');
+        $nginxNote = WCF::getLanguage()->get('shrinkr.acp.url.rewrite.nginx.note');
+        
+        $nginxRules = <<<SNIPPET
+# Shr1nkr: /r/ auf /shrinkr/r/ umschreiben
+# {$nginxInstructions}
+# {$nginxImportant}
 
 location ~ ^/r/(.*)$ {
-    try_files $uri $uri/ @short;
+    try_files \$uri \$uri/ @short;
 }
 
 location @short {
-    rewrite /r/(.*)$ /urls/r/$1 last;
+    rewrite /r/(.*)$ /shrinkr/r/$1 last;
 }
 
-# Hinweis: Stellen Sie sicher, dass die Standard-WoltLab-Regeln
-# für /urls/ ebenfalls in Ihrer nginx.conf vorhanden sind.
+# {$nginxNote}
 SNIPPET;
         
         return [
@@ -233,7 +236,7 @@ SNIPPET;
         // Call the demo data installation function from the post-install script
         // We'll include the post-install script which contains the installation logic
         // The script checks if demo data already exists, so it's safe to call multiple times
-        $postInstallScript = WCF_DIR . 'urls/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
+        $postInstallScript = WCF_DIR . 'shrinkr/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
         
         $this->log('Post-install script path: ' . $postInstallScript);
         $this->log('Post-install script exists: ' . (file_exists($postInstallScript) ? 'yes' : 'no'));

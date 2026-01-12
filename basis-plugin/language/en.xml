@@ -16,15 +16,15 @@
 		<item name="wcf.acp.option.category.shrinkr.hash"><![CDATA[Hash Configuration]]></item>
 		<item name="wcf.acp.option.category.shrinkr.interaction"><![CDATA[Interaction]]></item>
 		<item name="wcf.acp.option.category.shrinkr.interaction.description"><![CDATA[Settings for reactions, share button, descriptions and other interaction features]]></item>
-		<item name="wcf.acp.option.category.shrinkr.design"><![CDATA[Design]]></item>
-		<item name="wcf.acp.option.category.shrinkr.design.description"><![CDATA[Settings for special effects and themes]]></item>
+		<item name="wcf.acp.option.category.shrinkr.design"><![CDATA[Appearance]]></item>
+		<item name="wcf.acp.option.category.shrinkr.design.description"><![CDATA[Settings for forward button, title icon, special effects and themes]]></item>
 		<item name="wcf.acp.option.category.shrinkr.advanced"><![CDATA[Advanced]]></item>
 		<item name="wcf.acp.option.category.shrinkr.advanced.description"><![CDATA[Advanced settings for experts. <strong>Warning:</strong> Incorrect configurations can cause the URL shortener to stop working.]]></item>
 
 		<item name="wcf.acp.option.shrinkr_active"><![CDATA[Activate the Shr1nkr]]></item>
 		<item name="wcf.acp.option.shrinkr_active.description"><![CDATA[Activates the Shr1nkr. After activation, you can create and manage short URLs.]]></item>
 		<item name="wcf.acp.option.shrinkr_counter_active"><![CDATA[Activate the visit counter for short URLs]]></item>
-		<item name="wcf.acp.option.shrinkr_counter_active.description"><![CDATA[Shows how many times a short URL has been accessed. The counter is displayed in the <a href="{link application='urlshort' controller='UrlList'}{/link}">URL list</a> and can be reset if needed.]]></item>
+		<item name="wcf.acp.option.shrinkr_counter_active.description"><![CDATA[Shows how many times a short URL has been accessed. The counter is displayed in the <a href="{link application='shrinkr' controller='UrlList'}{/link}">URL list</a> and can be reset if needed.]]></item>
 		<item name="wcf.acp.option.shrinkr_forwarding_must_confirmed"><![CDATA[Forwarding must be confirmed]]></item>
 		<item name="wcf.acp.option.shrinkr_forwarding_must_confirmed.description"><![CDATA[On the redirect page, a button must first be clicked before redirecting to the target URL. This increases security and prevents automatic redirects. If "Delayed forwarding" is activated, the button can only be pressed after the waiting time has elapsed.]]></item>
 		<item name="wcf.acp.option.shrinkr_time_until_forwarding"><![CDATA[Delayed forwarding (in seconds)]]></item>
@@ -43,10 +43,6 @@
 		<item name="wcf.acp.option.shrinkr_only_https.description"><![CDATA[Only allows target URLs that start with <kbd>https://</kbd>. URLs with <kbd>http://</kbd> are rejected. This increases security by using encrypted connections.]]></item>
 		<item name="wcf.acp.option.shrinkr_deactivate_forwarding_chains"><![CDATA[Deactivate redirect chains]]></item>
 		<item name="wcf.acp.option.shrinkr_deactivate_forwarding_chains.description"><![CDATA[Prevents target URLs that themselves redirect to other URLs (redirect chains). Example: URL A redirects to URL B, which in turn redirects to URL C. Such chains are blocked by default as they can cause problems.]]></item>
-		<item name="wcf.acp.option.shrinkr_url_blacklist"><![CDATA[Blacklist for target URLs]]></item>
-		<item name="wcf.acp.option.shrinkr_url_blacklist.description"><![CDATA[List of URLs or domain names that may not be used as target URLs. Each line corresponds to one entry. Example: <kbd>example.com</kbd> blocks all URLs from this domain.]]></item>
-		<item name="wcf.acp.option.shrinkr_remove_urls_prefix"><![CDATA[Remove /urls/ prefix from URLs]]></item>
-		<item name="wcf.acp.option.shrinkr_remove_urls_prefix.description"><![CDATA[Removes the <kbd>/urls/</kbd> prefix from generated short URLs. Instead of <kbd>/urls/r/test/</kbd>, <kbd>/r/test/</kbd> will be generated. Requires manual web server configuration (see <a href="{link application='urlshort' controller='UrlAdd'}{/link}">instructions in URL form</a>). <strong>Important:</strong> URL rewriting must be enabled under "General".]]></item>
 		
 		<item name="wcf.acp.option.shrinkr_pattern"><![CDATA[Hash RegEx pattern]]></item>
 		<item name="wcf.acp.option.shrinkr_pattern.description"><![CDATA[Allows you to define a custom pattern (RegEx pattern) for hash codes. Default: <kbd>[0-9a-z\-]{1,64}</kbd> (numbers, lowercase letters and hyphens, 1-64 characters). <strong>Experts only:</strong> Incorrect patterns can prevent URLs from being created.]]></item>
@@ -57,22 +53,25 @@
 		<!-- Featured Links Options -->
 		<item name="wcf.acp.option.shrinkr_install_demo_data"><![CDATA[Install demo data]]></item>
 		<item name="wcf.acp.option.shrinkr_install_demo_data.description"><![CDATA[Installs demo URLs (DEMO-1 to DEMO-7) with example discounts, specials, featured links and custom buttons for testing purposes.]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableReactions"><![CDATA[Enable reactions]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableReactions.description"><![CDATA[Enables the reaction system for short URLs on the redirect page.]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableGuestReactions"><![CDATA[Enable guest reactions]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableGuestReactions.description"><![CDATA[Allows guests to react on short URLs. Guest reactions are stored and synchronized with the user account upon registration.]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableShareButton"><![CDATA[Enable share button]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableShareButton.description"><![CDATA[Shows the share button on the redirect page.]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableCustomForwardButton"><![CDATA[Enable 3D button style]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableCustomForwardButton.label"><![CDATA[Override forward button]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableCustomForwardButton.description"><![CDATA[The button automatically adapts to the promo badge colors.]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableCustomForwardButton.preview"><![CDATA[Preview:]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableDescriptions"><![CDATA[Enable descriptions]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_enableDescriptions.description"><![CDATA[Enables the display of descriptions on the redirect page. This setting overrides the individual activation/deactivation of single descriptions.]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_titleIcon"><![CDATA[Title Icon]]></item>
-		<item name="wcf.acp.option.shrinkr_featuredLinks_titleIcon.description"><![CDATA[Select a Font Awesome icon to display before the h1 title on the redirect page.]]></item>
-		<item name="wcf.acp.option.shrinkr_halloween_leaves"><![CDATA[Enable special effects]]></item>
-		<item name="wcf.acp.option.shrinkr_halloween_leaves.description"><![CDATA[Allows theme-specific effects such as autumn leaves, snow or ghosts.]]></item>
+		<item name="wcf.acp.option.shrinkr_remove_shrinkr_prefix"><![CDATA[Remove /shrinkr/ prefix from URLs]]></item>
+		<item name="wcf.acp.option.shrinkr_remove_shrinkr_prefix.description"><![CDATA[Removes the <kbd>/shrinkr/</kbd> prefix from generated short URLs. Instead of <kbd>/shrinkr/r/test/</kbd>, <kbd>/r/test/</kbd> will be generated. Requires manual webserver configuration. <strong>Important:</strong> Link rewriting must be enabled under "General".]]></item>
+		
+		<item name="wcf.acp.option.shrinkr_enable_reactions"><![CDATA[Enable reactions]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_reactions.description"><![CDATA[Enables the reaction system for short URLs on the redirect page.]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_guest_reactions"><![CDATA[Enable guest reactions]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_guest_reactions.description"><![CDATA[Allows guests to react on short URLs. Guest reactions are stored and synchronized with the user account upon registration.]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_share_button"><![CDATA[Enable share button]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_share_button.description"><![CDATA[Shows the share button on the redirect page.]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_descriptions"><![CDATA[Enable descriptions]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_descriptions.description"><![CDATA[Enables the display of descriptions on the redirect page. This setting overrides the individual activation/deactivation of single descriptions.]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button"><![CDATA[Enable 3D button style]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button.label"><![CDATA[Override forward button]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button.description"><![CDATA[The button automatically adapts to the promo badge colors.]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button.preview"><![CDATA[Preview:]]></item>
+		<item name="wcf.acp.option.shrinkr_title_icon"><![CDATA[Title Icon]]></item>
+		<item name="wcf.acp.option.shrinkr_title_icon.description"><![CDATA[Select a Font Awesome icon to display before the h1 title on the redirect page.]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_theme_effects"><![CDATA[Enable special effects]]></item>
+		<item name="wcf.acp.option.shrinkr_enable_theme_effects.description"><![CDATA[Allows theme-specific effects such as autumn leaves, snow or ghosts.]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_qr_code"><![CDATA[Enable QR code generation]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_qr_code.description"><![CDATA[Enables the generation and display of QR codes in the URL list in the ACP.]]></item>
 	</category>
@@ -80,40 +79,53 @@
 	<category name="wcf.acp.group">
 		<item name="wcf.acp.group.option.category.user.shrinkr"><![CDATA[Shr1nkr]]></item>
 		<item name="wcf.acp.group.option.category.mod.shrinkr"><![CDATA[Shr1nkr]]></item>
-		<item name="wcf.acp.group.option.category.admin.shrinkr"><![CDATA[Shr1nkr]]></item>
-		<item name="wcf.acp.group.option.admin.shrinkr.canManageUrls"><![CDATA[Can manage short URLs]]></item>
+		<item name="wcf.acp.group.option.category.admin.shrinkr"><![CDATA[Shr1nkr Administration]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageLinks"><![CDATA[Can manage links]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageDiscounts"><![CDATA[Can manage discounts]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageDescriptions"><![CDATA[Can manage descriptions]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageFeaturedLinks"><![CDATA[Can manage featured links]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageCustomButtons"><![CDATA[Can manage custom buttons]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageSpecials"><![CDATA[Can manage specials]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageThemes"><![CDATA[Can manage themes]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageButtonClicks"><![CDATA[Can manage button clicks]]></item>
 	</category>
 
 	<category name="shrinkr.acp.option">
-		<item name="shrinkr.acp.option.reload"><![CDATA[Reload Options]]></item>
+		<item name="shrinkr.acp.option.reload"><![CDATA[Load Options]]></item>
 	</category>
 
 	<category name="shrinkr.acp.menu">
 		<item name="shrinkr.acp.menu.link.menu"><![CDATA[Shr1nkr]]></item>
-		<item name="shrinkr.acp.menu.link.url.list"><![CDATA[Short URLs]]></item>
-		<item name="shrinkr.acp.menu.link.url.add"><![CDATA[Add short URL]]></item>
+		<item name="shrinkr.acp.menu.link.link.list"><![CDATA[Links]]></item>
+		<item name="shrinkr.acp.menu.link.link.add"><![CDATA[Add Link]]></item>
 		<item name="shrinkr.acp.menu.link.discount.list"><![CDATA[Discounts]]></item>
 		<item name="shrinkr.acp.menu.link.discount.add"><![CDATA[Add discount]]></item>
+		<item name="shrinkr.acp.menu.link.discount.edit"><![CDATA[Edit Discount]]></item>
 		<item name="shrinkr.acp.menu.link.description.list"><![CDATA[Descriptions]]></item>
 		<item name="shrinkr.acp.menu.link.description.add"><![CDATA[Add description]]></item>
+		<item name="shrinkr.acp.menu.link.description.edit"><![CDATA[Edit Description]]></item>
 		<item name="shrinkr.acp.menu.link.featuredLink.list"><![CDATA[Featured Links]]></item>
 		<item name="shrinkr.acp.menu.link.featuredLink.add"><![CDATA[Add featured link]]></item>
 		<item name="shrinkr.acp.menu.link.customButton.list"><![CDATA[Custom Buttons]]></item>
 		<item name="shrinkr.acp.menu.link.customButton.add"><![CDATA[Add custom button]]></item>
 		<item name="shrinkr.acp.menu.link.special.list"><![CDATA[Specials]]></item>
+		<item name="shrinkr.acp.menu.link.special.edit"><![CDATA[Edit Special]]></item>
 		<item name="shrinkr.acp.menu.link.theme.list"><![CDATA[Themes]]></item>
 		<item name="shrinkr.acp.menu.link.theme.add"><![CDATA[Add theme]]></item>
+		<item name="shrinkr.acp.menu.link.theme.edit"><![CDATA[Edit Theme]]></item>
 		<item name="shrinkr.acp.menu.link.statistics.list"><![CDATA[Statistics]]></item>
 	</category>
 
-	<category name="wcf.urlshort">
+	<category name="wcf.shrinkr">
 		<item name="wcf.shrinkr.url"><![CDATA[Short URL]]></item>
 		<item name="wcf.shrinkr.copyUrl"><![CDATA[Copy short URL]]></item>
 		<item name="wcf.shrinkr.copyUrl.success"><![CDATA[URL was copied successfully]]></item>
 		<item name="wcf.shrinkr.copyUrl.error"><![CDATA[An error occurred during copying]]></item>
 		<item name="wcf.shrinkr.urlGoal"><![CDATA[Destination URL]]></item>
 		<item name="wcf.shrinkr.urlGoal.description"><![CDATA[The full target URL to redirect to (e.g. https://example.com).]]></item>
-		<item name="wcf.shrinkr.notActive"><![CDATA[Shr1nkr has not been activateds.]]></item>
+		<item name="wcf.shrinkr.notActive"><![CDATA[Shr1nkr has not been activated.]]></item>
+		<item name="wcf.shrinkr.yes"><![CDATA[Yes]]></item>
+		<item name="wcf.shrinkr.no"><![CDATA[No]]></item>
 		<item name="wcf.shrinkr.url.hash"><![CDATA[Hash]]></item>
 		<item name="wcf.shrinkr.url.hash.description"><![CDATA[The hash is the unique short code for the URL. If left empty, a random hash will be automatically generated.]]></item>
 		<item name="wcf.shrinkr.url.counter"><![CDATA[Visit Counter]]></item>
@@ -121,7 +133,7 @@
 		<item name="wcf.shrinkr.qrCode.download"><![CDATA[Download]]></item>
 		<item name="wcf.shrinkr.qrCode.zoom"><![CDATA[Zoom in]]></item>
 		<item name="wcf.shrinkr.resetCounter"><![CDATA[Reset Visit Counter]]></item>
-		<item name="wcf.shrinkr.copyright"><![CDATA[<a href="https://julian-pfeil.de" rel="nofollow"{if EXTERNAL_LINK_TARGET_BLANK} target="_blank"{/if}><strong>Shr1nkr</strong> (by <strong>julian-pfeil.de</strong>)</a>]]></item>
+		<item name="wcf.shrinkr.copyright"><![CDATA[<a href="https://sunnyc.de" rel="nofollow"{if EXTERNAL_LINK_TARGET_BLANK} target="_blank"{/if}><strong>Shr1nkr</strong> (by <strong>sunnyc.de</strong>)</a>]]></item>
 	</category>
 
 	<category name="shrinkr.acp.rewrite">
@@ -130,6 +142,13 @@
 		<item name="shrinkr.acp.rewrite.description"><![CDATA[Generates the required .htaccess rules for URLs without /urls/ prefix.]]></item>
 		<item name="shrinkr.acp.rewrite.info.title"><![CDATA[Important]]></item>
 		<item name="shrinkr.acp.rewrite.info.description"><![CDATA[The rule for /r/ must be at the VERY TOP of the .htaccess file (before the urls/ rule). URL rewriting must be enabled under "General" → "Search Engine Optimization (SEO)".]]></item>
+	</category>
+	
+	<category name="shrinkr.acp.url">
+		<item name="shrinkr.acp.url.removeUrlsPrefix.info.title"><![CDATA[Remove /shrinkr/ Prefix]]></item>
+		<item name="shrinkr.acp.url.removeUrlsPrefix.info.description"><![CDATA[You have enabled the option to remove the /shrinkr/ prefix from URLs. For links like <strong>https://example.com/r/abc123</strong> to work, rewrite rules must be added to your webserver configuration.]]></item>
+		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate"><![CDATA[Show Rewrite Rules]]></item>
+		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate.description"><![CDATA[Click the button to display the appropriate rewrite rules for your webserver.]]></item>
 	</category>
 
 	<category name="shrinkr.acp.url">
@@ -146,17 +165,21 @@
 		<item name="shrinkr.acp.url.url.error.httpsRequired"><![CDATA[The URL must use HTTPS (https://).]]></item>
 		<item name="shrinkr.acp.url.url.error.isOnBlacklist"><![CDATA[The specified URL is on the blacklist.]]></item>
 		<item name="shrinkr.acp.url.url.error.forwardingChain"><![CDATA[Redirect chains are not allowed.]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.title"><![CDATA[Advanced URL generation enabled]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.description"><![CDATA[URLs are generated without <kbd>/urls/</kbd> prefix (e.g. <kbd>/r/test/</kbd> instead of <kbd>/urls/r/test/</kbd>). For this to work, the web server configuration (Apache <kbd>.htaccess</kbd> or nginx <kbd>nginx.conf</kbd>) must be manually adjusted. Click the "Generate Rewrite Rules" button in the top right to display the required rules. This info will automatically disappear once the rules are correctly inserted into the web server configuration.]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.title"><![CDATA[Instructions: Adjust web server configuration]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.step1"><![CDATA[Go to: ACP → General → Search Engine Optimization (SEO) → Generate Rewrite Rules]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.step2"><![CDATA[Copy the generated standard rules from WoltLab]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.step3"><![CDATA[Insert the rule for <kbd>/r/</kbd> at the VERY TOP (before the <kbd>urls/</kbd> rule)]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.alreadySet"><![CDATA[The rule for <kbd>/r/</kbd> is already present in the .htaccess file.]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.apache"><![CDATA[Apache (.htaccess)]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.nginx"><![CDATA[nginx (nginx.conf)]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate"><![CDATA[Generate Rewrite Rules]]></item>
-		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate.description"><![CDATA[Click the "Generate Rewrite Rules" button in the top right to display the required rules for Apache (.htaccess) and nginx (nginx.conf) and insert them into your web server configuration.]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.title"><![CDATA[Advanced URL generation enabled]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.description"><![CDATA[URLs are generated without <kbd>/shrinkr/</kbd> prefix (e.g. <kbd>/r/test/</kbd> instead of <kbd>/shrinkr/r/test/</kbd>). For this to work, the web server configuration (Apache <kbd>.htaccess</kbd> or nginx <kbd>nginx.conf</kbd>) must be manually adjusted. Click the "Generate Rewrite Rules" button in the top right to display the required rules. This info will automatically disappear once the rules are correctly inserted into the web server configuration.]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.title"><![CDATA[Instructions: Adjust web server configuration]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.step1"><![CDATA[Go to: ACP → General → Search Engine Optimization (SEO) → Generate Rewrite Rules]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.step2"><![CDATA[Copy the generated standard rules from WoltLab]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.step3"><![CDATA[Insert the rule for <kbd>/r/</kbd> at the VERY TOP (before the <kbd>shrinkr/</kbd> rule)]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.alreadySet"><![CDATA[The rule for <kbd>/r/</kbd> is already present in the .htaccess file.]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.apache"><![CDATA[Apache (.htaccess)]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.nginx"><![CDATA[nginx (nginx.conf)]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.generate"><![CDATA[Generate Rewrite Rules]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.generate.description"><![CDATA[Click the "Generate Rewrite Rules" button in the top right to display the required rules for Apache (.htaccess) and nginx (nginx.conf) and insert them into your web server configuration.]]></item>
+		<item name="shrinkr.acp.url.rewrite.nginx.instructions"><![CDATA[These rules must be inserted into the server block of your nginx.conf]]></item>
+		<item name="shrinkr.acp.url.rewrite.nginx.important"><![CDATA[IMPORTANT: The /r/ rule must be placed BEFORE the standard WoltLab rules!]]></item>
+		<item name="shrinkr.acp.url.rewrite.nginx.note"><![CDATA[Note: Ensure that the standard WoltLab rules
+for /shrinkr/ are also present in your nginx.conf.]]></item>
 	</category>
 
 	<category name="shrinkr.redirect">
@@ -175,9 +198,13 @@
 		<item name="shrinkr.featured.texts.discount"><![CDATA[Take advantage of exclusive discounts from these providers as well]]></item>
 	</category>
 
-	<category name="wcf.urlshort">
+	<category name="wcf.shrinkr">
+		<item name="wcf.shrinkr.design"><![CDATA[Appearance]]></item>
 		<item name="wcf.shrinkr.featured"><![CDATA[Recommended for this]]></item>
 		<item name="wcf.shrinkr.featuredLinks"><![CDATA[Recommended links]]></item>
+		<item name="wcf.shrinkr.featuredLinks.manage.description"><![CDATA[Recommended links are displayed on the redirect page. You can manage them via the corresponding menu items.]]></item>
+		<item name="wcf.shrinkr.customButtons"><![CDATA[Custom Buttons]]></item>
+		<item name="wcf.shrinkr.customButtons.manage.description"><![CDATA[Custom buttons are displayed on the redirect page. You can manage them via the corresponding menu items.]]></item>
 		<item name="wcf.shrinkr.hosts"><![CDATA[Host names]]></item>
 		<item name="wcf.shrinkr.hosts.description"><![CDATA[Enter one or more host names (e.g. amazon.com, ebay.com, walmart.com)]]></item>
 		<item name="wcf.shrinkr.special"><![CDATA[Special]]></item>
@@ -191,7 +218,7 @@
 		<item name="wcf.shrinkr.special.noItems.howToAdd.title"><![CDATA[How do I add specials?]]></item>
 		<item name="wcf.shrinkr.special.noItems.howToAdd.text"><![CDATA[Specials can be created in two ways:]]></item>
 		<item name="wcf.shrinkr.special.noItems.howToAdd.viaUrlList"><![CDATA[In the URL list via the \"+\" button in the Special column]]></item>
-		<item name="wcf.shrinkr.special.noItems.howToAdd.viaUrlEdit"><![CDATA[Via the URL edit page in the navigation menu]]></item>
+		<item name="wcf.shrinkr.special.noItems.howToAdd.viaLinkEdit"><![CDATA[Via the link edit page in the navigation menu]]></item>
 		<item name="wcf.shrinkr.special.noItems.dependencies.title"><![CDATA[What are specials dependent on?]]></item>
 		<item name="wcf.shrinkr.special.noItems.dependencies.text"><![CDATA[Specials require an existing URL. Each special is assigned to a specific URL and is displayed on the corresponding redirect page.]]></item>
 		<item name="wcf.shrinkr.special.noItems.impact.title"><![CDATA[What depends on specials?]]></item>
@@ -215,7 +242,7 @@
 		<item name="wcf.shrinkr.special.isActive.description"><![CDATA[The special is activated. The countdown continues even if deactivated.]]></item>
 		<item name="wcf.shrinkr.special.urlHash"><![CDATA[Short URL]]></item>
 		<item name="wcf.shrinkr.special.shortUrl"><![CDATA[Short URL / hash]]></item>
-		<item name="wcf.shrinkr.special.shortUrl.placeholder"><![CDATA[e.g. #42 or benjaro]]></item>
+		<item name="wcf.shrinkr.special.shortUrl.placeholder"><![CDATA[e.g. #42 or mylink]]></item>
 		<item name="wcf.shrinkr.special.timeRange"><![CDATA[Schedule]]></item>
 		<item name="wcf.shrinkr.special.timeRange.start"><![CDATA[Start]]></item>
 		<item name="wcf.shrinkr.special.timeRange.end"><![CDATA[End]]></item>
@@ -231,7 +258,7 @@
 		<item name="wcf.shrinkr.additionalText"><![CDATA[Additional text]]></item>
 		<item name="wcf.shrinkr.additionalText.description"><![CDATA[HTML-formatted text displayed below the discount codes]]></item>
 		<item name="wcf.shrinkr.codes"><![CDATA[Discount codes]]></item>
-		<item name="wcf.shrinkr.codes.description"><![CDATA[One or more discount codes (Default: BENJARO). Additional codes can be added.]]></item>
+		<item name="wcf.shrinkr.codes.description"><![CDATA[One or more discount codes (Default: SHRINKR). Additional codes can be added.]]></item>
 		<item name="wcf.shrinkr.codes.single"><![CDATA[Discount Code]]></item>
 		<item name="wcf.shrinkr.codes.multiple"><![CDATA[Discount Codes]]></item>
 		<item name="wcf.shrinkr.code.clickToCopy"><![CDATA[Click to copy]]></item>
@@ -288,6 +315,7 @@
 		<item name="wcf.shrinkr.theme.css.edit.warning"><![CDATA[Warning: Only edit this CSS file if you know what you are doing. Changes to predefined themes may affect the design.]]></item>
 		<item name="wcf.shrinkr.theme.css.content"><![CDATA[CSS Content]]></item>
 		<item name="wcf.shrinkr.theme.css.content.description"><![CDATA[The complete CSS code for this theme.]]></item>
+		<item name="wcf.shrinkr.form.tab.basic"><![CDATA[Basic settings]]></item>
 		<item name="wcf.shrinkr.form.section.basic"><![CDATA[Basic Settings]]></item>
 		<item name="wcf.shrinkr.form.section.basic.description"><![CDATA[Identifier, title, effect and status of the theme]]></item>
 		<item name="wcf.shrinkr.form.section.basic.description.description"><![CDATA[Title and description text]]></item>
@@ -310,6 +338,7 @@
 		<item name="wcf.shrinkr.badge.backgroundColor.description"><![CDATA[Background color for the badge]]></item>
 		<item name="wcf.shrinkr.url.urlTitle"><![CDATA[Title of the destination URL]]></item>
 		<item name="wcf.shrinkr.url.urlTitle.description"><![CDATA[Title displayed on the redirect page]]></item>
+		<item name="wcf.shrinkr.url.linkTitle.placeholder"><![CDATA[Recommended Links]]></item>
 		<item name="wcf.shrinkr.likeableUrl.notification"><![CDATA[Someone reacted to your short URL]]></item>
 		<item name="wcf.shrinkr.likeableUrl.notification.title"><![CDATA[Reaction on short URL]]></item>
 		<item name="wcf.shrinkr.copyCode"><![CDATA[Copy discount code]]></item>
@@ -321,7 +350,7 @@
 		<item name="wcf.shrinkr.description.title"><![CDATA[Title]]></item>
 		<item name="wcf.shrinkr.description.title.description"><![CDATA[A short title for this description (visible in ACP only)]]></item>
 		<item name="wcf.shrinkr.description.descriptionText"><![CDATA[Description text]]></item>
-		<item name="wcf.shrinkr.description.descriptionText.description"><![CDATA[Description text for the redirect page (HTML & Smarty allowed).<br><br><strong>Variables (click to insert):</strong><br><button type="button" class="badge descriptionVariable" data-variable="{literal}{$url}{/literal}">{icon size=16 name='plus'} <span>Target URL</span></button> <button type="button" class="badge descriptionVariable" data-variable="{literal}{$extractedTitle}{/literal}">{icon size=16 name='plus'} <span>Page Title</span></button> <button type="button" class="badge descriptionVariable" data-variable="{literal}{$discount->discountValue}{/literal}">{icon size=16 name='plus'} <span>Discount Title</span></button><br><br><strong>Placeholder:</strong><br><button type="button" class="badge descriptionVariable" data-variable="[[FAV_URL_LINK]]">{icon size=16 name='plus'} <span>Link with Favicon</span></button><br><br><strong>Example:</strong><br><code>Visit {literal}{$extractedTitle}{/literal} for more info: [[FAV_URL_LINK]]</code>]]></item>
+		<item name="wcf.shrinkr.description.descriptionText.description"><![CDATA[Description text for the redirect page (HTML & Smarty allowed).<br><br><strong>Variables (click to insert):</strong><br><button type="button" class="button small descriptionVariable" data-variable="{literal}{$url}{/literal}">{icon size=16 name='plus'} <span>Target URL</span></button> <button type="button" class="button small descriptionVariable" data-variable="{literal}{$extractedTitle}{/literal}">{icon size=16 name='plus'} <span>Page Title</span></button> <button type="button" class="button small descriptionVariable" data-variable="{literal}{$discount->discountValue}{/literal}">{icon size=16 name='plus'} <span>Discount Title</span></button><br><br><strong>Placeholder:</strong><br><button type="button" class="button small descriptionVariable" data-variable="[[FAV_URL_LINK]]">{icon size=16 name='plus'} <span>Link with Favicon</span></button>]]></item>
 		<item name="wcf.shrinkr.description.isActive"><![CDATA[Active]]></item>
 		<item name="wcf.shrinkr.description.preview"><![CDATA[Preview]]></item>
 		<item name="wcf.shrinkr.description.isActive.description"><![CDATA[Only active descriptions will be randomly displayed on the redirect page.]]></item>
@@ -413,7 +442,7 @@
 		<item name="wcf.shrinkr.buttonClick.statistics.period"><![CDATA[Period]]></item>
 		<item name="wcf.shrinkr.buttonClick.statistics.topUrls"><![CDATA[Top URLs]]></item>
 	</category>
-	
+
 	<category name="wcf.shrinkr.statistics">
 		<item name="wcf.shrinkr.statistics.visits"><![CDATA[Visits]]></item>
 		<item name="wcf.shrinkr.statistics.visits.total"><![CDATA[Total]]></item>

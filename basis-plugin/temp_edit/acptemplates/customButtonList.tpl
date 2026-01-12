@@ -14,7 +14,7 @@
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='UrlEdit' application='shrinkr' id=$linkID}{/link}"
+			<li><a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$linkID}{/link}"
 					class="button buttonPrimary">{icon size=16 name='pen-to-square'}
 					<span>{lang}wcf.shrinkr.customButton.backToUrl{/lang}</span></a></li>
 			<li><a href="{link controller='CustomButtonAdd' application='shrinkr'}linkID={#$linkID}{/link}"

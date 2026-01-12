@@ -77,7 +77,7 @@ class OptionActionDemoDataListener extends AbstractEventListener
         // Call the demo data installation function from the post-install script
         // We'll include the post-install script which contains the installation logic
         // The script checks if demo data already exists, so it's safe to call multiple times
-        $postInstallScript = WCF_DIR . 'urls/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
+        $postInstallScript = WCF_DIR . 'shrinkr/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
         
         $this->log('Post-install script path: ' . $postInstallScript);
         $this->log('Post-install script exists: ' . (file_exists($postInstallScript) ? 'yes' : 'no'));

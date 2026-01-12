@@ -1,0 +1,165 @@
+.userCardList {
+	--column-count: 3;
+
+	display: grid;
+	gap: 20px;
+	grid-auto-rows: minmax(200px, auto);
+	grid-template-columns: repeat(var(--column-count), 1fr);
+	padding: 20px 0;
+
+	@include screen-lg-only {
+		--column-count: 2;
+	}
+	@include screen-sm {
+		--column-count: 2;
+	}
+	@include screen-xs {
+		--column-count: 1;
+	}
+}
+
+.userCard {
+	background-color: var(--wcfContentBackground);
+	border: 1px solid var(--wcfContentBorderInner);
+	border-radius: var(--wcfBorderRadius);
+	box-shadow: var(--wcfBoxShadowCard);
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+.userCard__header {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.userCard__header__background {
+	height: 100px;
+	overflow: hidden;
+	/* Nesting the border radius requires the inner element to be one pixel
+	   shorter to prevent visual gaps. */
+	border-top-right-radius: calc(var(--wcfBorderRadius) - 1px);
+	border-top-left-radius: calc(var(--wcfBorderRadius) - 1px);
+}
+
+.userCard__header__background__image {
+	height: 100%;
+	object-fit: cover;
+	width: 100%;
+}
+
+.userCard__header__avatar {
+	position: relative;
+	border-radius: 50%;
+	border: 5px solid var(--wcfContentBackground);
+	margin: auto;
+	margin-top: -37px;
+}
+
+.userCard__onlineIndicator {
+	background-color: rgba(0, 153, 0, 1);
+	border: 1px solid var(--wcfContentBackground);
+	border-radius: 50%;
+	bottom: 0;
+	height: 12px;
+	position: absolute;
+	right: 6px;
+	width: 12px;
+}
+
+.userCard__footer {
+	border-top: 1px solid var(--wcfContentBorderInner);
+	padding: 10px;
+}
+
+.userCard__content {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	flex: 1 auto;
+	row-gap: 5px;
+	padding: 10px 20px 20px 20px;
+}
+
+.userCard__username {
+	@include wcfFontHeadline;
+	@include wcfFontBold;
+
+	a {
+		color: inherit;
+	}
+}
+
+.userCard__footer__stats {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px;
+}
+
+.userCard__footer__statsItem {
+	display: flex;
+	color: inherit;
+	flex-direction: column;
+	text-align: center;
+
+	&:hover {
+		color: inherit;
+	}
+}
+
+.userCard__footer__statsItem:nth-child(n + 4) {
+	display: none;
+}
+
+.userCard__footer__statsItem__key {
+	@include wcfFontSmall;
+	color: var(--wcfContentDimmedText);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.userCard__buttons {
+	background-color: var(--wcfContentContainerBackground);
+	border-radius: 30px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 5px;
+	margin: 5px auto 0 auto;
+	padding: 5px 10px;
+}
+
+.userCard__button {
+	color: inherit;
+
+	&:hover {
+		color: inherit;
+	}
+}
+
+.userCard__details {
+	@include wcfFontSmall;
+	margin-top: auto;
+	padding-top: 5px;
+}
+
+.userCard__details .dataList dd {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.popoverContainer[data-identifier="com.woltlab.wcf.user"] {
+	--padding: 0;
+	--maxHeight: none;
+	--maxWidth: 300px;
+	width: 300px;
+
+	.userCard {
+		border-width: 0;
+		box-shadow: none;
+	}
+}

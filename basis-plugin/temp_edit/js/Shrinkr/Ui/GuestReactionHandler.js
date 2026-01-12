@@ -4,9 +4,9 @@
  * Extends WoltLab's UiReactionHandler to support guest reactions via GuestReactionAction.
  * Handles data conversion and Web Component updates for reaction summaries.
  *
- * @author      Sunny C. <https://benjaro.info>
- * @copyright   2022-2025 Benjaro
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  * @module      Shrinkr/Ui/GuestReactionHandler
  * @since       2.3.6
  */

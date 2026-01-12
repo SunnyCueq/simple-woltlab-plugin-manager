@@ -13,9 +13,9 @@ use wcf\util\StringUtil;
  * Fetches favicons from websites without using external services.
  * Policy-compliant implementation for WoltLab Plugin Store.
  *
- * @author      Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @license     License for Commercial Plugins
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.favicon

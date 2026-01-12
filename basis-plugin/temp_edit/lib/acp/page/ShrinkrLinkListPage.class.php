@@ -13,7 +13,7 @@ use wcf\util\StringUtil;
 /**
  * @author      Sunny C, Sunny C <https://sunnyc.de>
  * @link        https://sunnyc.de
- * @copyright   2022 Sunny C Websites & Co.
+ * @copyright   2026 Sunny C Websites & Co.
  * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
  *
  * @package    de.sunnyc.wsc.shrinkr
@@ -24,12 +24,12 @@ class ShrinkrLinkListPage extends SortablePage
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'shrinkr.acp.menu.link.url.list';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.link.list';
     
     /**
      * @inheritDoc
      */
-    public $neededPermissions = ['admin.shrinkr.canManageUrls'];
+    public $neededPermissions = ['admin.shrinkr.canManageLinks'];
     
     /**
      * @inheritDoc
@@ -151,23 +151,8 @@ class ShrinkrLinkListPage extends SortablePage
                     continue;
                 }
                 
-                // Handle both Url objects and decorated objects
-                $linkID = null;
-                if (is_a($object, 'shrinkr\data\shrinkrlink\Url')) {
-                    $linkID = $object->linkID ?? null;
-                } elseif (method_exists($object, 'getDecoratedObject')) {
-                    try {
-                        $decorated = $object->getDecoratedObject();
-                        if ($decorated !== null && is_a($decorated, 'shrinkr\data\shrinkrlink\Url')) {
-                            $linkID = $decorated->linkID ?? null;
-                        }
-                    } catch (\Exception $e) {
-                        // Skip this object if getDecoratedObject() fails
-                        continue;
-                    }
-                } elseif (isset($object->linkID)) {
-                    $linkID = $object->linkID;
-                }
+                // ShrinkrLink objects have linkID property directly
+                $linkID = $object->linkID ?? null;
                 
                 if ($linkID) {
                     $linkIDs[] = $linkID;
@@ -294,10 +279,9 @@ class ShrinkrLinkListPage extends SortablePage
 
             // Step 5: Add plainLinks for featured links
             foreach ($this->objectList as $object) {
-                if (!is_a($object, 'shrinkr\data\shrinkrlink\Url')) {
-                    $object = $object->getDecoratedObject();
-                }
-
+                // ShrinkrLink is already a DatabaseObject, not a decorator
+                // No need to call getDecoratedObject()
+                
                 if (!isset($linksArray[$object->linkID])) {
                     $linksArray[$object->linkID] = [
                         'countFeaturedLinks' => 0,
@@ -385,9 +369,7 @@ class ShrinkrLinkListPage extends SortablePage
         if (MODULE_LIKE && isset($this->objectList) && !empty($this->objectList)) {
             $reactionUrlIDs = [];
             foreach ($this->objectList as $object) {
-                if (!is_a($object, 'shrinkr\data\shrinkrlink\Url')) {
-                    $object = $object->getDecoratedObject();
-                }
+                // ShrinkrLink objects have linkID property directly
                 if (isset($object->linkID) && $object->linkID) {
                     $reactionUrlIDs[] = $object->linkID;
                 }
@@ -478,8 +460,9 @@ class ShrinkrLinkListPage extends SortablePage
             $objects = $this->objectList->getObjects();
             
             usort($objects, function($a, $b) use ($sortField, $sortOrder, $linksArray) {
-                $aObj = is_a($a, 'shrinkr\data\shrinkrlink\Url') ? $a : $a->getDecoratedObject();
-                $bObj = is_a($b, 'shrinkr\data\shrinkrlink\Url') ? $b : $b->getDecoratedObject();
+                // ShrinkrLink objects are used directly, no decorator
+                $aObj = $a;
+                $bObj = $b;
                 
                 $aID = $aObj->linkID;
                 $bID = $bObj->linkID;
@@ -515,7 +498,6 @@ class ShrinkrLinkListPage extends SortablePage
             'reactionData' => $reactionData,
             'reactionObjectType' => 'de.sunnyc.wsc.shrinkr.likeableUrl',
             'reactionTypesJS' => $reactionTypesJS,
-            'enableQrCode' => SHRINKR_ENABLE_QR_CODE,
         ]);
         
         // Override objects in template if sorted

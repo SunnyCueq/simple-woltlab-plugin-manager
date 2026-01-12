@@ -27,23 +27,15 @@ class ShrinkrLinkAction extends AbstractDatabaseObjectAction
     
     /**
      * Increases the click counter for the given link.
+     *
+     * @param ShrinkrLink $link The link whose counter should be increased
+     * @return void
      */
     public static function increaseCounter(ShrinkrLink $link): void
     {
         if (SHRINKR_COUNTER_ACTIVE) {
             $editor = new ShrinkrLinkEditor($link);
             $editor->update(['counter' => ($link->counter + 1)]);
-        }
-    }
-
-    /**
-     * Alias for increaseCounter for backwards compatibility.
-     * @deprecated Use increaseCounter() instead
-     */
-    public static function increaseCounter($link): void
-    {
-        if ($link instanceof ShrinkrLink) {
-            self::increaseCounter($link);
         }
     }
 }

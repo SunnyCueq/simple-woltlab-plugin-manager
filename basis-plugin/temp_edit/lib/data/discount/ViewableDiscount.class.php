@@ -7,9 +7,9 @@ use wcf\data\DatabaseObjectDecorator;
 /**
  * Decorator for discounts that can be viewed on the frontend.
  *
- * @author      Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @license     License for Commercial Plugins
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.discount

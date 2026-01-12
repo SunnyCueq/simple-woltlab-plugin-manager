@@ -1,11 +1,22 @@
-/* ACP Styles für URL-Shortener */
+/* ACP Styles für Shr1nkr */
 
 #tplShrinkrLinkList .columnQR {
     text-align: center;
 }
 
+/* Scale QR icon in header to 18px to match text size */
+.qrIconHeader fa-icon {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.qrIconHeader fa-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
 /* Description Variable Buttons - Badge Style with Icon and Text */
-.badge.descriptionVariable {
+.button.small.descriptionVariable {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -53,7 +64,7 @@
 
 /* Mobile: Larger touch targets */
 @media (pointer: coarse) {
-    .badge.descriptionVariable {
+    .button.small.descriptionVariable {
         padding: 6px 10px;
         min-height: 32px;
         gap: 6px;
@@ -70,7 +81,7 @@
     }
 }
 
-/* ACP Styles für URL-Shortener: Affiliate-Erweiterung */
+/* ACP Styles für Shr1nkr: Affiliate-Erweiterung */
 
 /* Theme List - Farbvorschau */
 .themeColorPreview {
@@ -192,4 +203,32 @@
 
 .specialList td {
     line-height: 1.6; /* Slightly increased line height */
+}
+
+/* Reload Options Button - Success Style */
+.button.shrinkrReloadButton {
+    margin-left: 10px;
+    background-color: var(--wcfStatusSuccessText);
+    color: var(--wcfButtonPrimaryText);
+}
+
+.button.shrinkrReloadButton:hover {
+    background-color: var(--wcfStatusSuccessText);
+    color: var(--wcfButtonTextActive) !important;
+    text-decoration: none;
+    opacity: 0.8;
+}
+
+/* Dark Mode: Invert colors for reload button */
+@media (prefers-color-scheme: dark) {
+    .button.shrinkrReloadButton {
+        background-color: var(--wcfButtonPrimaryText);
+        color: var(--wcfStatusSuccessText);
+    }
+    
+    .button.shrinkrReloadButton:hover {
+        background-color: var(--wcfStatusSuccessText);
+        color: var(--wcfButtonPrimaryText) !important;
+        opacity: 0.8;
+    }
 }

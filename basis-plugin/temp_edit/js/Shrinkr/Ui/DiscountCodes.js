@@ -1,8 +1,9 @@
 /**
  * Handles discount code copying functionality.
  *
- * @author Julian Pfeil
- * @module Shrinkr/Ui/DiscountCodes
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;

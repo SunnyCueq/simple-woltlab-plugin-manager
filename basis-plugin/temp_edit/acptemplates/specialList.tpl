@@ -137,7 +137,7 @@
 								{assign var="urlHash" value=$urlHashes[$object->linkID]}
 							{/if}
 							{if $urlHash}
-								<a href="/urls/index.php?r/{$urlHash}/" title="{$object->title}">
+								<a href="/shrinkr/index.php?r/{$urlHash}/" title="{$object->title}">
 									{$object->title}
 								</a>
 							{else}
@@ -149,7 +149,7 @@
 					</td>
 						<td class="columnText">
 							{if $object->linkID}
-								<a href="{link controller='UrlEdit' application='shrinkr' id=$object->linkID}{/link}" class="badge badgeInverse">
+								<a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$object->linkID}{/link}" class="badge badgeInverse">
 									{if $urlHashes|isset && $urlHashes[$object->linkID]|isset}
 										{$urlHashes[$object->linkID]}
 									{else}
@@ -236,7 +236,7 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.url.list{/lang}</span></a></li>
+				<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.link.list{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
 			</ul>
 		</nav>
@@ -251,7 +251,7 @@
 					{lang}wcf.shrinkr.special.noItems.howToAdd.text{/lang}
 					<ul class="nativeList">
 						<li>In der <a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}">URL-Liste</a> über den <a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}">+-Button</a> in der Special-Spalte</li>
-						<li>{lang}wcf.shrinkr.special.noItems.howToAdd.viaUrlEdit{/lang}</li>
+						<li>{lang}wcf.shrinkr.special.noItems.howToAdd.viaLinkEdit{/lang}</li>
 					</ul>
 				</small>
 			</dd>
@@ -273,7 +273,7 @@
 	<footer class="contentFooter">
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.url.list{/lang}</span></a></li>
+				<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.link.list{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
 			</ul>
 		</nav>

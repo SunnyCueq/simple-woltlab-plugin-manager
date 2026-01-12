@@ -19,6 +19,11 @@
 			<categoryname>de.sunnyc.wsc.shrinkr</categoryname>
 		</type>
 		<type>
+			<name>de.sunnyc.wsc.shrinkr.special.additionalText</name>
+			<definitionname>com.woltlab.wcf.message</definitionname>
+			<categoryname>de.sunnyc.wsc.shrinkr</categoryname>
+		</type>
+		<type>
 			<name>de.sunnyc.wsc.shrinkr.likeableShrinkrLink</name>
 			<definitionname>com.woltlab.wcf.like.likeableObject</definitionname>
 			<application>shrinkr</application>
@@ -37,6 +42,10 @@
 		</type>
 		<type>
 			<name>de.sunnyc.wsc.shrinkr.discount.additionalText</name>
+			<definitionname>com.woltlab.wcf.message</definitionname>
+		</type>
+		<type>
+			<name>de.sunnyc.wsc.shrinkr.special.additionalText</name>
 			<definitionname>com.woltlab.wcf.message</definitionname>
 		</type>
 		<type>

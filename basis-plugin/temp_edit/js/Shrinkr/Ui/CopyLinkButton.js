@@ -1,18 +1,18 @@
 /**
- * Handles copyLinkButtons.
+ * Handles copy link buttons.
  *
- * @author  Julian Pfeil <https://julian-pfeil.de>
- * @copyright   2022 Julian Pfeil Websites & Co.
- * @license     License for Commercial Plugins <https://julian-pfeil.de/lizenz/>
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  */
 define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Notification", "WoltLabSuite/Core/Clipboard", "WoltLabSuite/Core/Language"], function (require, exports, tslib_1, UiNotification, Clipboard, Language) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.setup = exports.tkCopyTextToClipboard = void 0;
+    exports.setup = exports.copyTextToClipboard = void 0;
     UiNotification = tslib_1.__importStar(UiNotification);
     Clipboard = tslib_1.__importStar(Clipboard);
     Language = tslib_1.__importStar(Language);
-    const tkCopyTextToClipboard = async (str) => {
+    const copyTextToClipboard = async (str) => {
         try {
             await Clipboard.copyTextToClipboard(str);
             UiNotification.show(Language.get('wcf.shrinkr.copyUrl.success'), null, "success");
@@ -22,7 +22,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Notification", "Wol
             console.log(error.toString());
         }
     };
-    exports.tkCopyTextToClipboard = tkCopyTextToClipboard;
+    exports.copyTextToClipboard = copyTextToClipboard;
     /**
      * Initializes trigger.
      */
@@ -37,6 +37,6 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Notification", "Wol
      */
     function click(event) {
         const button = event.currentTarget;
-        (0, exports.tkCopyTextToClipboard)(button.dataset.copyLink);
+        (0, exports.copyTextToClipboard)(button.dataset.copyLink);
     }
 });

@@ -9,9 +9,9 @@ use wcf\util\StringUtil;
  * Returns discounts accessible for a specific URL and host.
  * Filters discounts by host matching and URL validation.
  *
- * @author      Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @license     License for Commercial Plugins
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.discount

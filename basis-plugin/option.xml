@@ -108,34 +108,28 @@
 				<defaultvalue>1</defaultvalue>
 			</option>
 
-			<!-- Tab 2: Ziel-URL -->
-			<option name="shrinkr_only_https">
-				<categoryname>shrinkr.target</categoryname>
-				<options>shrinkr_active</options>
-				<showorder>1</showorder>
-				<optiontype>boolean</optiontype>
-				<defaultvalue>1</defaultvalue>
-			</option>
-			<option name="shrinkr_deactivate_forwarding_chains">
-				<categoryname>shrinkr.target</categoryname>
-				<options>shrinkr_active</options>
-				<showorder>2</showorder>
-				<optiontype>boolean</optiontype>
-				<defaultvalue>1</defaultvalue>
-			</option>
-			<option name="shrinkr_remove_shrinkr_prefix">
-				<categoryname>shrinkr.target</categoryname>
-				<options>shrinkr_active</options>
-				<showorder>3</showorder>
-				<optiontype>boolean</optiontype>
-				<defaultvalue>0</defaultvalue>
-			</option>
-			<option name="shrinkr_link_blacklist">
-				<categoryname>shrinkr.target</categoryname>
-				<options>shrinkr_active</options>
-				<showorder>4</showorder>
-				<optiontype>textarea</optiontype>
-			</option>
+		<!-- Tab 2: Ziel-URL -->
+		<option name="shrinkr_remove_shrinkr_prefix">
+			<categoryname>shrinkr.target</categoryname>
+			<options>shrinkr_active</options>
+			<showorder>1</showorder>
+			<optiontype>boolean</optiontype>
+			<defaultvalue>0</defaultvalue>
+		</option>
+		<option name="shrinkr_only_https">
+			<categoryname>shrinkr.target</categoryname>
+			<options>shrinkr_active</options>
+			<showorder>2</showorder>
+			<optiontype>boolean</optiontype>
+			<defaultvalue>1</defaultvalue>
+		</option>
+		<option name="shrinkr_deactivate_forwarding_chains">
+			<categoryname>shrinkr.target</categoryname>
+			<options>shrinkr_active</options>
+			<showorder>3</showorder>
+			<optiontype>boolean</optiontype>
+			<defaultvalue>1</defaultvalue>
+		</option>
 
 			<!-- Tab 4: Hash-Konfiguration -->
 			<option name="shrinkr_hash_length">
@@ -183,40 +177,33 @@
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
+
+			<!-- Tab 6: Aussehen (Design) -->
 			<option name="shrinkr_enable_custom_forward_button">
-				<categoryname>shrinkr.interaction</categoryname>
+				<categoryname>shrinkr.design</categoryname>
 				<options>shrinkr_active</options>
-				<showorder>5</showorder>
+				<showorder>1</showorder>
 				<optiontype>customForwardButton</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
 			<option name="shrinkr_title_icon">
-				<categoryname>shrinkr.interaction</categoryname>
+				<categoryname>shrinkr.design</categoryname>
 				<options>shrinkr_active</options>
-				<showorder>6</showorder>
+				<showorder>2</showorder>
 				<optiontype>icon</optiontype>
 				<defaultvalue>star;false</defaultvalue>
 			</option>
-			<option name="shrinkr_enable_qr_code">
-				<categoryname>shrinkr.interaction</categoryname>
-				<options>shrinkr_active</options>
-				<showorder>7</showorder>
-				<optiontype>boolean</optiontype>
-				<defaultvalue>0</defaultvalue>
-			</option>
-
-			<!-- Tab 6: Design -->
 			<option name="shrinkr_enable_theme_effects">
 				<categoryname>shrinkr.design</categoryname>
 				<options>shrinkr_active</options>
-				<showorder>1</showorder>
+				<showorder>3</showorder>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
 			<option name="shrinkr_special_themes">
 				<categoryname>shrinkr.design</categoryname>
 				<options>shrinkr_active</options>
-				<showorder>2</showorder>
+				<showorder>4</showorder>
 				<optiontype>textarea</optiontype>
 				<defaultvalue>halloween:Halloween:rgba(139, 0, 0, 1):rgba(255, 140, 0, 1):rgba(255, 255, 255, 1):rgba(255, 255, 255, 1)
 blackweek:Black Week:rgba(0, 0, 0, 1):rgba(255, 215, 0, 1):rgba(255, 255, 255, 1):rgba(0, 0, 0, 1)
@@ -243,46 +230,4 @@ default:Standard:rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 25
 			</option>
 		</options>
 	</import>
-
-	<delete>
-		<category name="urlshort"/>
-		<category name="urlshort.general"/>
-		<category name="urlshort.redirect"/>
-		<category name="urlshort.target"/>
-		<category name="urlshort.hash"/>
-		<category name="urlshort.interaction"/>
-		<category name="urlshort.design"/>
-		<category name="urlshort.advanced"/>
-		<category name="urlshort.usedBy"/>
-		<category name="urlshort.general.other"/>
-		<category name="urlshort.expertmode"/>
-		<category name="urlshort.featuredLinks"/>
-		<category name="urlshort.affiliateFeatures"/>
-		<category name="urlshort.visualEffects"/>
-		<option name="urlshort_active"/>
-		<option name="urlshort_install_demo_data"/>
-		<option name="urlshort_expertmode_active"/>
-		<option name="urlshort_counter_active"/>
-		<option name="urlshort_forwarding_must_confirmed"/>
-		<option name="urlshort_time_until_forwarding"/>
-		<option name="urlshort_normal_page_mode"/>
-		<option name="urlshort_only_https"/>
-		<option name="urlshort_deactivate_forwarding_chains"/>
-		<option name="urlshort_remove_urls_prefix"/>
-		<option name="urlshort_url_blacklist"/>
-		<option name="urlshort_hash_length"/>
-		<option name="urlshort_hash_prefix"/>
-		<option name="urlshort_featuredLinks_enableReactions"/>
-		<option name="urlshort_featuredLinks_enableGuestReactions"/>
-		<option name="urlshort_featuredLinks_enableShareButton"/>
-		<option name="urlshort_featuredLinks_enableDescriptions"/>
-		<option name="urlshort_featuredLinks_enableCustomForwardButton"/>
-		<option name="urlshort_featuredLinks_titleIcon"/>
-		<option name="urlshort_enable_qr_code"/>
-		<option name="urlshort_halloween_leaves"/>
-		<option name="urlshort_special_themes"/>
-		<option name="urlshort_pattern"/>
-		<option name="urlshort_external_url"/>
-		<option name="urlshort_prevent_redirection_urls"/>
-	</delete>
 </data>

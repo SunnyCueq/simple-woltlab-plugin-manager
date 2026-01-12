@@ -1,0 +1,605 @@
+.pageHeaderContainer {
+	background-color: var(--wcfHeaderBackground);
+	color: var(--wcfHeaderText);
+	z-index: 100;
+
+	a {
+		color: var(--wcfHeaderLink);
+
+		&:hover {
+			color: var(--wcfHeaderLinkActive);
+		}
+	}
+
+	.icon {
+		color: var(--wcfHeaderText);
+	}
+
+	/* reserved space for `.pageHeaderPanel` */
+	padding-top: 50px;
+}
+
+.pageHeaderPanel {
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 300;
+
+	> .layoutBoundary {
+		display: flex;
+	}
+
+	@include screen-lg {
+		background-color: var(--wcfHeaderMenuBackground);
+	}
+}
+
+@include screen-lg {
+	html.disableScrolling .pageHeaderPanel {
+		right: var(--scrollbar-width, 0);
+	}
+}
+
+.pageHeaderFacade {
+	&:first-child {
+		// page header without user-panel (during setup)
+		margin-top: -50px;
+	}
+
+	> .layoutBoundary {
+		align-items: center;
+		display: flex;
+
+		@include screen-lg {
+			align-items: center;
+			padding-bottom: 30px;
+			padding-top: 30px;
+		}
+	}
+}
+
+/* MAIN MENU */
+.mainMenu {
+	position: relative;
+
+	.boxMenu {
+		display: flex;
+		overflow: hidden;
+
+		> li {
+			flex: 0 0 auto;
+
+			&:first-child {
+				transition: margin-left 0.24s ease-in-out;
+			}
+
+			> a {
+				background-color: var(--wcfHeaderMenuLinkBackground);
+				align-items: center;
+				color: var(--wcfHeaderMenuLink);
+				display: flex;
+				height: 50px;
+				padding: 0 15px;
+
+				> span {
+					flex: 0 0 auto;
+				}
+
+				> .boxMenuLinkOutstandingItems {
+					margin-left: 5px;
+				}
+			}
+
+			> span {
+				cursor: default;
+			}
+
+			&.active > a,
+			&:hover > a {
+				background-color: var(--wcfHeaderMenuLinkBackgroundActive);
+				color: var(--wcfHeaderMenuLinkActive);
+			}
+		}
+
+		> .boxMenuHasChildren {
+			&:hover .boxMenuDepth1,
+			> a[aria-expanded="true"] ~ .boxMenuDepth1 {
+				visibility: visible;
+			}
+		}
+
+		.boxMenuDepth1 {
+			background-color: var(--wcfHeaderMenuDropdownBackground);
+			border: 1px solid var(--wcfHeaderMenuDropdownBorder);
+			border-radius: 0 0 var(--wcfBorderRadius) var(--wcfBorderRadius);
+			box-shadow: var(--wcfBoxShadow);
+			padding: 5px 0;
+			position: absolute;
+			visibility: hidden;
+
+			@include wcfFontDefault;
+
+			> li {
+				> a {
+					color: var(--wcfHeaderMenuDropdownLink);
+				}
+
+				> a,
+				> span {
+					display: block;
+					padding: 7px 20px;
+					white-space: nowrap;
+				}
+
+				&.active > a,
+				> a:hover {
+					background-color: var(--wcfHeaderMenuDropdownBackgroundActive);
+					color: var(--wcfHeaderMenuDropdownLinkActive);
+					text-decoration: none;
+				}
+			}
+		}
+
+		.boxMenuDepth2 li {
+			> a {
+				color: var(--wcfHeaderMenuDropdownLink);
+				display: block;
+				padding: 5px 20px 5px 40px;
+				white-space: nowrap;
+			}
+
+			&.active > a,
+			> a:hover {
+				background-color: var(--wcfHeaderMenuDropdownBackgroundActive);
+				color: var(--wcfHeaderMenuDropdownLinkActive);
+				text-decoration: none;
+			}
+		}
+	}
+
+	.mainMenuShowPrevious,
+	.mainMenuShowNext {
+		align-items: center;
+		display: flex;
+		height: 100%;
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		transition:
+			opacity 0.24s linear,
+			visibility 0s linear 0.24s;
+		visibility: hidden;
+		width: 50px;
+
+		&.active {
+			opacity: 1;
+			transition-delay: 0s;
+			visibility: visible;
+		}
+	}
+
+	.mainMenuShowPrevious {
+		background: linear-gradient(
+			to left,
+			rgba(var(--wcfHeaderMenuBackground-rgb) / 0) 0%,
+			var(--wcfHeaderMenuBackground) 75%
+		);
+		left: 0;
+	}
+
+	.mainMenuShowNext {
+		background: linear-gradient(
+			to right,
+			rgba(var(--wcfHeaderMenuBackground-rgb) / 0) 0%,
+			var(--wcfHeaderMenuBackground) 75%
+		);
+		justify-content: flex-end;
+		right: 0;
+	}
+
+	@include screen-lg {
+		flex: 1;
+		margin-right: 20px;
+	}
+}
+
+/* Hack for a font rendering issue in Safari on menu hover */
+@include only_safari_no_ios(
+	".pageHeaderPanel > .layoutBoundary",
+	(
+		transform: translateZ(0),
+	)
+);
+
+/* user panel */
+.userPanel {
+	flex: 0 0 auto;
+
+	> ul {
+		display: flex;
+		justify-content: flex-end;
+
+		> li {
+			align-items: center;
+			display: flex;
+			flex: 0 0 auto;
+
+			> a {
+				align-items: center;
+				background-color: var(--wcfHeaderMenuLinkBackground);
+				color: var(--wcfHeaderMenuLink);
+				display: flex;
+				flex: 0 0 auto;
+				height: 50px;
+				padding: 0 15px;
+				position: relative;
+
+				.iconWrapper {
+					align-items: center;
+					display: flex;
+					height: 50px;
+				}
+
+				/* hide icon label */
+				> span:not(.icon):not(.badge):not(.iconWrapper) {
+					display: none;
+				}
+
+				/* special styling for update badge */
+				> .badgeUpdate {
+					box-shadow:
+						-1px 2px 3px rgba(0, 0, 0, 0.3),
+						inset 0 2px 5px rgba(225, 225, 225, 0.3);
+					left: 35px;
+					padding: 1px 6px;
+					position: absolute;
+					top: 4px;
+					z-index: 101;
+				}
+
+				.icon {
+					color: var(--wcfHeaderMenuLink);
+				}
+			}
+
+			&.dropdownOpen > a,
+			&.open > a,
+			&:hover > a {
+				background-color: var(--wcfHeaderMenuLinkBackgroundActive);
+				color: var(--wcfHeaderMenuLinkActive);
+
+				.icon {
+					color: var(--wcfHeaderMenuLinkActive);
+				}
+			}
+
+			/* ringing animation for notification icon */
+			&#userNotifications:not([data-count="0"]) {
+				> a > .icon {
+					animation: fa-bell-ring 5s ease 10s 6;
+					transform-origin: 50% 0;
+				}
+			}
+		}
+	}
+}
+
+/* LOGO */
+.pageHeaderLogo {
+	@include screen-lg {
+		flex: 1 1 auto;
+
+		.pageHeaderLogoLarge {
+			height: auto;
+			max-width: 100%;
+		}
+
+		.pageHeaderLogoSmall {
+			display: none;
+		}
+
+		> a {
+			display: block;
+			padding: 10px 0;
+		}
+	}
+
+	@include screen-md-down {
+		.pageHeaderLogoLarge {
+			display: none;
+		}
+
+		.pageHeaderLogoSmall {
+			max-height: 30px;
+			max-width: 100%;
+			object-fit: contain;
+			width: auto;
+		}
+	}
+}
+
+/* SEARCH AREA */
+.pageHeaderSearch {
+	display: none;
+	position: fixed;
+}
+
+@include screen-lg {
+	.pageHeaderSearchMobile,
+	.pageHeaderMenuMobile,
+	.userPanelLoginLink,
+	.pageHeaderUserMobile {
+		display: none;
+	}
+}
+
+.searchBarOpen .pageHeaderSearch {
+	display: block;
+
+	/* required for Edge */
+	z-index: 100;
+}
+
+.pageHeaderSearchInputContainer {
+	display: flex;
+
+	.pageHeaderSearchType {
+		display: flex;
+
+		> .button {
+			align-items: center;
+			background-color: var(--wcfHeaderMenuLinkBackground);
+			border-radius: 0 0 0 2px;
+			color: var(--wcfHeaderMenuLink);
+			display: flex;
+			justify-content: space-between;
+			max-width: 200px;
+			min-width: 130px;
+			padding: 4px 8px;
+			position: relative;
+			text-align: left;
+
+			> .pageHeaderSearchTypeLabel {
+				flex: 0 auto;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+
+		> .button:hover,
+		&.dropdownOpen > .button {
+			background-color: var(--wcfHeaderMenuLinkBackgroundActive);
+			color: var(--wcfHeaderMenuLinkActive);
+		}
+	}
+
+	.pageHeaderSearchInput {
+		background-color: var(--wcfHeaderSearchBoxBackground);
+		border-radius: 0;
+		border-width: 0;
+		color: var(--wcfHeaderSearchBoxText);
+		padding-bottom: 8px;
+		padding-top: 8px;
+		width: 250px;
+
+		&:focus,
+		&:hover {
+			background-color: var(--wcfHeaderSearchBoxBackgroundActive);
+			color: var(--wcfHeaderSearchBoxTextActive);
+
+			/* set placeholder color, do not chain these with a comma
+			   as an unrecognized value causes the instruction to be
+			   discarded in entirety */
+			&::-webkit-input-placeholder {
+				/* WebKit browsers */
+				color: var(--wcfHeaderSearchBoxPlaceholderActive);
+			}
+			&::-moz-placeholder {
+				/* Mozilla Firefox 19+ */
+				color: var(--wcfHeaderSearchBoxPlaceholderActive);
+			}
+			&:-ms-input-placeholder {
+				/* Internet Explorer 10+ */
+				color: var(--wcfHeaderSearchBoxPlaceholderActive);
+			}
+		}
+
+		/* set placeholder color, do not chain these with a comma
+		   as an unrecognized value causes the instruction to be
+		   discarded in entirety */
+		&::-webkit-input-placeholder {
+			/* WebKit browsers */
+			color: var(--wcfHeaderSearchBoxPlaceholder);
+		}
+		&::-moz-placeholder {
+			/* Mozilla Firefox 19+ */
+			color: var(--wcfHeaderSearchBoxPlaceholder);
+		}
+		&:-ms-input-placeholder {
+			/* Internet Explorer 10+ */
+			color: var(--wcfHeaderSearchBoxPlaceholder);
+		}
+
+		/* remove broken cancel-button (webkit) */
+		&::-webkit-search-cancel-button {
+			display: none;
+		}
+	}
+
+	/* Increases the specificity to overrule the CSS for <button>. */
+	.pageHeaderSearchInputButton.pageHeaderSearchInputButton {
+		background-color: var(--wcfHeaderMenuLinkBackground);
+		border-radius: 0 0 2px 0;
+		color: var(--wcfHeaderMenuLink);
+		padding: 4px 9px;
+
+		&:hover {
+			background-color: var(--wcfHeaderMenuLinkBackgroundActive);
+			color: var(--wcfHeaderMenuLinkActive);
+		}
+	}
+}
+
+@include screen-md-down {
+	.pageHeader {
+		align-items: center;
+		background-color: var(--wcfHeaderBackground);
+		column-gap: 10px;
+		display: grid;
+		grid-template-areas: "logo search user menu";
+		grid-template-columns: auto repeat(3, max-content);
+		height: 50px;
+		left: 0;
+		padding: 0 6px;
+		position: fixed;
+		right: 0;
+		top: 0;
+	}
+
+	.pageHeader.pageHeader--authFlow {
+		display: flex;
+		justify-content: center;
+	}
+
+	.pageHeaderPanel,
+	.pageHeaderFacade,
+	.pageHeaderPanel .layoutBoundary,
+	.pageHeaderFacade .layoutBoundary {
+		display: contents;
+		position: static;
+	}
+
+	.pageHeaderSearchMobile,
+	.userPanel,
+	.pageHeaderMenuMobile {
+		align-items: center;
+		display: flex;
+		height: 40px;
+		justify-content: center;
+		width: 40px;
+	}
+
+	.pageHeaderLogo {
+		grid-area: logo;
+
+		a {
+			align-items: center;
+			display: inline-flex;
+			height: 40px;
+			padding: 0 4px;
+		}
+	}
+
+	.pageHeaderSearchMobile {
+		grid-area: search;
+	}
+
+	.pageHeaderUserMobile {
+		align-items: center;
+		display: flex;
+		grid-area: user;
+		height: 40px;
+		justify-content: center;
+		width: 40px;
+
+		&[aria-expanded="false"] .pageHeaderUserMobileActive {
+			display: none;
+		}
+
+		&[aria-expanded="true"] .pageHeaderUserMobileInactive {
+			display: none;
+		}
+	}
+
+	.userPanel,
+	.mainMenu {
+		display: none;
+	}
+
+	.pageHeaderMenuMobile {
+		grid-area: menu;
+
+		&[aria-expanded="false"] .pageHeaderMenuMobileActive {
+			display: none;
+		}
+
+		&[aria-expanded="true"] .pageHeaderMenuMobileInactive {
+			display: none;
+		}
+	}
+
+	.mainMenu.pageMenuMobileButtonHasContent ~ .pageHeaderMenuMobile[aria-expanded="false"],
+	.userPanel.pageMenuMobileButtonHasContent ~ .pageHeaderUserMobile[aria-expanded="false"] {
+		position: relative;
+
+		&::after {
+			background-color: rgb(244, 67, 54);
+			border: 2px solid var(--wcfHeaderBackground);
+			border-radius: 50%;
+			content: "";
+			height: 14px;
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 14px;
+		}
+	}
+
+	.userPanelLoginLink {
+		align-items: center;
+		display: flex;
+		justify-content: center;
+		height: 100%;
+		width: 100%;
+
+		fa-icon {
+			color: var(--wcfHeaderText);
+		}
+	}
+
+	.userPanel.hideUserPanel::before {
+		visibility: hidden !important;
+	}
+
+	.pageHeaderSearch {
+		background-color: rgba(0, 0, 0, 0.34);
+		bottom: 0;
+		left: 0 !important;
+		overflow: hidden;
+		right: 0 !important;
+
+		.pageHeaderSearchInputContainer {
+			border-radius: 0;
+			box-shadow: var(--wcfBoxShadow);
+			display: flex;
+			flex-wrap: wrap;
+
+			.pageHeaderSearchType {
+				flex: 0 0 100%;
+
+				> .button {
+					border-radius: 0;
+					max-width: unset;
+					min-width: unset;
+					padding-bottom: 8px;
+					padding-top: 8px;
+					width: 100%;
+				}
+			}
+
+			.pageHeaderSearchInput {
+				flex: 1 1 auto;
+			}
+
+			.pageHeaderSearchInputButton {
+				border-radius: 0;
+			}
+		}
+
+		&:not(.open) {
+			display: none;
+		}
+	}
+}

@@ -142,7 +142,7 @@ class OptionFormDemoDataHandler
                 if ($featuredLinksCount == 0 || $customButtonsCount == 0) {
                     $this->log('OptionFormDemoDataHandler: Demo URLs exist but Featured Links (' . $featuredLinksCount . ') or Custom Buttons (' . $customButtonsCount . ') are missing - calling post-install script to create them');
                     
-                    $postInstallScript = WCF_DIR . 'urls/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
+                    $postInstallScript = WCF_DIR . 'shrinkr/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
                     
                     if (file_exists($postInstallScript)) {
                         $GLOBALS['shrinkr_demo_data_from_event'] = true;
@@ -167,7 +167,7 @@ class OptionFormDemoDataHandler
         
         // Call the demo data installation function from the post-install script (if URLs don't exist)
         if ($existingCount == 0) {
-            $postInstallScript = WCF_DIR . 'urls/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
+            $postInstallScript = WCF_DIR . 'shrinkr/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
             
             $this->log('OptionFormDemoDataHandler: Post-install script path: ' . $postInstallScript);
             $this->log('OptionFormDemoDataHandler: Post-install script exists: ' . (file_exists($postInstallScript) ? 'yes' : 'no'));

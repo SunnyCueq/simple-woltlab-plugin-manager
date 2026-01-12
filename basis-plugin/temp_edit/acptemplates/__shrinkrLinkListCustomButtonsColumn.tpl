@@ -5,7 +5,7 @@
     {/if}
     {if $customButtonsCount > 0}
         {* Custom Buttons vorhanden: Anzahl + Bearbeiten-Button (zur URL-Edit-Seite) *}
-        {$customButtonsCount} <a href="{link application='shrinkr' controller='UrlEdit' id=$link->linkID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
+        {$customButtonsCount} <a href="{link application='shrinkr' controller='ShrinkrLinkEdit' id=$link->linkID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
     {else}
         {* Keine Custom Buttons vorhanden: 0 / + *}
         0 / <a href="{link application='shrinkr' controller='CustomButtonAdd'}linkID={#$link->linkID}{/link}" title="{lang}wcf.shrinkr.customButton.add{/lang}" class="jsTooltip">{icon name='plus'}</a>

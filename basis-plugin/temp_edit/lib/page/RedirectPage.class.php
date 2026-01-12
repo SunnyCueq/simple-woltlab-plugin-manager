@@ -4,6 +4,7 @@ namespace shrinkr\page;
 
 use shrinkr\data\discount\AccessibleDiscountList;
 use shrinkr\data\discount\Discount;
+use shrinkr\data\discount\ViewableDiscount;
 use shrinkr\data\description\AccessibleDescriptionList;
 use shrinkr\data\special\Special;
 use shrinkr\data\theme\Theme;
@@ -21,80 +22,72 @@ use wcf\system\WCF;
 use wcf\util\StringUtil;
 
 /**
- * @author      Sunny C, Sunny C <https://sunnyc.de>
- * @link        https://sunnyc.de
- * @copyright   2022 Sunny C Websites & Co.
- * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
+ * Handles the redirect page display for shortened links.
+ * Manages countdown, discounts, specials, featured links, reactions, and visual effects.
  *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage page
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
+ * @package     de.sunnyc.wsc.shrinkr
  */
 class RedirectPage extends AbstractPage
 {
     /**
+     * The shortened link object being displayed.
      * @var ShrinkrLink|null
      */
     public ?ShrinkrLink $link = null;
 
     /**
-     * List of featured links for the current URL.
-     *
+     * Featured links associated with this shortened link.
      * @var array<string, array{title: string, host: string, linkID: int}>
      */
     public array $featuredLinks = [];
 
     /**
-     * List of custom buttons for the current URL.
-     *
+     * Custom buttons for this shortened link.
      * @var array<int, array{title: string, targetUrl: string, customButtonID: int}>
      */
     public array $customButtons = [];
 
     /**
-     * Discount to display on the redirect page.
-     *
-     * @var Discount|null
+     * Active discount for display (if applicable).
+     * @var ViewableDiscount|null
      */
-    public ?Discount $discount = null;
+    public ?ViewableDiscount $discount = null;
 
     /**
-     * Active special for this URL (if any).
-     *
+     * Active special event configuration.
      * @var Special|null
      */
     public ?Special $special = null;
 
     /**
-     * Theme object for the active special (if any).
-     *
+     * Theme associated with the active special.
      * @var Theme|null
      */
     public ?Theme $specialTheme = null;
     
     /**
-     * Short theme name (without parenthesis content) for promo badge center display.
-     *
+     * Shortened theme name for display in promo badge.
      * @var string|null
      */
     public ?string $specialThemeShortName = null;
 
     /**
-     * Random description text to display.
-     *
+     * Random description text to display on the page.
      * @var string
      */
     public string $randomDescription = '';
 
     /**
-     * Extracted page title (or fallback).
-     *
+     * Extracted or auto-generated page title.
      * @var string
      */
     private string $extractedTitle = '';
 
     /**
-     * Cache for loaded themes by identifier.
-     *
+     * Internal cache for loaded theme objects.
      * @var array<string, Theme|null>
      */
     private array $themeCache = [];
@@ -110,15 +103,15 @@ class RedirectPage extends AbstractPage
         // Extract hash from request
         // URL formats supported:
         // - /r/{hash}/ (with URL rewriting + prefix removal)
-        // - /urls/r/{hash}/ (with URL rewriting)
-        // - /urls/index.php?r/{hash}/ (without URL rewriting)
+        // - /shrinkr/r/{hash}/ (with URL rewriting)
+        // - /shrinkr/index.php?r/{hash}/ (without URL rewriting)
         $hash = null;
         
         // Try to get hash from route parameter (if CMS Page Individual URL is configured)
         if (isset($_REQUEST['hash'])) {
             $hash = $_REQUEST['hash'];
         } elseif (isset($_REQUEST['r'])) {
-            // Handle /urls/index.php?r={hash} format (standard query parameter)
+            // Handle /shrinkr/index.php?r={hash} format (standard query parameter)
             $rParam = $_REQUEST['r'];
             if (is_string($rParam) && !empty($rParam)) {
                 // Remove trailing slash and extract hash
@@ -127,7 +120,7 @@ class RedirectPage extends AbstractPage
         }
         
         // If no hash found yet, try parsing from QUERY_STRING directly
-        // This handles /urls/index.php?r/DEMO-1/ format where r/DEMO-1/ is the key, not value
+        // This handles /shrinkr/index.php?r/DEMO-1/ format where r/DEMO-1/ is the key, not value
         if (!$hash && !empty($_SERVER['QUERY_STRING'])) {
             $queryString = $_SERVER['QUERY_STRING'];
             // Check for r/{hash}/ pattern in query string
@@ -138,7 +131,7 @@ class RedirectPage extends AbstractPage
         
         // Fallback: Parse from REQUEST_URI
         if (!$hash && !empty($_SERVER['REQUEST_URI'])) {
-            // Parse from REQUEST_URI: /r/{hash}/ or /urls/r/{hash}/
+            // Parse from REQUEST_URI: /r/{hash}/ or /shrinkr/r/{hash}/
             $requestUri = $_SERVER['REQUEST_URI'];
             if (preg_match('#/r/([^/?]+)/?#', $requestUri, $matches)) {
                 $hash = $matches[1];
@@ -147,7 +140,7 @@ class RedirectPage extends AbstractPage
         
         if ($hash) {
             // Get URL by hash
-            $this->url = ShrinkrLink::getLinkByHash($hash);
+            $this->link = ShrinkrLink::getLinkByHash($hash);
         }
     }
 
@@ -160,7 +153,7 @@ class RedirectPage extends AbstractPage
         parent::readData();
 
         // Check if URL object is valid
-        if (!isset($this->url?->linkID) || !$this->link->linkID) {
+        if (!isset($this->link?->linkID) || !$this->link->linkID) {
             return;
         }
 
@@ -214,9 +207,9 @@ class RedirectPage extends AbstractPage
         parent::assignVariables();
 
         // Check if URL exists
-        if ($this->url !== null && $this->link->linkID) {
+        if ($this->link !== null && $this->link->linkID) {
             // Increase URL counter
-            ShrinkrLinkAction::increaseCounter($this->url);
+            ShrinkrLinkAction::increaseCounter($this->link);
 
             // Check for direct forwarding
             if (!SHRINKR_FORWARDING_MUST_CONFIRMED && SHRINKR_TIME_UNTIL_FORWARDING == 0) {
@@ -236,7 +229,7 @@ class RedirectPage extends AbstractPage
             $guestReactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableGuestReactions');
             $enableGuestReactions = $guestReactionsOption ? $guestReactionsOption->optionValue : 0;
             
-            if (defined('MODULE_LIKE') && MODULE_LIKE && $enableReactions && $this->url !== null && isset($this->link->linkID) && $this->link->linkID) {
+            if (defined('MODULE_LIKE') && MODULE_LIKE && $enableReactions && $this->link !== null && isset($this->link->linkID) && $this->link->linkID) {
                 $objectType = ReactionHandler::getInstance()->getObjectType('de.sunnyc.wsc.shrinkr.likeableUrl');
                 if ($objectType !== null) {
                     $likeObject = ReactionHandler::getInstance()->getLikeObject($objectType, $this->link->linkID);
@@ -382,10 +375,8 @@ class RedirectPage extends AbstractPage
                             }
                             
                             $label = 'Aktionscode';
-                            if ($code === 'BENJARO') {
+                            if ($code === 'SHRINKR') {
                                 $label = 'Standard';
-                            } elseif ($code === 'AD6EE065') {
-                                $label = 'Regenbogenkreis';
                             }
                             
                             $result[] = [
@@ -428,7 +419,7 @@ class RedirectPage extends AbstractPage
 
             // Get current guest reaction (if any)
             $guestReactionTypeID = 0;
-            if ($enableGuestReactions && !WCF::getUser()->userID && $this->url !== null && isset($this->link->linkID)) {
+            if ($enableGuestReactions && !WCF::getUser()->userID && $this->link !== null && isset($this->link->linkID)) {
                 $sessionID = WCF::getSession()->sessionID;
                 $sql = "SELECT  reactionTypeID
                         FROM    shrinkr" . WCF_N . "_guest_reaction
@@ -485,7 +476,7 @@ class RedirectPage extends AbstractPage
 
             // Assign to template (merge with existing assignments)
             WCF::getTPL()->assign([
-                'url' => $this->url, // Keep existing assignment
+                'link' => $this->link,
                 'featuredLinks' => $this->featuredLinks,
                 'customButtons' => $this->customButtons,
                 'discount' => $displayDiscount,
@@ -500,7 +491,7 @@ class RedirectPage extends AbstractPage
                 'extractedTitle' => $this->extractedTitle, // Auto-extracted title or fallback
                 'reactionData' => $reactionData,
                 'reactionObjectType' => 'de.sunnyc.wsc.shrinkr.likeableUrl',
-                'reactionObjectID' => ($this->url !== null && isset($this->link->linkID)) ? $this->link->linkID : 0,
+                'reactionObjectID' => ($this->link !== null && isset($this->link->linkID)) ? $this->link->linkID : 0,
                 'guestReactionTypeID' => $guestReactionTypeID,
                 'guestReactionTypes' => $reactionTypes,
                 'enableReactions' => $enableReactions,
@@ -649,12 +640,12 @@ class RedirectPage extends AbstractPage
     /**
      * Loads discount for the current URL based on host matching.
      *
-     * @return Discount|null The matching discount or null if none found
+     * @return ViewableDiscount|null The matching discount or null if none found
      */
-    private function loadDiscount(): ?Discount
+    private function loadDiscount(): ?ViewableDiscount
     {
-        $host = ($this->url !== null && isset($this->link->url)) ? (parse_url($this->link->url, PHP_URL_HOST) ?? '') : '';
-        $urlString = ($this->url !== null) ? ($this->link->url ?? '') : '';
+        $host = ($this->link !== null && isset($this->link->url)) ? (parse_url($this->link->url, PHP_URL_HOST) ?? '') : '';
+        $urlString = ($this->link !== null) ? ($this->link->url ?? '') : '';
         $discountList = new AccessibleDiscountList($urlString, $host);
         $discountList->readObjects();
 
@@ -730,11 +721,11 @@ class RedirectPage extends AbstractPage
         $randomDescription = $descriptions[array_rand($descriptions)];
 
         // Compile description text with Smarty variables
-        $urlString = ($this->url !== null) ? ($this->link->url ?? '') : '';
+        $urlString = ($this->link !== null) ? ($this->link->url ?? '') : '';
 
         return $randomDescription->getDescriptionText([
             'url' => $urlString, // Full URL string (e.g., "https://google.de")
-            'urlObject' => $this->url, // URL object for advanced usage
+            'urlObject' => $this->link, // Link object for advanced usage
             'discount' => $this->discount,
             'special' => $this->special, // Special object for favicon
             'extractedTitle' => $this->extractedTitle
@@ -1074,7 +1065,7 @@ class RedirectPage extends AbstractPage
         $visitCount = $statement->fetchSingleColumn();
 
         // Update counter in shrinkr1_link
-        $urlEditor = new ShrinkrLinkEditor($this->url);
+        $urlEditor = new ShrinkrLinkEditor($this->link);
         $urlEditor->update(['counter' => $visitCount]);
     }
 }

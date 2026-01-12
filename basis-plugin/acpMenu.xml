@@ -96,18 +96,4 @@
 		</acpmenuitem>
 	</import>
 
-	<delete>
-		<acpmenuitem name="urlshort.acp.menu.link.menu"/>
-		<acpmenuitem name="urlshort.acp.menu.link.url.list"/>
-		<acpmenuitem name="urlshort.acp.menu.link.url.add"/>
-		<acpmenuitem name="urlshort.acp.menu.link.discount.list"/>
-		<acpmenuitem name="urlshort.acp.menu.link.discount.add"/>
-		<acpmenuitem name="urlshort.acp.menu.link.description.list"/>
-		<acpmenuitem name="urlshort.acp.menu.link.description.add"/>
-		<acpmenuitem name="urlshort.acp.menu.link.special.list"/>
-		<acpmenuitem name="urlshort.acp.menu.link.theme.list"/>
-		<acpmenuitem name="urlshort.acp.menu.link.theme.add"/>
-		<acpmenuitem name="urlshort.acp.menu.link.statistics.list"/>
-		<acpmenuitem name="urlshort.acp.menu.link.settings"/>
-	</delete>
 </data>

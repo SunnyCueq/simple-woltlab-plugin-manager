@@ -233,10 +233,8 @@ Custom: [A-Z0-9]{6}  → DEAL42, PROMO7
 - DDEV Development Environment Support
 
 **Technische Änderungen:**
-- `Url` → `ShrinkrLink` (Klassen-Umbenennung)
-- `urlID` → `linkID` (Datenbank-Spalten)
-- `urlshort_*` → `shrinkr_*` (Optionen & Sprachvariablen)
 - Namespace: `shrinkr\*` (App-eigener Namespace)
+- Datenbank-Tabellen: `shrinkr1_*`
 - JavaScript: Konsolidiert unter `Shrinkr/*`
 
 ---

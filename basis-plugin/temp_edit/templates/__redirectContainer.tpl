@@ -271,7 +271,7 @@
         </script>
 
         {* Enhance Forward Button (nice: 1) *}
-        {if SHRINKR_FEATUREDLINKS_ENABLECUSTOMFORWARDBUTTON}
+        {if SHRINKR_ENABLE_CUSTOM_FORWARD_BUTTON}
         {* Enhanced forward button with 3D effect *}
         <script data-relocate="true">
         (function() {
@@ -451,7 +451,7 @@
 
                 {* Buttons rechts (wie comment__buttons) *}
                 <div class="shrinkrBox__buttons">
-                    {if SHRINKR_FEATUREDLINKS_ENABLESHAREBUTTON}
+                    {if SHRINKR_ENABLE_SHARE_BUTTON}
                             <button type="button" class="button small shareButton jsTooltip" title="{lang}wcf.message.share{/lang}" aria-label="{lang}wcf.message.share{/lang}" data-link="{$shareUrl}" data-link-title="{if $link->linkTitle|isset && $link->linkTitle}{$link->linkTitle}{elseif $link->extractedTitle|isset}{$link->extractedTitle}{else}{$link->hash}{/if}">
                                 {icon name='share-nodes'}
                                 <span class="invisible">{lang}wcf.message.share{/lang}</span>
@@ -501,7 +501,7 @@
                 {/if}
 
                 {* Initialize share dialog if enabled *}
-                {if SHRINKR_FEATUREDLINKS_ENABLESHAREBUTTON}
+                {if SHRINKR_ENABLE_SHARE_BUTTON}
                 require(['WoltLabSuite/Core/Ui/Message/Share/Dialog'], function(UiMessageShareDialog) {
                     UiMessageShareDialog.setup();
                 });

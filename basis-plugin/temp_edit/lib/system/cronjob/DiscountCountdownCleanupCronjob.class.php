@@ -12,9 +12,9 @@ use wcf\system\WCF;
  * Deactivates specials (isActive = 0) that have been expired for more than 2 days.
  * Between expiration and deactivation, the special is shown as "Ended" in the ACP.
  *
- * @author      Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @license     License for Commercial Plugins
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.cronjob

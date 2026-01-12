@@ -1,0 +1,331 @@
+.commentList {
+	display: flex;
+	flex-direction: column;
+	padding: 10px 0;
+	row-gap: 10px;
+}
+
+.commentList__item:not(:first-child) {
+	border-top: 1px solid var(--wcfContentBorderInner);
+	padding-top: 10px;
+}
+
+.comment {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	row-gap: 10px;
+}
+
+.comment__header {
+	display: grid;
+	column-gap: 10px;
+	grid-template-areas:
+		"avatar author status menu"
+		"avatar date status menu";
+	grid-template-columns: min-content 1fr min-content min-content;
+}
+
+.comment__footer {
+	display: grid;
+	column-gap: 10px;
+	grid-template-areas: "reactions buttons";
+	grid-template-columns: auto max-content;
+}
+
+.comment__avatar {
+	align-self: center;
+	grid-area: avatar;
+}
+
+.comment__author {
+	align-self: end;
+	display: flex;
+	grid-area: author;
+}
+
+.comment__author__link {
+	color: inherit;
+}
+
+.comment__date {
+	display: flex;
+	grid-area: date;
+}
+
+.comment__permalink {
+	color: var(--wcfContentDimmedText);
+	font-size: 12px;
+}
+
+.comment__status {
+	align-self: start;
+	column-gap: 5px;
+	display: flex;
+	grid-area: status;
+	padding-top: 2px;
+}
+
+.comment__menu {
+	align-self: start;
+	grid-area: menu;
+}
+
+.comment__reactions {
+	align-self: center;
+	grid-area: reactions;
+}
+
+.comment__buttons {
+	grid-area: buttons;
+	display: flex;
+	gap: 10px;
+}
+
+.commentAdd {
+	display: grid;
+	column-gap: 10px;
+	grid-template-areas: "avatar content";
+	grid-template-columns: min-content 1fr;
+	padding: 10px;
+}
+
+.commentAdd__avatar {
+	grid-area: avatar;
+}
+
+.commentAdd__content {
+	grid-area: content;
+}
+
+.commentAdd__placeholder {
+	display: none;
+}
+
+.commentAdd__content--collapsed {
+	overflow: hidden;
+	position: relative;
+
+	.commentAdd__placeholder {
+		align-items: center;
+		background-color: var(--wcfSidebarBackground);
+		border-radius: var(--wcfBorderRadius);
+		column-gap: 10px;
+		color: var(--wcfSidebarText);
+		display: flex;
+		padding: 10px 20px;
+		width: 100%;
+	}
+
+	.commentAdd__editor {
+		left: 200%;
+		position: absolute;
+		top: -100%;
+	}
+}
+
+html[data-color-scheme="dark"] .commentAdd__content--collapsed .commentAdd__placeholder {
+	border: 1px solid var(--wcfSidebarBorder);
+}
+
+.commentAdd__content--loading {
+	height: 150px;
+	position: relative;
+
+	.commentAdd__editor {
+		display: none;
+	}
+
+	.commentAdd__loading {
+		left: 50%;
+		position: absolute;
+		top: 50%;
+		transform: translateX(-50%) translateY(-50%);
+	}
+}
+
+.comment__responses {
+	padding-top: 10px;
+	padding-left: 20px;
+}
+
+.commentResponseList {
+	display: flex;
+	flex-direction: column;
+	row-gap: 10px;
+}
+
+.commentResponseList__item {
+	border-top: 1px solid var(--wcfContentBorderInner);
+	padding-top: 10px;
+}
+
+.commentResponse {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	row-gap: 10px;
+}
+
+.commentResponse__header {
+	display: grid;
+	column-gap: 10px;
+	grid-template-areas:
+		"avatar author status menu"
+		"avatar date status menu";
+	grid-template-columns: min-content 1fr min-content min-content;
+}
+
+.commentResponse__footer {
+	display: grid;
+	column-gap: 10px;
+	grid-template-areas: "reactions buttons";
+	grid-template-columns: 1fr min-content;
+}
+
+.commentResponse__avatar {
+	align-self: center;
+	grid-area: avatar;
+}
+
+.commentResponse__author {
+	align-self: end;
+	display: flex;
+	grid-area: author;
+}
+
+.commentResponse__author__link {
+	color: inherit;
+}
+
+.commentResponse__date {
+	display: flex;
+	grid-area: date;
+}
+
+.commentResponse__permalink {
+	color: var(--wcfContentDimmedText);
+	font-size: 12px;
+}
+
+.commentResponse__status {
+	align-self: start;
+	column-gap: 5px;
+	display: flex;
+	grid-area: status;
+	padding-top: 2px;
+}
+
+.commentResponse__menu {
+	align-self: start;
+	grid-area: menu;
+}
+
+.commentResponse__reactions {
+	grid-area: reactions;
+}
+
+.commentResponse__buttons {
+	grid-area: buttons;
+	display: flex;
+	gap: 10px;
+}
+
+.commentResponseAdd {
+	border-top: 1px solid var(--wcfContentBorderInner);
+	display: grid;
+	column-gap: 10px;
+	grid-template-areas: "avatar content";
+	grid-template-columns: min-content 1fr;
+	padding: 10px;
+	margin-left: 20px;
+}
+
+.commentResponseAdd__avatar {
+	grid-area: avatar;
+}
+
+.commentResponseAdd__content {
+	grid-area: content;
+}
+
+.commentResponseAdd__content--loading {
+	height: 150px;
+	position: relative;
+
+	.commentResponseAdd__editor {
+		display: none;
+	}
+
+	.commentResponseAdd__loading {
+		left: 50%;
+		position: absolute;
+		top: 50%;
+		transform: translateX(-50%) translateY(-50%);
+	}
+}
+
+.commentList > li:hover {
+	background-color: transparent;
+}
+
+@keyframes wcfCommentHighlight {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.3;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.comment.comment__highlight__target,
+.commentResponse.comment__highlight__target {
+	animation: wcfCommentHighlight 0.96s linear;
+}
+
+@include screen-sm-up {
+	.comment__message {
+		padding-left: 42px;
+	}
+
+	.comment__footer {
+		padding-left: 42px;
+	}
+
+	.comment__responses {
+		padding-left: 42px;
+	}
+
+	.commentResponse__message {
+		padding-left: 42px;
+	}
+
+	.commentResponse__footer {
+		padding-left: 42px;
+	}
+
+	.commentResponseAdd {
+		margin-left: 42px;
+	}
+}
+
+@include screen-xs {
+	.commentAdd:not(.commentAdd--collapsed) {
+		column-gap: 0;
+
+		.commentAdd__avatar {
+			display: none;
+		}
+	}
+
+	.commentResponseAdd {
+		column-gap: 0;
+	}
+
+	.commentResponseAdd__avatar {
+		display: none;
+	}
+}

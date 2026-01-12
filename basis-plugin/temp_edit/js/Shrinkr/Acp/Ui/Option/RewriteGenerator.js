@@ -1,9 +1,9 @@
 /**
- * URL Shortener rewrite rule generation.
+ * Rewrite rule generation for Shr1nkr.
  *
- * @author      Julian Pfeil, Titus Kirch <https://julian-pfeil.de>
- * @copyright   2022 Julian Pfeil Websites & Co.
- * @license     License for Commercial Plugins <https://julian-pfeil.de/lizenz/>
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  */
 define(["require", "exports", "tslib", "../../../../WoltLabSuite/Core/Ajax", "../../../../WoltLabSuite/Core/Language", "../../../../WoltLabSuite/Core/Ui/Dialog"], function (require, exports, tslib_1, Ajax, Language, Dialog_1) {
     "use strict";
@@ -59,7 +59,7 @@ define(["require", "exports", "tslib", "../../../../WoltLabSuite/Core/Ajax", "..
         
         _dialogSetup() {
             return {
-                id: "dialogUrlshortRewriteRules",
+                id: "dialogShrinkrRewriteRules",
                 source: null,
                 options: {
                     title: Language.get("shrinkr.acp.rewrite.title"),

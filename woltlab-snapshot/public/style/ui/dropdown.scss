@@ -1,0 +1,104 @@
+.dropdownMenuContainer {
+	pointer-events: none;
+}
+
+.dropdown {
+	.dropdownToggle:active,
+	&.dropdownOpen .dropdownToggle {
+		outline: 0;
+	}
+
+	&.inputAddon {
+		> .dropdownToggle {
+			padding: 4px 7px;
+		}
+	}
+
+	&.preInput {
+		display: table;
+		width: 100%;
+
+		input {
+			border-radius: 0 3px 3px 0;
+			display: table-cell;
+			margin: 0;
+			width: 99%;
+		}
+
+		textarea {
+			border-radius: 0 3px 3px;
+			display: block;
+			margin-top: 0;
+		}
+	}
+
+	&.dropdownOpen {
+		.dropdownMenu {
+			display: block;
+		}
+	}
+
+	.dropdownToggle {
+		cursor: pointer;
+	}
+}
+
+.dropdownMenu {
+	@include dropdownMenu;
+
+	@include screen-md-down {
+		&.dropdownMenuPageSearch {
+			left: 0 !important;
+			right: 0 !important;
+		}
+	}
+}
+
+.iOS.iOS--virtualKeyboard .dropdownMenu.dropdownOpen {
+	position: absolute !important;
+}
+
+@include screen-md-down {
+	/* iOS WebKit fails to calculate absolute positions when the documentElement is
+	   set to `overflow: hidden`, causing the site to implicitly scroll. Elements
+	   with absolute positioning are still relative to (0,0) and are thus (partially)
+	   moved out of the viewport. */
+	.pageOverlayActive.iOS .dropdownMenu.dropdownOpen {
+		position: fixed;
+	}
+}
+
+.boxFlag > .box24,
+.boxFlag.box24 {
+	align-items: center;
+	display: flex !important;
+	min-height: 20px;
+
+	> img:first-child {
+		height: auto;
+	}
+
+	// prevents text being hidden when displayed in user panel
+	> span {
+		display: inline-flex !important;
+	}
+
+	&.dropdownToggle {
+		display: inline-flex !important;
+	}
+}
+
+.userObjectWatchSelect {
+	.userObjectWatchSelectHeader {
+		font-weight: 600;
+		padding-bottom: 0;
+	}
+
+	.userObjectWatchSelectDescription {
+		@include wcfFontSmall;
+
+		color: var(--wcfContentDimmedText);
+		padding-top: 0;
+		white-space: normal;
+	}
+}

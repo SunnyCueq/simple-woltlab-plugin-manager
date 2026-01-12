@@ -562,10 +562,6 @@ body[data-page-identifier="de.sunnyc.wsc.shrinkr.redirect"] {
                 position: relative;
                 margin-bottom: 5px;
                 
-                &:not(:last-child) {
-                    margin-right: 5px;
-                }
-                
                 .button {
                     display: inline-flex;
                     align-items: center;
@@ -725,10 +721,6 @@ body[data-page-identifier="de.sunnyc.wsc.shrinkr.redirect"] {
         
         > li {
             margin-bottom: 5px;
-            
-            &:not(:last-child) {
-                margin-right: 5px;
-            }
         }
         
         .customButton {

@@ -12,9 +12,9 @@ use wcf\data\object\type\AbstractObjectTypeProvider;
 /**
  * Like Object type provider for URL shortener URLs.
  *
- * @author      Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @license     License for Commercial Plugins
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.like

@@ -23,21 +23,31 @@ use wcf\util\FileUtil;
 
 /**
  * Represents a shortened link database object.
+ *
+ * @property-read   int         $linkID             Unique link identifier
+ * @property-read   string      $url                Target URL
+ * @property-read   string      $hash               Short link hash/identifier
+ * @property-read   int         $counter            Click counter
+ * @property-read   string      $featuredLinks      Serialized featured links data
+ * @property-read   string      $linkTitle          Custom link title
+ * @property-read   string      $autoExtractedTitle Auto-extracted page title
+ * @property-read   string      $faviconUrl         Cached favicon URL
+ * @property-read   int         $isDemo             Demo data flag (0 or 1)
  */
 class ShrinkrLink extends DatabaseObject implements IRouteController
 {
     /**
-     * @var string Database table name
+     * @inheritDoc
      */
-    protected static $databaseTableName = 'shrinkr1_link';
+    protected static $databaseTableName = 'link';
 
     /**
-     * @var string Database table index name
+     * @inheritDoc
      */
     protected static $databaseTableIndexName = 'linkID';
 
     /**
-     * Returns the title (hash) as string representation.
+     * @inheritDoc
      */
     public function __toString(): string
     {
@@ -53,7 +63,11 @@ class ShrinkrLink extends DatabaseObject implements IRouteController
     }
 
     /**
-     * Returns the shortened URL (format: /r/{hash}/).
+     * Generates the full shortened URL for this link.
+     * Respects expert mode settings, URL rewriting, and prefix removal options.
+     *
+     * @param   bool    $isAcp  Reserved for future use
+     * @return  string          The complete shortened URL (e.g., https://example.com/r/abc123/)
      */
     public function getShortedUrl(bool $isAcp = false): string
     {
@@ -155,7 +169,11 @@ class ShrinkrLink extends DatabaseObject implements IRouteController
     }
 
     /**
-     * Returns the link with the given hash.
+     * Retrieves a link by its hash identifier.
+     * Returns an empty object if hash does not exist.
+     *
+     * @param   string      $hash   The hash to search for
+     * @return  ShrinkrLink         Link object (may be empty if not found)
      */
     public static function getLinkByHash(string $hash): ShrinkrLink
     {
@@ -168,14 +186,5 @@ class ShrinkrLink extends DatabaseObject implements IRouteController
         }
         
         return new self(null, $row);
-    }
-
-    /**
-     * Alias for getLinkByHash for backwards compatibility.
-     * @deprecated Use getLinkByHash() instead
-     */
-    public static function getLinkByHash(string $hash): ShrinkrLink
-    {
-        return self::getLinkByHash($hash);
     }
 }

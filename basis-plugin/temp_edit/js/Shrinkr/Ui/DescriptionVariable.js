@@ -1,11 +1,9 @@
 /**
  * Description variable inserter - Makes variables clickable to insert into textarea.
  *
- * @author      Sunny C. <https://benjaro.info>
- * @copyright   2025 Sunny C.
- * @license     Commercial License
- * @package     de.julian-pfeil.shrinkr.featuredLinks
- * @since       6.4.0
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  */
 define(["require", "exports"], function (require, exports) {
     "use strict";

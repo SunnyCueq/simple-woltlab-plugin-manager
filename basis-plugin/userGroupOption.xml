@@ -65,18 +65,4 @@
 		</options>
 	</import>
 
-	<delete>
-		<category name="user.urlshort"/>
-		<category name="mod.urlshort"/>
-		<category name="admin.urlshort"/>
-		<option name="admin.urlshort.canManageUrls"/>
-		<option name="admin.urlshort.canManageDiscounts"/>
-		<option name="admin.urlshort.canManageDescriptions"/>
-		<option name="admin.urlshort.canManageFeaturedLinks"/>
-		<option name="admin.urlshort.canManageCustomButtons"/>
-		<option name="admin.urlshort.canManageSpecials"/>
-		<option name="admin.urlshort.canManageThemes"/>
-		<option name="admin.urlshort.canManageButtonClicks"/>
-		<option name="admin.urlshort.canCreateURLWithDirectForwarding"/>
-	</delete>
 </data>

@@ -1,0 +1,63 @@
+{
+    "name": "laminas/laminas-progressbar",
+    "description": "Create and update progress bars in different environments",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "laminas",
+        "progressbar"
+    ],
+    "homepage": "https://laminas.dev",
+    "support": {
+        "docs": "https://docs.laminas.dev/laminas-progressbar/",
+        "issues": "https://github.com/laminas/laminas-progressbar/issues",
+        "source": "https://github.com/laminas/laminas-progressbar",
+        "rss": "https://github.com/laminas/laminas-progressbar/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
+    },
+    "abandoned": true,
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.0.99"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require": {
+        "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+        "laminas/laminas-stdlib": "^3.2.1"
+    },
+    "require-dev": {
+        "laminas/laminas-coding-standard": "~2.5.0",
+        "laminas/laminas-session": "^2.16",
+        "phpunit/phpunit": "^9.5.25"
+    },
+    "suggest": {
+        "laminas/laminas-session": "To support progressbar persistent"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laminas\\ProgressBar\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaminasTest\\ProgressBar\\": "test/"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    },
+    "conflict": {
+        "zendframework/zend-progressbar": "*"
+    }
+}

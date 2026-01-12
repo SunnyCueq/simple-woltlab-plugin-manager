@@ -41,25 +41,9 @@
 			<environment>admin</environment>
 			<templatename>header</templatename>
 			<eventname>stylesheets</eventname>
-			<templatecode><![CDATA[<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('shrinkr')}acp/style/shrinkr.css" />
-{* Hide QR code column if option is disabled *}
-{if !SHRINKR_ENABLE_QR_CODE}
-<style>
-    /* Hide QR code column in Link list - uses class columnQR from base plugin template */
-    .columnQR,
-    th.columnQR,
-    td.columnQR {
-        display: none !important;
-    }
-</style>
-{/if}]]></templatecode>
+			<templatecode><![CDATA[<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('shrinkr')}acp/style/shrinkr.css" />]]></templatecode>
 		</templatelistener>
 
 	</import>
 
-	<delete>
-		<templatelistener name="urlshortACPCSS"/>
-		<templatelistener name="urlshortOptionFormReloadLink"/>
-		<templatelistener name="affiliateAcpStylesheet"/>
-	</delete>
 </data>

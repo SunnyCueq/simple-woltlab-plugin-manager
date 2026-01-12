@@ -1,0 +1,69 @@
+.inputItemList {
+	@include input;
+
+	display: flex;
+	flex-wrap: wrap;
+	padding-bottom: 0;
+	padding-top: 5px;
+
+	&[data-accepts-new-items="true"] {
+		cursor: text;
+	}
+
+	&:focus-within:focus-visible {
+		border-color: var(--wcfInputBorderActive);
+	}
+
+	> .item,
+	> .input {
+		flex: 0 0 auto;
+		margin-bottom: 5px;
+
+		&:not(:last-child) {
+			margin-right: 5px;
+		}
+	}
+
+	> .item {
+		background-color: var(--wcfButtonBackground);
+		border-radius: 2px;
+		color: var(--wcfButtonText);
+		cursor: default;
+		max-width: 100%;
+		padding: 1px 5px;
+
+		.icon {
+			color: inherit;
+		}
+
+		&.active {
+			background-color: var(--wcfButtonBackgroundActive);
+			color: var(--wcfButtonTextActive);
+		}
+	}
+
+	&:not(.disabled) {
+		> item:hover {
+			background-color: var(--wcfButtonBackgroundActive);
+			color: var(--wcfButtonTextActive);
+		}
+	}
+
+	> .input > input {
+		background-color: transparent !important;
+		border-width: 0 !important;
+		min-width: 165px;
+		padding: 0 !important;
+	}
+}
+
+.inputItemListLimitReached {
+	color: var(--wcfContentDimmedText);
+	vertical-align: middle;
+
+	/* The input field does not have a distinct appearance, making the text unselectable
+	   will prevent the browser from displaying a potentially misleading caret cursor. */
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}

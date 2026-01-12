@@ -10,9 +10,9 @@ use wcf\system\WCF;
 /**
  * Event listener to add REACTION_TYPES to template variables for ACP header.
  *
- * @author      Sunny C. <https://benjaro.info>
+ * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins <https://benjaro.info>
+ * @license     License for Commercial Plugins
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage system.event.listener
