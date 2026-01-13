@@ -141,6 +141,7 @@ class DiscountListPage extends MultipleLinkPage
             'hosts' => $this->hosts,
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.discount.list',
         ]);
     }
 }

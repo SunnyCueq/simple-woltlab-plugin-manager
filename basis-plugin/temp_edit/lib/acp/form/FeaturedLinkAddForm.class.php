@@ -155,6 +155,7 @@ class FeaturedLinkAddForm extends AbstractFormBuilderForm
             'linkID' => $this->linkID,
             'urlHash' => $this->urlHash,
             'hasExistingFeaturedLinks' => $hasExistingFeaturedLinks,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.menu',
         ]);
     }
 }

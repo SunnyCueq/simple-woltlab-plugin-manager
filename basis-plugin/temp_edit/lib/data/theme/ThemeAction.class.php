@@ -37,6 +37,11 @@ class ThemeAction extends AbstractDatabaseObjectAction
     /**
      * @inheritDoc
      */
+    protected $requireACP = ['create', 'update', 'delete', 'toggle'];
+
+    /**
+     * @inheritDoc
+     */
     public function create()
     {
         // Validate color values before creating
@@ -141,6 +146,26 @@ class ThemeAction extends AbstractDatabaseObjectAction
         $effectIdentifier = $this->parameters['data']['effectIdentifier'];
         if (!\in_array($effectIdentifier, self::ALLOWED_EFFECTS, true)) {
             throw new UserInputException('effectIdentifier', 'invalid');
+        }
+    }
+
+    /**
+     * Validates the "toggle" action.
+     */
+    public function validateToggle()
+    {
+        $this->validateUpdate();
+    }
+
+    /**
+     * Toggles the active state of themes.
+     */
+    public function toggle()
+    {
+        foreach ($this->getObjects() as $object) {
+            $object->update([
+                'isActive' => $object->isActive ? 0 : 1,
+            ]);
         }
     }
 }

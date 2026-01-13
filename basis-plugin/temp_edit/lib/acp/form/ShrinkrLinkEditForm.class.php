@@ -11,6 +11,7 @@ use wcf\http\Helper;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\TabFormContainer;
+use wcf\system\form\builder\TemplateFormNode;
 use wcf\system\WCF;
 
 /**
@@ -72,26 +73,85 @@ class ShrinkrLinkEditForm extends ShrinkrLinkAddForm
         $tabMenu = $this->form->getNodeById('linkTabMenu');
 
         if ($tabMenu) {
-            // === DESIGN TAB ===
-            $designTab = TabFormContainer::create('designTabContainer')
-                ->label('wcf.shrinkr.design');
+            // === FEATURED LINKS TAB ===
+            $featuredLinksTab = TabFormContainer::create('featuredLinksTab')
+                ->label('wcf.shrinkr.featuredLink.section');
 
-            // Featured Links Section (read-only display)
-            $featuredLinksContainer = FormContainer::create('featuredLinksDisplay')
-                ->label('wcf.shrinkr.featuredLinks')
-                ->description('wcf.shrinkr.featuredLinks.manage.description');
+            $featuredLinksContainer = FormContainer::create('featuredLinksContainer');
+            
+            // Use TemplateFormNode for Featured Links content
+            $featuredLinksTemplate = TemplateFormNode::create('featuredLinksTemplate')
+                ->application('shrinkr')
+                ->templateName('__shrinkrLinkEditFeaturedLinksSection')
+                ->variables([
+                    'action' => 'edit',
+                    'linkID' => $this->formObject->linkID ?? 0,
+                    'urlFeaturedLinks' => $this->getFeaturedLinks(),
+                ]);
+            
+            $featuredLinksContainer->appendChild($featuredLinksTemplate);
+            $featuredLinksTab->appendChild($featuredLinksContainer);
 
-            $designTab->appendChild($featuredLinksContainer);
+            // === CUSTOM BUTTONS TAB ===
+            $customButtonsTab = TabFormContainer::create('customButtonsTab')
+                ->label('wcf.shrinkr.customButton.section');
 
-            // Custom Buttons Section (read-only display)
-            $customButtonsContainer = FormContainer::create('customButtonsDisplay')
-                ->label('wcf.shrinkr.customButtons')
-                ->description('wcf.shrinkr.customButtons.manage.description');
+            $customButtonsContainer = FormContainer::create('customButtonsContainer');
+            
+            // Use TemplateFormNode for Custom Buttons content
+            $customButtonsTemplate = TemplateFormNode::create('customButtonsTemplate')
+                ->application('shrinkr')
+                ->templateName('__shrinkrLinkEditCustomButtonsSection')
+                ->variables([
+                    'action' => 'edit',
+                    'linkID' => $this->formObject->linkID ?? 0,
+                    'urlCustomButtons' => $this->getCustomButtons(),
+                ]);
+            
+            $customButtonsContainer->appendChild($customButtonsTemplate);
+            $customButtonsTab->appendChild($customButtonsContainer);
 
-            $designTab->appendChild($customButtonsContainer);
-
-            $tabMenu->appendChild($designTab);
+            $tabMenu->appendChild($featuredLinksTab);
+            $tabMenu->appendChild($customButtonsTab);
         }
+    }
+
+    /**
+     * Returns featured links for the current URL.
+     *
+     * @return array
+     */
+    protected function getFeaturedLinks(): array
+    {
+        if (!$this->formObject || !$this->formObject->linkID) {
+            return [];
+        }
+
+        $featuredLinkList = new FeaturedLinkList();
+        $featuredLinkList->getConditionBuilder()->add('linkID = ?', [$this->formObject->linkID]);
+        $featuredLinkList->sqlOrderBy = 'sortOrder ASC, linkID ASC';
+        $featuredLinkList->readObjects();
+
+        return $featuredLinkList->getObjects();
+    }
+
+    /**
+     * Returns custom buttons for the current URL.
+     *
+     * @return array
+     */
+    protected function getCustomButtons(): array
+    {
+        if (!$this->formObject || !$this->formObject->linkID) {
+            return [];
+        }
+
+        $customButtonList = new CustomButtonList();
+        $customButtonList->getConditionBuilder()->add('linkID = ?', [$this->formObject->linkID]);
+        $customButtonList->sqlOrderBy = 'sortOrder ASC';
+        $customButtonList->readObjects();
+
+        return $customButtonList->getObjects();
     }
 
     /**
@@ -101,15 +161,13 @@ class ShrinkrLinkEditForm extends ShrinkrLinkAddForm
     {
         parent::assignVariables();
 
-        // Load specials and featured links for this URL
+        // Load specials for this URL
         $urlSpecials = [];
         $urlActiveSpecials = [];
         $hasActiveSpecials = false;
         $firstActiveSpecialID = null;
-        $urlFeaturedLinks = [];
 
         if ($this->formObject && $this->formObject->linkID) {
-            // Load specials for this URL
             $specialList = new SpecialList();
             $specialList->getConditionBuilder()->add('linkID = ?', [$this->formObject->linkID]);
             $specialList->readObjects();
@@ -126,14 +184,31 @@ class ShrinkrLinkEditForm extends ShrinkrLinkAddForm
 
             $urlSpecials = $specials;
             $hasActiveSpecials = !empty($urlActiveSpecials);
+        }
 
-            // Load featured links for this URL
-            $featuredLinkList = new FeaturedLinkList();
-            $featuredLinkList->getConditionBuilder()->add('linkID = ?', [$this->formObject->linkID]);
-            $featuredLinkList->sqlOrderBy = 'sortOrder ASC, linkID ASC';
-            $featuredLinkList->readObjects();
+        // Get data for tabs
+        $urlFeaturedLinks = $this->getFeaturedLinks();
+        $urlCustomButtons = $this->getCustomButtons();
 
-            $urlFeaturedLinks = $featuredLinkList->getObjects();
+        // Update tab labels with badges
+        $featuredLinksTab = $this->form->getNodeById('featuredLinksTab');
+        if ($featuredLinksTab) {
+            $featuredLinksCount = count($urlFeaturedLinks);
+            $featuredLinksLabel = WCF::getLanguage()->get('wcf.shrinkr.featuredLink.section');
+            if ($featuredLinksCount > 0) {
+                $featuredLinksLabel .= ' <span class="badge">' . $featuredLinksCount . '</span>';
+            }
+            $featuredLinksTab->label($featuredLinksLabel);
+        }
+
+        $customButtonsTab = $this->form->getNodeById('customButtonsTab');
+        if ($customButtonsTab) {
+            $customButtonsCount = count($urlCustomButtons);
+            $customButtonsLabel = WCF::getLanguage()->get('wcf.shrinkr.customButton.section');
+            if ($customButtonsCount > 0) {
+                $customButtonsLabel .= ' <span class="badge">' . $customButtonsCount . '</span>';
+            }
+            $customButtonsTab->label($customButtonsLabel);
         }
 
         WCF::getTPL()->assign([
@@ -144,6 +219,7 @@ class ShrinkrLinkEditForm extends ShrinkrLinkAddForm
             'hasActiveSpecials' => $hasActiveSpecials,
             'firstActiveSpecialID' => $firstActiveSpecialID,
             'urlFeaturedLinks' => $urlFeaturedLinks,
+            'urlCustomButtons' => $urlCustomButtons,
         ]);
     }
 }

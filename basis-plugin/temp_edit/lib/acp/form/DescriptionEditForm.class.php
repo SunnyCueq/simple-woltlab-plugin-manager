@@ -22,7 +22,7 @@ class DescriptionEditForm extends DescriptionAddForm
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'shrinkr.acp.menu.link.description.edit';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.description.list';
 
     /**
      * @inheritDoc

@@ -155,6 +155,7 @@ class CustomButtonAddForm extends AbstractFormBuilderForm
             'linkID' => $this->linkID,
             'urlHash' => $this->urlHash,
             'hasExistingCustomButtons' => $hasExistingCustomButtons,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.menu',
         ]);
     }
 }

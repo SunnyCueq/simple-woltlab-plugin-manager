@@ -23,21 +23,21 @@
 			<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
 			<div class="row rowColGap formGrid">
-				<dl class="col-xs-12 col-md-3">
+				<dl class="col-xs-12 col-md-4">
 					<dt><label for="discountValue">{lang}wcf.shrinkr.discount{/lang}</label></dt>
 					<dd>
 						<input class="long" type="text" id="discountValue" name="discountValue" value="{$discountValue}" placeholder="{lang}wcf.shrinkr.discount{/lang}">
 					</dd>
 				</dl>
 
-				<dl class="col-xs-12 col-md-3">
+				<dl class="col-xs-12 col-md-4">
 					<dt><label for="codes">{lang}wcf.shrinkr.codes{/lang}</label></dt>
 					<dd>
 						<input class="long" type="text" id="codes" name="codes" value="{$codes}" placeholder="{lang}wcf.shrinkr.codes{/lang}">
 					</dd>
 				</dl>
 
-				<dl class="col-xs-12 col-md-3">
+				<dl class="col-xs-12 col-md-4">
 					<dt><label for="hosts">{lang}wcf.shrinkr.hosts{/lang}</label></dt>
 					<dd>
 						<input class="long" type="text" id="hosts" name="hosts" value="{$hosts}" placeholder="{lang}wcf.shrinkr.hosts{/lang}">

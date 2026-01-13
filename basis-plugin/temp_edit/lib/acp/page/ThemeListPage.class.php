@@ -145,6 +145,7 @@ class ThemeListPage extends MultipleLinkPage
             'isActiveFilter' => $this->isActive,
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.theme.list',
         ]);
     }
 }

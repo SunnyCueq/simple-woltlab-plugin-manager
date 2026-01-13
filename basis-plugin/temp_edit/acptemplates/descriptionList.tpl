@@ -99,6 +99,11 @@
 				{foreach from=$objects item=object}
 					<tr class="jsObjectActionObject" data-object-id="{#$object->descriptionID}">
 						<td class="columnIcon">
+							{assign var='descriptionIsDisabled' value=true}
+							{if $object->isActive()}
+								{assign var='descriptionIsDisabled' value=false}
+							{/if}
+							{objectAction action="toggle" isDisabled=$descriptionIsDisabled disableTitle='wcf.shrinkr.description.isActive.yes' enableTitle='wcf.shrinkr.description.isActive.no'}
 							<a href="{link controller='DescriptionEdit' id=$object->descriptionID application='shrinkr'}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->getTitle()}

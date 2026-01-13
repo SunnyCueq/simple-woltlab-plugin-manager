@@ -24,7 +24,7 @@ class SpecialEditForm extends SpecialAddForm
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'shrinkr.acp.menu.link.special.edit';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.special.list';
 
     /**
      * @inheritDoc

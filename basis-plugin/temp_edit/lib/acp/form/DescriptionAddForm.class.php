@@ -62,18 +62,33 @@ class DescriptionAddForm extends AbstractFormBuilderForm
                     ->rows(10),
             ]);
 
-        // === SETTINGS ===
-        $settingsContainer = FormContainer::create('settings')
-            ->label('wcf.shrinkr.form.section.settings')
-            ->description('wcf.shrinkr.form.section.settings.description')
-            ->appendChildren([
-                BooleanFormField::create('isActive')
-                    ->label('wcf.shrinkr.description.isActive')
-                    ->description('wcf.shrinkr.description.isActive.description')
-                    ->value(true),
-            ]);
-
         $this->form->appendChild($basicContainer);
-        $this->form->appendChild($settingsContainer);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[\Override]
+    public function save()
+    {
+        // Set isActive to true by default if not set (since field was removed from form)
+        if ($this->formAction === 'create') {
+            $this->additionalFields['isActive'] = 1;
+        }
+
+        parent::save();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[\Override]
+    public function assignVariables()
+    {
+        parent::assignVariables();
+
+        \wcf\system\WCF::getTPL()->assign([
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.description.list'
+        ]);
     }
 }

@@ -104,6 +104,11 @@
 				{foreach from=$objects item=object}
 					<tr class="jsObjectActionObject" data-object-id="{#$object->themeID}">
 						<td class="columnIcon">
+							{assign var='themeIsDisabled' value=true}
+							{if $object->isActive}
+								{assign var='themeIsDisabled' value=false}
+							{/if}
+							{objectAction action="toggle" isDisabled=$themeIsDisabled disableTitle='wcf.shrinkr.theme.isActive.yes' enableTitle='wcf.shrinkr.theme.isActive.no'}
 							<a href="{link controller='ThemeEdit' id=$object->themeID application='shrinkr'}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->title}

@@ -60,7 +60,7 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
 
         // === BASIC TAB ===
         $basicTab = TabFormContainer::create('basicTab')
-            ->label('wcf.shrinkr.form.tab.basic');
+            ->label('wcf.global.form.data');
 
         $basicContainer = FormContainer::create('basicFields')
             ->appendChildren([
@@ -140,6 +140,7 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
             'rewriteRules' => $rewriteRules,
             'htaccessRuleExists' => $htaccessRuleExists,
             'detectedWebserver' => $detectedWebserver,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.link.list',
         ]);
     }
 

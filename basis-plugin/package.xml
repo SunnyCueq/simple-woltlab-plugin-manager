@@ -5,8 +5,8 @@
 		<packagename language="de">Shr1nkr</packagename>
 		<packagedescription>Create your own short links directly in your community – fast, secure and without external services.</packagedescription>
 		<packagedescription language="de">Erstelle eigene Kurz-URLs direkt in deiner Community – schnell, sicher und ohne externe Dienste.</packagedescription>
-		<version>1.0.41</version>
-		<date>2026-01-08</date>
+		<version>1.0.50</version>
+		<date>2026-01-13</date>
 		<packageurl><![CDATA[https://sunnyc.de]]></packageurl>
 		<isapplication>1</isapplication>
 		<applicationdirectory>shrinkr</applicationdirectory>

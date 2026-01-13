@@ -212,6 +212,13 @@ summer:Sommer:rgba(255, 215, 0, 1):rgba(135, 206, 250, 1):rgba(0, 0, 0, 1):rgba(
 default:Standard:rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 255, 1)</defaultvalue>
 				<hidden>1</hidden>
 			</option>
+			<option name="shrinkr_copyright_enabled">
+				<categoryname>shrinkr.general</categoryname>
+				<showorder>999</showorder>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+				<hidden>1</hidden>
+			</option>
 
 			<!-- Tab 7: Erweitert -->
 			<option name="shrinkr_pattern">

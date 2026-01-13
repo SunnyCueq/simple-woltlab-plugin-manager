@@ -22,6 +22,11 @@ class CustomButtonEditForm extends CustomButtonAddForm
     /**
      * @inheritDoc
      */
+    public $activeMenuItem = 'shrinkr.acp.menu.link.customButton.edit';
+
+    /**
+     * @inheritDoc
+     */
     public $formAction = 'edit';
 
     /**
@@ -64,6 +69,19 @@ class CustomButtonEditForm extends CustomButtonAddForm
 
         // Call parent WITHOUT readParameters (to avoid linkID check from query)
         \wcf\form\AbstractFormBuilderForm::readParameters();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[\Override]
+    public function assignVariables()
+    {
+        parent::assignVariables();
+
+        \wcf\system\WCF::getTPL()->assign([
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.customButton.list'
+        ]);
     }
 }
 

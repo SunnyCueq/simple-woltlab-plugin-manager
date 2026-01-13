@@ -7,8 +7,11 @@ use shrinkr\data\theme\Theme;
 use wcf\http\Helper;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\form\builder\container\FormContainer;
+use wcf\system\form\builder\container\TabFormContainer;
 use wcf\system\form\builder\field\MultilineTextFormField;
 use wcf\system\form\builder\field\SourceCodeFormField;
+use wcf\system\form\builder\NoticeFormNode;
+use wcf\system\form\builder\NoticeFormNodeType;
 use wcf\system\WCF;
 
 /**
@@ -27,7 +30,7 @@ class ThemeEditForm extends ThemeAddForm
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'shrinkr.acp.menu.link.theme.edit';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.theme.list';
 
     /**
      * @inheritDoc
@@ -80,44 +83,53 @@ class ThemeEditForm extends ThemeAddForm
     {
         parent::createForm();
 
-        // Add CSS editor container if theme has CSS file
+        // Add CSS editor as tab if theme has CSS file
         // formObject is already loaded in readParameters()
         if ($this->formObject && $this->formObject->hasCssFile()) {
-            // Load CSS content directly from file (not from database)
-            $cssPath = $this->formObject->getCssFilePath();
+            // Get the tab menu container from parent (ThemeAddForm)
+            $tabMenu = $this->form->getNodeById('themeTabs');
             
-            $cssContent = '';
-            if ($cssPath !== null && file_exists($cssPath)) {
-                $fileContent = file_get_contents($cssPath);
-                if ($fileContent !== false) {
-                    $cssContent = $fileContent;
+            if ($tabMenu) {
+                // Load CSS content directly from file (not from database)
+                $cssPath = $this->formObject->getCssFilePath();
+                
+                $cssContent = '';
+                if ($cssPath !== null && file_exists($cssPath)) {
+                    $fileContent = file_get_contents($cssPath);
+                    if ($fileContent !== false) {
+                        $cssContent = $fileContent;
+                    }
                 }
+                
+                // Fallback: Try loadCssContent() if direct file read failed
+                if (empty($cssContent)) {
+                    $cssContent = $this->formObject->loadCssContent() ?? '';
+                }
+                
+                // === TAB 3: CSS bearbeiten ===
+                $cssTab = TabFormContainer::create('cssTab')
+                    ->label('wcf.shrinkr.form.tab.css')
+                    ->description('wcf.shrinkr.theme.css.edit.description');
+                
+                $cssContainer = FormContainer::create('cssData');
+                
+                // Add warning notice using NoticeFormNode
+                $cssWarning = NoticeFormNode::create('cssWarning')
+                    ->type(NoticeFormNodeType::Warning)
+                    ->languageItem('wcf.shrinkr.theme.css.edit.warning');
+                
+                $cssContainer->appendChildren([
+                    $cssWarning,
+                    SourceCodeFormField::create('cssContent')
+                        ->label('wcf.shrinkr.theme.css.content')
+                        ->description('wcf.shrinkr.theme.css.content.description')
+                        ->language('css')
+                        ->value($cssContent),
+                ]);
+                
+                $cssTab->appendChild($cssContainer);
+                $tabMenu->appendChild($cssTab);
             }
-            
-            // Fallback: Try loadCssContent() if direct file read failed
-            if (empty($cssContent)) {
-                $cssContent = $this->formObject->loadCssContent() ?? '';
-            }
-            
-            $cssContainer = FormContainer::create('css')
-                ->label('wcf.shrinkr.theme.css.edit')
-                ->description(
-                    WCF::getLanguage()->get('wcf.shrinkr.theme.css.edit.description') . 
-                    '<p class="warning">' . 
-                    WCF::getLanguage()->get('wcf.shrinkr.theme.css.edit.warning') . 
-                    '</p>'
-                );
-
-            // Use SourceCodeFormField for CSS editing (like WoltLab's style editor)
-            $cssContainer->appendChildren([
-                SourceCodeFormField::create('cssContent')
-                    ->label('wcf.shrinkr.theme.css.content')
-                    ->description('wcf.shrinkr.theme.css.content.description')
-                    ->language('css')
-                    ->value($cssContent),
-            ]);
-
-            $this->form->appendChild($cssContainer);
         }
     }
 

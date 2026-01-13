@@ -155,6 +155,7 @@ class CustomButtonListPage extends MultipleLinkPage
             'q' => $this->q,
             'urlHash' => $this->urlHash,
             'urlTarget' => $this->urlTarget,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.menu',
         ]);
     }
 }

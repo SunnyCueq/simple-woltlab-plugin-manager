@@ -498,6 +498,7 @@ class ShrinkrLinkListPage extends SortablePage
             'reactionData' => $reactionData,
             'reactionObjectType' => 'de.sunnyc.wsc.shrinkr.likeableUrl',
             'reactionTypesJS' => $reactionTypesJS,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.link.list',
         ]);
         
         // Override objects in template if sorted

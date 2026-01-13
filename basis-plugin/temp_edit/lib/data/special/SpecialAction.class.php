@@ -42,6 +42,26 @@ class SpecialAction extends AbstractDatabaseObjectAction
     /**
      * @inheritDoc
      */
-    protected $requireACP = ['create', 'delete', 'update'];
+    protected $requireACP = ['create', 'delete', 'update', 'toggle'];
+
+    /**
+     * Validates the "toggle" action.
+     */
+    public function validateToggle()
+    {
+        $this->validateUpdate();
+    }
+
+    /**
+     * Toggles the active state of specials.
+     */
+    public function toggle()
+    {
+        foreach ($this->getObjects() as $object) {
+            $object->update([
+                'isActive' => $object->isActive ? 0 : 1,
+            ]);
+        }
+    }
 }
 

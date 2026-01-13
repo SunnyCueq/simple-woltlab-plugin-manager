@@ -113,6 +113,7 @@
 							{lang}wcf.shrinkr.countdownEnd{/lang}
 						</a>
 					</th>
+					<th>{lang}wcf.shrinkr.special.status.expired{/lang}</th>
 					<th class="columnDigits columnSpecialIsActive{if $sortField == 'isActive'} active {unsafe:$sortOrder}{/if}">
 						<a href="{link controller='SpecialList' application='shrinkr'}pageNo={#$pageNo}&sortField=isActive&sortOrder={if $sortField == 'isActive' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
 							{lang}wcf.shrinkr.special.status{/lang}
@@ -124,6 +125,11 @@
 				{foreach from=$objects item=object}
 					<tr class="jsObjectActionObject" data-object-id="{#$object->specialID}">
 						<td class="columnIcon">
+							{assign var='specialIsDisabled' value=true}
+							{if $object->isActive}
+								{assign var='specialIsDisabled' value=false}
+							{/if}
+							{objectAction action="toggle" isDisabled=$specialIsDisabled disableTitle='wcf.shrinkr.special.isActive.yes' enableTitle='wcf.shrinkr.special.isActive.no'}
 							<a href="{link controller='SpecialEdit' id=$object->specialID application='shrinkr'}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->specialID}
@@ -211,14 +217,17 @@
 							{/if}
 						</td>
 						<td class="columnText">
-							{if $object->isCurrentlyActive()}
-								<span class="badge green">{lang}wcf.shrinkr.special.status.active{/lang}</span>
-							{elseif $object->endTime && TIME_NOW > $object->endTime}
+							{if $object->endTime && $object->endTime > 0 && TIME_NOW > $object->endTime}
 								<span class="badge red">{lang}wcf.shrinkr.special.status.expired{/lang}</span>
-							{elseif $object->startTime && TIME_NOW < $object->startTime}
-								<span class="badge">{lang}wcf.shrinkr.special.status.scheduled{/lang}</span>
 							{else}
-								<span class="badge">{lang}wcf.shrinkr.special.status.inactive{/lang}</span>
+								-
+							{/if}
+						</td>
+						<td class="columnText">
+							{if $object->isActive}
+								<span class="badge green">{lang}wcf.shrinkr.special.status.active{/lang}</span>
+							{else}
+								<span class="badge red">{lang}wcf.shrinkr.special.status.inactive{/lang}</span>
 							{/if}
 						</td>
 					</tr>
@@ -236,7 +245,7 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.link.list{/lang}</span></a></li>
+				<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button">{icon size=16 name='link'} <span>{lang}wcf.shrinkr.special.urlList{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
 			</ul>
 		</nav>

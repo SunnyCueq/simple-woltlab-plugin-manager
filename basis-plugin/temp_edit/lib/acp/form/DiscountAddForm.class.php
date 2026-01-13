@@ -126,8 +126,8 @@ class DiscountAddForm extends AbstractFormBuilderForm
         $defaultTextColor = $styleVariables['wcfHeaderText'] ?? 'rgba(255, 255, 255, 1)';
         
         $designTab = TabFormContainer::create('designTab')
-            ->label('wcf.shrinkr.design')
-            ->description('Primäre Farben (linke Seite) und Sekundäre Farben (rechte Seite) des Promo Badges');
+            ->label('wcf.shrinkr.form.section.colors')
+            ->description('wcf.shrinkr.form.section.colors.description');
         
         $designContainer = FormContainer::create('designData');
         $designContainer->appendChildren([
@@ -230,5 +230,9 @@ class DiscountAddForm extends AbstractFormBuilderForm
             );
             WCF::getTPL()->assign('additionalText', $upcastProcessor->getHtml());
         }
+
+        WCF::getTPL()->assign([
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.discount.list'
+        ]);
     }
 }

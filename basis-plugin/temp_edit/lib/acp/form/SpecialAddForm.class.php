@@ -7,6 +7,8 @@ use shrinkr\system\special\SpecialThemeHelper;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\form\builder\container\FormContainer;
+use wcf\system\form\builder\container\TabFormContainer;
+use wcf\system\form\builder\container\TabMenuFormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
 use wcf\system\form\builder\field\BooleanFormField;
 use wcf\system\form\builder\field\ColorFormField;
@@ -96,8 +98,8 @@ class SpecialAddForm extends AbstractFormBuilderForm
     {
         parent::createForm();
 
-        $dataContainer = FormContainer::create('data')
-            ->label('wcf.global.form.data');
+        // Create tab menu container
+        $tabMenu = TabMenuFormContainer::create('specialTabs');
 
         // Get theme options
         $themeOptions = SpecialThemeHelper::getThemeOptions();
@@ -113,16 +115,15 @@ class SpecialAddForm extends AbstractFormBuilderForm
         $defaultSecondaryColor = $styleVariables['wcfHeaderMenuBackground'] ?? 'rgba(44, 62, 80, 1)';
         $defaultTextColor = $styleVariables['wcfHeaderText'] ?? 'rgba(255, 255, 255, 1)';
 
-        $dataContainer->appendChildren([
+        // === TAB 1: Allgemein ===
+        $generalTab = TabFormContainer::create('generalTab')
+            ->label('wcf.global.form.data');
+        
+        $generalContainer = FormContainer::create('generalData');
+        $generalContainer->appendChildren([
             // Hidden field for linkID
             HiddenFormField::create('linkID')
                 ->value($this->linkID),
-
-            // === BASIC SETTINGS ===
-            BooleanFormField::create('isActive')
-                ->label('wcf.shrinkr.special.isActive')
-                ->description('wcf.shrinkr.special.isActive.description')
-                ->value(true),
 
             SelectFormField::create('theme')
                 ->label('wcf.shrinkr.special.theme')
@@ -134,6 +135,7 @@ class SpecialAddForm extends AbstractFormBuilderForm
                 ->label('wcf.global.title')
                 ->description('wcf.shrinkr.special.title.description')
                 ->required()
+                ->autoFocus()
                 ->maximumLength(255),
 
             TextFormField::create('discount')
@@ -148,63 +150,79 @@ class SpecialAddForm extends AbstractFormBuilderForm
                 ->description('wcf.shrinkr.special.codes.description')
                 ->value('SHRINKR'),
         ]);
+        $generalTab->appendChild($generalContainer);
         
-        // === COLOR SECTION for Promo Badge ===
-        $colorContainer = FormContainer::create('colors')
-            ->label('Farben für Promo Badge')
-            ->description('Primäre Farben (linke Seite) und Sekundäre Farben (rechte Seite) des Promo Badges')
-            ->appendChildren([
-                ColorFormField::create('primaryColor')
-                    ->label('wcf.shrinkr.primaryColor')
-                    ->value($defaultPrimaryColor)
-                    ->required(),
-
-                ColorFormField::create('primaryTextColor')
-                    ->label('wcf.shrinkr.primaryTextColor')
-                    ->value($defaultTextColor)
-                    ->required(),
-
-                ColorFormField::create('secondaryColor')
-                    ->label('wcf.shrinkr.secondaryColor')
-                    ->value($defaultSecondaryColor)
-                    ->required(),
-
-                ColorFormField::create('secondaryTextColor')
-                    ->label('wcf.shrinkr.secondaryTextColor')
-                    ->value($defaultTextColor)
-                    ->required(),
-            ]);
+        // === TAB 2: Design ===
+        $designTab = TabFormContainer::create('designTab')
+            ->label('wcf.shrinkr.form.section.colors')
+            ->description('wcf.shrinkr.form.section.colors.description');
         
-        // === COUNTDOWN SECTION ===
-        $countdownContainer = FormContainer::create('countdown')
-            ->label('Countdown')
-            ->description('Zeitraum für das Special (optional)')
-            ->appendChildren([
-                DateFormField::create('startTime')
-                    ->label('wcf.shrinkr.special.startTime')
-                    ->description('wcf.shrinkr.special.startTime.description')
-                    ->saveValueFormat('U')
-                    ->supportTime(true)
-                    ->value(TIME_NOW),
+        $designContainer = FormContainer::create('designData');
+        $designContainer->appendChildren([
+            ColorFormField::create('primaryColor')
+                ->label('wcf.shrinkr.primaryColor')
+                ->value($defaultPrimaryColor)
+                ->required(),
 
-                DateFormField::create('endTime')
-                    ->label('wcf.shrinkr.special.endTime')
-                    ->description('wcf.shrinkr.special.endTime.description')
-                    ->saveValueFormat('U')
-                    ->supportTime(true)
-                    ->value(TIME_NOW + 86400),
-            ]);
+            ColorFormField::create('primaryTextColor')
+                ->label('wcf.shrinkr.primaryTextColor')
+                ->value($defaultTextColor)
+                ->required(),
 
+            ColorFormField::create('secondaryColor')
+                ->label('wcf.shrinkr.secondaryColor')
+                ->value($defaultSecondaryColor)
+                ->required(),
+
+            ColorFormField::create('secondaryTextColor')
+                ->label('wcf.shrinkr.secondaryTextColor')
+                ->value($defaultTextColor)
+                ->required(),
+        ]);
+        $designTab->appendChild($designContainer);
+        
+        // === TAB 3: Zeitraum ===
+        $periodTab = TabFormContainer::create('periodTab')
+            ->label('wcf.shrinkr.form.tab.period')
+            ->description('Zeitraum für das Special (optional)');
+        
+        $periodContainer = FormContainer::create('periodData');
+        $periodContainer->appendChildren([
+            DateFormField::create('startTime')
+                ->label('wcf.shrinkr.special.startTime')
+                ->description('wcf.shrinkr.special.startTime.description')
+                ->saveValueFormat('U')
+                ->supportTime(true)
+                ->value(TIME_NOW),
+
+            DateFormField::create('endTime')
+                ->label('wcf.shrinkr.special.endTime')
+                ->description('wcf.shrinkr.special.endTime.description')
+                ->saveValueFormat('U')
+                ->supportTime(true)
+                ->value(TIME_NOW + 86400),
+        ]);
+        $periodTab->appendChild($periodContainer);
+
+        // === TAB 4: Zusatztext ===
+        $additionalTextTab = TabFormContainer::create('additionalTextTab')
+            ->label('wcf.shrinkr.form.tab.additionalText');
+        
         // WYSIWYG Container for additionalText
         $wysiwygContainer = WysiwygFormContainer::create('additionalText')
-            ->label('Zusätzlicher Text')
-            ->description('Zusätzlicher HTML-Text für das Special (überschreibt normalen Zusatztext)')
+            ->description('wcf.shrinkr.special.additionalText.description')
             ->messageObjectType('de.sunnyc.wsc.shrinkr.special.additionalText');
+        
+        $additionalTextTab->appendChild($wysiwygContainer);
 
-        $this->form->appendChild($dataContainer);
-        $this->form->appendChild($colorContainer);
-        $this->form->appendChild($countdownContainer);
-        $this->form->appendChild($wysiwygContainer);
+        // Append tabs to tab menu
+        $tabMenu->appendChild($generalTab);
+        $tabMenu->appendChild($designTab);
+        $tabMenu->appendChild($periodTab);
+        $tabMenu->appendChild($additionalTextTab);
+        
+        // Append tab menu to form
+        $this->form->appendChild($tabMenu);
     }
 
     /**
@@ -213,6 +231,11 @@ class SpecialAddForm extends AbstractFormBuilderForm
     #[\Override]
     public function save()
     {
+        // Set isActive to true by default if not set (since field was removed from form)
+        if ($this->formAction === 'create') {
+            $this->additionalFields['isActive'] = 1;
+        }
+
         // Convert codes array to comma-separated string BEFORE parent::save()
         $codesField = $this->form->getNodeById('codes');
         if ($codesField && $codesField->getValue() && is_array($codesField->getValue())) {
@@ -300,6 +323,7 @@ class SpecialAddForm extends AbstractFormBuilderForm
             'linkID' => $this->linkID,
             'urlHash' => $this->urlHash ?? '',
             'themes' => $themes,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.special.list',
         ]);
     }
 }

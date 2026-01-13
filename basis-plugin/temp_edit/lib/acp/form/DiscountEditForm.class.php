@@ -23,7 +23,7 @@ class DiscountEditForm extends DiscountAddForm
     /**
      * @inheritDoc
      */
-    public $activeMenuItem = 'shrinkr.acp.menu.link.discount.edit';
+    public $activeMenuItem = 'shrinkr.acp.menu.link.discount.list';
 
     /**
      * @inheritDoc

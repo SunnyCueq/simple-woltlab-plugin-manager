@@ -197,6 +197,7 @@ class SpecialListPage extends MultipleLinkPage
             'shortUrl' => $this->shortUrlQuery ?? '',
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.special.list',
         ]);
     }
 }

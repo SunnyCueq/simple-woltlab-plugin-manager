@@ -55,8 +55,7 @@ class ThemeAddForm extends AbstractFormBuilderForm
         
         // === TAB 1: Basic Settings ===
         $basicTab = TabFormContainer::create('basicTab')
-            ->label('wcf.shrinkr.form.section.basic')
-            ->description('wcf.shrinkr.form.section.basic.description');
+            ->label('wcf.global.form.data');
         
         $basicContainer = FormContainer::create('basicData');
         $basicContainer->appendChildren([
@@ -83,11 +82,6 @@ class ThemeAddForm extends AbstractFormBuilderForm
                     'ghosts' => 'wcf.shrinkr.theme.effect.ghosts',
                 ])
                 ->value('none'),
-
-            BooleanFormField::create('isActive')
-                ->label('wcf.shrinkr.theme.isActive')
-                ->description('wcf.shrinkr.theme.isActive.description')
-                ->value(true),
 
             IntegerFormField::create('sortOrder')
                 ->label('wcf.shrinkr.theme.sortOrder')
@@ -146,6 +140,33 @@ class ThemeAddForm extends AbstractFormBuilderForm
         
         // Append tab menu to form
         $this->form->appendChild($tabMenu);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[\Override]
+    public function save()
+    {
+        // Set isActive to true by default if not set (since field was removed from form)
+        if ($this->formAction === 'create') {
+            $this->additionalFields['isActive'] = 1;
+        }
+
+        parent::save();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[\Override]
+    public function assignVariables()
+    {
+        parent::assignVariables();
+
+        WCF::getTPL()->assign([
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.theme.list'
+        ]);
     }
 }
 

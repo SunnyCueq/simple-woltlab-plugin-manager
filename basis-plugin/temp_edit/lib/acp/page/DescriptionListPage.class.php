@@ -146,6 +146,7 @@ class DescriptionListPage extends MultipleLinkPage
             'title' => $this->title,
             'descriptionText' => $this->descriptionText,
             'isActiveFilter' => $this->isActive,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.description.list',
         ]);
     }
 }

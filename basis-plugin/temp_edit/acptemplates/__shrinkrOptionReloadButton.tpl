@@ -11,21 +11,24 @@ document.addEventListener('DOMContentLoaded', function() {
 	var notice = document.querySelector('woltlab-core-notice[type="success"]');
 	if (!notice) return;
 	
-	// Füge Reload-Button hinzu
+	// Füge Reload-Button hinzu (WoltLab-Standard-Format)
 	var btn = document.createElement('a');
 	btn.href = window.location.href;
-	btn.className = 'button shrinkrReloadButton';
+	btn.className = 'button small';
+	btn.style.marginLeft = '10px';
 	
 	// Erstelle Icon
 	var icon = document.createElement('fa-icon');
 	icon.setAttribute('size', '16');
-	icon.setAttribute('name', 'arrow-rotate-right');
-	icon.setAttribute('solid', '');
+	icon.setAttribute('name', 'arrows-rotate');
+	icon.setAttribute('aria-hidden', 'true');
+	icon.setAttribute('translate', 'no');
 	btn.appendChild(icon);
 	
-	// Füge Text hinzu
-	var text = document.createTextNode(' {jslang}shrinkr.acp.option.reload{/jslang}');
-	btn.appendChild(text);
+	// Füge Text hinzu (direkt neben Icon, kein Abstand)
+	var span = document.createElement('span');
+	span.textContent = '{jslang}shrinkr.acp.option.reload{/jslang}';
+	btn.appendChild(span);
 	
 	notice.appendChild(btn);
 });

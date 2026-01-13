@@ -44,6 +44,14 @@
 			<templatecode><![CDATA[<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('shrinkr')}acp/style/shrinkr.css" />]]></templatecode>
 		</templatelistener>
 
+		<!-- Copyright-Erweiterung -->
+		<templatelistener name="shrinkrCopyright">
+			<environment>user</environment>
+			<templatename>pageFooterCopyright</templatename>
+			<eventname>copyright</eventname>
+			<templatecode><![CDATA[{include file='__shrinkrCopyright' application='shrinkr'}]]></templatecode>
+		</templatelistener>
+
 	</import>
 
 </data>

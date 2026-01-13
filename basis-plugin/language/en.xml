@@ -109,6 +109,7 @@
 		<item name="shrinkr.acp.menu.link.customButton.list"><![CDATA[Custom Buttons]]></item>
 		<item name="shrinkr.acp.menu.link.customButton.add"><![CDATA[Add custom button]]></item>
 		<item name="shrinkr.acp.menu.link.special.list"><![CDATA[Specials]]></item>
+		<item name="shrinkr.acp.menu.link.special.add"><![CDATA[Add Special]]></item>
 		<item name="shrinkr.acp.menu.link.special.edit"><![CDATA[Edit Special]]></item>
 		<item name="shrinkr.acp.menu.link.theme.list"><![CDATA[Themes]]></item>
 		<item name="shrinkr.acp.menu.link.theme.add"><![CDATA[Add theme]]></item>
@@ -184,7 +185,7 @@ for /shrinkr/ are also present in your nginx.conf.]]></item>
 
 	<category name="shrinkr.redirect">
 		<item name="shrinkr.redirect.headline"><![CDATA[Redirect page]]></item>
-		<item name="shrinkr.redirect.text.confirm"><![CDATA[You are to be redirected to the following destination address: <kbd>{$url->url}</kbd>]]></item>
+		<item name="shrinkr.redirect.text.confirm"><![CDATA[You are to be redirected to the following destination address: <kbd>{$redirectUrl}</kbd>]]></item>
 		<item name="shrinkr.redirect.text.timer"><![CDATA[Forwarding is done automatically after the timer expires.]]></item>
 		<item name="shrinkr.redirect.forwardingIn"><![CDATA[Forwarding in]]></item>
 		<item name="shrinkr.redirect.second"><![CDATA[second]]></item>
@@ -240,6 +241,8 @@ for /shrinkr/ are also present in your nginx.conf.]]></item>
 		<item name="wcf.shrinkr.special.endTime.description"><![CDATA[End time of the special (date and time)]]></item>
 		<item name="wcf.shrinkr.special.isActive"><![CDATA[Active]]></item>
 		<item name="wcf.shrinkr.special.isActive.description"><![CDATA[The special is activated. The countdown continues even if deactivated.]]></item>
+		<item name="wcf.shrinkr.special.isActive.yes"><![CDATA[Active]]></item>
+		<item name="wcf.shrinkr.special.isActive.no"><![CDATA[Inactive]]></item>
 		<item name="wcf.shrinkr.special.urlHash"><![CDATA[Short URL]]></item>
 		<item name="wcf.shrinkr.special.shortUrl"><![CDATA[Short URL / hash]]></item>
 		<item name="wcf.shrinkr.special.shortUrl.placeholder"><![CDATA[e.g. #42 or mylink]]></item>
@@ -316,6 +319,9 @@ for /shrinkr/ are also present in your nginx.conf.]]></item>
 		<item name="wcf.shrinkr.theme.css.content"><![CDATA[CSS Content]]></item>
 		<item name="wcf.shrinkr.theme.css.content.description"><![CDATA[The complete CSS code for this theme.]]></item>
 		<item name="wcf.shrinkr.form.tab.basic"><![CDATA[Basic settings]]></item>
+		<item name="wcf.shrinkr.form.tab.period"><![CDATA[Period]]></item>
+		<item name="wcf.shrinkr.form.tab.additionalText"><![CDATA[Additional Text]]></item>
+		<item name="wcf.shrinkr.form.tab.css"><![CDATA[Edit CSS]]></item>
 		<item name="wcf.shrinkr.form.section.basic"><![CDATA[Basic Settings]]></item>
 		<item name="wcf.shrinkr.form.section.basic.description"><![CDATA[Identifier, title, effect and status of the theme]]></item>
 		<item name="wcf.shrinkr.form.section.basic.description.description"><![CDATA[Title and description text]]></item>

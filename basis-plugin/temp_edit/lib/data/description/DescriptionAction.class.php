@@ -38,5 +38,25 @@ class DescriptionAction extends AbstractDatabaseObjectAction
     /**
      * @inheritDoc
      */
-    protected $requireACP = ['create', 'update', 'delete'];
+    protected $requireACP = ['create', 'update', 'delete', 'toggle'];
+
+    /**
+     * Validates the "toggle" action.
+     */
+    public function validateToggle()
+    {
+        $this->validateUpdate();
+    }
+
+    /**
+     * Toggles the active state of descriptions.
+     */
+    public function toggle()
+    {
+        foreach ($this->getObjects() as $object) {
+            $object->update([
+                'isActive' => $object->isActive ? 0 : 1,
+            ]);
+        }
+    }
 }
