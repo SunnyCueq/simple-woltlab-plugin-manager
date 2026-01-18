@@ -1,0 +1,71 @@
+.flexibleButtonGroup {
+	display: flex;
+	flex-wrap: wrap;
+
+	> li {
+		display: flex;
+		flex: 0 0 auto;
+
+		&:not(:last-child) {
+			margin-right: 5px;
+
+			&.spaceAfter {
+				margin-right: 20px;
+			}
+		}
+
+		> input[type="radio"] {
+			left: -3000px;
+			opacity: 0;
+			position: absolute;
+
+			&:checked + label {
+				cursor: default;
+			}
+
+			&:focus + label {
+				border-color: rgba(0, 0, 0, 0.3);
+			}
+		}
+
+		> a,
+		> label {
+			background-color: rgb(207, 216, 220);
+			border: 1px solid transparent;
+			border-radius: var(--wcfBorderRadius);
+			color: rgb(33, 33, 33);
+			cursor: pointer;
+			padding: 5px 10px;
+
+			:is(fa-brand, fa-icon) {
+				color: inherit;
+			}
+		}
+
+		> a.active,
+		> input[type="radio"]:checked + label,
+		> input[type="radio"] + label:hover {
+			color: #fff;
+
+			&.green {
+				background-color: rgb(46, 125, 50);
+			}
+
+			&.red {
+				background-color: rgb(198, 40, 40);
+			}
+
+			&.yellow {
+				background-color: rgb(251, 140, 0);
+				color: #000;
+			}
+		}
+	}
+}
+
+.disabled .flexibleButtonGroup > li > input[type="radio"]:checked + label,
+.flexibleButtonGroup > li > input[type="radio"]:disabled + label {
+	cursor: default;
+	opacity: 0.54;
+	pointer-events: none;
+}

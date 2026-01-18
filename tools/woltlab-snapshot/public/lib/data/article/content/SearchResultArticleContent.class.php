@@ -1,0 +1,107 @@
+<?php
+
+namespace wcf\data\article\content;
+
+use wcf\data\search\ISearchResultObject;
+use wcf\system\html\output\HtmlOutputProcessor;
+use wcf\system\request\LinkHandler;
+use wcf\system\search\SearchResultTextParser;
+
+/**
+ * Represents an article content as a search result.
+ *
+ * @author  Marcel Werk
+ * @copyright   2001-2019 WoltLab GmbH
+ * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @since   3.0
+ */
+class SearchResultArticleContent extends ViewableArticleContent implements ISearchResultObject
+{
+    /**
+     * @inheritDoc
+     */
+    public function getUserProfile()
+    {
+        return $this->getArticle()->getUserProfile();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSubject()
+    {
+        return $this->getDecoratedObject()->getTitle();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTime()
+    {
+        return $this->getArticle()->time;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getLink($query = ''): string
+    {
+        $parameters = [
+            'object' => $this->getDecoratedObject(),
+            'forceFrontend' => true,
+        ];
+
+        if ($query) {
+            $parameters['highlight'] = \urlencode($query);
+        }
+
+        return LinkHandler::getInstance()->getLink('Article', $parameters);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getObjectTypeName()
+    {
+        return 'com.woltlab.wcf.article';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFormattedMessage()
+    {
+        $processor = new HtmlOutputProcessor();
+        $processor->setOutputType('text/simplified-html');
+        $processor->process(
+            $this->content,
+            'com.woltlab.wcf.article.content',
+            $this->articleContentID,
+            false,
+            $this->languageID
+        );
+        $message = SearchResultTextParser::getInstance()->parse($processor->getHtml());
+
+        if ($this->getTeaserImage()) {
+            return '<div class="box96">' . $this->getTeaserImage()->getElementTag(96) . '<div>' . $message . '</div></div>';
+        }
+
+        return $message;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContainerTitle()
+    {
+        return '';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContainerLink()
+    {
+        return '';
+    }
+}

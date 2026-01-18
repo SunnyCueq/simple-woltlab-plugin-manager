@@ -1,0 +1,21 @@
+45:        $this->cache = ApplicationCacheBuilder::getInstance()->getData();
+57:        if (isset($this->cache['abbreviation'][$abbreviation])) {
+58:            $packageID = $this->cache['abbreviation'][$abbreviation];
+60:            if (isset($this->cache['application'][$packageID])) {
+61:                return $this->cache['application'][$packageID];
+76:        return $this->cache['application'][$packageID] ?? null;
+85:        return $this->getApplicationByID(1);
+120:            return $this->getApplication($abbreviation);
+123:        if (isset($this->cache['application'][PACKAGE_ID])) {
+124:            return $this->cache['application'][PACKAGE_ID];
+127:        return $this->getWCF();
+137:        $applications = $this->getApplications();
+139:            if ($application->packageID == $this->getActiveApplication()->packageID) {
+155:        return $this->cache['application'];
+163:        foreach ($this->cache['abbreviation'] as $abbreviation => $applicationID) {
+180:        return \array_keys($this->cache['abbreviation']);
+188:        if (empty($this->pageURLs)) {
+191:            $this->pageURLs = \array_unique([
+192:                $this->getDomainName(),
+204:        return Url::getHostnameMatcher($this->pageURLs)($host);
+231:        return $this->getApplicationByID(1)->domainName;

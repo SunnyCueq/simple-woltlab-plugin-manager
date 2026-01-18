@@ -1,0 +1,243 @@
+html.disableScrolling {
+	overflow: hidden !important;
+
+	body {
+		overflow: hidden !important;
+	}
+}
+
+@include screen-lg {
+	html.disableScrolling {
+		padding-right: var(--scrollbar-width, 0);
+	}
+}
+
+@include screen-md-down {
+	html.disableScrolling {
+		/* Fix for the gap when using fullscreen dialogs and the navbar collapses.
+		   See https://stackoverflow.com/questions/69589924/ios-15-minimized-address-bar-issue-with-fixed-position-full-screen-content */
+		height: 100vh !important;
+
+		body {
+			position: fixed !important;
+		}
+	}
+}
+
+html,
+body {
+	font-weight: 400;
+	min-height: 100vh;
+	overflow-x: clip;
+	width: 100%;
+
+	@include wcfLineHeight;
+	@include wcfFontDefault;
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	background-color: var(--wcfContentBackground);
+	color: var(--wcfContentText);
+	font-family: var(--wcfFontFamily);
+	position: relative;
+	word-wrap: break-word;
+}
+
+a {
+	color: var(--wcfContentLink);
+	cursor: pointer;
+	text-decoration: none;
+
+	&:hover {
+		color: var(--wcfContentLinkActive);
+		text-decoration: none;
+	}
+}
+
+.pageContainer {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+/* <select> fields placed inside a flexbox parent while containing
+   long select options will cause an invisible page overflow, when
+   one such option is selected. The <select> itself stays within the
+   boundaries, but a scrollbar will appear. */
+html.iOS select {
+	overflow: hidden;
+}
+
+/* COLUMN LAYOUT */
+.pageHeaderContainer,
+.boxesHeaderBoxes,
+.pageNavigation,
+.pageFooter,
+.boxesTop,
+.boxesBottom,
+.boxesFooterBoxes {
+	flex: 0 0 auto;
+}
+
+.main {
+	flex: 1 0 auto;
+
+	@include screen-xs {
+		padding: 20px 0;
+		width: 100%;
+	}
+
+	@include screen-sm-md {
+		padding: 40px 0;
+		width: 100%;
+	}
+
+	@include screen-lg {
+		padding: 60px 0;
+	}
+}
+
+/* use flex-box to enforce a proper side-by-side layout on desktop */
+@include screen-lg {
+	.main > div {
+		display: flex;
+	}
+
+	.content {
+		flex: 1 1 0px;
+
+		&.content--sidebar-right {
+			flex-basis: calc(100% - 340px);
+			max-width: calc(100% - 340px);
+
+			& + .sidebar {
+				margin-left: 30px;
+			}
+		}
+	}
+
+	.sidebar {
+		flex: 0 0 310px;
+		overflow: hidden;
+
+		&:first-child {
+			margin-right: 30px;
+		}
+
+		& + .content {
+			flex-basis: calc(100% - 340px);
+			max-width: calc(100% - 340px); // IE fix
+
+			// sidebar follows
+			&:not(:last-child) {
+				flex-basis: calc(100% - 680px);
+				max-width: calc(100% - 680px); // IE fix
+			}
+		}
+	}
+}
+
+/* mobile arranges the sidebar and content vertically:
+   
+   <leftSidebar> <content> <rightSidebar>
+   
+   becomes:
+   
+   <leftSidebar>
+   <content>
+   <rightSidebar>
+*/
+@include screen-md-down {
+	.sidebar + .content,
+	.content + .sidebar {
+		// gap between sidebars and content
+		margin-top: 30px;
+	}
+}
+
+.sideBySide {
+	margin-top: 20px;
+
+	@include screen-md-up {
+		display: table;
+		table-layout: fixed;
+		width: 100%;
+
+		> .section {
+			display: table-cell;
+			vertical-align: top;
+			width: 49%;
+
+			& + .section {
+				padding-left: 2%;
+			}
+		}
+	}
+}
+
+.sideBySide.templateDiff {
+	--templateDiff-added-background: #90ee90;
+	--templateDiff-added-color: inherit;
+	--templateDiff-removed-background: #ffb6c1;
+	--templateDiff-removed-color: inherit;
+
+	li {
+		margin: 0;
+	}
+
+	.templateDiff--added {
+		background-color: var(--templateDiff-added-background);
+		color: var(--templateDiff-added-color);
+	}
+
+	.templateDiff--removed {
+		background-color: var(--templateDiff-removed-background);
+		color: var(--templateDiff-removed-color);
+	}
+}
+
+html[data-color-scheme="dark"] .sideBySide.templateDiff {
+	--templateDiff-added-background: #172810;
+	--templateDiff-added-color: #4f9c51;
+	--templateDiff-removed-background: #281010;
+	--templateDiff-removed-color: #d95654;
+}
+
+.inlineItems {
+	display: flex;
+	flex-wrap: wrap;
+
+	.inlineItem {
+		flex: 0 1 auto;
+
+		&:not(:last-child) {
+			margin-right: 5px;
+		}
+	}
+
+	&.commaSeparated {
+		.inlineItem:not(:last-child)::after {
+			content: ",";
+			padding-left: 1px;
+		}
+	}
+
+	&.dotSeparated {
+		.inlineItem:not(:last-child)::after {
+			content: "\00b7";
+			margin-left: 5px;
+		}
+	}
+}
+
+#pageOverlayContainer {
+	pointer-events: none;
+}
+
+#pageOverlayContainer > *:not(.dropdownMenuContainer) {
+	pointer-events: all;
+}

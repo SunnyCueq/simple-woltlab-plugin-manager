@@ -1,0 +1,116 @@
+@keyframes wcfPopover {
+	0% {
+		visibility: visible;
+		transform: translateY(-20px);
+		opacity: 0;
+	}
+	100% {
+		visibility: visible;
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes wcfPopoverOut {
+	0% {
+		visibility: visible;
+		transform: translateY(0);
+		opacity: 1;
+	}
+	100% {
+		visibility: hidden;
+		transform: translateY(-20px);
+		opacity: 0;
+	}
+}
+
+/* outer element containing both the pointer and content element */
+.popover {
+	animation: wcfPopoverOut 0.3s;
+	animation-fill-mode: forwards;
+	background-color: var(--wcfContentContainerBackground);
+	border-radius: var(--wcfBorderRadius);
+	box-shadow: var(--wcfBoxShadow);
+	position: absolute;
+	top: 0;
+	vertical-align: middle;
+	visibility: hidden;
+	width: 500px !important;
+	z-index: 350;
+
+	&.active {
+		animation: wcfPopover 0.3s;
+		animation-fill-mode: forwards;
+	}
+
+	&.forceHide {
+		animation: 0;
+		visibility: hidden;
+	}
+
+	@include screen-sm-down {
+		display: none;
+	}
+}
+
+/* actual popover content */
+.popoverContent {
+	background-color: var(--wcfContentContainerBackground);
+	border-radius: var(--wcfBorderRadius);
+	color: var(--wcfContentText);
+	padding: 15px;
+
+	> div {
+		max-height: 290px;
+		min-height: 36px;
+		overflow: hidden;
+	}
+
+	a {
+		color: var(--wcfContentLink);
+
+		&:hover {
+			color: var(--wcfContentLinkActive);
+		}
+	}
+
+	/* Workaround for the partially active mobile navigation on desktop devices. See #2791 */
+	.jsMobileButtonGroupNavigation > .dropdownLabel {
+		display: none;
+	}
+}
+
+/* @since 6.1 */
+.popoverContainer {
+	--padding: 20px;
+	--maxHeight: 300px;
+	--maxWidth: 500px;
+
+	background-color: var(--wcfContentContainerBackground);
+	border: 1px solid var(--wcfContentBorderInner);
+	border-radius: var(--wcfBorderRadius);
+	box-shadow: var(--wcfBoxShadow);
+	color: var(--wcfContentText);
+	display: none;
+	max-height: var(--maxHeight);
+	max-width: var(--maxWidth);
+	opacity: 0;
+	padding: var(--padding);
+	position: absolute;
+	transform: translateY(-20px);
+	transition:
+		opacity 0.12s linear,
+		transform 0.12s linear;
+	z-index: 350;
+
+	&[aria-hidden="false"] {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (hover: hover) {
+	.popoverContainer {
+		display: block;
+	}
+}

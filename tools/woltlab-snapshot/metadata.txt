@@ -1,0 +1,21 @@
+WoltLab Snapshot
+================
+Erstellt: $(date '+%Y-%m-%d %H:%M:%S')
+WoltLab Version: 6.1
+Admin User: Admin
+Admin Password: 123456
+Admin Email: admin@example.com
+
+Datenbank:
+- Name: db
+- User: db
+- Password: db
+- Tabellen: 161
+
+Public-Ordner:
+- Dateien: 7419
+- Größe: 54M
+
+Snapshot-Größe:
+- Public: 54M
+- Database: 684K

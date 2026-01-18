@@ -1,0 +1,190 @@
+[2026-01-18 12:16:56.457] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:16:56.459] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:16:56.461] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:16:56.550] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:16:56.584] [WARNING] [common.sh:debug_warning] get_php_version | not found
+[2026-01-18 12:19:31.112] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:19:31.114] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:19:31.116] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:19:31.204] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:19:44.908] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:19:44.919] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:19:47.645] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: WCF_VERSION
+[2026-01-18 12:19:47.648] [INFO] [common.sh:debug_info] print_header | ddev_version=unknown woltlab_version=WCF_VERSION
+[2026-01-18 12:19:47.650] [INFO] [common.sh:debug_info] check_ddev_status | checking if DDEV is running
+[2026-01-18 12:19:47.711] [ddev_start] [start.sh:main] starting DDEV
+[2026-01-18 12:21:28.175] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:21:28.177] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:21:28.179] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:21:28.267] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:21:35.453] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:21:35.464] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:21:36.981] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: WCF_VERSION
+[2026-01-18 12:21:36.984] [INFO] [common.sh:debug_info] print_header | ddev_version=unknown woltlab_version=WCF_VERSION
+[2026-01-18 12:21:36.986] [INFO] [common.sh:debug_info] check_ddev_status | checking if DDEV is running
+[2026-01-18 12:21:37.047] [INFO] [common.sh:debug_info] ddev_start | starting DDEV
+[2026-01-18 12:21:37.049] [INFO] [common.sh:debug_info] ddev_start | current_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:21:37.051] [INFO] [common.sh:debug_info] ddev_start | script_dir=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:21:37.111] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:21:37.113] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command
+[2026-01-18 12:21:37.307] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start command finished with exit_code=1
+[2026-01-18 12:26:14.075] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:26:14.079] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:26:14.081] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:26:14.170] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:26:23.788] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:26:23.799] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:26:25.623] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:26:25.694] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 12:26:25.696] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:26:25.850] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:26:25.852] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command
+[2026-01-18 12:28:25.863] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-18 12:30:33.308] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:30:33.312] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:30:33.314] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:30:33.413] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:30:42.177] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:30:42.188] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:30:43.544] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:30:43.632] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 12:30:43.635] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:30:44.179] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 12:30:56.805] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:30:56.819] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command
+[2026-01-18 12:46:54.707] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:46:54.709] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:46:54.711] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:46:54.806] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:47:01.001] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:47:01.006] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-18 12:47:01.008] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-18 12:47:01.049] [INFO] [common.sh:debug_info] check_updates | checking for available updates
+[2026-01-18 12:47:01.051] [print_section] [common.sh:print_section] title=Update-Prüfung
+[2026-01-18 12:47:01.596] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:47:19.577] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:47:19.589] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:47:19.600] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:47:19.709] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:47:33.068] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:47:33.079] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:47:34.333] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:47:34.419] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 12:47:34.422] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:47:34.956] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 12:47:47.580] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:47:47.582] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 12:52:47.587] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-18 12:52:47.589] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-18 12:52:50.636] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-18 12:52:50.659] [INFO] [common.sh:debug_info] ddev_router_status | router=0
+0
+[2026-01-18 12:52:52.264] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-18 12:52:52.266] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-18 12:52:52.269] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers to be ready
+[2026-01-18 12:52:57.313] [INFO] [common.sh:debug_info] ddev_containers_ready | both containers are running
+[2026-01-18 12:52:57.944] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts
+[2026-01-18 12:52:59.947] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-18 12:53:00.604] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32780 HTTPS=32781 MySQL=32779 URL=https://woltlab.ddev.site
+[2026-01-18 12:53:00.646] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
+[2026-01-18 12:54:19.181] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:54:19.185] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:54:19.188] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:54:19.312] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:54:22.677] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:54:22.680] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-18 12:54:22.682] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-18 12:54:22.725] [INFO] [common.sh:debug_info] check_updates | checking for available updates
+[2026-01-18 12:54:22.727] [print_section] [common.sh:print_section] title=Update-Prüfung
+[2026-01-18 12:54:37.849] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:54:37.851] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:54:37.853] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:54:37.944] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:54:41.147] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:54:41.149] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:54:42.727] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:54:42.815] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 12:54:42.817] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:54:43.346] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 12:54:55.994] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:54:56.005] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 12:58:19.929] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:58:19.932] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:58:19.935] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:58:20.029] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:58:23.405] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:58:23.407] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:58:28.668] [print_header] [common.sh:print_header] title=DDEV - Status
+[2026-01-18 12:58:42.755] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:58:42.757] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:58:42.759] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:58:42.851] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:58:44.072] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:58:44.075] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:58:51.018] [print_header] [common.sh:print_header] title=DDEV - Logs
+[2026-01-18 13:00:05.979] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:00:05.981] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 13:00:05.983] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 13:00:06.080] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:00:07.833] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:00:07.844] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 13:00:15.087] [print_header] [common.sh:print_header] title=DDEV - Restart
+[2026-01-18 13:00:15.089] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 13:02:33.068] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:02:33.070] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 13:02:33.072] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 13:02:33.172] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:02:34.697] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:02:34.708] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 13:02:35.856] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:02:35.947] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 13:02:35.949] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 13:02:36.504] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 13:02:49.496] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 13:02:49.507] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 13:07:49.527] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-18 13:07:49.538] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-18 13:07:52.592] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-18 13:07:52.613] [INFO] [common.sh:debug_info] ddev_router_status | router=0
+0
+[2026-01-18 13:07:53.151] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-18 13:07:53.153] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-18 13:07:53.155] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers and router to be ready
+[2026-01-18 13:07:58.162] [INFO] [common.sh:debug_info] ddev_router_check | checking router status
+[2026-01-18 13:07:58.193] [INFO] [common.sh:debug_info] ddev_router_status | router_running=0
+0
+[2026-01-18 13:07:58.195] [INFO] [common.sh:debug_info] ddev_router_ok | router is already running
+[2026-01-18 13:07:58.805] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts (containers + router)
+[2026-01-18 13:08:00.813] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-18 13:08:01.373] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32795 HTTPS=32796 MySQL=32794 URL=https://woltlab.ddev.site
+[2026-01-18 13:08:01.416] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
+[2026-01-18 13:45:25.891] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:45:25.893] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 13:45:25.896] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 13:45:25.993] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:45:28.864] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:45:28.866] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 13:45:30.747] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:45:30.834] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 13:45:30.836] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 13:45:31.365] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 13:45:43.976] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 13:45:43.988] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 13:50:44.009] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-18 13:50:44.020] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-18 13:50:47.074] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-18 13:50:47.096] [INFO] [common.sh:debug_info] ddev_router_status | router=0 (count=0)
+[2026-01-18 13:50:47.653] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-18 13:50:47.655] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-18 13:50:47.657] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers and router to be ready
+[2026-01-18 13:50:52.664] [INFO] [common.sh:debug_info] ddev_router_check | checking router status
+[2026-01-18 13:50:52.699] [INFO] [common.sh:debug_info] ddev_router_status | router_running=0 (count=0)
+[2026-01-18 13:50:52.701] [WARNING] [common.sh:debug_warning] ddev_router_missing | router not running, starting explicitly
+[2026-01-18 13:50:52.735] [INFO] [common.sh:debug_info] ddev_router_start | exit_code=255
+[2026-01-18 13:51:18.213] [INFO] [common.sh:debug_info] ddev_containers_ready | all containers including router are running
+[2026-01-18 13:51:18.771] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts (containers + router)
+[2026-01-18 13:51:20.780] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-18 13:51:21.355] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32802 HTTPS=32803 MySQL=32805 URL=https://woltlab.ddev.site
+[2026-01-18 13:51:21.398] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
+[2026-01-18 16:41:43.015] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 16:41:53.252] [print_header] [common.sh:print_header] title=Push zum alternativen Repository

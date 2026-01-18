@@ -1,0 +1,42 @@
+.inlineCode, /* deprecated, legacy class */
+.ck-content *:not(pre) > code,
+kbd {
+	background-color: rgba(255, 255, 255, 1) !important;
+	border: 1px solid rgba(196, 196, 196, 1) !important;
+	border-radius: 2px;
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+	color: rgba(68, 68, 68, 1) !important;
+	display: inline;
+	font-family: var(--wcfFontFamilyMonospace);
+	font-size: 13px;
+	font-style: normal;
+	font-weight: normal;
+	overflow: auto;
+	padding: 0.15em;
+	text-decoration: none;
+	word-break: break-word;
+	word-wrap: break-word;
+}
+
+a:hover :is(.inlineCode, .ck-content *:not(pre) > code, kbd) {
+	text-decoration: underline;
+}
+
+html[data-color-scheme="dark"] :is(.inlineCode, .ck-content *:not(pre) > code, kbd) {
+	background-color: #3a3f49 !important;
+	border-color: #546172 !important;
+	color: #bdbdbd !important;
+}
+
+small kbd {
+	@include wcfFontSmall;
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+	.inlineCode,
+	.ck-content code,
+	kbd {
+		-webkit-box-decoration-break: initial;
+	}
+}

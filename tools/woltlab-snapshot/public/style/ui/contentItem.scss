@@ -1,0 +1,316 @@
+.contentItemList {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 0 -20px -20px;
+}
+
+.contentItem {
+	background-color: var(--wcfContentBackground);
+	border-radius: var(--wcfBorderRadius);
+	box-shadow: var(--wcfBoxShadowCard);
+	display: flex;
+	flex-direction: column;
+	margin: 0 0 20px 20px;
+	position: relative;
+	overflow: hidden;
+}
+
+.contentItemSingleColumn {
+	/* The `flex` shorthand fails in IE11 if `calc()` is used. */
+	flex-grow: 0;
+	flex-shrink: 0;
+	flex-basis: calc(100% - 20px);
+}
+
+.contentItemMultiColumn {
+	/* The `flex` shorthand fails in IE11 if `calc()` is used. */
+	flex-grow: 0;
+	flex-shrink: 0;
+	flex-basis: calc(50% - 20px);
+}
+
+.contentItemLink {
+	flex: 1 auto;
+}
+
+.contentItemTitleLink {
+	color: inherit;
+
+	&::before {
+		bottom: 0;
+		content: "";
+		left: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	&:hover,
+	&:focus {
+		color: inherit;
+	}
+}
+
+/* Deprecated: use contentItemTitleLink instead. */
+.contentItemLinkShadow {
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.contentItemContent {
+	padding: 10px;
+}
+
+.contentItemContentTruncate {
+	max-height: 150px;
+	overflow: hidden;
+	position: relative;
+
+	&::after {
+		background-image: linear-gradient(
+			to top,
+			var(--wcfContentBackground),
+			rgba(var(--wcfContentBackground-rgb) / 0)
+		);
+		bottom: 0;
+		content: "";
+		height: 30px;
+		left: 0;
+		pointer-events: none;
+		position: absolute;
+		right: 0;
+		/* The `top` value is important, because it prevents the last line from being affected
+		   when the content isn't too long. */
+		top: 120px;
+	}
+}
+
+.contentItemImage {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	padding: 10px;
+	position: relative;
+}
+
+.contentItemImageSmall {
+	min-height: 75px;
+
+	.contentItemImageElement {
+		height: 75px;
+	}
+}
+
+.contentItemImageLarge {
+	min-height: 150px;
+
+	.contentItemImageElement {
+		height: 150px;
+	}
+}
+
+.contentItemImageElement {
+	margin: -10px -10px -10px -10px;
+	object-fit: cover;
+	object-position: center;
+
+	// The `100% + 20px` are the result of the negative margins.
+	width: calc(100% + 20px);
+}
+
+.contentItemBadges,
+.contentItemOptions {
+	align-items: flex-start;
+	display: flex;
+	flex-direction: column;
+}
+
+.contentItemImageElement + .contentItemBadges {
+	left: 10px;
+	position: absolute;
+	top: 10px;
+	z-index: 1;
+}
+
+.contentItemOptions {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 1;
+}
+
+.contentItemBadge,
+.contentItemOption {
+	flex: 0 auto;
+
+	&:not(:first-child) {
+		margin-top: 5px;
+	}
+}
+
+.contentItemBadge {
+	border: 1px solid currentColor;
+}
+
+.contentItemOption.button {
+	box-shadow:
+		0 0 3px rgba(0, 0, 0, 0.12),
+		0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.contentItemLabels {
+	margin-bottom: 5px;
+}
+
+.contentItemCategory {
+	color: var(--wcfContentDimmedText);
+
+	@include wcfFontSmall;
+}
+
+.contentItemTitle {
+	color: var(--wcfContentHeadlineLink);
+
+	@include wcfFontHeadline;
+	@include wcfFontBold;
+
+	&:hover {
+		color: var(--wcfContentHeadlineLinkActive);
+	}
+}
+
+.contentItemDescription {
+	color: var(--wcfContentDimmedText);
+	margin-top: 5px;
+
+	img {
+		height: auto !important;
+		max-width: 100%;
+	}
+}
+
+.contentItemContentLinks {
+	padding: 0 10px 10px 10px;
+}
+
+.contentItemMeta {
+	align-items: center;
+	border-top: 1px solid var(--wcfContentBorderInner);
+	color: var(--wcfContentDimmedText);
+	display: flex;
+	flex: 0 auto;
+	padding: 10px;
+	white-space: nowrap;
+
+	.icon {
+		color: inherit;
+	}
+}
+
+.contentItemMetaImage {
+	flex: 0 auto;
+	margin-right: 10px;
+}
+
+.contentItemMetaContent {
+	flex: 1 auto;
+	font-size: 12px;
+}
+
+.contentItemMetaAuthor {
+	color: var(--wcfContentText);
+
+	a,
+	a:hover {
+		color: inherit;
+	}
+}
+
+.contentItemMetaIcons {
+	align-items: center;
+	display: flex;
+	flex: 0 auto;
+	margin-left: 10px;
+
+	@include wcfFontSmall;
+}
+
+.contentItemMetaIcon {
+	flex: 0 auto;
+
+	&:not(:first-child) {
+		margin-left: 10px;
+	}
+
+	.topReactionShort {
+		align-items: center;
+		display: flex;
+	}
+
+	.reactionType {
+		margin-right: 3px;
+	}
+}
+
+.contentItemImagePreview {
+	border-radius: var(--wcfBorderRadius);
+	box-shadow:
+		0 0 3px rgba(0, 0, 0, 0.12),
+		0 1px 2px rgba(0, 0, 0, 0.24);
+	margin-bottom: 10px;
+	max-width: 100%;
+}
+
+.contentItemImagePreviewButtons {
+	display: flex;
+	flex-wrap: wrap;
+	margin-left: -10px;
+
+	> .button {
+		flex: 0 auto;
+		margin-left: 10px;
+	}
+
+	> .innerError {
+		flex: 0 0 100%;
+		margin-left: 10px;
+	}
+}
+
+@include screen-lg {
+	/* There are no sidebars, use a three column layout. */
+	.content:first-child:last-child,
+	.boxesTop,
+	.boxesBottom {
+		.contentItemMultiColumn {
+			/* The `flex` shorthand fails in IE11 if `calc()` is used. */
+			flex-grow: 0;
+			flex-shrink: 0;
+			flex-basis: calc(100% / 3 - 20px);
+		}
+	}
+}
+
+@include screen-md {
+	/* The sidebar, if any, is not adjacent to the content, use a three column layout. */
+	.contentItemMultiColumn {
+		/* The `flex` shorthand fails in IE11 if `calc()` is used. */
+		flex-grow: 0;
+		flex-shrink: 0;
+		flex-basis: calc(100% / 3 - 20px);
+	}
+}
+
+@include screen-xs {
+	/* There is not enough space to fit two columns. */
+	.contentItemList {
+		display: block;
+	}
+
+	.contentItemMultiColumn {
+		max-width: none;
+	}
+}

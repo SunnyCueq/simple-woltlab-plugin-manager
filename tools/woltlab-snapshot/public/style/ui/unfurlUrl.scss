@@ -1,0 +1,122 @@
+.unfurlUrlCardContainer {
+	margin: 1em 0 0 0;
+}
+
+.unfurlUrlCard {
+	background-color: var(--wcfContentBackground);
+	border-radius: var(--wcfBorderRadius);
+	box-shadow:
+		0 0 3px rgba(0, 0, 0, 0.12),
+		0 1px 2px rgba(0, 0, 0, 0.24);
+	color: var(--wcfContentText);
+	display: inline-block;
+	max-width: 100%;
+	overflow: hidden;
+	position: relative;
+	width: 400px;
+
+	/* OG images are designed with a 2:1 aspect ratio. */
+	&.unfurlUrlCardCoverImage {
+		.unfurlUrlImage {
+			/* The `!important` is required because of `.messageBody > .messageText img`. */
+			height: 200px !important;
+			object-fit: cover;
+			object-position: center;
+			width: 400px;
+		}
+	}
+
+	&.unfurlUrlCardSquaredImage {
+		display: flex;
+
+		.unfurlUrlImage {
+			border-radius: 3px;
+			flex: 0 0 auto;
+			/* The `!important` is required because of `.messageBody > .messageText img`. */
+			height: 128px !important;
+			margin: 10px;
+			width: 128px;
+
+			@include screen-sm {
+				height: 64px !important;
+				width: 64px;
+			}
+
+			@include screen-xs {
+				height: 24px !important;
+				position: absolute;
+				width: 24px;
+			}
+		}
+
+		.unfurlUrlInformation {
+			flex: 1 auto;
+			overflow: hidden;
+			padding-left: 10px;
+		}
+
+		@include screen-xs {
+			.unfurlUrlTitle {
+				padding-left: 30px;
+			}
+		}
+	}
+}
+
+html[data-color-scheme="dark"] .unfurlUrlCard {
+	border: 1px solid var(--wcfContentBorderInner);
+}
+
+.unfurlUrlInformation {
+	padding: 10px 10px 25px 10px;
+}
+
+.unfurlUrlTitle {
+	@include wcfFontHeadline;
+	@include wcfFontBold;
+
+	color: inherit;
+	display: -webkit-box;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+
+	&::before {
+		bottom: 0;
+		content: "";
+		left: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	&:hover,
+	&:focus {
+		color: inherit;
+	}
+}
+
+@media (pointer: fine) {
+	.unfurlUrlCard:hover .unfurlUrlTitle {
+		text-decoration: underline;
+	}
+}
+
+.unfurlUrlDescription {
+	color: var(--wcfContentDimmedText);
+	margin-top: 5px;
+}
+
+.unfurlUrlHost {
+	@include wcfFontSmall;
+
+	bottom: 5px;
+	color: var(--wcfContentDimmedText);
+	position: absolute;
+	right: 5px;
+
+	img {
+		height: 12px !important;
+	}
+}

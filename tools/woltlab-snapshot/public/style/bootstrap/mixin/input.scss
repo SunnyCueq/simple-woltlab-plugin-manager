@@ -1,0 +1,32 @@
+@mixin input {
+	background-color: var(--wcfInputBackground);
+	border: 1px solid var(--wcfInputBorder);
+	border-radius: var(--wcfBorderRadius);
+	color: var(--wcfInputText);
+	font-weight: 400;
+	outline: none;
+	padding: 4px 8px;
+
+	// input elements do not inherit font family, size and line-height from body
+	font-family: var(--wcfFontFamily);
+	@include wcfFontDefault;
+	@include wcfLineHeight;
+
+	&:focus,
+	&:hover {
+		background-color: var(--wcfInputBackgroundActive);
+		border-color: var(--wcfInputBorderActive);
+		color: var(--wcfInputTextActive);
+	}
+
+	&[disabled],
+	&.disabled {
+		background-color: var(--wcfInputDisabledBackground) !important;
+		border-color: var(--wcfInputDisabledBorder) !important;
+		color: var(--wcfInputDisabledText) !important;
+	}
+
+	&[readonly] {
+		color: var(--wcfInputDisabledText) !important;
+	}
+}

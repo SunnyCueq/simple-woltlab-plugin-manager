@@ -1,48 +1,64 @@
+# Credentials und lokale Konfigurationen
+.vscode/woltlab-credentials.local.json
+*.local.json
+.env.local
+.env
+
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
 *~
 
 # OS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
 Thumbs.db
 
 # Temporary files
 *.tmp
-*.log
-*.cache
 *.bak
 *.backup
 *.old
 
-# WoltLab-spezifisch
-.woltlab-config.local
-_extracted/
-*.tar
-*.tar.gz
-.tar-backups/
-.package-backups/
-package.xml.bak
+# DDEV (nur generierte Dateien ignorieren)
+woltlab-dev/.ddev/.ddev-docker-compose-*
+woltlab-dev/.ddev/import.yaml
+woltlab-dev/.ddev/docker-compose.yaml
+woltlab-dev/.ddev/.gitignore
+# WICHTIG: Verzeichnis bleibt erhalten, aber INHALT wird ignoriert
+tools/woltlab-dev/public/*
+!tools/woltlab-dev/public/.gitignore
+!tools/woltlab-dev/public/README*.md
 
-# User-spezifische Workspaces
-*-workspace.code-workspace
-!templates/workspace.code-workspace
+# WICHTIG: Diese Verzeichnisse NIEMALS committen oder ändern!
+# WoltLab Core - nur lesen, niemals schreiben!
+# Verzeichnisse bleiben erhalten, aber INHALT wird ignoriert
+woltlab-github/*
+!woltlab-github/.gitignore
+!woltlab-github/README*.md
+!woltlab-github/LICENSE
 
-# Interne Dokumentation (nicht für GitHub)
-RULES.md
-PROJEKT-STATUS.md
-REFERENZ-WSPACKAGER.md
-docs/GITHUB-WORKFLOW-TEST.md
-docs/WSPACKAGER-ANALYSE.md
+woltlab-docs/*
+!woltlab-docs/.gitignore
+!woltlab-docs/README*.md
+!woltlab-docs/LICENSE
+!woltlab-docs/requirements.txt
 
-# Cursor-spezifisch (intern - nur lokal, nicht auf GitHub)
-.cursorrules
+# Plugin-Verzeichnisse (werden separat verwaltet, NICHT committen!)
+# WICHTIG: Verzeichnisse bleiben erhalten, aber INHALT wird ignoriert
+# Diese enthalten große Dateien und werden separat gebaut/verwaltet
+basis-plugin/*
+!basis-plugin/.gitignore
+!basis-plugin/README*.md
+!basis-plugin/CHANGELOG*.md
 
-# Claude Code Verweis (intern - nur lokal, nicht auf GitHub)
-CLAUDE.md
+mein-plugin/*
+!mein-plugin/.gitignore
+!mein-plugin/README*.md
+!mein-plugin/CHANGELOG*.md
+
+plugins-integrieren/*
+!plugins-integrieren/.gitignore
+!plugins-integrieren/README*.md
+!plugins-integrieren/CHANGELOG*.md
