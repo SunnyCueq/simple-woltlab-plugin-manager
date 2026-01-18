@@ -258,7 +258,7 @@ WoltLab Suite ist ein Content Management System (CMS) und Forum-Software. Die De
 Öffne ein Terminal (Konsole) und wechsle ins Hauptverzeichnis:
 
 ```bash
-cd /home/benny/Dokumente/woltlab-development
+cd ~/Dokumente/woltlab-development
 ```
 
 ### Schritt 2: Das Hauptmenü starten
@@ -1120,7 +1120,7 @@ Verwende diese Checkliste vor einem Restore:
 **Schritt 1: Alles installieren**
 ```
 1. Öffne Terminal
-2. cd /home/benny/Dokumente/woltlab-development
+2. cd ~/Dokumente/woltlab-development
 3. ./tools.sh
 4. Option 6 (Setup) wählen
 5. Warte bis alles installiert ist (~10 Minuten)
@@ -1399,7 +1399,7 @@ woltlab-development/
 
 #### Schritt 1: Setup durchführen
 1. Öffne ein Terminal
-2. Wechsle ins Verzeichnis: `cd /home/benny/Dokumente/woltlab-development`
+2. Wechsle ins Verzeichnis: `cd ~/Dokumente/woltlab-development`
 3. Starte das Menü: `./tools.sh`
 4. Wähle Option `6` (Setup)
 5. Folge den Anweisungen auf dem Bildschirm
