@@ -366,7 +366,7 @@ if [[ "$VERSION_TYPE" =~ ^(patch|minor|major)$ ]]; then
     
     # Update Changelog
     print_info "Aktualisiere Changelog..."
-    local has_breaking_changes="false"
+    has_breaking_changes="false"
     if [ "$VERSION_TYPE" = "major" ]; then
         echo -e "${YELLOW}Enthält diese Version Breaking Changes? (j/n):${NC} "
         read -r has_breaking
@@ -442,7 +442,7 @@ if [ -n "$VERSION_TYPE" ]; then
     if git rev-parse "$TAG_NAME" &>/dev/null 2>&1; then
         print_warning "Tag $TAG_NAME existiert bereits"
     else
-        local tag_message=""
+        tag_message=""
         if [ -f "$ALT_REPO_DIR/CHANGELOG.md" ]; then
             tag_message=$(awk -v version="$VERSION" '
                 /^## \[/ {

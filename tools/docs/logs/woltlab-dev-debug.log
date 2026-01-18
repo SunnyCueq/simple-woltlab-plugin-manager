@@ -188,3 +188,6 @@
 [2026-01-18 13:51:21.398] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
 [2026-01-18 16:41:43.015] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
 [2026-01-18 16:41:53.252] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 16:42:01.310] [print_header] [common.sh:print_header] title=Push abgeschlossen
+[2026-01-18 16:43:03.129] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 16:43:41.613] [print_header] [common.sh:print_header] title=Push zum alternativen Repository

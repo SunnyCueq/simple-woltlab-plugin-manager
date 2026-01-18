@@ -1,15 +1,49 @@
 # Changelog
 
+Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
+
+Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
+und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
+
+## [Unreleased]
+
+---
+
+## [0.1.0] - 2026-01-18
+
+### Added
+
+- **TODO:** Neue Features hier dokumentieren
+
+### Changed
+
+- **TODO:** Änderungen hier dokumentieren
+
+### Fixed
+
+- **TODO:** Bugfixes hier dokumentieren
+
+### Deprecated
+
+- **TODO:** Veraltete Features hier dokumentieren
+
+### Removed
+
+- **TODO:** Entfernte Features hier dokumentieren
+
+### Security
+
+- **TODO:** Sicherheits-Updates hier dokumentieren
+
+---
+
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
----
 
-## [Unreleased]
-
----
 
 ## [1.5.1] - 2026-01-08
 
@@ -27,7 +61,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Improved test infrastructure for cross-platform compatibility testing
 
----
 
 ## [1.5.0] - 2025-11-26
 
@@ -58,14 +91,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - `WSPACKAGER-ANALYSE.md` - Internal analysis file (not user-relevant)
 
----
 
 ## [1.4.3] - 2025-11-08
 
 ### Changed
 - Version bump for workflow testing
 
----
 
 ## [1.4.2] - 2025-11-08
 
@@ -75,7 +106,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated all dates to 2025-11-08
 
----
 
 ## [1.4.1] - 2025-11-08
 
@@ -90,7 +120,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Question template from GitHub issues
 - `.cursorrules` from repository (local only)
 
----
 
 ## [1.4.0] - 2025-11-08
 
@@ -108,7 +137,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Comprehensive logging
 - Enhanced all scripts with logging and error handling
 
----
 
 ## [1.0.0] - 2025-01-01
 
@@ -123,7 +151,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-root workspace support
 - Automatic version management scripts
 
----
 
 ## Release Notes
 
@@ -138,8 +165,6 @@ This project uses [Semantic Versioning](https://semver.org/):
 - **WoltLab Suite:** 6.0, 6.1, 6.2
 - **PHP:** 8.0+
 
----
 
 **Copyright (c) 2025 SunnyCueq**
 **License:** MIT (Open Source)
-**Repository:** https://github.com/SunnyCueq/simple-woltlab-plugin-manager
