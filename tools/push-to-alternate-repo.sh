@@ -283,9 +283,13 @@ for item in "${OLD_FILES[@]}"; do
 done
 
 # Lösche alte docs/ (wird durch tools/docs/ ersetzt)
-if [ -d "$ALT_REPO_DIR/docs" ] && [ ! -d "$ALT_REPO_DIR/tools/docs" ]; then
-    rm -rf "$ALT_REPO_DIR/docs" 2>/dev/null || true
-    print_info "Entfernt: docs/ (wird durch tools/docs/ ersetzt)"
+# Prüfe ob docs/ im Root existiert (nicht tools/docs/)
+if [ -d "$ALT_REPO_DIR/docs" ]; then
+    # Prüfe ob es sich um das alte docs/ handelt (nicht tools/docs/)
+    if [ ! -d "$ALT_REPO_DIR/tools/docs" ] || [ "$(readlink -f "$ALT_REPO_DIR/docs" 2>/dev/null)" != "$(readlink -f "$ALT_REPO_DIR/tools/docs" 2>/dev/null)" ]; then
+        rm -rf "$ALT_REPO_DIR/docs" 2>/dev/null || true
+        print_info "Entfernt: docs/ (wird durch tools/docs/ ersetzt)"
+    fi
 fi
 
 print_success "✓ Alte Dateien entfernt"
