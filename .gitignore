@@ -28,6 +28,7 @@ woltlab-dev/.ddev/docker-compose.yaml
 woltlab-dev/.ddev/.gitignore
 # WICHTIG: Verzeichnis bleibt erhalten, aber INHALT wird ignoriert
 tools/woltlab-dev/public/*
+!tools/woltlab-dev/public/.gitkeep
 !tools/woltlab-dev/public/.gitignore
 !tools/woltlab-dev/public/README*.md
 
@@ -35,11 +36,13 @@ tools/woltlab-dev/public/*
 # WoltLab Core - nur lesen, niemals schreiben!
 # Verzeichnisse bleiben erhalten, aber INHALT wird ignoriert
 woltlab-github/*
+!woltlab-github/.gitkeep
 !woltlab-github/.gitignore
 !woltlab-github/README*.md
 !woltlab-github/LICENSE
 
 woltlab-docs/*
+!woltlab-docs/.gitkeep
 !woltlab-docs/.gitignore
 !woltlab-docs/README*.md
 !woltlab-docs/LICENSE
@@ -49,16 +52,19 @@ woltlab-docs/*
 # WICHTIG: Verzeichnisse bleiben erhalten, aber INHALT wird ignoriert
 # Diese enthalten große Dateien und werden separat gebaut/verwaltet
 basis-plugin/*
+!basis-plugin/.gitkeep
 !basis-plugin/.gitignore
 !basis-plugin/README*.md
 !basis-plugin/CHANGELOG*.md
 
 mein-plugin/*
+!mein-plugin/.gitkeep
 !mein-plugin/.gitignore
 !mein-plugin/README*.md
 !mein-plugin/CHANGELOG*.md
 
 plugins-integrieren/*
+!plugins-integrieren/.gitkeep
 !plugins-integrieren/.gitignore
 !plugins-integrieren/README*.md
 !plugins-integrieren/CHANGELOG*.md
