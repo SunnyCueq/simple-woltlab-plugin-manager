@@ -9,7 +9,7 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ---
 
-## [0.1.0] - 2026-01-18
+## [0.1.1] - 2026-01-18
 
 ### Added
 
@@ -36,6 +36,40 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **TODO:** Sicherheits-Updates hier dokumentieren
 
 ---
+
+
+Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
+
+Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
+und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
+
+
+## [0.1.0] - 2026-01-18
+
+### Added
+
+- **TODO:** Neue Features hier dokumentieren
+
+### Changed
+
+- **TODO:** Änderungen hier dokumentieren
+
+### Fixed
+
+- **TODO:** Bugfixes hier dokumentieren
+
+### Deprecated
+
+- **TODO:** Veraltete Features hier dokumentieren
+
+### Removed
+
+- **TODO:** Entfernte Features hier dokumentieren
+
+### Security
+
+- **TODO:** Sicherheits-Updates hier dokumentieren
+
 
 
 All notable changes to this project will be documented in this file.
@@ -167,4 +201,3 @@ This project uses [Semantic Versioning](https://semver.org/):
 
 
 **Copyright (c) 2025 SunnyCueq**
-**License:** MIT (Open Source)

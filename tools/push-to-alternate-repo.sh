@@ -259,6 +259,38 @@ git pull origin main 2>/dev/null || git pull origin master 2>/dev/null || {
 # Kopiere Workspace-Inhalte zum alternativen Repository
 # ============================================================
 
+print_info "Bereinige alte Dateien und Verzeichnisse..."
+
+# Liste der zu löschenden alten Dateien/Verzeichnisse
+OLD_FILES=(
+    "scripts"
+    "templates"
+    "example-plugin"
+    "install.sh"
+    "README.md"
+    "README_DE.md"
+    "README_EN.md"
+    "LICENSE"
+    "CONTRIBUTING.md"
+)
+
+# Lösche alte Dateien/Verzeichnisse (außer .git und neuen Verzeichnissen)
+for item in "${OLD_FILES[@]}"; do
+    if [ -e "$ALT_REPO_DIR/$item" ]; then
+        rm -rf "$ALT_REPO_DIR/$item" 2>/dev/null || true
+        print_info "Entfernt: $item"
+    fi
+done
+
+# Lösche alte docs/ (wird durch tools/docs/ ersetzt)
+if [ -d "$ALT_REPO_DIR/docs" ] && [ ! -d "$ALT_REPO_DIR/tools/docs" ]; then
+    rm -rf "$ALT_REPO_DIR/docs" 2>/dev/null || true
+    print_info "Entfernt: docs/ (wird durch tools/docs/ ersetzt)"
+fi
+
+print_success "✓ Alte Dateien entfernt"
+echo ""
+
 print_info "Kopiere Workspace-Inhalte..."
 
 # 1. Kopiere Tools komplett
