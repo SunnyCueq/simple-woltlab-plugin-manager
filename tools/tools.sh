@@ -26,11 +26,9 @@ else
     
     print_header() {
         clear
-        echo -e "${BLUE}╔═══════════════════════════════════════════════════════╗${NC}"
-        echo -e "${BLUE}║                                                       ║${NC}"
-        echo -e "${BLUE}║     ${CYAN}WoltLab Development Tools${BLUE}                      ║${NC}"
-        echo -e "${BLUE}║                                                       ║${NC}"
-        echo -e "${BLUE}╚═══════════════════════════════════════════════════════╝${NC}"
+        echo -e "${BLUE}==========================================${NC}"
+        echo -e "${CYAN}WoltLab Development Tools${NC}"
+        echo -e "${BLUE}==========================================${NC}"
         echo ""
     }
 fi
@@ -57,7 +55,7 @@ print_menu() {
     echo -e "   ${YELLOW}7)${NC} ${CYAN}WoltLab Download${NC}      ${ARROW} WoltLab Core herunterladen"
     echo -e "   ${YELLOW}8)${NC} ${CYAN}Snapshot Manager${NC}     ${ARROW} Snapshot-Verwaltung"
     echo -e "   ${YELLOW}9)${NC} ${CYAN}Credentials${NC}           ${ARROW} Zugangsdaten-Verwaltung"
-    echo -e "   ${YELLOW}10)${NC} ${CYAN}Portainer${NC}            ${ARROW} Container-Management"
+    echo -e "   ${YELLOW}10)${NC} ${CYAN}Dockge${NC}               ${ARROW} Container-Management"
     echo -e "   ${YELLOW}11)${NC} ${CYAN}Hilfe & Dokumentation${NC} ${ARROW} README anzeigen"
     echo -e "   ${YELLOW}12)${NC} ${CYAN}Plugin Validierung${NC}    ${ARROW} Security & Store-Compliance prüfen"
     echo -e "   ${YELLOW}13)${NC} ${CYAN}Updates prüfen${NC}        ${ARROW} Verfügbare Updates anzeigen"
@@ -210,10 +208,10 @@ run_credentials() {
     read -p "Drücke ENTER um fortzufahren..."
 }
 
-run_portainer() {
-    echo -e "${YELLOW}${ARROW} Öffne Portainer...${NC}"
+run_dockge() {
+    echo -e "${YELLOW}${ARROW} Öffne Dockge...${NC}"
     echo ""
-    "$TOOLS_DIR/portainer.sh" "$@"
+    "$TOOLS_DIR/dockge.sh" "$@"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -447,27 +445,27 @@ while true; do
             ;;
         10)
             print_header
-            print_section "Portainer - Container-Management"
+            print_section "Dockge - Container-Management"
             
             echo -e "${GREEN}Verfügbare Optionen:${NC}"
             echo ""
-            echo -e "   ${YELLOW}1)${NC} ${CYAN}Start${NC}      ${ARROW} Portainer starten/Status anzeigen"
-            echo -e "   ${YELLOW}2)${NC} ${CYAN}Stop${NC}       ${ARROW} Portainer stoppen"
-            echo -e "   ${YELLOW}3)${NC} ${CYAN}Restart${NC}    ${ARROW} Portainer neu starten"
-            echo -e "   ${YELLOW}4)${NC} ${CYAN}Status${NC}     ${ARROW} Portainer Status anzeigen"
-            echo -e "   ${YELLOW}5)${NC} ${CYAN}Open${NC}       ${ARROW} Portainer im Browser öffnen"
+            echo -e "   ${YELLOW}1)${NC} ${CYAN}Start${NC}      ${ARROW} Dockge starten/Status anzeigen"
+            echo -e "   ${YELLOW}2)${NC} ${CYAN}Stop${NC}       ${ARROW} Dockge stoppen"
+            echo -e "   ${YELLOW}3)${NC} ${CYAN}Restart${NC}    ${ARROW} Dockge neu starten"
+            echo -e "   ${YELLOW}4)${NC} ${CYAN}Status${NC}     ${ARROW} Dockge Status anzeigen"
+            echo -e "   ${YELLOW}5)${NC} ${CYAN}Open${NC}       ${ARROW} Dockge im Browser öffnen"
             echo ""
             echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
             echo ""
-            read -p "Wähle eine Option (0-5): " portainer_choice
+            read -p "Wähle eine Option (0-5): " dockge_choice
             echo ""
             
-            case "$portainer_choice" in
-                1) portainer_cmd="start" ;;
-                2) portainer_cmd="stop" ;;
-                3) portainer_cmd="restart" ;;
-                4) portainer_cmd="status" ;;
-                5) portainer_cmd="open" ;;
+            case "$dockge_choice" in
+                1) dockge_cmd="start" ;;
+                2) dockge_cmd="stop" ;;
+                3) dockge_cmd="restart" ;;
+                4) dockge_cmd="status" ;;
+                5) dockge_cmd="open" ;;
                 0) continue ;;
                 *) 
                     echo -e "${RED}Ungültige Option!${NC}"
@@ -476,7 +474,7 @@ while true; do
                     ;;
             esac
             
-            run_portainer "$portainer_cmd"
+            run_dockge "$dockge_cmd"
             ;;
         11)
             print_header

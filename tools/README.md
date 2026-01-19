@@ -13,7 +13,7 @@ Die **WoltLab Development Tools** sind eine Sammlung von automatisierten Skripte
 - ✅ **DDEV verwalten** - Startet und verwaltet die lokale Entwicklungsumgebung
 - ✅ **Snapshots erstellen/wiederherstellen** - Schnelle Backups der kompletten Installation
 - ✅ **Zugangsdaten verwalten** - Zentrale Verwaltung aller Passwörter und Einstellungen
-- ✅ **Portainer verwalten** - Container-Management für Docker
+- ✅ **Dockge verwalten** - Container-Management für Docker (moderne Alternative zu Portainer)
 - ✅ **HeidiSQL konfigurieren** - Automatische Datenbank-Verbindung einrichten
 - ✅ **Plugin Validierung** - Security-Checks & Plugin Store Compliance prüfen
 
@@ -94,12 +94,12 @@ ddev version
 
 ---
 
-### 🐳 Portainer - Container-Management (Optional)
+### 🐳 Dockge - Container-Management (Optional)
 
-**Was ist Portainer?**
-Portainer ist eine Web-Oberfläche zur Verwaltung von Docker-Containern. Es macht die Verwaltung von DDEV und anderen Containern visuell und einfach - perfekt für Einsteiger!
+**Was ist Dockge?**
+Dockge ist eine moderne, schnellere Alternative zu Portainer für die Verwaltung von Docker-Containern. Es bietet eine intuitive Web-Oberfläche zur Verwaltung von DDEV und anderen Containern - perfekt für Einsteiger!
 
-**Warum Portainer?**
+**Warum Dockge?**
 - ✅ Visuelle Verwaltung von Docker-Containern
 - ✅ Einfaches Starten/Stoppen von Containern
 - ✅ Logs und Status auf einen Blick
@@ -108,40 +108,45 @@ Portainer ist eine Web-Oberfläche zur Verwaltung von Docker-Containern. Es mach
 **Installation:**
 
 **Automatisch (empfohlen):**
-1. Starte Portainer über das Menü (Option 10)
-2. Beim ersten Start wird Portainer automatisch installiert
+1. Starte Dockge über das Menü (Option 10)
+2. Beim ersten Start wird Dockge automatisch installiert
+
+**Migration von Portainer (falls noch vorhanden):**
+Falls du noch Portainer verwendest, kannst du mit dem Migrations-Script umsteigen:
+```bash
+./tools/migrate-to-dockge.sh
+```
+Dies entfernt Portainer automatisch und installiert Dockge.
 
 **Manuell:**
 ```bash
-# Starte Portainer Container
+# Starte Dockge Container
 docker run -d \
-  -p 9000:9000 \
-  -p 9443:9443 \
-  --name portainer \
+  -p 5001:5001 \
+  --name dockge \
   --restart=always \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v portainer_data:/data \
-  portainer/portainer-ce:latest
+  -v ./dockge/stacks:/app/data/stacks \
+  -v ./dockge:/data \
+  louislam/dockge:latest
 ```
 
 **Zugriff:**
-- **HTTP:** http://localhost:9000
-- **HTTPS:** https://localhost:9443
+- **HTTP:** http://localhost:5001
 
 **📖 Offizielle Dokumentation:**
-- **Dokumentation:** https://docs.portainer.io/
-- **Installation:** https://docs.portainer.io/start/install-ce/server/docker/linux
-- **Getting Started:** https://docs.portainer.io/start/get-started
+- **Dokumentation:** https://dockge.kuma.pet/
+- **GitHub:** https://github.com/louislam/dockge
+- **Installation:** https://dockge.kuma.pet/guide/getting-started/
 
 **Voraussetzungen:**
 - Docker muss installiert und laufen
-- Port 9000 (und optional 9443) muss frei sein
+- Port 5001 muss frei sein
 
-**Erste Schritte mit Portainer:**
-1. Starte Portainer über das Menü (Option 10)
-2. Öffne http://localhost:9000 im Browser
-3. Erstelle beim ersten Start ein Admin-Passwort
-4. Wähle "Docker" als Umgebung
+**Erste Schritte mit Dockge:**
+1. Starte Dockge über das Menü (Option 10)
+2. Öffne http://localhost:5001 im Browser
+3. Dockge ist sofort einsatzbereit - keine zusätzliche Konfiguration nötig!
 5. Du siehst jetzt alle Docker-Container, inklusive DDEV!
 
 ---
@@ -383,7 +388,7 @@ Startet, stoppt und verwaltet deine lokale WoltLab-Installation in Docker-Contai
   - HTTP: Für unverschlüsselte Verbindungen
   - HTTPS: Für verschlüsselte Verbindungen
   - MySQL: Für Datenbank-Verbindungen
-- 🐳 **Portainer**: Falls Portainer läuft, wird die URL angezeigt
+- 🐳 **Dockge**: Falls Dockge läuft, wird die URL angezeigt
 
 **Verwendung:**
 - Im Menü: Option `4` wählen
@@ -529,7 +534,7 @@ Installiert und konfiguriert automatisch alle benötigten Tools für die WoltLab
 
 **Weitere Hilfe:**
 - **DDEV:** https://github.com/ddev/ddev
-- **Portainer:** https://docs.portainer.io/
+- **Dockge:** https://dockge.kuma.pet/
 - **HeidiSQL:** https://www.heidisql.com/help.php
 - **WoltLab:** https://manual.woltlab.com/de/installation/
 
@@ -1200,30 +1205,30 @@ Im Verzeichnis `tools/.env` (wird nicht in Git gespeichert, da sie Passwörter e
 
 ---
 
-### 🔟 Portainer - Container-Management
+### 🔟 Dockge - Container-Management
 
-**Was ist Portainer?**
-Portainer ist eine Web-Oberfläche zur Verwaltung von Docker-Containern. Es macht die Verwaltung von DDEV und anderen Containern visuell und einfach.
+**Was ist Dockge?**
+Dockge ist eine moderne, schnellere Alternative zu Portainer für die Verwaltung von Docker-Containern. Es bietet eine intuitive Web-Oberfläche zur Verwaltung von DDEV und anderen Containern.
 
 **Was macht es?**
-Startet, stoppt und verwaltet den Portainer-Container, der eine Web-Oberfläche für Docker bereitstellt.
+Startet, stoppt und verwaltet den Dockge-Container, der eine moderne Web-Oberfläche für Docker bereitstellt.
 
 **Optionen:**
-- **Start** (Standard): Startet Portainer oder zeigt den Status
-- **Stop**: Stoppt Portainer
-- **Restart**: Startet Portainer neu
+- **Start** (Standard): Startet Dockge oder zeigt den Status
+- **Stop**: Stoppt Dockge
+- **Restart**: Startet Dockge neu
 - **Status**: Zeigt detaillierte Informationen
-- **Open**: Öffnet Portainer im Browser
+- **Open**: Öffnet Dockge im Browser
 
 **Verwendung:**
 - Im Menü: Option `10` wählen
 - Kommando eingeben (oder Leer lassen für Start)
 
 **Erste Verwendung:**
-Beim ersten Start wird der Portainer-Container automatisch erstellt und gestartet.
+Beim ersten Start wird der Dockge-Container automatisch erstellt und gestartet.
 
 **Zugriff:**
-Nach dem Start ist Portainer unter `http://localhost:9000` erreichbar.
+Nach dem Start ist Dockge unter `http://localhost:5001` erreichbar.
 
 **Voraussetzung:** Docker muss installiert und laufen.
 
@@ -1302,7 +1307,8 @@ woltlab-development/
 │   ├── gitpush.sh             # Git Push & Release
 │   ├── typescript.sh          # TypeScript Kompilierung
 │   ├── start-ddev.sh          # DDEV Manager
-│   ├── portainer.sh           # Portainer Verwaltung
+│   ├── dockge.sh              # Dockge Verwaltung
+│   ├── migrate-to-dockge.sh   # Migration von Portainer zu Dockge
 │   ├── validate-plugin.sh     # Plugin Validierung (Security & Compliance)
 │   ├── restore-snapshot.sh   # Snapshot wiederherstellen
 │   ├── setup.sh               # Vollständige Installation
@@ -1473,8 +1479,8 @@ woltlab-development/
 2. Die Verbindung "WoltLab DDEV" sollte automatisch vorhanden sein
 3. Falls nicht: Im Menü Option `9` → Option `5` (HeidiSQL Passwort speichern)
 
-### Q: Was ist Portainer und brauche ich es?
-**A:** Portainer ist optional. Es bietet eine Web-Oberfläche zur Verwaltung von Docker-Containern. Du kannst es verwenden, um DDEV visuell zu verwalten, aber es ist nicht zwingend notwendig.
+### Q: Was ist Dockge und brauche ich es?
+**A:** Dockge ist optional. Es bietet eine moderne Web-Oberfläche zur Verwaltung von Docker-Containern. Du kannst es verwenden, um DDEV visuell zu verwalten, aber es ist nicht zwingend notwendig. Dockge ist eine schnellere, modernere Alternative zu Portainer.
 
 ---
 
@@ -1529,8 +1535,8 @@ Auch wenn automatische Nachrichten generiert werden, kannst du eine eigene Nachr
 ### Tipp 4: TypeScript Watch-Modus
 Verwende den Watch-Modus beim Entwickeln, damit Änderungen automatisch kompiliert werden.
 
-### Tipp 5: Portainer für visuelle Verwaltung
-Wenn du Docker visuell verwalten möchtest, nutze Portainer. Es macht viele Operationen einfacher.
+### Tipp 5: Dockge für visuelle Verwaltung
+Wenn du Docker visuell verwalten möchtest, nutze Dockge. Es ist eine moderne, schnellere Alternative zu Portainer und macht viele Operationen einfacher.
 
 ---
 
@@ -1553,7 +1559,7 @@ Bei Problemen oder Fragen:
 - ✅ Plugin Store Checkliste hinzugefügt
 
 ### Version 2.0
-- ✅ Portainer-Integration hinzugefügt
+- ✅ Dockge-Integration hinzugefügt (Migration von Portainer)
 - ✅ HeidiSQL automatische Konfiguration
 - ✅ Verbesserte Plugin-Suche (auch in Unterverzeichnissen)
 - ✅ Gruppierte Plugin-Anzeige

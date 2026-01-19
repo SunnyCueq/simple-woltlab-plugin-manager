@@ -95,6 +95,43 @@ else
             echo -e "${YELLOW}  Drücke Ctrl+C zum Beenden${NC}\n"
             npx tsc -w
         else
+            # WICHTIG: Lösche alle .js und .min.js Dateien, die aus .ts Dateien kompiliert werden
+            # Dies stellt sicher, dass TypeScript IMMER neu kompiliert, auch wenn .js Dateien neuer sind
+            # Außerdem werden verwaiste .min.js Dateien entfernt (wenn .ts Datei gelöscht wurde)
+            echo -e "${YELLOW}  Lösche alte .js und .min.js Dateien für saubere Kompilierung...${NC}"
+            if [ -d "js" ]; then
+                # Finde alle .ts Dateien und lösche die entsprechenden .js und .min.js Dateien
+                mapfile -t ts_files < <(find ts -name "*.ts" -type f 2>/dev/null)
+                DELETED_JS_COUNT=0
+                DELETED_MIN_COUNT=0
+                for ts_file in "${ts_files[@]}"; do
+                    # Konvertiere ts/.../file.ts zu js/.../file.js
+                    js_file="${ts_file#ts/}"
+                    js_file="${js_file%.ts}.js"
+                    js_path="js/${js_file}"
+                    min_path="js/${js_file%.js}.min.js"
+                    
+                    # Lösche .js Datei, falls sie existiert
+                    if [ -f "$js_path" ]; then
+                        rm -f "$js_path"
+                        DELETED_JS_COUNT=$((DELETED_JS_COUNT + 1))
+                    fi
+                    
+                    # Lösche .min.js Datei, falls sie existiert
+                    if [ -f "$min_path" ]; then
+                        rm -f "$min_path"
+                        DELETED_MIN_COUNT=$((DELETED_MIN_COUNT + 1))
+                    fi
+                done
+                
+                if [ "$DELETED_JS_COUNT" -gt 0 ] || [ "$DELETED_MIN_COUNT" -gt 0 ]; then
+                    echo -e "${GREEN}  ✓ ${DELETED_JS_COUNT} .js Datei(en) und ${DELETED_MIN_COUNT} .min.js Datei(en) gelöscht${NC}"
+                else
+                    echo -e "${GREEN}  ✓ Keine alten Dateien zu löschen${NC}"
+                fi
+            fi
+            
+            # Jetzt kompilieren (TypeScript wird alle .js Dateien neu erstellen)
             npx tsc
             TSC_EXIT=$?
             if [ $TSC_EXIT -eq 0 ]; then
@@ -103,7 +140,8 @@ else
                 # Validierung: Prüfe ob JavaScript-Dateien erstellt wurden
                 JS_COUNT=0
                 if [ -d "js" ]; then
-                    JS_COUNT=$(find js -name "*.js" 2>/dev/null | wc -l)
+                    # WICHTIG: Zähle nur .js Dateien, NICHT .min.js!
+                    JS_COUNT=$(find js -name "*.js" ! -name "*.min.js" 2>/dev/null | wc -l)
                 fi
                 
                 if [ "$TS_COUNT" -gt 0 ] && [ "$JS_COUNT" -eq 0 ]; then
@@ -137,8 +175,14 @@ else
                         fi
                         minfile="${jsfile%.js}.min.js"
                         # Immer aktualisieren, damit .min.js mit .js synchron bleibt
-                        cp "$jsfile" "$minfile"
-                        MIN_JS_COUNT=$((MIN_JS_COUNT + 1))
+                        # -f: Überschreibe vorhandene Dateien ohne Nachfrage
+                        cp -f "$jsfile" "$minfile"
+                        if [ $? -eq 0 ]; then
+                            MIN_JS_COUNT=$((MIN_JS_COUNT + 1))
+                        else
+                            echo -e "${RED}   ❌ Fehler beim Kopieren: $jsfile → $minfile${NC}"
+                            exit 1
+                        fi
                     done
                     
                     # Prüfe, ob alle .js Dateien eine entsprechende .min.js Datei haben
@@ -184,16 +228,38 @@ else
                 
                 # Prüfe auf nicht-synchronisierte Dateien
                 if [ ${#UNSYNCED_FILES[@]} -gt 0 ]; then
-                    echo -e "${RED}❌ FEHLER: ${#UNSYNCED_FILES[@]} Datei(en) sind nicht synchronisiert:${NC}"
+                    echo -e "${RED}❌ KRITISCHER FEHLER: ${#UNSYNCED_FILES[@]} Datei(en) sind nicht synchronisiert!${NC}"
                     for unsynced in "${UNSYNCED_FILES[@]}"; do
                         echo -e "${RED}   - $unsynced${NC}"
                     done
-                    echo -e "${YELLOW}  → Führe typescript.sh erneut aus, um zu synchronisieren${NC}\n"
+                    echo -e "${RED}   → .js und .min.js Dateien MÜSSEN identisch sein!${NC}"
+                    echo -e "${RED}   → Build wird abgebrochen!${NC}\n"
                     exit 1
                 fi
                 
-                if [ ${#MISSING_MIN_JS[@]} -eq 0 ] && [ ${#UNSYNCED_FILES[@]} -eq 0 ]; then
-                    echo -e "${GREEN}✓ Alle .js und .min.js Dateien sind synchronisiert${NC}\n"
+                # KRITISCHE PRÜFUNG: Verifiziere dass ALLE .js Dateien identische .min.js Dateien haben
+                echo -e "${YELLOW}  Finale Validierung: Prüfe dass alle .js und .min.js Dateien identisch sind...${NC}"
+                VALIDATION_ERRORS=0
+                mapfile -t final_jsfiles < <(find js -name "*.js" ! -name "*.min.js" ! -path "*/3rdParty/*" -type f)
+                for jsfile in "${final_jsfiles[@]}"; do
+                    minfile="${jsfile%.js}.min.js"
+                    if [ ! -f "$minfile" ]; then
+                        echo -e "${RED}   ❌ $minfile fehlt für $jsfile${NC}"
+                        VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+                    elif ! diff -q "$jsfile" "$minfile" > /dev/null 2>&1; then
+                        echo -e "${RED}   ❌ $jsfile und $minfile sind NICHT identisch!${NC}"
+                        VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+                    fi
+                done
+                
+                if [ "$VALIDATION_ERRORS" -gt 0 ]; then
+                    echo -e "${RED}❌ KRITISCHER FEHLER: ${VALIDATION_ERRORS} Validierungsfehler gefunden!${NC}"
+                    echo -e "${RED}   → Build wird abgebrochen!${NC}\n"
+                    exit 1
+                fi
+                
+                if [ ${#MISSING_MIN_JS[@]} -eq 0 ] && [ ${#UNSYNCED_FILES[@]} -eq 0 ] && [ "$VALIDATION_ERRORS" -eq 0 ]; then
+                    echo -e "${GREEN}✓ Alle .js und .min.js Dateien sind synchronisiert und identisch${NC}\n"
                 fi
             else
                 echo -e "${RED}❌ TypeScript-Kompilierung fehlgeschlagen!${NC}"

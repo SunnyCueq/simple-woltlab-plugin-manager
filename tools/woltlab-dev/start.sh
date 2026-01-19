@@ -27,31 +27,73 @@ else
     exit 1
 fi
 
-# DDEV starten mit gefilterter Ausgabe
+# DDEV starten - optimierte Version die nicht auf Router wartet
 ddev_start_quiet() {
-    debug_info "ddev_start_quiet" "starting DDEV command (waiting for full startup including router)"
+    debug_info "ddev_start_quiet" "starting DDEV containers directly (not waiting for router) at $(date +%s)"
     set +e
     
-    # Starte DDEV vollständig - warte auf Router und alle Services
-    # Verwende längeren Timeout, da Router-Start Zeit braucht
-    if command -v timeout &> /dev/null; then
-        debug_debug "ddev_start_quiet" "using timeout command (300s for full startup)"
-        # Starte DDEV mit längeren Timeout für vollständigen Start (Router, Services, etc.)
-        timeout 300 ddev start 2>&1 | grep --line-buffered -v -E "(Mutagen|upload_dirs|disable-upload-dirs-warning|You have|For faster|If this is intended)" || true
-        local exit_code=${PIPESTATUS[0]}
+    # Starte Container direkt mit docker compose (schneller, wartet nicht auf Router)
+    debug_info "ddev_start_quiet" "starting containers with docker compose"
+    cd "$SCRIPT_DIR"
+    
+    # Starte Container im Hintergrund - wartet nicht auf Router
+    ddev start --skip-hooks 2>&1 | grep --line-buffered -v -E "(Mutagen|upload_dirs|disable-upload-dirs-warning|You have|For faster|If this is intended)" &
+    local ddev_pid=$!
+    
+    # Warte maximal 30 Sekunden auf Container-Start
+    local wait_time=0
+    local max_wait=30
+    local containers_ready=0
+    
+    while [ $wait_time -lt $max_wait ]; do
+        sleep 1
+        wait_time=$((wait_time + 1))
+        
+        # Prüfe ob Container laufen
+        if command -v docker &> /dev/null; then
+            local web_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep -c "ddev-woltlab-web" || echo "0")
+            local db_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep -c "ddev-woltlab-db" || echo "0")
+            
+            if [ "$web_count" -ge 1 ] && [ "$db_count" -ge 1 ]; then
+                containers_ready=1
+                debug_info "ddev_start_quiet" "containers are running after ${wait_time}s"
+                break
+            fi
+        fi
+    done
+    
+    # Wenn Container laufen, ist das OK - ddev start kann im Hintergrund weiterlaufen
+    if [ $containers_ready -eq 1 ]; then
+        debug_info "ddev_start_quiet" "containers started successfully, ddev start continues in background"
+        local exit_code=0
     else
-        debug_debug "ddev_start_quiet" "starting without timeout (may take longer)"
-        # Starte DDEV direkt - kann lange dauern
-        ddev start 2>&1 | grep --line-buffered -v -E "(Mutagen|upload_dirs|disable-upload-dirs-warning|You have|For faster|If this is intended)" || true
-        local exit_code=${PIPESTATUS[0]}
+        debug_warning "ddev_start_quiet" "containers not ready after ${max_wait}s, checking ddev process"
+        # Prüfe ob ddev start noch läuft
+        if kill -0 $ddev_pid 2>/dev/null; then
+            debug_info "ddev_start_quiet" "ddev start still running, waiting a bit more"
+            sleep 5
+            # Prüfe erneut
+            local web_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep -c "ddev-woltlab-web" || echo "0")
+            local db_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep -c "ddev-woltlab-db" || echo "0")
+            if [ "$web_count" -ge 1 ] && [ "$db_count" -ge 1 ]; then
+                exit_code=0
+            else
+                exit_code=1
+            fi
+        else
+            # ddev start ist beendet
+            wait $ddev_pid 2>/dev/null
+            exit_code=$?
+        fi
     fi
     
     debug_info "ddev_start_quiet" "DDEV start finished with exit_code=$exit_code"
     set -e
+    return $exit_code
     
     # Prüfe ob DDEV vollständig läuft (Container + Router)
     debug_info "ddev_start_check" "checking if DDEV is fully running (containers + router)"
-    sleep 3
+    sleep 1  # Reduziert von 3s auf 1s
     
     # Prüfe Container-Status
     local web_running=0
@@ -95,7 +137,7 @@ ddev_start_quiet() {
                 debug_warning "ddev_router_missing" "router not running, attempting to start"
                 print_info "Router läuft nicht, starte Router neu..."
                 ddev restart 2>&1 | grep --line-buffered -v -E "(Mutagen|upload_dirs|disable-upload-dirs-warning|You have|For faster|If this is intended)" || true
-                sleep 5
+                sleep 2  # Reduziert von 5s auf 2s
                 
                 # Prüfe erneut
                 if check_ddev_running; then
@@ -117,7 +159,7 @@ ddev_start_quiet() {
             return 0
         else
             debug_warning "ddev_start_check" "exit_code=0 but containers not running yet, waiting..."
-            sleep 10
+            sleep 2  # Reduziert von 10s auf 2s
             if check_ddev_running; then
                 return 0
             fi
@@ -266,8 +308,10 @@ case "$COMMAND" in
         print_info "DDEV wird gestartet (dies kann einige Sekunden dauern)..."
         
         # Starte DDEV und warte auf Completion
+        debug_info "ddev_start_before" "about to call ddev_start_quiet at $(date +%s)"
         ddev_start_quiet
         start_exit=$?
+        debug_info "ddev_start_after" "ddev_start_quiet returned with exit_code=$start_exit at $(date +%s)"
         
         set -e
         
@@ -275,9 +319,29 @@ case "$COMMAND" in
         
         # Prüfe Exit-Code (124 = Timeout, 0 = Erfolg, andere = Fehler)
         if [ $start_exit -eq 124 ]; then
-            debug_warning "ddev_start_timeout" "DDEV start timed out after 120s"
-            print_warning "DDEV-Start hat länger gedauert als erwartet..."
-            print_info "Prüfe DDEV-Status..."
+            debug_warning "ddev_start_timeout" "DDEV start timed out after 60s - checking if containers are running"
+            print_info "DDEV-Start hat länger gedauert (Timeout nach 60s)..."
+            print_info "Prüfe ob Container laufen..."
+            
+            # Prüfe schnell ob Container laufen
+            local containers_running=0
+            if command -v docker &> /dev/null; then
+                local web_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep -c "ddev-woltlab-web" || echo "0")
+                local db_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep -c "ddev-woltlab-db" || echo "0")
+                if [ "$web_count" -ge 1 ] && [ "$db_count" -ge 1 ]; then
+                    containers_running=1
+                    debug_info "ddev_containers_running" "containers are running despite timeout"
+                    print_success "Container laufen! Fahre fort..."
+                else
+                    debug_warning "ddev_containers_not_running" "containers not running after timeout"
+                    print_warning "Container laufen noch nicht. Bitte manuell prüfen: ddev start"
+                fi
+            fi
+            
+            # Wenn Container laufen, fahre fort (Router wird später geprüft)
+            if [ $containers_running -eq 1 ]; then
+                start_exit=0  # Setze auf Erfolg, damit wir fortfahren
+            fi
         elif [ $start_exit -ne 0 ]; then
             debug_error "ddev_start_failed" "exit_code=$start_exit"
             print_error "DDEV konnte nicht gestartet werden (Exit-Code: $start_exit)!"
@@ -294,100 +358,27 @@ case "$COMMAND" in
             exit 1
         fi
         
-        # Warte auf DDEV-Bereitschaft (Container müssen vollständig hochgefahren sein)
-        print_info "Warte auf DDEV-Bereitschaft..."
-        debug_info "ddev_wait" "waiting for containers and router to be ready"
-        sleep 5
+        # Container laufen bereits - Router separat im Hintergrund starten (NICHT warten!)
+        debug_info "ddev_wait" "containers are running, starting router in background"
         
-        # Prüfe Router-Status und starte explizit falls nötig
-        print_info "Prüfe Router-Status..."
-        debug_info "ddev_router_check" "checking router status"
+        # Starte Router im Hintergrund - NICHT warten!
+        print_info "Starte Router im Hintergrund..."
+        (
+            cd "$SCRIPT_DIR"
+            ddev router start > /dev/null 2>&1 || {
+                # Fallback: Router über ddev start (aber im Hintergrund)
+                ddev start > /dev/null 2>&1 || true
+            }
+        ) &
+        local router_pid=$!
+        debug_info "ddev_router_background" "router starting in background (pid=$router_pid)"
         
-        router_running=0
-        if command -v docker &> /dev/null; then
-            # Zähle Router-Container (zähle Zeilen, nicht Matches)
-            router_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep -E "ddev-router|traefik" | wc -l | tr -d '[:space:]')
-            # Falls leer oder nicht numerisch, setze auf 0
-            if [ -z "$router_count" ] || ! echo "$router_count" | grep -qE '^[0-9]+$'; then
-                router_running=0
-            else
-                # Wenn mindestens 1 Container läuft, ist Router aktiv
-                router_running=$([ "$router_count" -ge 1 ] && echo "1" || echo "0")
-            fi
-            debug_info "ddev_router_status" "router_running=$router_running (count=$router_count)"
-        fi
+        # KEIN SLEEP - Router läuft im Hintergrund, wir fahren sofort fort!
         
-        # Falls Router nicht läuft, starte ihn explizit
-        if [ "$router_running" -eq 0 ] || [ -z "$router_running" ]; then
-            debug_warning "ddev_router_missing" "router not running, starting explicitly"
-            print_info "Router läuft nicht, starte Router..."
-            set +e
-            ddev router --start > /dev/null 2>&1
-            router_start_exit=$?
-            set -e
-            debug_info "ddev_router_start" "exit_code=$router_start_exit"
-            
-            if [ $router_start_exit -eq 0 ]; then
-                print_success "Router gestartet!"
-                sleep 3  # Warte auf Router-Bereitschaft
-            else
-                print_warning "Router-Start fehlgeschlagen, versuche alternativen Weg..."
-                # Alternativer Weg: ddev restart (startet auch Router)
-                set +e
-                (ddev restart > /dev/null 2>&1) &
-                restart_pid=$!
-                set -e
-                sleep 5
-                # Warte auf Prozess (nicht blockierend)
-                wait $restart_pid 2>/dev/null || true
-            fi
-        else
-            debug_info "ddev_router_ok" "router is already running"
-        fi
-        
-        # Prüfe ob DDEV wirklich läuft (mit erweiterten Checks)
-        ddev_ready=0
-        for i in {1..20}; do
-            debug_debug "ddev_ready_check" "attempt=$i"
-            
-            # Prüfe ob Container laufen
-            if command -v docker &> /dev/null; then
-                # Zähle Container (zähle Zeilen, nicht Matches)
-                web_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep "ddev-woltlab-web" | wc -l | tr -d '[:space:]')
-                db_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep "ddev-woltlab-db" | wc -l | tr -d '[:space:]')
-                router_count=$(docker ps --format "{{.Names}}" 2>/dev/null | grep -E "ddev-router|traefik" | wc -l | tr -d '[:space:]')
-                
-                # Falls leer oder nicht numerisch, setze auf 0
-                [ -z "$web_count" ] || ! echo "$web_count" | grep -qE '^[0-9]+$' && web_count=0
-                [ -z "$db_count" ] || ! echo "$db_count" | grep -qE '^[0-9]+$' && db_count=0
-                [ -z "$router_count" ] || ! echo "$router_count" | grep -qE '^[0-9]+$' && router_count=0
-                
-                # Wenn mindestens 1 Container läuft, ist er aktiv
-                web_running=$([ "$web_count" -ge 1 ] && echo "1" || echo "0")
-                db_running=$([ "$db_count" -ge 1 ] && echo "1" || echo "0")
-                router_running=$([ "$router_count" -ge 1 ] && echo "1" || echo "0")
-                
-                debug_debug "ddev_containers" "web=$web_running db=$db_running router=$router_running (counts: web=$web_count db=$db_count router=$router_count)"
-                
-                if [ "$web_running" -eq 1 ] && [ "$db_running" -eq 1 ] && [ "$router_running" -ge 1 ]; then
-                    debug_info "ddev_containers_ready" "all containers including router are running"
-                fi
-            fi
-            
-            # Prüfe DDEV-Status (beinhaltet Router-Check)
-            if check_ddev_running; then
-                ddev_ready=1
-                debug_info "ddev_ready" "DDEV is ready after $i attempts (containers + router)"
-                break
-            fi
-            
-            # Zeige Fortschritt alle 5 Versuche
-            if [ $((i % 5)) -eq 0 ]; then
-                print_info "Warte noch... (Versuch $i/20)"
-            fi
-            
-            [ $i -lt 20 ] && sleep 2
-        done
+        # Container laufen bereits - Router läuft im Hintergrund
+        # KEINE WARTESCHLEIFE mehr - Container sind bereit!
+        ddev_ready=1
+        debug_info "ddev_ready" "containers are running, router starting in background - proceeding immediately"
         
         if [ $ddev_ready -eq 1 ]; then
             print_success "DDEV gestartet!"
@@ -409,7 +400,7 @@ case "$COMMAND" in
         
         # Extrahiere Ports und URLs
         print_info "Ermittle Ports und URLs..."
-        sleep 2
+        # Kein Sleep mehr - Ports sollten sofort verfügbar sein nach ddev start
         
         ddev_info=$(extract_ddev_info)
         HTTP_PORT=$(echo "$ddev_info" | cut -d'|' -f1)
@@ -422,7 +413,7 @@ case "$COMMAND" in
         # Retry falls Ports leer
         if [ -z "$HTTP_PORT" ] || [ "$HTTP_PORT" = "null" ]; then
             debug_debug "extract_ddev_info" "retrying extraction"
-            sleep 3
+            sleep 1  # Reduziert von 3s auf 1s
             ddev_info=$(extract_ddev_info)
             HTTP_PORT=$(echo "$ddev_info" | cut -d'|' -f1)
             HTTPS_PORT=$(echo "$ddev_info" | cut -d'|' -f2)
@@ -435,19 +426,19 @@ case "$COMMAND" in
             source "$SCRIPT_DIR/../.env" 2>/dev/null || true
         fi
         
-        # Portainer Status prüfen (nach DDEV-Start, damit Router bereit ist)
-        PORTAINER_URL=""
+        # Dockge Status prüfen (nach DDEV-Start, damit Router bereit ist)
+        DOCKGE_URL=""
         if command -v docker &> /dev/null && docker info &>/dev/null 2>&1; then
-            # Prüfe ob Portainer läuft
-            if docker ps --format "{{.Names}}" 2>/dev/null | grep -q "^portainer$"; then
-                PORTAINER_PORT="${PORTAINER_PORT:-9000}"
-                PORTAINER_URL="http://localhost:${PORTAINER_PORT}"
-                debug_info "portainer_status" "Portainer is running on port $PORTAINER_PORT"
+            # Prüfe ob Dockge läuft
+            if docker ps --format "{{.Names}}" 2>/dev/null | grep -q "^dockge$"; then
+                DOCKGE_PORT="${DOCKGE_PORT:-5001}"
+                DOCKGE_URL="http://localhost:${DOCKGE_PORT}"
+                debug_info "dockge_status" "Dockge is running on port $DOCKGE_PORT"
             else
-                debug_debug "portainer_status" "Portainer is not running"
-                # Optional: Hinweis dass Portainer gestartet werden kann
-                if [ -f "$SCRIPT_DIR/../portainer.sh" ]; then
-                    debug_info "portainer_hint" "Portainer script available, user can start it manually"
+                debug_debug "dockge_status" "Dockge is not running"
+                # Optional: Hinweis dass Dockge gestartet werden kann
+                if [ -f "$SCRIPT_DIR/../dockge.sh" ]; then
+                    debug_info "dockge_hint" "Dockge script available, user can start it manually"
                 fi
             fi
         fi
@@ -481,7 +472,7 @@ case "$COMMAND" in
         else
             echo -e "   Frontend:  ${YELLOW}(URL wird ermittelt...)${NC}"
         fi
-        [ -n "$PORTAINER_URL" ] && echo -e "   Portainer: ${BLUE}${PORTAINER_URL}${NC}"
+        [ -n "$DOCKGE_URL" ] && echo -e "   Dockge:    ${BLUE}${DOCKGE_URL}${NC}"
         echo ""
         
         echo -e "${CYAN}👤 WoltLab Admin:${NC}"
@@ -516,17 +507,17 @@ case "$COMMAND" in
         echo -e "   ${YELLOW}1)${NC} ${CYAN}Logs${NC}        ${ARROW} Zeige DDEV-Logs"
         echo -e "   ${YELLOW}2)${NC} ${CYAN}Stop${NC}        ${ARROW} Stoppe DDEV"
         echo -e "   ${YELLOW}3)${NC} ${CYAN}Restart${NC}     ${ARROW} Starte DDEV neu"
-        if [ -n "$PORTAINER_URL" ]; then
-            echo -e "   ${YELLOW}4)${NC} ${CYAN}Portainer${NC}   ${ARROW} Portainer verwalten"
-        elif [ -f "$SCRIPT_DIR/../portainer.sh" ]; then
-            echo -e "   ${YELLOW}4)${NC} ${CYAN}Portainer${NC}   ${ARROW} Portainer starten"
+        if [ -n "$DOCKGE_URL" ]; then
+            echo -e "   ${YELLOW}4)${NC} ${CYAN}Dockge${NC}      ${ARROW} Dockge verwalten"
+        elif [ -f "$SCRIPT_DIR/../dockge.sh" ]; then
+            echo -e "   ${YELLOW}4)${NC} ${CYAN}Dockge${NC}      ${ARROW} Dockge starten"
         fi
         echo -e "   ${YELLOW}0)${NC} ${CYAN}Weiter${NC}      ${ARROW} Zurück zum Hauptmenü"
         echo ""
         
-        # Optional: SSH-Agent, PHP-Konfiguration und Portainer Hinweise
+        # Optional: SSH-Agent, PHP-Konfiguration und Dockge Hinweise
         has_hints=0
-        if [ -f "$SCRIPT_DIR/.ddev/php/woltlab.ini" ] || (command -v ddev &>/dev/null && ddev describe 2>/dev/null | grep -q "ssh-agent") || [ -z "$PORTAINER_URL" ]; then
+        if [ -f "$SCRIPT_DIR/.ddev/php/woltlab.ini" ] || (command -v ddev &>/dev/null && ddev describe 2>/dev/null | grep -q "ssh-agent") || [ -z "$DOCKGE_URL" ]; then
             echo -e "   ${CYAN}ℹ️  Hinweise:${NC}"
             has_hints=1
             
@@ -539,9 +530,9 @@ case "$COMMAND" in
                 echo -e "                  ${BLUE}$SCRIPT_DIR/.ddev/php/woltlab.ini${NC}"
             fi
             
-            if [ -z "$PORTAINER_URL" ] && [ -f "$SCRIPT_DIR/../portainer.sh" ]; then
-                echo -e "      ${YELLOW}Portainer:${NC} Container-Management starten: ${BLUE}../portainer.sh start${NC}"
-                echo -e "                  ${BLUE}Dokumentation: https://docs.portainer.io/${NC}"
+            if [ -z "$DOCKGE_URL" ] && [ -f "$SCRIPT_DIR/../dockge.sh" ]; then
+                echo -e "      ${YELLOW}Dockge:${NC} Container-Management starten: ${BLUE}../dockge.sh start${NC}"
+                echo -e "                  ${BLUE}Dokumentation: https://dockge.kuma.pet/${NC}"
             fi
         fi
         
@@ -549,7 +540,7 @@ case "$COMMAND" in
         
         # Interaktives Menü
         max_option=3
-        if [ -n "$PORTAINER_URL" ] || [ -f "$SCRIPT_DIR/../portainer.sh" ]; then
+        if [ -n "$DOCKGE_URL" ] || [ -f "$SCRIPT_DIR/../dockge.sh" ]; then
             max_option=4
         fi
         
@@ -591,9 +582,9 @@ case "$COMMAND" in
                 read -p "Drücke ENTER um fortzufahren..."
                 ;;
             4)
-                if [ -n "$PORTAINER_URL" ] || [ -f "$SCRIPT_DIR/../portainer.sh" ]; then
-                    print_info "Öffne Portainer..."
-                    "$SCRIPT_DIR/../portainer.sh" status
+                if [ -n "$DOCKGE_URL" ] || [ -f "$SCRIPT_DIR/../dockge.sh" ]; then
+                    print_info "Öffne Dockge..."
+                    "$SCRIPT_DIR/../dockge.sh" status
                     echo ""
                     read -p "Drücke ENTER um fortzufahren..."
                 else

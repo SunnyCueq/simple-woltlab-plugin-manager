@@ -29,11 +29,9 @@ else
     
     print_header() {
         clear
-        echo -e "${BLUE}╔═══════════════════════════════════════════════════════╗${NC}"
-        echo -e "${BLUE}║                                                       ║${NC}"
-        echo -e "${BLUE}║     ${CYAN}Credentials Manager${BLUE}                          ║${NC}"
-        echo -e "${BLUE}║                                                       ║${NC}"
-        echo -e "${BLUE}╚═══════════════════════════════════════════════════════╝${NC}"
+        echo -e "${BLUE}==========================================${NC}"
+        echo -e "${CYAN}Credentials Manager${NC}"
+        echo -e "${BLUE}==========================================${NC}"
         echo ""
     }
     

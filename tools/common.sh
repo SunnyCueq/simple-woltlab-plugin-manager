@@ -164,34 +164,34 @@ clear_debug_log() {
 # Versions-Ermittlung für alle Tools
 # ============================================================
 
-# Funktion: Portainer-Version ermitteln
-get_portainer_version() {
-    debug_trace "get_portainer_version" "starting"
+# Funktion: Dockge-Version ermitteln
+get_dockge_version() {
+    debug_trace "get_dockge_version" "starting"
     local version=""
     
     if command -v docker &> /dev/null && docker info &>/dev/null 2>&1; then
-        # Prüfe ob Portainer-Container läuft
-        if docker ps --format "{{.Names}}" | grep -q "^portainer$"; then
+        # Prüfe ob Dockge-Container läuft
+        if docker ps --format "{{.Names}}" | grep -q "^dockge$"; then
             # Versuche Version aus Container-Image zu extrahieren
-            version=$(docker inspect portainer --format='{{.Config.Image}}' 2>/dev/null | grep -oP ':\K[^:]+$' || echo "")
+            version=$(docker inspect dockge --format='{{.Config.Image}}' 2>/dev/null | grep -oP ':\K[^:]+$' || echo "")
             if [ -z "$version" ]; then
                 # Fallback: Versuche aus Container-Labels
-                version=$(docker inspect portainer --format='{{index .Config.Labels "org.opencontainers.image.version"}}' 2>/dev/null || echo "")
+                version=$(docker inspect dockge --format='{{index .Config.Labels "org.opencontainers.image.version"}}' 2>/dev/null || echo "")
             fi
             if [ -z "$version" ] || [ "$version" = "<no value>" ]; then
                 # Fallback: Prüfe ob latest Image verwendet wird
-                if docker inspect portainer --format='{{.Config.Image}}' 2>/dev/null | grep -q ":latest"; then
+                if docker inspect dockge --format='{{.Config.Image}}' 2>/dev/null | grep -q ":latest"; then
                     version="latest"
                 else
                     version="running"
                 fi
             fi
-            debug_debug "get_portainer_version" "found version=$version"
+            debug_debug "get_dockge_version" "found version=$version"
         else
-            debug_debug "get_portainer_version" "Portainer container not running"
+            debug_debug "get_dockge_version" "Dockge container not running"
         fi
     else
-        debug_warning "get_portainer_version" "Docker not available"
+        debug_warning "get_dockge_version" "Docker not available"
     fi
     
     echo "${version:-not installed}"
@@ -462,12 +462,12 @@ show_system_overview() {
     echo -e "${CYAN}Installierte Tools & Versionen:${NC}"
     echo ""
     
-    # Portainer
-    local portainer_version=$(get_portainer_version)
-    if [ "$portainer_version" != "not installed" ]; then
-        echo -e "   ${GREEN}✓${NC} ${CYAN}Portainer:${NC}     ${YELLOW}${portainer_version}${NC}"
+    # Dockge
+    local dockge_version=$(get_dockge_version)
+    if [ "$dockge_version" != "not installed" ]; then
+        echo -e "   ${GREEN}✓${NC} ${CYAN}Dockge:${NC}         ${YELLOW}${dockge_version}${NC}"
     else
-        echo -e "   ${RED}✗${NC} ${CYAN}Portainer:${NC}     ${YELLOW}nicht installiert${NC}"
+        echo -e "   ${RED}✗${NC} ${CYAN}Dockge:${NC}         ${YELLOW}nicht installiert${NC}"
     fi
     
     # DDEV
@@ -683,18 +683,18 @@ check_updates() {
         fi
     fi
     
-    # Portainer Update prüfen (Docker Hub API)
-    if command -v docker &> /dev/null && docker ps --format "{{.Names}}" 2>/dev/null | grep -q "^portainer$"; then
-        local current_portainer=$(get_portainer_version)
-        if [ "$current_portainer" != "not installed" ] && [ "$current_portainer" != "latest" ] && [ "$current_portainer" != "running" ]; then
-            local latest_portainer=""
+    # Dockge Update prüfen (Docker Hub API)
+    if command -v docker &> /dev/null && docker ps --format "{{.Names}}" 2>/dev/null | grep -q "^dockge$"; then
+        local current_dockge=$(get_dockge_version)
+        if [ "$current_dockge" != "not installed" ] && [ "$current_dockge" != "latest" ] && [ "$current_dockge" != "running" ]; then
+            local latest_dockge=""
             if command -v curl &> /dev/null; then
-                latest_portainer=$(curl -s "https://hub.docker.com/v2/repositories/portainer/portainer-ce/tags?page_size=1&ordering=-last_updated" 2>/dev/null | grep -oP '"name":\s*"\K[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "")
+                latest_dockge=$(curl -s "https://hub.docker.com/v2/repositories/louislam/dockge/tags?page_size=1&ordering=-last_updated" 2>/dev/null | grep -oP '"name":\s*"\K[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "")
             fi
             
-            if [ -n "$latest_portainer" ] && [ "$current_portainer" != "$latest_portainer" ]; then
-                echo -e "   ${YELLOW}⚠ Portainer:${NC} ${current_portainer} → ${latest_portainer} verfügbar"
-                echo -e "      ${BLUE}docker pull portainer/portainer-ce:latest${NC}"
+            if [ -n "$latest_dockge" ] && [ "$current_dockge" != "$latest_dockge" ]; then
+                echo -e "   ${YELLOW}⚠ Dockge:${NC} ${current_dockge} → ${latest_dockge} verfügbar"
+                echo -e "      ${BLUE}docker pull louislam/dockge:latest${NC}"
                 updates_found=$((updates_found + 1))
             fi
         fi
