@@ -125,11 +125,6 @@ class GuestReactionAction extends ReactionAction
                 'objectType' => $reactionData['objectType'],
                 'reactionTypeID' => $reactionData['reactionTypeID'],
                 'reputationCount' => $combinedReactionData['cumulativeLikes'],
-                '_debug' => [
-                    'source' => 'user_reaction_with_guests',
-                    'reactions_count' => count($reactionsNumbers),
-                    'reactions' => $reactionsNumbers,
-                ],
             ];
         }
         
@@ -191,12 +186,6 @@ class GuestReactionAction extends ReactionAction
         // Get reaction data including guest reactions
         $reactionData = $this->getReactionDataWithGuests($objectType, $objectID);
 
-        // #region agent log - Debug info for browser (no file logging, only in response)
-        $debugInfo = [
-            'reactions_structure_before' => is_array($reactionData['cachedReactions']) ? array_keys($reactionData['cachedReactions']) : 'not_array',
-            'reactions_sample_before' => !empty($reactionData['cachedReactions']) ? array_slice($reactionData['cachedReactions'], 0, 1, true) : 'empty',
-        ];
-        // #endregion
 
         // ReactionAction.react() returns $reactionData['cachedReactions'] from ReactionHandler.react(),
         // which is [reactionTypeID => count] (numbers only). The JavaScript/Frontend expects numbers
@@ -212,21 +201,12 @@ class GuestReactionAction extends ReactionAction
             }
         }
 
-        // #region agent log - Debug info for browser
-        $debugInfo['reactions_numbers'] = $reactionsNumbers;
-        $debugInfo['reactions_count'] = count($reactionsNumbers);
-        $debugInfo['reactions_type'] = gettype($reactionsNumbers);
-        $debugInfo['reactions_is_array'] = is_array($reactionsNumbers);
-        // #endregion
-
         $returnData = [
             'reactions' => $reactionsNumbers,
             'objectID' => $objectID,
             'objectType' => $objectType,
             'reactionTypeID' => $reactionTypeID,
             'reputationCount' => $reactionData['cumulativeLikes'],
-            // Debug info - visible in browser AJAX response
-            '_debug' => $debugInfo,
         ];
 
         return $returnData;
@@ -288,9 +268,6 @@ class GuestReactionAction extends ReactionAction
             $cumulativeLikes += $count;
         }
 
-        // #region agent log - Debug info only in response, no file logging
-        // Debug info is included in _debug field of AJAX response (visible in browser)
-        // #endregion
 
         return [
             'cachedReactions' => $cachedReactions,
