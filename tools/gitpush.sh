@@ -110,8 +110,8 @@ print_header "Git Push - Multi-Plugin"
 if [ "$PLUGIN_COUNT" -gt 0 ]; then
     print_list "Gefundene Plugins (${PLUGIN_COUNT})"
     for plugin_dir in "${PLUGIN_DIRS[@]}"; do
-        local version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-        local name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+        version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
+        name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
         print_list_item "•" "${name} ${YELLOW}(v${version})${NC}"
     done
     echo ""
@@ -192,14 +192,14 @@ if [ "$TARGET" = "auto" ]; then
     
     # Prüfe Änderungen in jedem Plugin
     for plugin_dir in "${PLUGIN_DIRS[@]}"; do
-        local changed=$(git diff --name-only HEAD -- "$MAIN_DIR/$plugin_dir" 2>/dev/null | wc -l)
+        changed=$(git diff --name-only HEAD -- "$MAIN_DIR/$plugin_dir" 2>/dev/null | wc -l)
         if [ "$changed" -gt 0 ]; then
             CHANGED_PLUGINS+=("$plugin_dir")
         fi
     done
     
     # Prüfe Root-Änderungen (außer Plugin-Verzeichnissen)
-    local root_pattern=""
+    root_pattern=""
     for plugin_dir in "${PLUGIN_DIRS[@]}"; do
         root_pattern="${root_pattern}${root_pattern:+|}${plugin_dir}"
     done
@@ -225,7 +225,7 @@ if [ "$TARGET" = "auto" ]; then
 
     print_list "Erkannte Änderungen"
     for plugin_dir in "${CHANGED_PLUGINS[@]}"; do
-        local name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+        name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
         print_list_item "•" "${name}"
     done
     [ "$CHANGED_ROOT" -gt 0 ] && print_list_item "•" "Root-Dateien (Skripte, README etc.)"
@@ -243,7 +243,7 @@ case "$TARGET" in
         # Prüfe ob TARGET ein gültiges Plugin-Verzeichnis ist
         if [[ " ${PLUGIN_DIRS[@]} " =~ " ${TARGET} " ]]; then
             TO_PUSH_PLUGINS=("$TARGET")
-            local name=$(get_plugin_name "$MAIN_DIR/$TARGET")
+            name=$(get_plugin_name "$MAIN_DIR/$TARGET")
             TO_PUSH="$name"
         elif [ -z "$COMMIT_MESSAGE" ]; then
             # Wenn TARGET eine Commit-Message ist (kein bekannter Parameter)
@@ -283,8 +283,8 @@ echo ""
 if [ -z "$COMMIT_MESSAGE" ]; then
     PLUGIN_VERSIONS=""
     for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-        local version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-        local name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+        version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
+        name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
         PLUGIN_VERSIONS="${PLUGIN_VERSIONS}${name} v${version}, "
     done
     PLUGIN_VERSIONS="${PLUGIN_VERSIONS%, }"  # Entferne letztes Komma
@@ -388,8 +388,8 @@ else
     # Create annotated tag
     PLUGIN_INFO=""
     for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-        local version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-        local name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+        version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
+        name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
         PLUGIN_INFO="${PLUGIN_INFO}${name} v${version}, "
     done
     PLUGIN_INFO="${PLUGIN_INFO%, }"
@@ -430,16 +430,16 @@ if command -v gh &> /dev/null; then
         if [ -z "$RELEASE_NOTES" ] || [ -z "$(echo "$RELEASE_NOTES" | tr -d '[:space:]')" ]; then
             RELEASE_NOTES="Version ${VERSION} - ${DATE}"$'\n\n'
             for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-                local version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-                local name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+                version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
+                name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
                 RELEASE_NOTES="${RELEASE_NOTES}**${name}:** v${version}"$'\n'
             done
         fi
     else
         RELEASE_NOTES="Version ${VERSION} - ${DATE}"$'\n\n'
         for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-            local version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-            local name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+            version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
+            name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
             RELEASE_NOTES="${RELEASE_NOTES}**${name}:** v${version}"$'\n'
         done
     fi
@@ -473,8 +473,8 @@ print_section "Git Push & Release abgeschlossen" "Hauptmenü" "Git"
 print_success "Git Push & Release abgeschlossen!"
 print_info "Version: ${VERSION}"
 for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-    local version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-    local name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+    version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
+    name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
     print_info "${name}: v${version}"
 done
 print_info "Tag: ${TAG_NAME}"
