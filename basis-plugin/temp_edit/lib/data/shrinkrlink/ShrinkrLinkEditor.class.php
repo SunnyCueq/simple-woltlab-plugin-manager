@@ -24,4 +24,20 @@ class ShrinkrLinkEditor extends DatabaseObjectEditor
      * @inheritDoc
      */
     protected static $baseClass = ShrinkrLink::class;
+
+    /**
+     * @inheritDoc
+     */
+    public static function create(array $parameters = [])
+    {
+        return parent::create($parameters);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function update(array $parameters = [])
+    {
+        parent::update($parameters);
+    }
 }

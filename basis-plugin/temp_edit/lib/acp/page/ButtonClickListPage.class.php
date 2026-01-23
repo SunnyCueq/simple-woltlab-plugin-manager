@@ -70,6 +70,11 @@ class ButtonClickListPage extends MultipleLinkPage
     public $dateTo;
 
     /**
+     * Time granularity for time series (day or hour)
+     */
+    public $timeGranularity = 'day';
+
+    /**
      * Statistics data
      */
     public array $statistics = [];
@@ -107,6 +112,11 @@ class ButtonClickListPage extends MultipleLinkPage
                 // Set to end of day (23:59:59)
                 $this->dateTo = $timestamp + 86399;
             }
+        }
+
+        // Read time granularity parameter
+        if (isset($_REQUEST['timeGranularity']) && in_array($_REQUEST['timeGranularity'], ['day', 'hour'])) {
+            $this->timeGranularity = $_REQUEST['timeGranularity'];
         }
     }
 
@@ -190,6 +200,7 @@ class ButtonClickListPage extends MultipleLinkPage
             'buttonType' => $this->buttonType ?? '',
             'dateFrom' => $this->dateFrom ? date('Y-m-d', $this->dateFrom) : '',
             'dateTo' => $this->dateTo ? date('Y-m-d', $this->dateTo) : '',
+            'timeGranularity' => $this->timeGranularity,
             'urlHashes' => $urlHashes,
             'statistics' => $this->statistics,
             'sortField' => $this->sortField,
@@ -215,6 +226,7 @@ class ButtonClickListPage extends MultipleLinkPage
             $parameters[] = $this->buttonType;
         }
 
+        // If no date filter is set, use default range of last 30 days for better statistics
         if ($this->dateFrom) {
             $conditions[] = 'clickTime >= ?';
             $parameters[] = $this->dateFrom;
@@ -317,6 +329,12 @@ class ButtonClickListPage extends MultipleLinkPage
 
         // Combined statistics (Button-Klicks + Besuche)
         $this->calculateCombinedStatistics();
+
+        // Extended analytics statistics (country, device, browser, os)
+        $this->calculateExtendedAnalyticsStatistics($conditions, $parameters);
+
+        // Time series data for charts
+        $this->calculateTimeSeriesData($conditions, $parameters);
     }
 
     /**
@@ -500,6 +518,243 @@ class ButtonClickListPage extends MultipleLinkPage
             'yesterday' => ($this->statistics['yesterday'] ?? 0) + ($this->statistics['visits']['yesterday'] ?? 0),
             'last7' => ($this->statistics['last7'] ?? 0) + ($this->statistics['visits']['last7'] ?? 0),
         ];
+    }
+
+    /**
+     * Calculates extended analytics statistics (country, device, browser, os).
+     *
+     * @param array $conditions Base conditions for filtering
+     * @param array $parameters Base parameters for filtering
+     * @return void
+     */
+    private function calculateExtendedAnalyticsStatistics(array $conditions, array $parameters): void
+    {
+        // Build WHERE clause for visits
+        $visitConditions = [];
+        $visitParameters = [];
+
+        if ($this->linkID) {
+            $visitConditions[] = 'linkID = ?';
+            $visitParameters[] = $this->linkID;
+        }
+
+        if ($this->dateFrom) {
+            $visitConditions[] = 'visitTime >= ?';
+            $visitParameters[] = $this->dateFrom;
+        }
+
+        if ($this->dateTo) {
+            $visitConditions[] = 'visitTime <= ?';
+            $visitParameters[] = $this->dateTo;
+        }
+
+        // Country statistics
+        $countryWhereClause = '';
+        if (!empty($visitConditions)) {
+            $countryWhereClause = 'WHERE ' . implode(' AND ', $visitConditions) . ' AND country IS NOT NULL AND country != \'\'';
+        } else {
+            $countryWhereClause = 'WHERE country IS NOT NULL AND country != \'\'';
+        }
+        $sql = "SELECT country, COUNT(*) as count 
+                FROM shrinkr1_visit 
+                {$countryWhereClause}
+                GROUP BY country
+                ORDER BY count DESC
+                LIMIT 20";
+        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement->execute($visitParameters);
+        $this->statistics['analytics']['countries'] = [];
+        while ($row = $statement->fetchArray()) {
+            $this->statistics['analytics']['countries'][$row['country']] = $row['count'];
+        }
+
+        // Device type statistics
+        $deviceWhereClause = '';
+        if (!empty($visitConditions)) {
+            $deviceWhereClause = 'WHERE ' . implode(' AND ', $visitConditions) . ' AND deviceType IS NOT NULL AND deviceType != \'\'';
+        } else {
+            $deviceWhereClause = 'WHERE deviceType IS NOT NULL AND deviceType != \'\'';
+        }
+        $sql = "SELECT deviceType, COUNT(*) as count 
+                FROM shrinkr1_visit 
+                {$deviceWhereClause}
+                GROUP BY deviceType
+                ORDER BY count DESC";
+        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement->execute($visitParameters);
+        $this->statistics['analytics']['devices'] = [];
+        while ($row = $statement->fetchArray()) {
+            $this->statistics['analytics']['devices'][] = [
+                'label' => ucfirst($row['deviceType']),
+                'value' => (int) $row['count']
+            ];
+        }
+
+        // Browser statistics
+        $browserWhereClause = '';
+        if (!empty($visitConditions)) {
+            $browserWhereClause = 'WHERE ' . implode(' AND ', $visitConditions) . ' AND browser IS NOT NULL AND browser != \'\'';
+        } else {
+            $browserWhereClause = 'WHERE browser IS NOT NULL AND browser != \'\'';
+        }
+        $sql = "SELECT browser, COUNT(*) as count 
+                FROM shrinkr1_visit 
+                {$browserWhereClause}
+                GROUP BY browser
+                ORDER BY count DESC
+                LIMIT 15";
+        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement->execute($visitParameters);
+        $this->statistics['analytics']['browsers'] = [];
+        while ($row = $statement->fetchArray()) {
+            $this->statistics['analytics']['browsers'][] = [
+                'label' => $row['browser'],
+                'value' => (int) $row['count']
+            ];
+        }
+
+        // OS statistics
+        $osWhereClause = '';
+        if (!empty($visitConditions)) {
+            $osWhereClause = 'WHERE ' . implode(' AND ', $visitConditions) . ' AND os IS NOT NULL AND os != \'\'';
+        } else {
+            $osWhereClause = 'WHERE os IS NOT NULL AND os != \'\'';
+        }
+        $sql = "SELECT os, COUNT(*) as count 
+                FROM shrinkr1_visit 
+                {$osWhereClause}
+                GROUP BY os
+                ORDER BY count DESC
+                LIMIT 15";
+        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement->execute($visitParameters);
+        $this->statistics['analytics']['os'] = [];
+        while ($row = $statement->fetchArray()) {
+            $this->statistics['analytics']['os'][$row['os']] = $row['count'];
+        }
+    }
+
+    /**
+     * Calculates time series data for charts (daily visits/clicks over time).
+     *
+     * @param array $conditions Base conditions for filtering
+     * @param array $parameters Base parameters for filtering
+     * @return void
+     */
+    private function calculateTimeSeriesData(array $conditions, array $parameters): void
+    {
+        // Default to last 30 days if no date range specified
+        $fromTimestamp = $this->dateFrom ?: (TIME_NOW - (30 * 86400));
+        $toTimestamp = $this->dateTo ?: TIME_NOW;
+
+        // Build WHERE clause for visits
+        $visitConditions = [];
+        $visitParameters = [];
+
+        if ($this->linkID) {
+            $visitConditions[] = 'linkID = ?';
+            $visitParameters[] = $this->linkID;
+        }
+
+        $visitConditions[] = 'visitTime >= ?';
+        $visitParameters[] = $fromTimestamp;
+        $visitConditions[] = 'visitTime <= ?';
+        $visitParameters[] = $toTimestamp;
+
+        $whereClause = 'WHERE ' . implode(' AND ', $visitConditions);
+
+        // Visits grouped by day or hour
+        if ($this->timeGranularity === 'hour') {
+            $sql = "SELECT DATE(FROM_UNIXTIME(visitTime)) as date, HOUR(FROM_UNIXTIME(visitTime)) as hour, COUNT(*) as count 
+                    FROM shrinkr1_visit 
+                    {$whereClause}
+                    GROUP BY DATE(FROM_UNIXTIME(visitTime)), HOUR(FROM_UNIXTIME(visitTime))
+                    ORDER BY date ASC, hour ASC";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute($visitParameters);
+            $this->statistics['timeSeries']['visits'] = [];
+            while ($row = $statement->fetchArray()) {
+                $timestamp = strtotime($row['date'] . ' ' . str_pad($row['hour'], 2, '0', STR_PAD_LEFT) . ':00:00') * 1000; // JavaScript timestamp (milliseconds)
+                $this->statistics['timeSeries']['visits'][] = [
+                    'timestamp' => $timestamp,
+                    'value' => (int) $row['count']
+                ];
+            }
+        } else {
+            // Daily visits (grouped by day)
+            $sql = "SELECT DATE(FROM_UNIXTIME(visitTime)) as date, COUNT(*) as count 
+                    FROM shrinkr1_visit 
+                    {$whereClause}
+                    GROUP BY DATE(FROM_UNIXTIME(visitTime))
+                    ORDER BY date ASC";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute($visitParameters);
+            $this->statistics['timeSeries']['visits'] = [];
+            while ($row = $statement->fetchArray()) {
+                $timestamp = strtotime($row['date'] . ' 00:00:00') * 1000; // JavaScript timestamp (milliseconds)
+                $this->statistics['timeSeries']['visits'][] = [
+                    'timestamp' => $timestamp,
+                    'value' => (int) $row['count']
+                ];
+            }
+        }
+
+        // Daily button clicks (grouped by day)
+        $clickConditions = [];
+        $clickParameters = [];
+
+        if ($this->linkID) {
+            $clickConditions[] = 'linkID = ?';
+            $clickParameters[] = $this->linkID;
+        }
+
+        if ($this->buttonType) {
+            $clickConditions[] = 'buttonType = ?';
+            $clickParameters[] = $this->buttonType;
+        }
+
+        $clickConditions[] = 'clickTime >= ?';
+        $clickParameters[] = $fromTimestamp;
+        $clickConditions[] = 'clickTime <= ?';
+        $clickParameters[] = $toTimestamp;
+
+        $clickWhereClause = 'WHERE ' . implode(' AND ', $clickConditions);
+
+        // Button clicks grouped by day or hour
+        if ($this->timeGranularity === 'hour') {
+            $sql = "SELECT DATE(FROM_UNIXTIME(clickTime)) as date, HOUR(FROM_UNIXTIME(clickTime)) as hour, COUNT(*) as count 
+                    FROM shrinkr1_button_click 
+                    {$clickWhereClause}
+                    GROUP BY DATE(FROM_UNIXTIME(clickTime)), HOUR(FROM_UNIXTIME(clickTime))
+                    ORDER BY date ASC, hour ASC";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute($clickParameters);
+            $this->statistics['timeSeries']['clicks'] = [];
+            while ($row = $statement->fetchArray()) {
+                $timestamp = strtotime($row['date'] . ' ' . str_pad($row['hour'], 2, '0', STR_PAD_LEFT) . ':00:00') * 1000; // JavaScript timestamp (milliseconds)
+                $this->statistics['timeSeries']['clicks'][] = [
+                    'timestamp' => $timestamp,
+                    'value' => (int) $row['count']
+                ];
+            }
+        } else {
+            // Daily button clicks (grouped by day)
+            $sql = "SELECT DATE(FROM_UNIXTIME(clickTime)) as date, COUNT(*) as count 
+                    FROM shrinkr1_button_click 
+                    {$clickWhereClause}
+                    GROUP BY DATE(FROM_UNIXTIME(clickTime))
+                    ORDER BY date ASC";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute($clickParameters);
+            $this->statistics['timeSeries']['clicks'] = [];
+            while ($row = $statement->fetchArray()) {
+                $timestamp = strtotime($row['date'] . ' 00:00:00') * 1000; // JavaScript timestamp (milliseconds)
+                $this->statistics['timeSeries']['clicks'][] = [
+                    'timestamp' => $timestamp,
+                    'value' => (int) $row['count']
+                ];
+            }
+        }
     }
 }
 

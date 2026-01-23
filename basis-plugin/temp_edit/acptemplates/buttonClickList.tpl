@@ -17,6 +17,90 @@
 
 {include file='formError'}
 
+{* Filter Form *}
+<form method="get" action="{link controller='ButtonClickList' application='shrinkr'}{/link}">
+	<section class="section">
+		<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
+		
+		<div class="row rowColGap formGrid">
+			<dl class="col-xs-12 col-md-4">
+				<dt><label for="linkID">{lang}wcf.shrinkr.url{/lang}</label></dt>
+				<dd>
+					<input type="number" id="linkID" name="linkID" value="{if $linkID}{$linkID}{/if}" placeholder="{lang}wcf.global.objectID{/lang}" class="long">
+				</dd>
+			</dl>
+			
+			<dl class="col-xs-12 col-md-4">
+				<dt><label for="buttonType">{lang}wcf.shrinkr.buttonClick.buttonType{/lang}</label></dt>
+				<dd>
+					<select id="buttonType" name="buttonType" class="long">
+						<option value="">{lang}wcf.global.all{/lang}</option>
+						<option value="forward"{if $buttonType == 'forward'} selected{/if}>{lang}wcf.shrinkr.buttonClick.type.forward{/lang}</option>
+						<option value="featured_link"{if $buttonType == 'featured_link'} selected{/if}>{lang}wcf.shrinkr.buttonClick.type.featured_link{/lang}</option>
+						<option value="custom"{if $buttonType == 'custom'} selected{/if}>{lang}wcf.shrinkr.buttonClick.type.custom{/lang}</option>
+					</select>
+				</dd>
+			</dl>
+			
+			<dl class="col-xs-12 col-md-4">
+				<dt><label for="dateFrom">{lang}wcf.date.period.start{/lang}</label></dt>
+				<dd>
+					<input type="date" id="dateFrom" name="dateFrom" value="{if $dateFrom}{$dateFrom}{/if}" class="long">
+				</dd>
+			</dl>
+			
+			<dl class="col-xs-12 col-md-4">
+				<dt><label for="dateTo">{lang}wcf.date.period.end{/lang}</label></dt>
+				<dd>
+					<input type="date" id="dateTo" name="dateTo" value="{if $dateTo}{$dateTo}{/if}" class="long">
+				</dd>
+			</dl>
+			
+			{event name='filterFields'}
+		</div>
+		
+		<div class="formSubmit">
+			<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s">
+			{if $linkID || $buttonType || $dateFrom || $dateTo}
+				<a href="{link controller='ButtonClickList' application='shrinkr'}{/link}" class="button">{lang}wcf.global.button.reset{/lang}</a>
+			{/if}
+		</div>
+	</section>
+</form>
+
+{* Statistics Overview Cards *}
+{if $statistics|isset}
+	<div class="section">
+		<h2 class="sectionTitle">{lang}wcf.shrinkr.buttonClick.statistics.overview{/lang}</h2>
+		<div class="statisticsOverviewGrid">
+			<dl class="dataList plain statisticsCard">
+				<dt>{lang}wcf.shrinkr.buttonClick.statistics.total{/lang}</dt>
+				<dd>
+					<span class="number">{if $statistics.total|isset}{#$statistics.total}{else}0{/if}</span>
+				</dd>
+			</dl>
+			<dl class="dataList plain statisticsCard">
+				<dt>{lang}wcf.shrinkr.buttonClick.statistics.today{/lang}</dt>
+				<dd>
+					<span class="number">{if $statistics.today|isset}{#$statistics.today}{else}0{/if}</span>
+				</dd>
+			</dl>
+			<dl class="dataList plain statisticsCard">
+				<dt>{lang}wcf.shrinkr.buttonClick.statistics.yesterday{/lang}</dt>
+				<dd>
+					<span class="number">{if $statistics.yesterday|isset}{#$statistics.yesterday}{else}0{/if}</span>
+				</dd>
+			</dl>
+			<dl class="dataList plain statisticsCard">
+				<dt>{lang}wcf.shrinkr.buttonClick.statistics.last7{/lang}</dt>
+				<dd>
+					<span class="number">{if $statistics.last7|isset}{#$statistics.last7}{else}0{/if}</span>
+				</dd>
+			</dl>
+		</div>
+	</div>
+{/if}
+
 {* Statistics Section with Tab Menu *}
 {if $statistics|isset && $statistics|count}
 	<div class="section tabMenuContainer">
@@ -25,19 +109,14 @@
 		<nav class="tabMenu">
 			<ul>
 				<li><a href="#statisticsPeriod">{lang}wcf.shrinkr.buttonClick.statistics.period{/lang}</a></li>
+				<li><a href="#statisticsTimeSeries">{lang}wcf.shrinkr.statistics.timeSeries{/lang}</a></li>
 				<li><a href="#statisticsButtonType">{lang}wcf.shrinkr.buttonClick.buttonType{/lang}</a></li>
-				{if $statistics.visits|isset}
-					<li><a href="#statisticsVisits">{lang}wcf.shrinkr.statistics.visits{/lang}</a></li>
-				{/if}
-				{if $statistics.referrers|isset && ($statistics.referrers.top|isset || $statistics.referrers.topDomains|isset)}
-					<li><a href="#statisticsReferrers">{lang}wcf.shrinkr.statistics.referrer{/lang}</a></li>
-				{/if}
-				{if $statistics.combined|isset}
-					<li><a href="#statisticsCombined">{lang}wcf.shrinkr.statistics.combined{/lang}</a></li>
-				{/if}
-				{if $statistics.topUrls|isset && $statistics.topUrls|count}
-					<li><a href="#statisticsTopUrls">{lang}wcf.shrinkr.buttonClick.statistics.topUrls{/lang}</a></li>
-				{/if}
+				<li><a href="#statisticsAnalytics">{lang}wcf.shrinkr.statistics.analytics{/lang}</a></li>
+				<li><a href="#statisticsCountries">{lang}wcf.shrinkr.statistics.countries{/lang}</a></li>
+				<li><a href="#statisticsVisits">{lang}wcf.shrinkr.statistics.visits{/lang}</a></li>
+				<li><a href="#statisticsReferrers">{lang}wcf.shrinkr.statistics.referrer{/lang}</a></li>
+				<li><a href="#statisticsCombined">{lang}wcf.shrinkr.statistics.combined{/lang}</a></li>
+				<li><a href="#statisticsTopUrls">{lang}wcf.shrinkr.buttonClick.statistics.topUrls{/lang}</a></li>
 				{event name='statisticsTabs'}
 			</ul>
 		</nav>
@@ -75,6 +154,49 @@
 			</div>
 		</div>
 		
+		<div id="statisticsTimeSeries" class="tabMenuContent">
+			{if $statistics.timeSeries|isset && ($statistics.timeSeries.visits|isset || $statistics.timeSeries.clicks|isset)}
+				<div class="section">
+					<div class="statisticsHeaderContainer">
+						<h3 class="sectionTitle">{lang}wcf.shrinkr.statistics.timeSeries{/lang}</h3>
+						<div class="statisticsDropdownContainer">
+							<label for="timeGranularitySelect">{lang}wcf.shrinkr.statistics.timeGranularity{/lang}:</label>
+							<select id="timeGranularitySelect" class="select" onchange="window.location.href = window.location.pathname + window.location.search.replace(/[&?]timeGranularity=[^&]*/, '') + (window.location.search ? '&' : '?') + 'timeGranularity=' + this.value">
+								<option value="day"{if $timeGranularity == 'day'} selected{/if}>{lang}wcf.shrinkr.statistics.timeGranularity.day{/lang}</option>
+								<option value="hour"{if $timeGranularity == 'hour'} selected{/if}>{lang}wcf.shrinkr.statistics.timeGranularity.hour{/lang}</option>
+							</select>
+						</div>
+					</div>
+					<div id="timeSeriesChart" class="statisticsChartContainer"></div>
+					<script data-relocate="true">
+						// Configure require.js path for D3.js (Woltlab pattern)
+						require.config({
+							paths: {
+								"d3": "shrinkr/js/3rdParty/d3/d3"
+							}
+						});
+						console.log('DEBUG D3: require.js config applied, paths:', require.config().paths);
+						require(["Shrinkr/Acp/Ui/Statistics/TimeSeriesChart"], (TimeSeriesChart) => {
+							var visitsData = {if $statistics.timeSeries.visits|isset}{@$statistics.timeSeries.visits|json}{else}[]{/if};
+							var clicksData = {if $statistics.timeSeries.clicks|isset}{@$statistics.timeSeries.clicks|json}{else}[]{/if};
+							var timeGranularity = '{if $timeGranularity|isset}{$timeGranularity}{else}day{/if}';
+							
+							TimeSeriesChart.init({
+								elementId: "timeSeriesChart",
+								visitsData: visitsData,
+								clicksData: clicksData,
+								timeGranularity: timeGranularity
+							});
+						});
+					</script>
+				</div>
+			{else}
+				<div class="section">
+					<p class="info">{lang}wcf.shrinkr.statistics.noData.timeSeries{/lang}</p>
+				</div>
+			{/if}
+		</div>
+		
 		<div id="statisticsButtonType" class="tabMenuContent">
 			<div class="section">
 				<div class="tabularBox">
@@ -104,8 +226,169 @@
 			</div>
 		</div>
 		
-		{if $statistics.visits|isset}
-			<div id="statisticsVisits" class="tabMenuContent">
+		<div id="statisticsAnalytics" class="tabMenuContent">
+			<div class="section">
+				{if $statistics.analytics.devices|isset && $statistics.analytics.devices|count}
+					<div class="tabularBox">
+						<h3 class="sectionTitle">{lang}wcf.shrinkr.statistics.devices{/lang}</h3>
+						<div class="statisticsFlexContainer">
+							<div>
+								<div id="deviceChart" class="statisticsChartContainerSmall"></div>
+							</div>
+							<div>
+								<table class="table">
+									<thead>
+										<tr>
+											<th class="columnTitle">{lang}wcf.shrinkr.statistics.device{/lang}</th>
+											<th class="columnDigits">{lang}wcf.shrinkr.statistics.visits{/lang}</th>
+										</tr>
+									</thead>
+									<tbody>
+										{foreach from=$statistics.analytics.devices item=deviceData}
+											<tr>
+												<td class="columnTitle">{$deviceData.label}</td>
+												<td class="columnDigits">{#$deviceData.value}</td>
+											</tr>
+										{/foreach}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<script data-relocate="true">
+							require(["Shrinkr/Acp/Ui/Statistics/PieChart"], (PieChart) => {
+								var deviceData = {if $statistics.analytics.devices|isset}{@$statistics.analytics.devices|json}{else}[]{/if};
+								
+								PieChart.init({
+									elementId: "deviceChart",
+									data: deviceData
+								});
+							});
+						</script>
+					</div>
+				{/if}
+				
+				{if $statistics.analytics.browsers|isset && $statistics.analytics.browsers|count}
+					<div class="tabularBox {if $statistics.analytics.devices|isset && $statistics.analytics.devices|count}marginTop{/if}">
+						<h3 class="sectionTitle">{lang}wcf.shrinkr.statistics.browsers{/lang}</h3>
+						<div class="statisticsFlexContainer">
+							<div>
+								<div id="browserChart" class="statisticsChartContainerSmall"></div>
+							</div>
+							<div>
+								<table class="table">
+									<thead>
+										<tr>
+											<th class="columnTitle">{lang}wcf.shrinkr.statistics.browser{/lang}</th>
+											<th class="columnDigits">{lang}wcf.shrinkr.statistics.visits{/lang}</th>
+										</tr>
+									</thead>
+									<tbody>
+										{foreach from=$statistics.analytics.browsers item=browserData}
+											<tr>
+												<td class="columnTitle">{$browserData.label}</td>
+												<td class="columnDigits">{#$browserData.value}</td>
+											</tr>
+										{/foreach}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<script data-relocate="true">
+							require(["Shrinkr/Acp/Ui/Statistics/PieChart"], (PieChart) => {
+								var browserData = {if $statistics.analytics.browsers|isset}{@$statistics.analytics.browsers|json}{else}[]{/if};
+								
+								PieChart.init({
+									elementId: "browserChart",
+									data: browserData
+								});
+							});
+						</script>
+					</div>
+				{/if}
+				
+				{if $statistics.analytics.os|isset && $statistics.analytics.os|count}
+					<div class="tabularBox {if ($statistics.analytics.devices|isset && $statistics.analytics.devices|count) || ($statistics.analytics.browsers|isset && $statistics.analytics.browsers|count)}marginTop{/if}">
+						<h3 class="sectionTitle">{lang}wcf.shrinkr.statistics.operatingSystems{/lang}</h3>
+						<div class="tabularBox">
+							<table class="table">
+								<thead>
+									<tr>
+										<th class="columnTitle">{lang}wcf.shrinkr.statistics.os{/lang}</th>
+										<th class="columnDigits">{lang}wcf.shrinkr.statistics.visits{/lang}</th>
+									</tr>
+								</thead>
+								<tbody>
+									{foreach from=$statistics.analytics.os item=count key=os}
+										<tr>
+											<td class="columnTitle">{$os}</td>
+											<td class="columnDigits">{#$count}</td>
+										</tr>
+									{/foreach}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				{/if}
+				
+				{if !($statistics.analytics.devices|isset && $statistics.analytics.devices|count) && !($statistics.analytics.browsers|isset && $statistics.analytics.browsers|count) && !($statistics.analytics.os|isset && $statistics.analytics.os|count)}
+					<p class="info">{lang}wcf.shrinkr.statistics.noData.analytics{/lang}</p>
+				{/if}
+			</div>
+		</div>
+		
+		<div id="statisticsCountries" class="tabMenuContent">
+			{if $statistics.analytics|isset && $statistics.analytics.countries|isset && $statistics.analytics.countries|count}
+				<div class="section">
+					<h3 class="sectionTitle">{lang}wcf.shrinkr.statistics.countries{/lang}</h3>
+					<div class="statisticsFlexContainer">
+						<div class="statisticsFlexContainerLarge">
+							<div id="countryMap" class="statisticsMapContainer"></div>
+							<script data-relocate="true">
+								require(["Shrinkr/Acp/Ui/Statistics/CountryMap"], (CountryMap) => {
+									var countryData = {
+										{foreach from=$statistics.analytics.countries item=count key=country name=countryLoop}
+											'{$country|strtolower}': {#$count}{if !$countryLoop@last},{/if}
+										{/foreach}
+									};
+									
+									CountryMap.init({
+										elementId: "countryMap",
+										countryData: countryData
+									});
+								});
+							</script>
+						</div>
+						<div>
+							<div class="tabularBox">
+								<table class="table">
+									<thead>
+										<tr>
+											<th class="columnTitle">{lang}wcf.shrinkr.statistics.country{/lang}</th>
+											<th class="columnDigits">{lang}wcf.shrinkr.statistics.visits{/lang}</th>
+										</tr>
+									</thead>
+									<tbody>
+										{foreach from=$statistics.analytics.countries item=count key=country}
+											<tr>
+												<td class="columnTitle">{$country}</td>
+												<td class="columnDigits">{#$count}</td>
+											</tr>
+										{/foreach}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			{else}
+				<div class="section">
+					<p class="info">{lang}wcf.shrinkr.statistics.noData.countries{/lang}</p>
+				</div>
+			{/if}
+		</div>
+		
+		<div id="statisticsVisits" class="tabMenuContent">
+			{if $statistics.visits|isset}
 				<div class="section">
 					<div class="tabularBox">
 						<table class="table">
@@ -136,7 +419,7 @@
 						</table>
 					</div>
 					{if $statistics.visits.topUrls|isset && $statistics.visits.topUrls|count}
-						<div class="tabularBox" style="margin-top: 1.5rem;">
+						<div class="tabularBox statisticsTableContainer">
 							<table class="table">
 								<thead>
 									<tr>
@@ -217,11 +500,15 @@
 						</div>
 					{/if}
 				</div>
-			</div>
-		{/if}
+			{else}
+				<div class="section">
+					<p class="info">{lang}wcf.shrinkr.statistics.noData.referrers{/lang}</p>
+				</div>
+			{/if}
+		</div>
 		
-		{if $statistics.combined|isset}
-			<div id="statisticsCombined" class="tabMenuContent">
+		<div id="statisticsCombined" class="tabMenuContent">
+			{if $statistics.combined|isset}
 				<div class="section">
 					<div class="tabularBox">
 						<table class="table">
@@ -255,8 +542,8 @@
 			</div>
 		{/if}
 		
-		{if $statistics.topUrls|isset && $statistics.topUrls|count}
-			<div id="statisticsTopUrls" class="tabMenuContent">
+		<div id="statisticsTopUrls" class="tabMenuContent">
+			{if $statistics.topUrls|isset && $statistics.topUrls|count}
 				<div class="section">
 					<div class="tabularBox">
 						<table class="table">
@@ -283,8 +570,12 @@
 						</table>
 					</div>
 				</div>
-			</div>
-		{/if}
+			{else}
+				<div class="section">
+					<p class="info">{lang}wcf.shrinkr.statistics.noData.referrers{/lang}</p>
+				</div>
+			{/if}
+		</div>
 		
 		{event name='statisticsContents'}
 		</div>

@@ -6,7 +6,6 @@ use shrinkr\data\special\SpecialList;
 use shrinkr\data\shrinkrlink\ShrinkrLinkList;
 use shrinkr\util\ShrinkrFeaturedLinksUtil;
 use wcf\page\SortablePage;
-use wcf\system\reaction\ReactionHandler;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
 
@@ -364,94 +363,7 @@ class ShrinkrLinkListPage extends SortablePage
             $buttonClicksArray = [];
         }
 
-        // Step 7: Load reaction data for all URLs
-        $reactionData = [];
-        if (MODULE_LIKE && isset($this->objectList) && !empty($this->objectList)) {
-            $reactionUrlIDs = [];
-            foreach ($this->objectList as $object) {
-                // ShrinkrLink objects have linkID property directly
-                if (isset($object->linkID) && $object->linkID) {
-                    $reactionUrlIDs[] = $object->linkID;
-                }
-            }
-            
-            if (!empty($reactionUrlIDs)) {
-                $objectType = ReactionHandler::getInstance()->getObjectType('de.sunnyc.wsc.shrinkr.likeableUrl');
-                if ($objectType !== null) {
-                    ReactionHandler::getInstance()->loadLikeObjects($objectType, $reactionUrlIDs);
-                    foreach ($reactionUrlIDs as $linkID) {
-                        $likeObject = ReactionHandler::getInstance()->getLikeObject($objectType, $linkID);
-                        
-                        // Lade Reaktionen inkl. Gast-Reaktionen
-                        $guestReactionAction = new \shrinkr\data\reaction\GuestReactionAction([], 'react');
-                        $reactionDataWithGuests = $guestReactionAction->getReactionDataWithGuests('de.sunnyc.wsc.shrinkr.likeableUrl', $linkID);
-                        
-                        // Erstelle Reaktions-Array mit Objekten
-                        $reactions = [];
-                        foreach ($reactionDataWithGuests['cachedReactions'] as $reactionTypeID => $count) {
-                            $reactionType = \wcf\data\reaction\type\ReactionTypeCache::getInstance()->getReactionTypeByID($reactionTypeID);
-                            if ($reactionType !== null) {
-                                $reactions[$reactionTypeID] = [
-                                    'reactionCount' => $count,
-                                    'renderedReactionIcon' => $reactionType->renderIcon(),
-                                    'renderedReactionIconEncoded' => \wcf\util\JSON::encode($reactionType->renderIcon()),
-                                    'reactionTitle' => $reactionType->getTitle(),
-                                ];
-                            }
-                        }
-                        
-                        $reactionTypeID = ($likeObject !== null && isset($likeObject->reactionTypeID)) ? $likeObject->reactionTypeID : 0;
-                        
-                        $wrapper = new class($reactions, $reactionDataWithGuests['cumulativeLikes'], $reactionTypeID) {
-                            private $reactions;
-                            private $cumulativeLikes;
-                            private $reactionTypeID;
-                            
-                            public function __construct($reactions, $cumulativeLikes, $reactionTypeID) {
-                                $this->reactions = $reactions;
-                                $this->cumulativeLikes = $cumulativeLikes;
-                                $this->reactionTypeID = $reactionTypeID;
-                            }
-                            
-                            public function getReactions() {
-                                return $this->reactions;
-                            }
-                            
-                            public function getReactionsJson(): string {
-                                $data = [];
-                                foreach ($this->reactions as $reactionTypeID => $value) {
-                                    $data[] = [
-                                        $reactionTypeID, $value['reactionCount'],
-                                    ];
-                                }
-                                return \wcf\util\JSON::encode($data);
-                            }
-                            
-                            public function __get($name) {
-                                if ($name === 'reactionTypeID') {
-                                    return $this->reactionTypeID;
-                                }
-                                if ($name === 'cumulativeLikes') {
-                                    return $this->cumulativeLikes;
-                                }
-                                return null;
-                            }
-                        };
-                        
-                        $reactionData[$linkID] = $wrapper;
-                    }
-                }
-            }
-        }
-
-        // Assign REACTION_TYPES JavaScript variable
-        $reactionTypesJS = '';
-        if (MODULE_LIKE) {
-            $reactionHandler = \wcf\system\reaction\ReactionHandler::getInstance();
-            $reactionTypesJS = $reactionHandler->getReactionsJSVariable();
-        }
-
-        // Step 8: Sort objects if needed (featuredLinks or special)
+        // Step 7: Sort objects if needed (featuredLinks or special)
         $sortedObjects = null;
         if (isset($this->sortFieldCustom) && in_array($this->sortFieldCustom, ['featuredLinks', 'special'])) {
             $sortField = $this->sortFieldCustom;
@@ -489,15 +401,12 @@ class ShrinkrLinkListPage extends SortablePage
             $sortedObjects = $objects;
         }
         
-        //assign template variables
+        // Assign template variables
         WCF::getTPL()->assign([
             'q' => $this->q,
             'qTitle' => $this->qTitle,
             'linksArray' => $linksArray,
             'buttonClicksArray' => $buttonClicksArray,
-            'reactionData' => $reactionData,
-            'reactionObjectType' => 'de.sunnyc.wsc.shrinkr.likeableUrl',
-            'reactionTypesJS' => $reactionTypesJS,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.link.list',
         ]);
         

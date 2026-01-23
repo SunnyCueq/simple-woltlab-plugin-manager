@@ -1,6 +1,3 @@
-/**
- * @module Shrinkr/Ui/AutumnLeaves
- */
 define(["require", "exports", "tslib", "Shrinkr/3rdParty/three.min", "WoltLabSuite/Core/Environment"], function (require, exports, tslib_1, THREE, Environment) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -14,8 +11,8 @@ define(["require", "exports", "tslib", "Shrinkr/3rdParty/three.min", "WoltLabSui
     class ScAutumnLeaves {
         options;
         engines = [];
-        containers;
-        isActive;
+        containers = [];
+        isActive = false;
         /**
          * Initializes the leaves effect.
          *
@@ -561,7 +558,8 @@ define(["require", "exports", "tslib", "Shrinkr/3rdParty/three.min", "WoltLabSui
                 const intersects = this.rayCaster.intersectObject(this.instancedMesh);
                 if (intersects.length > 0) {
                     const intersect = intersects[0];
-                    this.touchParticleIndex = intersect.instanceId !== undefined ? intersect.instanceId : null;
+                    this.touchParticleIndex =
+                        intersect.instanceId !== undefined ? intersect.instanceId : null;
                     if (this.touchParticleIndex !== null) {
                         event.preventDefault();
                     }

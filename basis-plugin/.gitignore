@@ -23,3 +23,11 @@ Thumbs.db
 *.tmp
 *.bak
 *~
+
+# TypeScript build artifacts
+temp_edit/files/js/
+temp_edit/node_modules/
+
+# TypeScript compiled files (only source files should be committed)
+files/js/
+node_modules/

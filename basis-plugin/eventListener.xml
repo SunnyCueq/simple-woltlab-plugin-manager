@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/eventListener.xsd">
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/eventListener.xsd">
 	<import>
 		<eventlistener name="shrinkrLinkAdd">
 			<eventclassname>shrinkr\acp\form\ShrinkrLinkAddForm</eventclassname>
@@ -45,8 +45,14 @@
 		</eventlistener>
 		<eventlistener name="reactionActionGuestReaction">
 			<eventclassname>wcf\data\reaction\ReactionAction</eventclassname>
-			<eventname>validateAction,finalizeAction</eventname>
+			<eventname>initializeAction,validateAction,finalizeAction</eventname>
 			<listenerclassname>shrinkr\system\event\listener\ReactionActionGuestReactionListener</listenerclassname>
+		</eventlistener>
+		<eventlistener name="shrinkrLinkListPageReaction">
+			<eventclassname>shrinkr\acp\page\ShrinkrLinkListPage</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>shrinkr\system\event\listener\ShrinkrLinkListPageReactionListener</listenerclassname>
+			<environment>admin</environment>
 		</eventlistener>
 		<eventlistener name="optionActionDemoData">
 			<eventclassname>wcf\data\option\OptionAction</eventclassname>

@@ -13,6 +13,7 @@ use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\TabFormContainer;
 use wcf\system\form\builder\container\TabMenuFormContainer;
 use wcf\system\form\builder\field\TextFormField;
+use wcf\system\form\builder\field\UploadFormField;
 use wcf\system\form\builder\field\UrlFormField;
 use wcf\system\WCF;
 
@@ -42,6 +43,11 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
      * @inheritDoc
      */
     public $objectActionClass = ShrinkrLinkAction::class;
+
+    /**
+     * @inheritDoc
+     */
+    public $formAction = 'create';
 
     /**
      * Maximum length for URL title field (VARCHAR)
@@ -82,6 +88,11 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
                     ->description('wcf.shrinkr.url.hash.description')
                     ->maximumLength(64)
                     ->value($this->getDefaultHash()),
+
+                UploadFormField::create('ogImage')
+                    ->label('wcf.shrinkr.url.ogImage')
+                    ->description('wcf.shrinkr.url.ogImage.description')
+                    ->imageOnly(true),
             ]);
 
         $basicTab->appendChild($basicContainer);
@@ -101,6 +112,16 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
     protected function getDefaultHash(): string
     {
         return ShrinkrUtil::generateHash();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function save()
+    {
+        // Note: ogImage upload is handled automatically by UploadFormField
+
+        parent::save();
     }
 
     /**
@@ -134,6 +155,12 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
             $urlCustomButtons = $customButtonList->getObjects();
         }
 
+        // Set shortUrl for success message (after create/update)
+        $shortUrl = '';
+        if (isset($this->formObject) && $this->formObject->linkID) {
+            $shortUrl = $this->formObject->getShortedUrl();
+        }
+
         WCF::getTPL()->assign([
             'urlCustomButtons' => $urlCustomButtons,
             'removeUrlsPrefix' => $removeUrlsPrefix,
@@ -141,6 +168,7 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
             'htaccessRuleExists' => $htaccessRuleExists,
             'detectedWebserver' => $detectedWebserver,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.link.list',
+            'shortUrl' => $shortUrl,
         ]);
     }
 

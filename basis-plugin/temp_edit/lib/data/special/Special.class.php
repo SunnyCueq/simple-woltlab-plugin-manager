@@ -22,7 +22,7 @@ use shrinkr\system\favicon\FaviconHandler;
  * @property-read string $theme              Theme identifier (halloween, blackweek, etc.)
  * @property-read string $title              Display title for the overview (not shown on redirect page)
  * @property-read string $discount            Discount text (e.g. "30%") - shown on redirect page
- * @property-read int    $discountID         ID of the associated discount (optional, not used)
+ * @property-read int    $discountID         ID of the associated discount (optional, reserved for future use)
  * @property-read string $codes              Discount codes (comma-separated)
  * @property-read string $primaryColor       Primary background color (RGBA)
  * @property-read string $secondaryColor     Secondary background color (RGBA)

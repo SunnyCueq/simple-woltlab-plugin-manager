@@ -7,15 +7,11 @@
 			<listenerclassname>shrinkr\system\event\listener\OptionFormDemoDataListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
-		<eventlistener name="userActionGuestReactionSync">
-			<eventclassname>wcf\data\user\UserAction</eventclassname>
-			<eventname>finalizeAction</eventname>
-			<listenerclassname>shrinkr\system\event\listener\UserActionGuestReactionSyncListener</listenerclassname>
-		</eventlistener>
-		<eventlistener name="reactionActionGuestReaction">
-			<eventclassname>wcf\data\reaction\ReactionAction</eventclassname>
-			<eventname>validateAction,finalizeAction</eventname>
-			<listenerclassname>shrinkr\system\event\listener\ReactionActionGuestReactionListener</listenerclassname>
+		<eventlistener name="shrinkrLinkListPageReaction">
+			<eventclassname>shrinkr\acp\page\ShrinkrLinkListPage</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>shrinkr\system\event\listener\ShrinkrLinkListPageReactionListener</listenerclassname>
+			<environment>admin</environment>
 		</eventlistener>
 	</import>
 </data>

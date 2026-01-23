@@ -63,6 +63,8 @@
 		<item name="wcf.acp.option.shrinkr_enable_share_button.description"><![CDATA[Zeigt den Teilen-Button auf der Weiterleitungsseite an.]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_descriptions"><![CDATA[Beschreibungen aktivieren]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_descriptions.description"><![CDATA[Aktiviert die Anzeige von Beschreibungen auf der Weiterleitungsseite. Diese Einstellung überschreibt die individuelle Aktivierung/Deaktivierung einzelner Beschreibungen.]]></item>
+		<item name="wcf.acp.option.shrinkr_password_session_storage"><![CDATA[Passwort in Session speichern]]></item>
+		<item name="wcf.acp.option.shrinkr_password_session_storage.description"><![CDATA[Wenn aktiviert, müssen Benutzer das Passwort für geschützte Links nur einmal pro Session eingeben. Nach erfolgreicher Eingabe wird der Zugriff für die aktuelle Browsersitzung gespeichert.]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button"><![CDATA[3D-Button-Stil aktivieren]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button.label"><![CDATA[Weiterleitungs-Button überschreiben]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button.description"><![CDATA[Der Button passt sich automatisch an die Farben des Promo-Badges an.]]></item>
@@ -78,7 +80,6 @@
 	<category name="wcf.acp.group">
 		<item name="wcf.acp.group.option.category.user.shrinkr"><![CDATA[Shr1nkr]]></item>
 		<item name="wcf.acp.group.option.category.mod.shrinkr"><![CDATA[Shr1nkr]]></item>
-		<item name="wcf.acp.group.option.category.admin.shrinkr"><![CDATA[Shr1nkr]]></item>
 		<item name="wcf.acp.group.option.category.admin.shrinkr"><![CDATA[Shr1nkr-Verwaltung]]></item>
 		<item name="wcf.acp.group.option.admin.shrinkr.canManageLinks"><![CDATA[Kann Links verwalten]]></item>
 		<item name="wcf.acp.group.option.admin.shrinkr.canManageDiscounts"><![CDATA[Kann Rabatte verwalten]]></item>
@@ -111,6 +112,7 @@
 		<item name="shrinkr.acp.menu.link.special.list"><![CDATA[Specials]]></item>
 		<item name="shrinkr.acp.menu.link.special.add"><![CDATA[Special hinzufügen]]></item>
 		<item name="shrinkr.acp.menu.link.special.edit"><![CDATA[Special bearbeiten]]></item>
+		<item name="shrinkr.acp.menu.link.link.password"><![CDATA[Passwort-geschützte Links]]></item>
 		<item name="shrinkr.acp.menu.link.theme.list"><![CDATA[Themes]]></item>
 		<item name="shrinkr.acp.menu.link.theme.add"><![CDATA[Theme hinzufügen]]></item>
 		<item name="shrinkr.acp.menu.link.theme.edit"><![CDATA[Theme bearbeiten]]></item>
@@ -150,9 +152,6 @@
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.description"><![CDATA[Sie haben die Option aktiviert, das /shrinkr/ Prefix aus URLs zu entfernen. Damit Links wie <strong>https://example.com/r/abc123</strong> funktionieren, müssen Rewrite-Regeln in Ihrer Webserver-Konfiguration eingetragen werden.]]></item>
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate"><![CDATA[Rewrite-Regeln anzeigen]]></item>
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate.description"><![CDATA[Klicken Sie auf den Button, um die passenden Rewrite-Regeln für Ihren Webserver anzuzeigen.]]></item>
-	</category>
-
-	<category name="shrinkr.acp.url">
 		<item name="shrinkr.acp.url.list"><![CDATA[Kurz-URLs verwalten]]></item>
 		<item name="shrinkr.acp.url.add"><![CDATA[URL kürzen]]></item>
 		<item name="shrinkr.acp.url.edit"><![CDATA[Kurz-URL bearbeiten]]></item>
@@ -160,9 +159,9 @@
 		<item name="shrinkr.acp.url.success.theShortUrlIs"><![CDATA[Die gekürzte URL lautet:]]></item>
 		<item name="shrinkr.acp.url.hash.error.tooLong"><![CDATA[Der Hash darf nicht länger als 64 Zeichen sein.]]></item>
 		<item name="shrinkr.acp.url.hash.error.alreadyExists"><![CDATA[Der Hash wird schon verwendet.]]></item>
-		<item name="shrinkr.acp.url.hash.error.notMatchesPattern"><![CDATA[Der Hash darf nur bestimmte Zeichen enthalten, die vom Administratoren festgelegt wurden.]]></item>
+		<item name="shrinkr.acp.url.hash.error.notMatchesPattern"><![CDATA[Der Hash darf nur bestimmte Zeichen enthalten, die vom Administrator festgelegt wurden.]]></item>
 		<item name="shrinkr.acp.url.url.error.tooLong"><![CDATA[Die Ziel-URL darf nicht länger als 255 Zeichen sein.]]></item>
-		<item name="shrinkr.acp.url.url.error.noUrl"><![CDATA[Die angegebende URL ist ungültig.]]></item>
+		<item name="shrinkr.acp.url.url.error.noUrl"><![CDATA[Die angegebene URL ist ungültig.]]></item>
 		<item name="shrinkr.acp.url.url.error.httpsRequired"><![CDATA[Die URL muss HTTPS (https://) verwenden.]]></item>
 		<item name="shrinkr.acp.url.url.error.isOnBlacklist"><![CDATA[Die angegebene URL steht auf der Blacklist.]]></item>
 		<item name="shrinkr.acp.url.url.error.forwardingChain"><![CDATA[Weiterleitungsketten sind nicht erlaubt.]]></item>
@@ -441,6 +440,7 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.buttonClick.filter.dateFrom"><![CDATA[Von]]></item>
 		<item name="wcf.shrinkr.buttonClick.filter.dateTo"><![CDATA[Bis]]></item>
 		<item name="wcf.shrinkr.buttonClick.statistics"><![CDATA[Statistiken]]></item>
+		<item name="wcf.shrinkr.buttonClick.statistics.overview"><![CDATA[Übersicht]]></item>
 		<item name="wcf.shrinkr.buttonClick.statistics.total"><![CDATA[Gesamt]]></item>
 		<item name="wcf.shrinkr.buttonClick.statistics.today"><![CDATA[Heute]]></item>
 		<item name="wcf.shrinkr.buttonClick.statistics.yesterday"><![CDATA[Gestern]]></item>
@@ -460,6 +460,60 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.statistics.referrer.topDomains"><![CDATA[Top Domains]]></item>
 		<item name="wcf.shrinkr.statistics.combined"><![CDATA[Kombiniert]]></item>
 		<item name="wcf.shrinkr.statistics.combined.total"><![CDATA[Gesamt (Button-Klicks + Besuche)]]></item>
+		<item name="wcf.shrinkr.statistics.timeSeries"><![CDATA[Zeitverlauf]]></item>
+		<item name="wcf.shrinkr.statistics.analytics"><![CDATA[Analytics]]></item>
+		<item name="wcf.shrinkr.statistics.devices"><![CDATA[Geräte]]></item>
+		<item name="wcf.shrinkr.statistics.device"><![CDATA[Gerät]]></item>
+		<item name="wcf.shrinkr.statistics.browsers"><![CDATA[Browser]]></item>
+		<item name="wcf.shrinkr.statistics.browser"><![CDATA[Browser]]></item>
+		<item name="wcf.shrinkr.statistics.operatingSystems"><![CDATA[Betriebssysteme]]></item>
+		<item name="wcf.shrinkr.statistics.os"><![CDATA[Betriebssystem]]></item>
+		<item name="wcf.shrinkr.statistics.countries"><![CDATA[Länder]]></item>
+		<item name="wcf.shrinkr.statistics.country"><![CDATA[Land]]></item>
+		<item name="wcf.shrinkr.statistics.timeGranularity"><![CDATA[Zeitgranularität]]></item>
+		<item name="wcf.shrinkr.statistics.timeGranularity.day"><![CDATA[Tag]]></item>
+		<item name="wcf.shrinkr.statistics.timeGranularity.hour"><![CDATA[Stunde]]></item>
+		<item name="wcf.shrinkr.statistics.noData.timeSeries"><![CDATA[Für diesen Zeitraum gibt es keine Zeitreihen-Daten.]]></item>
+		<item name="wcf.shrinkr.statistics.noData.devices"><![CDATA[Es gibt noch keine Geräte-Daten.]]></item>
+		<item name="wcf.shrinkr.statistics.noData.browsers"><![CDATA[Es gibt noch keine Browser-Daten.]]></item>
+		<item name="wcf.shrinkr.statistics.noData.os"><![CDATA[Es gibt noch keine Betriebssystem-Daten.]]></item>
+		<item name="wcf.shrinkr.statistics.noData.analytics"><![CDATA[Es gibt noch keine Analytics-Daten.]]></item>
+		<item name="wcf.shrinkr.statistics.noData.countries"><![CDATA[Es gibt noch keine Länder-Daten.]]></item>
+		<item name="wcf.shrinkr.statistics.noData.referrers"><![CDATA[Es gibt noch keine Referrer-Daten.]]></item>
+	</category>
+
+	<category name="wcf.shrinkr.url">
+		<item name="wcf.shrinkr.url.ogImage"><![CDATA[Open Graph Bild]]></item>
+		<item name="wcf.shrinkr.url.ogImage.description"><![CDATA[Bild, das beim Teilen des Links in Social Media (Facebook, X, etc.) angezeigt wird. Empfohlen: Mindestens 1200x630 Pixel.]]></item>
+		<item name="wcf.shrinkr.url.password"><![CDATA[Passwort]]></item>
+		<item name="wcf.shrinkr.url.password.description"><![CDATA[Optional: Schützt den Link mit einem Passwort. Benutzer müssen das Passwort eingeben, bevor sie auf die Ziel-URL weitergeleitet werden.]]></item>
+		<item name="wcf.shrinkr.url.passwordProtected"><![CDATA[Passwort-geschützt]]></item>
+	</category>
+
+	<category name="wcf.shrinkr.password">
+		<item name="wcf.shrinkr.password.dialog.title"><![CDATA[Passwort erforderlich]]></item>
+		<item name="wcf.shrinkr.password.label"><![CDATA[Passwort]]></item>
+		<item name="wcf.shrinkr.password.description"><![CDATA[Bitte geben Sie das Passwort ein, um auf den Link zuzugreifen.]]></item>
+		<item name="wcf.shrinkr.password.error.empty"><![CDATA[Bitte geben Sie ein Passwort ein.]]></item>
+		<item name="wcf.shrinkr.password.error.wrong"><![CDATA[Das eingegebene Passwort ist falsch.]]></item>
+		<item name="wcf.shrinkr.password.error.invalidLink"><![CDATA[Ungültiger Link.]]></item>
+		<item name="wcf.shrinkr.password.error.notRequired"><![CDATA[Für diesen Link ist kein Passwort erforderlich.]]></item>
+		<item name="wcf.shrinkr.password.success"><![CDATA[Passwort korrekt. Sie werden weitergeleitet...]]></item>
+	</category>
+
+	<category name="shrinkr.redirect.password">
+		<item name="shrinkr.redirect.password.title"><![CDATA[Passwort erforderlich]]></item>
+		<item name="shrinkr.redirect.password.label"><![CDATA[Passwort]]></item>
+		<item name="shrinkr.redirect.password.description"><![CDATA[Bitte geben Sie das Passwort ein, um auf den Link zuzugreifen.]]></item>
+		<item name="shrinkr.redirect.password.error.empty"><![CDATA[Bitte geben Sie ein Passwort ein.]]></item>
+		<item name="shrinkr.redirect.password.error.invalid"><![CDATA[Das eingegebene Passwort ist ungültig.]]></item>
+		<item name="shrinkr.redirect.password.error.general"><![CDATA[Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.]]></item>
+	</category>
+
+	<category name="wcf.shrinkr.geolite2">
+		<item name="wcf.shrinkr.geolite2.database_provider.default"><![CDATA[Standard (Standard)]]></item>
+		<item name="wcf.shrinkr.geolite2.database_provider.maxmind"><![CDATA[MaxMind (Eigener Account)]]></item>
+		<item name="wcf.shrinkr.geolite2.database_provider.local"><![CDATA[Lokale Datenbank]]></item>
 	</category>
 
 </language>

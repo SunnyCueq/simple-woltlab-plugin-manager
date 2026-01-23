@@ -113,7 +113,7 @@ class SpecialEditForm extends SpecialAddForm
         parent::assignVariables();
 
         // HtmlUpcastProcessor für WYSIWYG-Feld (WoltLab 6.1 Best Practice)
-        // Wird bereits in parent::assignVariables() (SpecialAddForm) behandelt, aber sicherheitshalber hier auch
+        // Already handled in parent::assignVariables() (SpecialAddForm), but also here for safety
         if (isset($this->formObject) && $this->formObject->specialID) {
             $upcastProcessor = new \wcf\system\html\upcast\HtmlUpcastProcessor();
             $upcastProcessor->process(

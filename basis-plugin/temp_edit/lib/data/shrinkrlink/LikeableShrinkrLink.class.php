@@ -1,37 +1,36 @@
 <?php
 
-/**
- * Likeable object implementation for Shr1nkr links.
- *
- * @author      Sunny C
- * @copyright   2026 Sunny C
- * @license     License for Commercial Plugins
- * @link        https://sunnyc.de
- *
- * @package     de.sunnyc.wsc.shrinkr
- */
-
 namespace shrinkr\data\shrinkrlink;
 
-use wcf\data\like\Like;
-use wcf\data\like\object\AbstractLikeObject;
-use wcf\data\reaction\object\IReactionObject;
-use wcf\system\user\notification\object\LikeUserNotificationObject;
-use wcf\system\user\notification\UserNotificationHandler;
-use wcf\system\WCF;
+use wcf\data\DatabaseObjectDecorator;
+use wcf\data\like\object\ILikeObject;
+use wcf\data\object\type\ObjectType;
 
 /**
  * Likeable object implementation for ShrinkrLink.
  *
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
+ *
+ * @package    de.sunnyc.wsc.shrinkr
+ * @subpackage data.shrinkrlink
+ *
  * @method  ShrinkrLink getDecoratedObject()
  * @mixin   ShrinkrLink
  */
-class LikeableShrinkrLink extends AbstractLikeObject implements IReactionObject
+class LikeableShrinkrLink extends DatabaseObjectDecorator implements ILikeObject
 {
     /**
      * @inheritDoc
      */
     protected static $baseClass = ShrinkrLink::class;
+
+    /**
+     * object type
+     * @var ObjectType
+     */
+    protected $objectType;
 
     /**
      * @inheritDoc
@@ -44,7 +43,7 @@ class LikeableShrinkrLink extends AbstractLikeObject implements IReactionObject
     /**
      * @inheritDoc
      */
-    public function getURL(): string
+    public function getURL()
     {
         return $this->getDecoratedObject()->getShortedUrl();
     }
@@ -52,15 +51,16 @@ class LikeableShrinkrLink extends AbstractLikeObject implements IReactionObject
     /**
      * @inheritDoc
      */
-    public function getUserID(): ?int
+    public function getUserID()
     {
-        return $this->userID ?? null;
+        // ShrinkrLink objects don't have a userID
+        return null;
     }
 
     /**
      * @inheritDoc
      */
-    public function getObjectID(): int
+    public function getObjectID()
     {
         return $this->linkID;
     }
@@ -68,34 +68,40 @@ class LikeableShrinkrLink extends AbstractLikeObject implements IReactionObject
     /**
      * @inheritDoc
      */
-    public function updateLikeCounter($cumulativeLikes): void
+    public function updateLikeCounter($cumulativeLikes)
     {
-        // Optional: Store cumulativeLikes in database if needed
+        // ShrinkrLink doesn't store cumulative likes, so we don't need to update anything
     }
 
     /**
      * @inheritDoc
      */
-    public function getLanguageID(): ?int
+    public function getObjectType()
+    {
+        return $this->objectType;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setObjectType(ObjectType $objectType)
+    {
+        $this->objectType = $objectType;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function sendNotification(\wcf\data\like\Like $like)
+    {
+        // ShrinkrLink objects don't have owners, so no notifications needed
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getLanguageID()
     {
         return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function sendNotification(Like $like): void
-    {
-        $userID = $this->getUserID();
-        if ($userID && $userID != WCF::getUser()->userID) {
-            $notificationObject = new LikeUserNotificationObject($like);
-            UserNotificationHandler::getInstance()->fireEvent(
-                'like',
-                'de.sunnyc.wsc.shrinkr.likeableShrinkrLink.notification',
-                $notificationObject,
-                [$userID],
-                ['objectID' => $this->getObjectID()]
-            );
-        }
     }
 }

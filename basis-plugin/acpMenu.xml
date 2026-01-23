@@ -19,7 +19,7 @@
 			<options>shrinkr_active</options>
 			<permissions>admin.shrinkr.canManageLinks</permissions>
 			<icon>plus</icon>
-			<showorder>1</showorder>
+			<showorder>3</showorder>
 		</acpmenuitem>
 
 		<acpmenuitem name="shrinkr.acp.menu.link.discount.list">
@@ -56,10 +56,21 @@
 
 		<acpmenuitem name="shrinkr.acp.menu.link.special.list">
 			<controller>shrinkr\acp\page\SpecialListPage</controller>
-			<parent>shrinkr.acp.menu.link.menu</parent>
+			<parent>shrinkr.acp.menu.link.link.list</parent>
 			<options>shrinkr_active</options>
 			<permissions>admin.shrinkr.canManageSpecials</permissions>
-			<showorder>6</showorder>
+			<icon>fire</icon>
+			<showorder>1</showorder>
+		</acpmenuitem>
+
+		<acpmenuitem name="shrinkr.acp.menu.link.link.password">
+			<controller>shrinkr\acp\page\ShrinkrLinkListPage</controller>
+			<link>passwordProtected=1</link>
+			<parent>shrinkr.acp.menu.link.link.list</parent>
+			<options>shrinkr_active</options>
+			<permissions>admin.shrinkr.canManageLinks</permissions>
+			<icon>key</icon>
+			<showorder>2</showorder>
 		</acpmenuitem>
 
 		<acpmenuitem name="shrinkr.acp.menu.link.theme.list">

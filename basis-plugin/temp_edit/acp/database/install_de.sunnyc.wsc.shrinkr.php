@@ -18,6 +18,7 @@ use wcf\system\database\table\column\ObjectIdDatabaseTableColumn;
 use wcf\system\database\table\column\VarcharDatabaseTableColumn;
 use wcf\system\database\table\column\DefaultFalseBooleanDatabaseTableColumn;
 use wcf\system\database\table\column\IntDatabaseTableColumn;
+use wcf\system\database\table\column\EnumDatabaseTableColumn;
 use wcf\system\database\table\PartialDatabaseTable;
 use wcf\system\database\table\DatabaseTable;
 use wcf\system\database\table\index\DatabaseTablePrimaryIndex;
@@ -40,6 +41,9 @@ return [
                 ->length(255)
                 ->defaultValue(''),
             VarcharDatabaseTableColumn::create('faviconUrl')
+                ->length(255)
+                ->defaultValue(''),
+            VarcharDatabaseTableColumn::create('ogImage')
                 ->length(255)
                 ->defaultValue(''),
             DefaultFalseBooleanDatabaseTableColumn::create('isDemo')
@@ -178,31 +182,6 @@ return [
                 ->columns(['linkID']),
         ]),
 
-    // Guest reaction table
-    DatabaseTable::create('shrinkr1_guest_reaction')
-        ->columns([
-            ObjectIdDatabaseTableColumn::create('guestReactionID'),
-            NotNullVarchar255DatabaseTableColumn::create('sessionID'),
-            NotNullVarchar255DatabaseTableColumn::create('objectType'),
-            IntDatabaseTableColumn::create('objectID')
-                ->length(10)
-                ->notNull(),
-            IntDatabaseTableColumn::create('reactionTypeID')
-                ->length(10)
-                ->notNull(),
-            IntDatabaseTableColumn::create('time')
-                ->length(10)
-                ->notNull(),
-        ])
-        ->indices([
-            DatabaseTablePrimaryIndex::create()
-                ->columns(['guestReactionID']),
-            DatabaseTableIndex::create('sessionID')
-                ->columns(['sessionID']),
-            DatabaseTableIndex::create('objectTypeObjectID')
-                ->columns(['objectType', 'objectID']),
-        ]),
-
     // Theme table
     DatabaseTable::create('shrinkr1_theme')
         ->columns([
@@ -278,6 +257,20 @@ return [
                 ->notNull(),
             VarcharDatabaseTableColumn::create('referrer')
                 ->length(512),
+            VarcharDatabaseTableColumn::create('country')
+                ->length(2),
+            VarcharDatabaseTableColumn::create('city')
+                ->length(100),
+            VarcharDatabaseTableColumn::create('deviceType')
+                ->length(20),
+            VarcharDatabaseTableColumn::create('browser')
+                ->length(50),
+            VarcharDatabaseTableColumn::create('browserVersion')
+                ->length(20),
+            VarcharDatabaseTableColumn::create('os')
+                ->length(50),
+            VarcharDatabaseTableColumn::create('ipAddress')
+                ->length(45),
             IntDatabaseTableColumn::create('userID')
                 ->length(10),
             VarcharDatabaseTableColumn::create('sessionID')
@@ -290,5 +283,38 @@ return [
                 ->columns(['linkID']),
             DatabaseTableIndex::create('visitTime')
                 ->columns(['visitTime']),
+            DatabaseTableIndex::create('country')
+                ->columns(['country']),
+            DatabaseTableIndex::create('deviceType')
+                ->columns(['deviceType']),
+            DatabaseTableIndex::create('browser')
+                ->columns(['browser']),
+            DatabaseTableIndex::create('os')
+                ->columns(['os']),
+        ]),
+
+    // Guest reaction table
+    DatabaseTable::create('shrinkr1_guest_reaction')
+        ->columns([
+            ObjectIdDatabaseTableColumn::create('guestReactionID'),
+            NotNullVarchar255DatabaseTableColumn::create('sessionID'),
+            NotNullVarchar255DatabaseTableColumn::create('objectType'),
+            IntDatabaseTableColumn::create('objectID')
+                ->length(10)
+                ->notNull(),
+            IntDatabaseTableColumn::create('reactionTypeID')
+                ->length(10)
+                ->notNull(),
+            IntDatabaseTableColumn::create('time')
+                ->length(10)
+                ->notNull(),
+        ])
+        ->indices([
+            DatabaseTablePrimaryIndex::create()
+                ->columns(['guestReactionID']),
+            DatabaseTableIndex::create('sessionID')
+                ->columns(['sessionID']),
+            DatabaseTableIndex::create('objectTypeObjectID')
+                ->columns(['objectType', 'objectID']),
         ]),
 ];

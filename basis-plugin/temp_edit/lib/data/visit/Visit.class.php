@@ -18,6 +18,13 @@ use wcf\data\DatabaseObject;
  * @property-read int    $linkID        ID of the associated URL
  * @property-read int    $visitTime    Timestamp of the visit
  * @property-read string|null $referrer Referrer URL (if available)
+ * @property-read string|null $country  ISO 3166-1 alpha-2 country code
+ * @property-read string|null $city    City name
+ * @property-read string|null $deviceType Device type (desktop, mobile, tablet)
+ * @property-read string|null $browser Browser name
+ * @property-read string|null $browserVersion Browser version
+ * @property-read string|null $os     Operating system
+ * @property-read string|null $ipAddress Anonymized IP address
  * @property-read int|null $userID     ID of the user (if logged in)
  * @property-read string|null $sessionID Session ID (for guests)
  */

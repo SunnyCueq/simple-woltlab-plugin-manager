@@ -13,6 +13,10 @@ use wcf\data\DatabaseObjectEditor;
  *
  * @package    de.sunnyc.wsc.shrinkr
  * @subpackage data.guestreaction
+ *
+ * @method static GuestReaction create(array $parameters = [])
+ * @method      GuestReaction getDecoratedObject()
+ * @mixin       GuestReaction
  */
 class GuestReactionEditor extends DatabaseObjectEditor
 {
@@ -21,4 +25,3 @@ class GuestReactionEditor extends DatabaseObjectEditor
      */
     protected static $baseClass = GuestReaction::class;
 }
-

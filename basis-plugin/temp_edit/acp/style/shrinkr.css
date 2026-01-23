@@ -232,3 +232,132 @@
         opacity: 0.8;
     }
 }
+
+
+/* Special Badge Container */
+.specialBadgeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Statistics Page Layout Styles */
+.statisticsHeaderContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.statisticsHeaderContainer .sectionTitle {
+    margin: 0;
+}
+
+.statisticsDropdownContainer {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.statisticsDropdownContainer label {
+    margin-right: 0.5rem;
+}
+
+.statisticsChartContainer {
+    height: 400px;
+    margin-bottom: 1.5rem;
+}
+
+.statisticsFlexContainer {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.statisticsFlexContainer > div {
+    flex: 1;
+    min-width: 300px;
+}
+
+.statisticsFlexContainer > div.statisticsFlexContainerLarge {
+    min-width: 400px;
+}
+
+.statisticsTableContainer {
+    margin-top: 1.5rem;
+}
+
+.statisticsChartContainerSmall {
+    height: 300px;
+}
+
+.statisticsMapContainer {
+    height: 500px;
+    width: 100%;
+}
+
+.countryMapLegend {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Grünes Passwort-Icon - überschreibt die columnIcon-Regel */
+.htmlContent table td.columnIcon .green fa-icon,
+.ck.ck-content.ck-editor__editable table td.columnIcon .green fa-icon,
+.messageBody > .messageText table td.columnIcon .green fa-icon,
+.messageSignature > div table td.columnIcon .green fa-icon,
+.table td.columnIcon .green fa-icon,
+table td.columnIcon span.green fa-icon {
+    color: var(--preset-green) !important;
+}
+
+/* Statistik-Übersichtskarten */
+.statisticsOverviewGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 545px) {
+    .statisticsOverviewGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .statisticsOverviewGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.statisticsCard {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: var(--wcfContentBackground);
+    border: 1px solid var(--wcfContentBorder);
+    border-radius: 4px;
+}
+
+.statisticsCard dt {
+    font-size: 0.875rem;
+    color: var(--wcfContentDimmedText);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.statisticsCard dd {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    color: var(--wcfContentText);
+}
+
+.statisticsCard .number {
+    display: block;
+}

@@ -1,6 +1,3 @@
-/**
- * @module Shrinkr/Ui/Ghosts
- */
 define(["require", "exports", "tslib", "Shrinkr/3rdParty/three.min", "WoltLabSuite/Core/Environment"], function (require, exports, tslib_1, THREE, Environment) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -439,9 +436,6 @@ define(["require", "exports", "tslib", "Shrinkr/3rdParty/three.min", "WoltLabSui
         onParticleAtlasIndexChanged(_data) {
             // Subclasses can hook into atlas updates.
         }
-        isEngineReady() {
-            return true;
-        }
     }
     /**
      * Entry point that wires the Halloween ghost effect into one or more containers.
@@ -451,8 +445,8 @@ define(["require", "exports", "tslib", "Shrinkr/3rdParty/three.min", "WoltLabSui
     class Ghosts {
         options;
         engines = [];
-        containers;
-        isActive;
+        containers = [];
+        isActive = false;
         /**
          * Initializes the ghosts effect and starts loading the sprite atlas.
          *

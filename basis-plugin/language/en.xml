@@ -64,6 +64,8 @@
 		<item name="wcf.acp.option.shrinkr_enable_share_button.description"><![CDATA[Shows the share button on the redirect page.]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_descriptions"><![CDATA[Enable descriptions]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_descriptions.description"><![CDATA[Enables the display of descriptions on the redirect page. This setting overrides the individual activation/deactivation of single descriptions.]]></item>
+		<item name="wcf.acp.option.shrinkr_password_session_storage"><![CDATA[Store password in session]]></item>
+		<item name="wcf.acp.option.shrinkr_password_session_storage.description"><![CDATA[If enabled, users only need to enter the password for protected links once per session. After successful entry, access is stored for the current browser session.]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button"><![CDATA[Enable 3D button style]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button.label"><![CDATA[Override forward button]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button.description"><![CDATA[The button automatically adapts to the promo badge colors.]]></item>
@@ -111,6 +113,7 @@
 		<item name="shrinkr.acp.menu.link.special.list"><![CDATA[Specials]]></item>
 		<item name="shrinkr.acp.menu.link.special.add"><![CDATA[Add Special]]></item>
 		<item name="shrinkr.acp.menu.link.special.edit"><![CDATA[Edit Special]]></item>
+		<item name="shrinkr.acp.menu.link.link.password"><![CDATA[Password Protected Links]]></item>
 		<item name="shrinkr.acp.menu.link.theme.list"><![CDATA[Themes]]></item>
 		<item name="shrinkr.acp.menu.link.theme.add"><![CDATA[Add theme]]></item>
 		<item name="shrinkr.acp.menu.link.theme.edit"><![CDATA[Edit Theme]]></item>
@@ -150,9 +153,6 @@
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.description"><![CDATA[You have enabled the option to remove the /shrinkr/ prefix from URLs. For links like <strong>https://example.com/r/abc123</strong> to work, rewrite rules must be added to your webserver configuration.]]></item>
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate"><![CDATA[Show Rewrite Rules]]></item>
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate.description"><![CDATA[Click the button to display the appropriate rewrite rules for your webserver.]]></item>
-	</category>
-
-	<category name="shrinkr.acp.url">
 		<item name="shrinkr.acp.url.list"><![CDATA[Manage short URLs]]></item>
 		<item name="shrinkr.acp.url.add"><![CDATA[Shorten URL]]></item>
 		<item name="shrinkr.acp.url.edit"><![CDATA[Edit short URL]]></item>
@@ -441,6 +441,7 @@ for /shrinkr/ are also present in your nginx.conf.]]></item>
 		<item name="wcf.shrinkr.buttonClick.filter.dateFrom"><![CDATA[From]]></item>
 		<item name="wcf.shrinkr.buttonClick.filter.dateTo"><![CDATA[To]]></item>
 		<item name="wcf.shrinkr.buttonClick.statistics"><![CDATA[Statistics]]></item>
+		<item name="wcf.shrinkr.buttonClick.statistics.overview"><![CDATA[Overview]]></item>
 		<item name="wcf.shrinkr.buttonClick.statistics.total"><![CDATA[Total]]></item>
 		<item name="wcf.shrinkr.buttonClick.statistics.today"><![CDATA[Today]]></item>
 		<item name="wcf.shrinkr.buttonClick.statistics.yesterday"><![CDATA[Yesterday]]></item>
@@ -460,6 +461,53 @@ for /shrinkr/ are also present in your nginx.conf.]]></item>
 		<item name="wcf.shrinkr.statistics.referrer.topDomains"><![CDATA[Top Domains]]></item>
 		<item name="wcf.shrinkr.statistics.combined"><![CDATA[Combined]]></item>
 		<item name="wcf.shrinkr.statistics.combined.total"><![CDATA[Total (Button Clicks + Visits)]]></item>
+		<item name="wcf.shrinkr.statistics.timeSeries"><![CDATA[Time Series]]></item>
+		<item name="wcf.shrinkr.statistics.analytics"><![CDATA[Analytics]]></item>
+		<item name="wcf.shrinkr.statistics.devices"><![CDATA[Devices]]></item>
+		<item name="wcf.shrinkr.statistics.device"><![CDATA[Device]]></item>
+		<item name="wcf.shrinkr.statistics.browsers"><![CDATA[Browsers]]></item>
+		<item name="wcf.shrinkr.statistics.browser"><![CDATA[Browser]]></item>
+		<item name="wcf.shrinkr.statistics.operatingSystems"><![CDATA[Operating Systems]]></item>
+		<item name="wcf.shrinkr.statistics.os"><![CDATA[Operating System]]></item>
+		<item name="wcf.shrinkr.statistics.countries"><![CDATA[Countries]]></item>
+		<item name="wcf.shrinkr.statistics.country"><![CDATA[Country]]></item>
+		<item name="wcf.shrinkr.statistics.timeGranularity"><![CDATA[Time Granularity]]></item>
+		<item name="wcf.shrinkr.statistics.timeGranularity.day"><![CDATA[Day]]></item>
+		<item name="wcf.shrinkr.statistics.timeGranularity.hour"><![CDATA[Hour]]></item>
+	</category>
+
+	<category name="wcf.shrinkr.url">
+		<item name="wcf.shrinkr.url.ogImage"><![CDATA[Open Graph Image]]></item>
+		<item name="wcf.shrinkr.url.ogImage.description"><![CDATA[Image displayed when sharing the link on social media (Facebook, X, etc.). Recommended: At least 1200x630 pixels.]]></item>
+		<item name="wcf.shrinkr.url.password"><![CDATA[Password]]></item>
+		<item name="wcf.shrinkr.url.password.description"><![CDATA[Optional: Protects the link with a password. Users must enter the password before being redirected to the target URL.]]></item>
+		<item name="wcf.shrinkr.url.passwordProtected"><![CDATA[Password Protected]]></item>
+	</category>
+
+	<category name="wcf.shrinkr.password">
+		<item name="wcf.shrinkr.password.dialog.title"><![CDATA[Password Required]]></item>
+		<item name="wcf.shrinkr.password.label"><![CDATA[Password]]></item>
+		<item name="wcf.shrinkr.password.description"><![CDATA[Please enter the password to access the link.]]></item>
+		<item name="wcf.shrinkr.password.error.empty"><![CDATA[Please enter a password.]]></item>
+		<item name="wcf.shrinkr.password.error.wrong"><![CDATA[The entered password is incorrect.]]></item>
+		<item name="wcf.shrinkr.password.error.invalidLink"><![CDATA[Invalid link.]]></item>
+		<item name="wcf.shrinkr.password.error.notRequired"><![CDATA[No password is required for this link.]]></item>
+		<item name="wcf.shrinkr.password.success"><![CDATA[Password correct. You will be redirected...]]></item>
+	</category>
+
+	<category name="shrinkr.redirect.password">
+		<item name="shrinkr.redirect.password.title"><![CDATA[Password Required]]></item>
+		<item name="shrinkr.redirect.password.label"><![CDATA[Password]]></item>
+		<item name="shrinkr.redirect.password.description"><![CDATA[Please enter the password to access the link.]]></item>
+		<item name="shrinkr.redirect.password.error.empty"><![CDATA[Please enter a password.]]></item>
+		<item name="shrinkr.redirect.password.error.invalid"><![CDATA[The entered password is invalid.]]></item>
+		<item name="shrinkr.redirect.password.error.general"><![CDATA[An error occurred. Please try again.]]></item>
+	</category>
+
+	<category name="wcf.shrinkr.geolite2">
+		<item name="wcf.shrinkr.geolite2.database_provider.default"><![CDATA[Default (Default)]]></item>
+		<item name="wcf.shrinkr.geolite2.database_provider.maxmind"><![CDATA[MaxMind (Own Account)]]></item>
+		<item name="wcf.shrinkr.geolite2.database_provider.local"><![CDATA[Local Database]]></item>
 	</category>
 
 </language>

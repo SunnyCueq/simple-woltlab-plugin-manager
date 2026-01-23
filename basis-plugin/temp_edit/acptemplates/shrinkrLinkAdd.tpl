@@ -91,7 +91,7 @@
         {/if}
     {/if}
 
-    {if $success|isset}
+    {if $success|isset && $shortUrl|isset && $shortUrl}
             <p class="success">{lang}wcf.global.success.{$action}{/lang} {lang}shrinkr.acp.url.success.theShortUrlIs{/lang} <kbd>{$shortUrl}</kbd> <button class="copyUrlButton" data-copy-link="{$shortUrl}" data-tooltip="{lang}wcf.shrinkr.copyUrl{/lang}" aria-label="{lang}wcf.shrinkr.copyUrl{/lang}">{icon name='copy'}</button></p>
                     
             <script data-relocate="true">

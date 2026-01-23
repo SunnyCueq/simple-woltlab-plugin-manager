@@ -12,14 +12,10 @@
  */
 
 use wcf\event\acp\menu\item\ItemCollecting;
-use wcf\event\template\TemplateEngineBeforeDisplay;
 use wcf\system\event\EventHandler;
 use wcf\system\menu\acp\AcpMenuItem;
-use wcf\system\reaction\ReactionHandler;
-use wcf\system\request\RequestHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\style\FontAwesomeIcon;
-use wcf\system\WCF;
 
 return static function (): void {
     EventHandler::getInstance()->register(ItemCollecting::class, static function (ItemCollecting $event) {
@@ -46,18 +42,6 @@ return static function (): void {
                 LinkHandler::getInstance()->getControllerLink(\shrinkr\acp\form\ShrinkrLinkAddForm::class),
                 FontAwesomeIcon::fromString('plus;false')
             ));
-        }
-    });
-
-    // Add REACTION_TYPES to template variables for ACP header
-    EventHandler::getInstance()->register(TemplateEngineBeforeDisplay::class, static function (TemplateEngineBeforeDisplay $event) {
-        if (RequestHandler::getInstance()->isACPRequest() && defined('MODULE_LIKE') && MODULE_LIKE) {
-            $reactionHandler = ReactionHandler::getInstance();
-            $reactionTypesJS = $reactionHandler->getReactionsJSVariable();
-            
-            WCF::getTPL()->assign([
-                'reactionTypesJS' => $reactionTypesJS,
-            ]);
         }
     });
 };

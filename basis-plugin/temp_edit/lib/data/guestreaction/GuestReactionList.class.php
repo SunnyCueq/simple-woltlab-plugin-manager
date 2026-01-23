@@ -21,4 +21,3 @@ class GuestReactionList extends DatabaseObjectList
      */
     public $className = GuestReaction::class;
 }
-

@@ -13,12 +13,18 @@ use shrinkr\data\shrinkrlink\ShrinkrLinkAction;
 use shrinkr\data\shrinkrlink\ShrinkrLinkEditor;
 use shrinkr\data\visit\VisitEditor;
 use shrinkr\system\favicon\FaviconHandler;
+use shrinkr\util\AnalyticsUtil;
+use shrinkr\util\GeoLite2Util;
+use shrinkr\util\UserAgentUtil;
 use wcf\data\option\Option;
 use wcf\page\AbstractPage;
 use wcf\system\exception\IllegalLinkException;
+use wcf\system\MetaTagHandler;
 use wcf\system\reaction\ReactionHandler;
+use wcf\system\request\LinkHandler;
 use wcf\system\request\RequestHandler;
 use wcf\system\WCF;
+use wcf\util\FileUtil;
 use wcf\util\StringUtil;
 
 /**
@@ -141,6 +147,9 @@ class RedirectPage extends AbstractPage
         if ($hash) {
             // Get URL by hash
             $this->link = ShrinkrLink::getLinkByHash($hash);
+        } else {
+            // No hash provided - link will be null, will throw IllegalLinkException in readData()
+            $this->link = null;
         }
     }
 
@@ -152,13 +161,11 @@ class RedirectPage extends AbstractPage
     {
         parent::readData();
 
-        // Check if URL object is valid
-        if (!isset($this->link?->linkID) || !$this->link->linkID) {
-            return;
+        // Track visit only if link exists (before assignVariables, so base plugin counter is not yet increased)
+        // Note: assignVariables() will always be called, even if link doesn't exist (WoltLab pattern)
+        if (isset($this->link?->linkID) && $this->link->linkID) {
+            $this->trackVisit();
         }
-
-        // Track visit (VOR assignVariables, damit Basis-Plugin Counter noch nicht erhöht wurde)
-        $this->trackVisit();
 
         // Extract page title (must be done before getRandomDescription)
         $url = $this->link->url ?? '';
@@ -206,62 +213,38 @@ class RedirectPage extends AbstractPage
     {
         parent::assignVariables();
 
-        // Check if URL exists
-        if ($this->link !== null && $this->link->linkID) {
-            // Increase URL counter
-            ShrinkrLinkAction::increaseCounter($this->link);
+        // Check if URL exists (WoltLab pattern: throw exception here, not in readData())
+        if ($this->link === null || !$this->link->linkID) {
+            throw new IllegalLinkException();
+        }
+        
+        // Link exists - process it
+        // Increase URL counter
+        ShrinkrLinkAction::increaseCounter($this->link);
 
-            // Check for direct forwarding
-            if (!SHRINKR_FORWARDING_MUST_CONFIRMED && SHRINKR_TIME_UNTIL_FORWARDING == 0) {
-                // Redirect
-                \header('Location: ' . $this->link->url, true, 303);
+        // Check for direct forwarding
+        if (!SHRINKR_FORWARDING_MUST_CONFIRMED && SHRINKR_TIME_UNTIL_FORWARDING == 0) {
+            // Redirect
+            \header('Location: ' . $this->link->url, true, 303);
 
-                exit();
-            }
-            
-            $url = $this->link->url ?? '';
+            exit();
+        }
+        
+        $url = $this->link->url ?? '';
 
-            // Load reaction data if MODULE_LIKE is enabled and reactions are enabled via option
-            $reactionData = [];
-            $objectType = null;
-            $reactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableReactions');
-            $enableReactions = $reactionsOption ? $reactionsOption->optionValue : 1;
-            $guestReactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableGuestReactions');
-            $enableGuestReactions = $guestReactionsOption ? $guestReactionsOption->optionValue : 0;
-            
-            if (defined('MODULE_LIKE') && MODULE_LIKE && $enableReactions && $this->link !== null && isset($this->link->linkID) && $this->link->linkID) {
-                $objectType = ReactionHandler::getInstance()->getObjectType('de.sunnyc.wsc.shrinkr.likeableUrl');
-                if ($objectType !== null) {
-                    $likeObject = ReactionHandler::getInstance()->getLikeObject($objectType, $this->link->linkID);
-                    if ($likeObject !== null) {
-                        // Add guest reactions to likeObject if enabled
-                        if ($enableGuestReactions) {
-                            $this->addGuestReactionsToLikeObject($likeObject, $objectType->objectType, $this->link->linkID);
-                        }
-                        $reactionData[$this->link->linkID] = $likeObject;
-                    } elseif ($enableGuestReactions) {
-                        // Create a minimal likeObject if only guest reactions exist
-                        $likeObject = $this->createLikeObjectWithGuestReactions($objectType, $this->link->linkID);
-                        if ($likeObject !== null) {
-                            $reactionData[$this->link->linkID] = $likeObject;
-                        }
-                    }
-                }
-            }
+            // Get option values for templates (read once, no redundancy)
+            // Woltlab Option-Werte sind Strings "1" oder "0", nicht booleans
+            $descriptionsOption = Option::getOptionByName('shrinkr_enable_descriptions');
+            $enableDescriptions = $descriptionsOption ? ($descriptionsOption->optionValue == '1' || $descriptionsOption->optionValue == 1) : true;
 
-            // Get option values for templates
-            $reactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableReactions');
-            $enableReactions = $reactionsOption ? $reactionsOption->optionValue : 1;
-            $guestReactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableGuestReactions');
-            $enableGuestReactions = $guestReactionsOption ? $guestReactionsOption->optionValue : 0;
-            $descriptionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableDescriptions');
-            $enableDescriptions = $descriptionsOption ? $descriptionsOption->optionValue : 1;
+            $shareButtonOption = Option::getOptionByName('shrinkr_enable_share_button');
+            $enableShareButton = $shareButtonOption ? ($shareButtonOption->optionValue == '1' || $shareButtonOption->optionValue == 1) : true;
 
-            // If special is active, use special data for discount display
-            $displayDiscount = $this->discount;
-            $specialCountdownSeconds = null;
+        // If special is active, use special data for discount display
+        $displayDiscount = $this->discount;
+        $specialCountdownSeconds = null;
 
-            if ($this->special && $this->special->isCurrentlyActive()) {
+        if ($this->special && $this->special->isCurrentlyActive()) {
                 // Create a pseudo-discount object from special data
                 // Use discount field (e.g. "30%") for display, not title (title is only for overview)
                 $rawDiscountValue = $this->special->discount ?: $this->special->title;
@@ -417,37 +400,6 @@ class RedirectPage extends AbstractPage
             $shareUrl = $this->link->getShortedUrl(false);
             $shareUrl = \rtrim($shareUrl, '/') . '/';
 
-            // Get current guest reaction (if any)
-            $guestReactionTypeID = 0;
-            if ($enableGuestReactions && !WCF::getUser()->userID && $this->link !== null && isset($this->link->linkID)) {
-                $sessionID = WCF::getSession()->sessionID;
-                $sql = "SELECT  reactionTypeID
-                        FROM    shrinkr" . WCF_N . "_guest_reaction
-                        WHERE   sessionID = ?
-                            AND objectType = ?
-                            AND objectID = ?";
-                $statement = WCF::getDB()->prepareStatement($sql);
-                $statement->execute([$sessionID, 'de.sunnyc.wsc.shrinkr.likeableUrl', $this->link->linkID]);
-                $row = $statement->fetchArray();
-                if ($row) {
-                    $guestReactionTypeID = $row['reactionTypeID'];
-                }
-            }
-
-            // Prepare reaction types for guest handler
-            $reactionTypes = [];
-            if ($enableGuestReactions && !WCF::getUser()->userID) {
-                foreach (\wcf\data\reaction\type\ReactionTypeCache::getInstance()->getReactionTypes() as $reactionType) {
-                    if ($reactionType->isAssignable) {
-                        $reactionTypes[] = [
-                            'reactionTypeID' => $reactionType->reactionTypeID,
-                            'title' => $reactionType->getTitle(),
-                            'renderedIcon' => $reactionType->renderIcon(),
-                        ];
-                    }
-                }
-            }
-
             // Get favicon HTML for special (if active)
             $specialFaviconHtml = '';
             if ($this->special && $this->special->isCurrentlyActive()) {
@@ -455,7 +407,7 @@ class RedirectPage extends AbstractPage
             }
 
             // Get title icon option and parse it
-            $titleIconOption = Option::getOptionByName('shrinkr_featuredLinks_titleIcon');
+            $titleIconOption = Option::getOptionByName('shrinkr_title_icon');
             $titleIcon = '';
             $titleIconName = '';
             $titleIconForceSolid = false;
@@ -474,7 +426,47 @@ class RedirectPage extends AbstractPage
             // Load custom buttons
             $this->customButtons = $this->extractCustomButtons();
 
-            // Assign to template (merge with existing assignments)
+            // Load reaction data
+            $reactionData = [];
+            $reactionObjectType = 'de.sunnyc.wsc.shrinkr.likeableShrinkrLink';
+            $reactionObjectID = $this->link->linkID;
+            $enableReactions = false;
+            $enableGuestReactions = false;
+            $guestReactionTypeID = 0;
+
+            if (MODULE_LIKE) {
+                $reactionsOption = Option::getOptionByName('shrinkr_enable_reactions');
+                $enableReactions = $reactionsOption ? ($reactionsOption->optionValue == '1' || $reactionsOption->optionValue == 1) : true;
+
+                $guestReactionsOption = Option::getOptionByName('shrinkr_enable_guest_reactions');
+                $enableGuestReactions = $guestReactionsOption ? ($guestReactionsOption->optionValue == '1' || $guestReactionsOption->optionValue == 1) : false;
+
+                if ($enableReactions && $reactionObjectID) {
+                    // Load reaction data including guest reactions
+                    $reactionData = $this->loadReactionData($reactionObjectType, $reactionObjectID);
+
+                    // Get guest reaction type ID for current session (if guest)
+                    if ($enableGuestReactions && !WCF::getUser()->userID) {
+                        $sessionID = WCF::getSession()->sessionID;
+                        $sql = "SELECT reactionTypeID
+                                FROM shrinkr" . WCF_N . "_guest_reaction
+                                WHERE sessionID = ?
+                                    AND objectType = ?
+                                    AND objectID = ?
+                                LIMIT 1";
+                        $statement = WCF::getDB()->prepareStatement($sql);
+                        $statement->execute([$sessionID, $reactionObjectType, $reactionObjectID]);
+                        $guestReaction = $statement->fetchArray();
+                        if ($guestReaction) {
+                            $guestReactionTypeID = (int)$guestReaction['reactionTypeID'];
+                        }
+                    }
+                }
+            }
+
+            // Set Open Graph Meta-Tags
+            $this->setOpenGraphMetaTags();
+
             WCF::getTPL()->assign([
                 'link' => $this->link,
                 'featuredLinks' => $this->featuredLinks,
@@ -489,23 +481,156 @@ class RedirectPage extends AbstractPage
                 'shareUrl' => $shareUrl, // Cleaned URL for share button (without double slashes)
                 'countdownSeconds' => $specialCountdownSeconds, // Only specials have countdowns
                 'extractedTitle' => $this->extractedTitle, // Auto-extracted title or fallback
-                'reactionData' => $reactionData,
-                'reactionObjectType' => 'de.sunnyc.wsc.shrinkr.likeableUrl',
-                'reactionObjectID' => ($this->link !== null && isset($this->link->linkID)) ? $this->link->linkID : 0,
-                'guestReactionTypeID' => $guestReactionTypeID,
-                'guestReactionTypes' => $reactionTypes,
-                'enableReactions' => $enableReactions,
-                'enableGuestReactions' => $enableGuestReactions,
                 'enableDescriptions' => $enableDescriptions,
                 'activeThemeEffect' => $activeThemeEffect,
                 'activeThemeIdentifier' => $activeThemeIdentifier, // Theme identifier for CSS file loading
                 'titleIcon' => $titleIcon, // Title icon option value (raw)
                 'titleIconName' => $titleIconName, // Parsed icon name
                 'titleIconForceSolid' => $titleIconForceSolid, // Parsed forceSolid flag
+                'reactionData' => $reactionData, // Reaction data for template
+                'reactionObjectType' => $reactionObjectType, // Object type for reactions
+                'reactionObjectID' => $reactionObjectID, // Object ID for reactions
+                'enableReactions' => $enableReactions, // Whether reactions are enabled
+                'enableGuestReactions' => $enableGuestReactions, // Whether guest reactions are enabled
+                'guestReactionTypeID' => $guestReactionTypeID, // Guest reaction type ID (if guest has reacted)
+                'enableShareButton' => $enableShareButton, // Whether share button is enabled
             ]);
-        } else {
-            throw new IllegalLinkException();
+    }
+
+    /**
+     * Loads reaction data including guest reactions for a specific object.
+     *
+     * @param string $objectType Object type identifier
+     * @param int $objectID Object ID
+     * @return array Reaction data with wrapper object
+     */
+    private function loadReactionData(string $objectType, int $objectID): array
+    {
+        $reactionData = [];
+
+        // Get regular reactions
+        $objectTypeObj = ReactionHandler::getInstance()->getObjectType($objectType);
+        if ($objectTypeObj === null) {
+            return $reactionData;
         }
+
+        ReactionHandler::getInstance()->loadLikeObjects($objectTypeObj, [$objectID]);
+        $likeObject = ReactionHandler::getInstance()->getLikeObject($objectTypeObj, $objectID);
+
+        // Get reaction data including guest reactions
+        $reactionDataWithGuests = $this->getReactionDataWithGuests($objectType, $objectID);
+
+        // Create reaction array with objects (like LikeObject->getReactions())
+        $reactions = [];
+        foreach ($reactionDataWithGuests['cachedReactions'] as $reactionTypeID => $reactionDataItem) {
+            $reactions[$reactionTypeID] = $reactionDataItem;
+        }
+
+        // ReactionTypeID from LikeObject (if available)
+        $reactionTypeID = ($likeObject !== null && isset($likeObject->reactionTypeID)) ? $likeObject->reactionTypeID : 0;
+
+        // Create wrapper object
+        $wrapper = new class($reactions, $reactionDataWithGuests['cumulativeLikes'], $reactionTypeID) {
+            private $reactions;
+            private $cumulativeLikes;
+            private $reactionTypeID;
+
+            public function __construct($reactions, $cumulativeLikes, $reactionTypeID) {
+                $this->reactions = $reactions;
+                $this->cumulativeLikes = $cumulativeLikes;
+                $this->reactionTypeID = $reactionTypeID;
+            }
+
+            public function getReactions() {
+                return $this->reactions;
+            }
+
+            public function getReactionsJson(): string {
+                $data = [];
+                foreach ($this->reactions as $reactionTypeID => $value) {
+                    $data[] = [
+                        $reactionTypeID, $value['reactionCount'],
+                    ];
+                }
+                return \wcf\util\JSON::encode($data);
+            }
+
+            public function __get($name) {
+                if ($name === 'reactionTypeID') {
+                    return $this->reactionTypeID;
+                }
+                if ($name === 'cumulativeLikes') {
+                    return $this->cumulativeLikes;
+                }
+                return null;
+            }
+        };
+
+        $reactionData[$objectID] = $wrapper;
+
+        return $reactionData;
+    }
+
+    /**
+     * Gets reaction data including guest reactions
+     *
+     * @param string $objectType
+     * @param int $objectID
+     * @return array
+     */
+    private function getReactionDataWithGuests(string $objectType, int $objectID): array
+    {
+        // Get regular reactions
+        $objectTypeObj = ReactionHandler::getInstance()->getObjectType($objectType);
+        if ($objectTypeObj === null) {
+            $cachedReactions = [];
+            $cumulativeLikes = 0;
+        } else {
+            $likeObject = \wcf\data\like\object\LikeObject::getLikeObject($objectTypeObj->objectTypeID, $objectID);
+            if ($likeObject === null) {
+                $cachedReactions = [];
+                $cumulativeLikes = 0;
+            } else {
+                $cachedReactions = $likeObject->getReactions();
+                $cumulativeLikes = $likeObject->cumulativeLikes;
+            }
+        }
+
+        // Get guest reactions
+        $sql = "SELECT  reactionTypeID, COUNT(*) as count
+                FROM    shrinkr" . WCF_N . "_guest_reaction
+                WHERE   objectType = ?
+                    AND objectID = ?
+                GROUP BY reactionTypeID";
+        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement->execute([$objectType, $objectID]);
+
+        while ($row = $statement->fetchArray()) {
+            $reactionTypeID = $row['reactionTypeID'];
+            $count = $row['count'];
+
+            $reactionType = \wcf\data\reaction\type\ReactionTypeCache::getInstance()->getReactionTypeByID($reactionTypeID);
+            if ($reactionType === null) {
+                continue;
+            }
+
+            if (!isset($cachedReactions[$reactionTypeID])) {
+                $cachedReactions[$reactionTypeID] = [
+                    'reactionCount' => 0,
+                    'renderedReactionIcon' => $reactionType->renderIcon(),
+                    'renderedReactionIconEncoded' => \wcf\util\JSON::encode($reactionType->renderIcon()),
+                    'reactionTitle' => $reactionType->getTitle(),
+                ];
+            }
+
+            $cachedReactions[$reactionTypeID]['reactionCount'] += $count;
+            $cumulativeLikes += $count;
+        }
+
+        return [
+            'cachedReactions' => $cachedReactions,
+            'cumulativeLikes' => $cumulativeLikes,
+        ];
     }
 
 
@@ -701,7 +826,7 @@ class RedirectPage extends AbstractPage
     private function getRandomDescription(): string
     {
         // Check if descriptions are enabled globally
-        $descriptionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableDescriptions');
+        $descriptionsOption = Option::getOptionByName('shrinkr_enable_descriptions');
         $enableDescriptions = $descriptionsOption ? $descriptionsOption->optionValue : 1;
         if (!$enableDescriptions) {
             return '';
@@ -732,133 +857,6 @@ class RedirectPage extends AbstractPage
         ]);
     }
 
-    /**
-     * Adds guest reactions to a LikeObject.
-     *
-     * @param object $likeObject The like object to add reactions to
-     * @param string $objectType The object type identifier
-     * @param int $objectID The object ID
-     * @return void
-     */
-    private function addGuestReactionsToLikeObject($likeObject, $objectType, $objectID): void
-    {
-        // Get guest reactions for this object
-        $sql = "SELECT  reactionTypeID, COUNT(*) as count
-                FROM    shrinkr" . WCF_N . "_guest_reaction
-                WHERE   objectType = ?
-                    AND objectID = ?
-                GROUP BY reactionTypeID";
-        $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$objectType, $objectID]);
-
-        // Get current reactions
-        $reactions = $likeObject->getReactions();
-        $cumulativeLikes = $likeObject->cumulativeLikes;
-
-        // Add guest reactions
-        while ($row = $statement->fetchArray()) {
-            $reactionTypeID = $row['reactionTypeID'];
-            $count = $row['count'];
-
-            $reactionType = \wcf\data\reaction\type\ReactionTypeCache::getInstance()->getReactionTypeByID($reactionTypeID);
-            if ($reactionType === null) {
-                continue;
-            }
-
-            if (!isset($reactions[$reactionTypeID])) {
-                $reactions[$reactionTypeID] = [
-                    'reactionCount' => 0,
-                    'renderedReactionIcon' => $reactionType->renderIcon(),
-                    'renderedReactionIconEncoded' => \wcf\util\JSON::encode($reactionType->renderIcon()),
-                    'reactionTitle' => $reactionType->getTitle(),
-                ];
-            }
-
-            $reactions[$reactionTypeID]['reactionCount'] += $count;
-            $cumulativeLikes += $count;
-        }
-
-        // Update likeObject using reflection to modify internal data
-        $reflection = new \ReflectionClass($likeObject);
-
-        // Update reactions property (private)
-        $reactionsProperty = $reflection->getProperty('reactions');
-        $reactionsProperty->setAccessible(true);
-        $reactionsProperty->setValue($likeObject, $reactions);
-
-        // Update data array with new cumulativeLikes
-        $dataProperty = $reflection->getProperty('data');
-        $dataProperty->setAccessible(true);
-        $data = $dataProperty->getValue($likeObject);
-        $data['cumulativeLikes'] = $cumulativeLikes;
-        $dataProperty->setValue($likeObject, $data);
-    }
-
-    /**
-     * Creates a minimal LikeObject with only guest reactions.
-     *
-     * @param object $objectType The object type
-     * @param int $objectID The object ID
-     * @return object|null The created like object or null if no reactions exist
-     */
-    private function createLikeObjectWithGuestReactions($objectType, $objectID)
-    {
-        // Get guest reactions for this object
-        $sql = "SELECT  reactionTypeID, COUNT(*) as count
-                FROM    shrinkr" . WCF_N . "_guest_reaction
-                WHERE   objectType = ?
-                    AND objectID = ?
-                GROUP BY reactionTypeID";
-        $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$objectType->objectType, $objectID]);
-        
-        $reactions = [];
-        $cumulativeLikes = 0;
-        
-        while ($row = $statement->fetchArray()) {
-            $reactionTypeID = $row['reactionTypeID'];
-            $count = $row['count'];
-            
-            $reactionType = \wcf\data\reaction\type\ReactionTypeCache::getInstance()->getReactionTypeByID($reactionTypeID);
-            if ($reactionType === null) {
-                continue;
-            }
-            
-            $reactions[$reactionTypeID] = [
-                'reactionCount' => $count,
-                'renderedReactionIcon' => $reactionType->renderIcon(),
-                'renderedReactionIconEncoded' => \wcf\util\JSON::encode($reactionType->renderIcon()),
-                'reactionTitle' => $reactionType->getTitle(),
-            ];
-            
-            $cumulativeLikes += $count;
-        }
-        
-        if (empty($reactions)) {
-            return null;
-        }
-        
-        // Create a minimal LikeObject
-        $likeObject = new \wcf\data\like\object\LikeObject(null, [
-            'likeObjectID' => 0,
-            'objectTypeID' => $objectType->objectTypeID,
-            'objectID' => $objectID,
-            'objectUserID' => null,
-            'likes' => $cumulativeLikes,
-            'dislikes' => 0,
-            'cumulativeLikes' => $cumulativeLikes,
-            'cachedUsers' => '',
-            'cachedReactions' => serialize($reactions),
-        ]);
-        
-        // Set reactions property
-        $reflection = new \ReflectionClass($likeObject);
-        $reactionsProperty = $reflection->getProperty('reactions');
-        $reactionsProperty->setAccessible(true);
-        $reactionsProperty->setValue($likeObject, $reactions);
-        
-        return $likeObject;
-    }
 
     /**
      * Determines the currently active theme effect.
@@ -969,7 +967,7 @@ class RedirectPage extends AbstractPage
     }
 
     /**
-     * Ghost effect defaults inspired by the SoftCreatR demo.
+     * Ghost effect defaults.
      */
     private function getGhostEffectSettings(): array
     {
@@ -1034,7 +1032,7 @@ class RedirectPage extends AbstractPage
         $statement->execute($parameters);
         $existingVisitCount = $statement->fetchSingleColumn();
 
-        // Wenn bereits ein Besuch innerhalb des Zeitfensters existiert, ignorieren
+        // If a visit already exists within the time window, ignore it
         if ($existingVisitCount > 0) {
             return;
         }
@@ -1049,13 +1047,45 @@ class RedirectPage extends AbstractPage
             }
         }
 
-        // Store visit in database
+        // Get IP address
+        $ipAddress = null;
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
+        }
+
+        // Anonymize IP address (DSGVO compliance)
+        $anonymizedIP = null;
+        if ($ipAddress) {
+            $anonymizedIP = AnalyticsUtil::getInstance()->anonymizeIP($ipAddress);
+        }
+
+        // Parse User-Agent
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
+        $userAgentData = UserAgentUtil::getInstance()->parse($userAgent);
+
+        // GeoIP Lookup
+        $geoData = [
+            'country' => null,
+            'city' => null,
+        ];
+        if ($ipAddress && GeoLite2Util::getInstance()->isAvailable()) {
+            $geoData = GeoLite2Util::getInstance()->lookup($ipAddress);
+        }
+
+        // Store visit in database with all analytics data
         VisitEditor::create([
             'linkID' => $linkID,
             'visitTime' => TIME_NOW,
             'referrer' => $referrer,
             'userID' => $userID,
             'sessionID' => $sessionID,
+            'country' => $geoData['country'],
+            'city' => $geoData['city'],
+            'deviceType' => $userAgentData['deviceType'],
+            'browser' => $userAgentData['browser'],
+            'browserVersion' => $userAgentData['browserVersion'],
+            'os' => $userAgentData['os'],
+            'ipAddress' => $anonymizedIP,
         ]);
 
         // Synchronize counter: Update shrinkr1_link.counter from visit count
@@ -1067,5 +1097,107 @@ class RedirectPage extends AbstractPage
         // Update counter in shrinkr1_link
         $urlEditor = new ShrinkrLinkEditor($this->link);
         $urlEditor->update(['counter' => $visitCount]);
+    }
+
+    /**
+     * Sets Open Graph Meta-Tags for the redirect page.
+     *
+     * @return void
+     */
+    private function setOpenGraphMetaTags(): void
+    {
+        if (!$this->link || !$this->link->linkID) {
+            return;
+        }
+
+        $metaTagHandler = MetaTagHandler::getInstance();
+
+        // og:title - Priority: linkTitle > autoExtractedTitle > extractedTitle > default
+        $ogTitle = $this->link->linkTitle ?: $this->link->autoExtractedTitle ?: $this->extractedTitle ?: WCF::getLanguage()->get('shrinkr.redirect.headline');
+        if (\defined('PAGE_TITLE')) {
+            $ogTitle .= ' - ' . WCF::getLanguage()->get(PAGE_TITLE);
+        }
+        $metaTagHandler->addTag('og:title', 'og:title', $ogTitle, true);
+
+        // og:description - Priority: randomDescription > special additionalText > default
+        $ogDescription = '';
+        if (!empty($this->randomDescription)) {
+            // Strip HTML tags for meta description
+            $ogDescription = StringUtil::stripHTML($this->randomDescription);
+        } elseif ($this->special && $this->special->isCurrentlyActive() && !empty($this->special->additionalText)) {
+            $ogDescription = StringUtil::stripHTML($this->special->additionalText);
+        }
+        if (empty($ogDescription) && \defined('META_DESCRIPTION')) {
+            $ogDescription = WCF::getLanguage()->get(META_DESCRIPTION);
+        }
+        if (!empty($ogDescription)) {
+            $metaTagHandler->addTag('og:description', 'og:description', $ogDescription, true);
+        }
+
+        // og:url - Canonical URL (the short URL)
+        $canonicalURL = $this->link->getShortedUrl(false);
+        $canonicalURL = \rtrim($canonicalURL, '/') . '/';
+        // Make absolute URL
+        if (!\preg_match('~^https?://~', $canonicalURL)) {
+            $canonicalURL = WCF::getPath() . \ltrim($canonicalURL, '/');
+        }
+        $metaTagHandler->addTag('og:url', 'og:url', $canonicalURL, true);
+
+        // og:type
+        $metaTagHandler->addTag('og:type', 'og:type', 'website', true);
+
+        // og:site_name - From WoltLab PAGE_TITLE
+        if (\defined('PAGE_TITLE')) {
+            $siteName = WCF::getLanguage()->get(PAGE_TITLE);
+            $metaTagHandler->addTag('og:site_name', 'og:site_name', $siteName, true);
+        }
+
+        // og:locale - Language code
+        $language = WCF::getLanguage();
+        $locale = $language->languageCode ?? 'en';
+        if ($locale === 'de') {
+            $locale = 'de_DE';
+        } elseif ($locale === 'en') {
+            $locale = 'en_US';
+        }
+        $metaTagHandler->addTag('og:locale', 'og:locale', $locale, true);
+
+        // og:image - Priority: link ogImage > WoltLab OG_IMAGE > favicon > special image
+        $ogImage = null;
+        
+        // 1. Link-spezifisches Open Graph Bild
+        if (!empty($this->link->ogImage)) {
+            $ogImage = $this->link->ogImage;
+        }
+        // 2. WoltLab OG_IMAGE Option
+        elseif (\defined('OG_IMAGE') && !empty(\OG_IMAGE)) {
+            $ogImage = \OG_IMAGE;
+        }
+        // 3. Favicon aus Discount (if available)
+        elseif ($this->discount && \method_exists($this->discount, 'getFaviconUrl') && $this->discount->getFaviconUrl()) {
+            $ogImage = $this->discount->getFaviconUrl();
+        }
+        // 4. Special Image (if available)
+        elseif ($this->special && $this->special->isCurrentlyActive()) {
+            // Special images are not yet implemented
+        }
+
+        if ($ogImage) {
+            // Make absolute URL if not already
+            if (!\preg_match('~^https?://~', $ogImage)) {
+                $ogImage = WCF::getPath() . \ltrim($ogImage, '/');
+            }
+            $metaTagHandler->addTag('og:image', 'og:image', $ogImage, true);
+        }
+
+        // Twitter Card Tags
+        $metaTagHandler->addTag('twitter:card', 'twitter:card', 'summary_large_image', false);
+        $metaTagHandler->addTag('twitter:title', 'twitter:title', $ogTitle, false);
+        if (!empty($ogDescription)) {
+            $metaTagHandler->addTag('twitter:description', 'twitter:description', $ogDescription, false);
+        }
+        if ($ogImage) {
+            $metaTagHandler->addTag('twitter:image', 'twitter:image', $ogImage, false);
+        }
     }
 }

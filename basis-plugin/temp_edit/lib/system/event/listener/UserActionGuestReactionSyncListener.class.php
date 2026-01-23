@@ -2,14 +2,15 @@
 
 namespace shrinkr\system\event\listener;
 
-use shrinkr\system\user\action\UserActionGuestReactionSyncHandler;
+use shrinkr\data\guestreaction\GuestReactionEditor;
+use shrinkr\data\guestreaction\GuestReactionList;
+use wcf\data\reaction\ReactionAction;
 use wcf\data\user\UserAction;
 use wcf\system\event\listener\IParameterizedEventListener;
+use wcf\system\WCF;
 
 /**
- * Event listener for UserAction::finalizeAction event.
- * Delegates to UserActionGuestReactionSyncHandler.
- * 
+ * Event listener to synchronize guest reactions with user account upon registration.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
@@ -26,8 +27,54 @@ class UserActionGuestReactionSyncListener implements IParameterizedEventListener
     public function execute($eventObj, $className, $eventName, array &$parameters)
     {
         if ($eventName === 'finalizeAction' && $eventObj instanceof UserAction) {
-            $handler = new UserActionGuestReactionSyncHandler();
-            $handler->handleFinalizeAction($eventObj);
+            if ($eventObj->getActionName() === 'create') {
+                // Get the created user
+                $returnValues = $eventObj->getReturnValues();
+                if (isset($returnValues['returnValues']) && $returnValues['returnValues'] instanceof \wcf\data\user\User) {
+                    $user = $returnValues['returnValues'];
+                    $sessionID = WCF::getSession()->sessionID;
+                    
+                    // Get all guest reactions for this session
+                    $guestReactionList = new GuestReactionList();
+                    $guestReactionList->getConditionBuilder()->add('sessionID = ?', [$sessionID]);
+                    $guestReactionList->readObjects();
+                    
+                    // Convert guest reactions to regular reactions
+                    foreach ($guestReactionList as $guestReaction) {
+                        // Check if user already reacted on this object
+                        $objectType = \wcf\system\reaction\ReactionHandler::getInstance()->getObjectType($guestReaction->objectType);
+                        if ($objectType === null) {
+                            continue;
+                        }
+                        
+                        $like = \wcf\data\like\Like::getLike(
+                            $objectType->objectTypeID,
+                            $guestReaction->objectID,
+                            $user->userID
+                        );
+                        
+                        if (!$like->likeID) {
+                            // Create regular reaction from guest reaction
+                            $reactionAction = new ReactionAction([], 'create', [
+                                'data' => [
+                                    'objectID' => $guestReaction->objectID,
+                                    'objectTypeID' => $objectType->objectTypeID,
+                                    'objectUserID' => null, // ShrinkrLink objects don't have a userID
+                                    'userID' => $user->userID,
+                                    'time' => $guestReaction->time,
+                                    'likeValue' => 1,
+                                    'reactionTypeID' => $guestReaction->reactionTypeID,
+                                ],
+                            ]);
+                            $reactionAction->executeAction();
+                        }
+                        
+                        // Delete guest reaction
+                        $guestReactionEditor = new GuestReactionEditor($guestReaction);
+                        $guestReactionEditor->delete();
+                    }
+                }
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ use wcf\data\like\object\ILikeObject;
 use wcf\data\object\type\AbstractObjectTypeProvider;
 
 /**
- * Like Object type provider for URL shortener URLs.
+ * Like Object type provider for ShrinkrLink objects.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
@@ -45,8 +45,7 @@ class LikeableShrinkrLinkProvider extends AbstractObjectTypeProvider implements 
     public function checkPermissions(ILikeObject $object)
     {
         /** @var LikeableShrinkrLink $object */
-        // Jeder kann auf URLs reagieren, solange die URL existiert
+        // Everyone can react on links, as long as the link exists
         return $object->linkID > 0;
     }
 }
-

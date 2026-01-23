@@ -52,6 +52,13 @@
 				<showorder>100</showorder>
 				<options>shrinkr_expertmode_active</options>
 			</category>
+
+			<!-- Tab 8: GeoLite2 (nur wenn Expertenmodus aktiviert) -->
+			<category name="shrinkr.geolite2">
+				<parent>shrinkr</parent>
+				<showorder>110</showorder>
+				<options>shrinkr_expertmode_active</options>
+			</category>
 		</categories>
 
 		<options>
@@ -177,6 +184,13 @@
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
+			<option name="shrinkr_password_session_storage">
+				<categoryname>shrinkr.interaction</categoryname>
+				<options>shrinkr_active</options>
+				<showorder>5</showorder>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>0</defaultvalue>
+			</option>
 
 			<!-- Tab 6: Aussehen (Design) -->
 			<option name="shrinkr_enable_custom_forward_button">
@@ -233,6 +247,42 @@ default:Standard:rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 25
 				<options>shrinkr_expertmode_active</options>
 				<showorder>2</showorder>
 				<optiontype>URL</optiontype>
+				<defaultvalue></defaultvalue>
+			</option>
+
+			<!-- Tab 8: GeoLite2 -->
+			<option name="shrinkr_geolite2_database_provider">
+				<categoryname>shrinkr.geolite2</categoryname>
+				<options>shrinkr_expertmode_active</options>
+				<showorder>1</showorder>
+				<optiontype>radioButton</optiontype>
+				<defaultvalue>default</defaultvalue>
+				<selectoptions>default:wcf.shrinkr.geolite2.database_provider.default
+maxmind:wcf.shrinkr.geolite2.database_provider.maxmind
+local:wcf.shrinkr.geolite2.database_provider.local</selectoptions>
+				<enableoptions>maxmind:shrinkr_geolite2_database_maxmind_account_id,shrinkr_geolite2_database_maxmind_license_key,!shrinkr_geolite2_custom_database_path
+default:!shrinkr_geolite2_database_maxmind_account_id,!shrinkr_geolite2_database_maxmind_license_key,!shrinkr_geolite2_custom_database_path
+local:!shrinkr_geolite2_database_maxmind_account_id,!shrinkr_geolite2_database_maxmind_license_key,shrinkr_geolite2_custom_database_path</enableoptions>
+			</option>
+			<option name="shrinkr_geolite2_database_maxmind_account_id">
+				<categoryname>shrinkr.geolite2</categoryname>
+				<options>shrinkr_expertmode_active</options>
+				<showorder>2</showorder>
+				<optiontype>text</optiontype>
+				<defaultvalue></defaultvalue>
+			</option>
+			<option name="shrinkr_geolite2_database_maxmind_license_key">
+				<categoryname>shrinkr.geolite2</categoryname>
+				<options>shrinkr_expertmode_active</options>
+				<showorder>3</showorder>
+				<optiontype>text</optiontype>
+				<defaultvalue></defaultvalue>
+			</option>
+			<option name="shrinkr_geolite2_custom_database_path">
+				<categoryname>shrinkr.geolite2</categoryname>
+				<options>shrinkr_expertmode_active</options>
+				<showorder>4</showorder>
+				<optiontype>text</optiontype>
 				<defaultvalue></defaultvalue>
 			</option>
 		</options>

@@ -52,7 +52,7 @@ class RewriteRulesPage extends AbstractPage
         }
         
         // WoltLab-Methode: $htaccess = "{$dir}.htaccess" (siehe OptionAction::fetchRewriteRules Zeile 192)
-        // getAbsolutePackageDir() sollte bereits einen trailing slash haben, aber sicherheitshalber prüfen
+        // getAbsolutePackageDir() should already have a trailing slash, but check for safety
         if ($rootDir !== null) {
             $rootDir = \rtrim($rootDir, '/') . '/';
             $htaccessPath = $rootDir . '.htaccess';

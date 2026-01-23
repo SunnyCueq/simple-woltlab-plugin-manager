@@ -83,6 +83,7 @@
                         <th class="columnTitle columnFeaturedLinks text-center{if $sortField == 'featuredLinks'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=featuredLinks&sortOrder={if $sortField == 'featuredLinks' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.featuredLink.section{/lang}</a></th>
                         <th class="columnTitle columnSpecial text-center{if $sortField == 'special'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=special&sortOrder={if $sortField == 'special' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.special{/lang}</a></th>
                         <th class="columnTitle columnCustomButtons text-center{if $sortField == 'customButtons'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=customButtons&sortOrder={if $sortField == 'customButtons' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.customButton.section{/lang}</a></th>
+                        
                         {if MODULE_LIKE && $__wcf->session->getPermission('user.like.canViewLike')}
                             <th class="columnTitle text-center">{lang}wcf.reactions.summary.title{/lang}</th>
                         {/if}
@@ -131,7 +132,7 @@
                             <td class="columnTitle columnSpecial text-center">
                                 {if $linksArray|isset && $linksArray[$url->linkID]|isset && $linksArray[$url->linkID]['hasActiveSpecial']|isset && ($linksArray[$url->linkID]['hasActiveSpecial'] == true || $linksArray[$url->linkID]['hasActiveSpecial'] == 1)}
                                     {* Aktives Special vorhanden: Status + Bearbeiten-Button *}
-                                    <div class="text-center" style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                                    <div class="text-center specialBadgeContainer">
                                         <span class="badge green">{lang}wcf.shrinkr.special.status.active{/lang}</span>
                                         {if $linksArray[$url->linkID]['firstActiveSpecialID']|isset && $linksArray[$url->linkID]['firstActiveSpecialID']}
                                             <a href="{link application='shrinkr' controller='SpecialEdit' id=$linksArray[$url->linkID]['firstActiveSpecialID']}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
@@ -139,7 +140,7 @@
                                     </div>
                                 {elseif $linksArray|isset && $linksArray[$url->linkID]|isset && $linksArray[$url->linkID]['firstSpecialID']|isset && $linksArray[$url->linkID]['firstSpecialID']}
                                     {* Inaktives Special vorhanden: Inaktiv Badge + Bearbeiten-Button *}
-                                    <div class="text-center" style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                                    <div class="text-center specialBadgeContainer">
                                         <span class="badge red">{lang}wcf.shrinkr.special.status.inactive{/lang}</span>
                                         <a href="{link application='shrinkr' controller='SpecialEdit' id=$linksArray[$url->linkID]['firstSpecialID']}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
                                     </div>
@@ -222,7 +223,11 @@
                     'wcf.shrinkr.qrCode': '{jslang}wcf.shrinkr.qrCode{/jslang}',
                 });
 
-                Qr.renderAll();
+                if (Qr && typeof Qr.renderAll === 'function') {
+                    Qr.renderAll();
+                } else if (Qr && Qr.default && typeof Qr.default.renderAll === 'function') {
+                    Qr.default.renderAll();
+                }
             });
         </script>
     {else}

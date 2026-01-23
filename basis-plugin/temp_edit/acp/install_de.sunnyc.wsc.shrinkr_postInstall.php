@@ -49,7 +49,7 @@ use shrinkr\data\theme\ThemeEditor;
 // Helper function for logging
 // Uses WoltLab's SystemException for error logging (appears in ACP → Management → Log → Errors)
 // Also writes to demodata.log for debugging
-// See: https://docs.woltlab.com/6.0/view/languages-naming-conventions/#error-texts
+// See: https://docs.woltlab.com/6.1/view/languages-naming-conventions/#error-texts
 function logPostInstall($message) {
     $timestamp = date('Y-m-d H:i:s');
     $logMessage = "[{$timestamp}] [PostInstall] {$message}";
@@ -431,7 +431,7 @@ if ($urlTableExists && ($installDemoData || $fromEvent)) {
         }
         
         // Also check by hash pattern (for backwards compatibility and to mark existing URLs)
-        $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE hash IN ('DEMO-1', 'DEMO-2', 'DEMO-3', 'DEMO-4', 'DEMO-5', 'DEMO-6', 'DEMO-7')";
+        $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE hash IN ('DEMO-1', 'DEMO-2', 'DEMO-3', 'DEMO-4', 'DEMO-5', 'DEMO-6', 'DEMO-7', 'DEMO-8')";
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute();
         while ($row = $statement->fetchArray()) {
@@ -577,6 +577,7 @@ if ($urlTableExists && ($installDemoData || $fromEvent)) {
             // - DEMO-5: Special (Summer) + Future start
             // - DEMO-6: Special (Christmas) + Expired
             // - DEMO-7: Featured Links only (no discount/special)
+            // - DEMO-8: Passwort-geschützter Link (Passwort: demo123)
             // ========================================================================
             // Note: $testUrls is already defined above (line 375)
 

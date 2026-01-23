@@ -1,0 +1,599 @@
+#!/bin/bash
+
+#################################################################
+# WoltLab Development Tools - Zentrales Menü
+# 
+# Zentrale Übersicht aller verfügbaren Tools
+#################################################################
+
+set -e
+
+# Verzeichnisse
+TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MAIN_DIR="$(dirname "$TOOLS_DIR")"
+
+# Lade gemeinsame Funktionen
+if [ -f "$TOOLS_DIR/common.sh" ]; then
+    source "$TOOLS_DIR/common.sh"
+else
+    # Fallback falls common.sh nicht existiert
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    CYAN='\033[0;36m'
+    NC='\033[0m'
+    
+    print_header() {
+        clear
+        echo -e "${BLUE}==========================================${NC}"
+        echo -e "${CYAN}WoltLab Development Tools${NC}"
+        echo -e "${BLUE}==========================================${NC}"
+        echo ""
+    }
+fi
+
+print_menu() {
+    # Zeige System-Übersicht
+    show_system_overview
+    
+    # Zeige Update-Informationen (optional, nicht aufdringlich)
+    # check_updates  # Auskommentiert - kann bei Bedarf aktiviert werden
+    
+    # Finde verfügbare Plugins
+    local plugins=($(find_plugin_directories "$MAIN_DIR"))
+    local plugin_count=${#plugins[@]}
+    
+    print_list "Verfügbare Tools"
+    print_list_item "1)" "${CYAN}Build${NC}                 ${ARROW} Plugin bauen & Version automatisch erhöhen"
+    print_list_item "2)" "${CYAN}Git Push${NC}              ${ARROW} Änderungen committen, pushen & Release erstellen"
+    print_list_item "3)" "${CYAN}TypeScript${NC}            ${ARROW} TypeScript kompilieren & .min.js Dateien erstellen"
+    print_list_item "4)" "${CYAN}DDEV${NC}                  ${ARROW} Entwicklungsumgebung starten, stoppen & verwalten"
+    print_list_item "5)" "${CYAN}Restore Snapshot${NC}     ${ARROW} WoltLab-Installation aus Snapshot wiederherstellen"
+    print_list_item "6)" "${CYAN}Setup${NC}                 ${ARROW} Vollständige Entwicklungsumgebung einrichten"
+    print_list_item "7)" "${CYAN}WoltLab Download${NC}      ${ARROW} WoltLab Suite Core herunterladen & installieren"
+    print_list_item "8)" "${CYAN}Snapshot Manager${NC}     ${ARROW} Snapshots erstellen, löschen & verwalten"
+    print_list_item "9)" "${CYAN}Credentials${NC}           ${ARROW} Zugangsdaten sicher speichern & verwalten"
+    print_list_item "10)" "${CYAN}Dockge${NC}               ${ARROW} Docker-Container visuell verwalten (Portainer-Alternative)"
+    print_list_item "11)" "${CYAN}Hilfe & Dokumentation${NC} ${ARROW} README & Anleitungen anzeigen"
+    print_list_item "12)" "${CYAN}Plugin Validierung${NC}    ${ARROW} Code-Qualität, Security & Store-Compliance prüfen"
+    print_list_item "13)" "${CYAN}Updates prüfen${NC}        ${ARROW} Verfügbare Updates für Tools & Dependencies anzeigen"
+    echo ""
+    if [ "$plugin_count" -gt 0 ]; then
+        # Gruppiere Plugins nach Verzeichnissen
+        local basis_plugins=()
+        local mein_plugins=()
+        local integrieren_plugins=()
+        local other_plugins=()
+        
+        for plugin_path in "${plugins[@]}"; do
+            local relative_path="${plugin_path#$MAIN_DIR/}"
+            if [[ "$relative_path" == basis-plugin* ]]; then
+                basis_plugins+=("$plugin_path")
+            elif [[ "$relative_path" == mein-plugin* ]]; then
+                mein_plugins+=("$plugin_path")
+            elif [[ "$relative_path" == plugins-integrieren* ]]; then
+                integrieren_plugins+=("$plugin_path")
+            else
+                other_plugins+=("$plugin_path")
+            fi
+        done
+        
+        print_list "Gefundene Plugins (${plugin_count})"
+        
+        # Basis-plugin
+        if [ ${#basis_plugins[@]} -gt 0 ]; then
+            print_list "Basis-plugin"
+            for plugin_path in "${basis_plugins[@]}"; do
+                local version=$(get_plugin_version "$plugin_path")
+                local name=$(get_plugin_name "$plugin_path")
+                local relative_path="${plugin_path#$MAIN_DIR/}"
+                print_list_item "•" "${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
+            done
+            echo ""
+        fi
+        
+        # Mein-Plugin
+        if [ ${#mein_plugins[@]} -gt 0 ]; then
+            print_list "Mein-Plugin"
+            for plugin_path in "${mein_plugins[@]}"; do
+                local version=$(get_plugin_version "$plugin_path")
+                local name=$(get_plugin_name "$plugin_path")
+                local relative_path="${plugin_path#$MAIN_DIR/}"
+                echo -e "   ${CYAN}•${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
+            done
+            echo ""
+        fi
+        
+        # Plugins integrieren
+        if [ ${#integrieren_plugins[@]} -gt 0 ]; then
+            echo -e "${CYAN}Plugins integrieren:${NC}"
+            for plugin_path in "${integrieren_plugins[@]}"; do
+                local version=$(get_plugin_version "$plugin_path")
+                local name=$(get_plugin_name "$plugin_path")
+                local relative_path="${plugin_path#$MAIN_DIR/}"
+                echo -e "   ${CYAN}•${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
+            done
+            echo ""
+        fi
+        
+        # Andere Plugins (falls vorhanden)
+        if [ ${#other_plugins[@]} -gt 0 ]; then
+            echo -e "${CYAN}Weitere Plugins:${NC}"
+            for plugin_path in "${other_plugins[@]}"; do
+                local version=$(get_plugin_version "$plugin_path")
+                local name=$(get_plugin_name "$plugin_path")
+                local relative_path="${plugin_path#$MAIN_DIR/}"
+                echo -e "   ${CYAN}•${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
+            done
+            echo ""
+        fi
+    fi
+    echo -e "   ${YELLOW}0)${NC} Beenden"
+    echo ""
+}
+
+# Scripts ausführen
+run_build() {
+    echo -e "${YELLOW}${ARROW} Starte Build.sh...${NC}"
+    echo ""
+    "$TOOLS_DIR/build.sh" "$@"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_gitpush() {
+    echo -e "${YELLOW}${ARROW} Starte Gitpush.sh...${NC}"
+    echo ""
+    "$TOOLS_DIR/gitpush.sh" "$@"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_start_ddev() {
+    echo -e "${YELLOW}${ARROW} Starte DDEV...${NC}"
+    echo ""
+    "$TOOLS_DIR/start-ddev.sh" "$@"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_typescript() {
+    echo -e "${YELLOW}${ARROW} Starte TypeScript.sh...${NC}"
+    echo ""
+    "$TOOLS_DIR/typescript.sh" "$@"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_restore_snapshot() {
+    echo -e "${YELLOW}${ARROW} Stelle Snapshot wieder her...${NC}"
+    echo ""
+    "$TOOLS_DIR/restore-snapshot.sh"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_setup() {
+    echo -e "${YELLOW}${ARROW} Starte Setup...${NC}"
+    echo ""
+    "$TOOLS_DIR/setup.sh"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_download_woltlab() {
+    echo -e "${YELLOW}${ARROW} Lade WoltLab Core herunter...${NC}"
+    echo ""
+    "$TOOLS_DIR/download-woltlab.sh"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_snapshot_manager() {
+    echo -e "${YELLOW}${ARROW} Öffne Snapshot Manager...${NC}"
+    echo ""
+    "$TOOLS_DIR/snapshot-manager.sh"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_credentials() {
+    echo -e "${YELLOW}${ARROW} Öffne Credentials Manager...${NC}"
+    echo ""
+    "$TOOLS_DIR/credentials.sh"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_dockge() {
+    echo -e "${YELLOW}${ARROW} Öffne Dockge...${NC}"
+    echo ""
+    "$TOOLS_DIR/dockge.sh" "$@"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_help() {
+    echo -e "${YELLOW}${ARROW} Zeige Dokumentation...${NC}"
+    echo ""
+    "$TOOLS_DIR/help.sh"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+run_validate() {
+    echo -e "${YELLOW}${ARROW} Starte Plugin Validierung...${NC}"
+    echo ""
+    "$TOOLS_DIR/validate-plugin.sh" "$@"
+    echo ""
+    read -p "Drücke ENTER um fortzufahren..."
+}
+
+# Hauptmenü
+while true; do
+    print_header
+    print_menu
+    
+    read -p "Wähle eine Option (0-13): " choice
+    echo ""
+    
+    case "$choice" in
+        1)
+            print_header
+            print_section "Build - Plugin bauen" "Hauptmenü" "Build"
+            
+            # Zeige verfügbare Plugins
+            local plugins=($(find_plugin_directories "$MAIN_DIR"))
+            if [ ${#plugins[@]} -gt 0 ]; then
+                echo -e "${YELLOW}Verfügbare Plugins:${NC}"
+                local i=1
+                for plugin_path in "${plugins[@]}"; do
+                    local version=$(get_plugin_version "$plugin_path")
+                    local name=$(get_plugin_name "$plugin_path")
+                    local relative_path="${plugin_path#$MAIN_DIR/}"
+                    echo -e "   ${CYAN}${i})${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
+                    i=$((i + 1))
+                done
+                echo ""
+            fi
+            
+            echo -e "${YELLOW}Optionen:${NC}"
+            echo -e "  ${CYAN}•${NC} Leer lassen → Erstes gefundenes Plugin bauen"
+            echo -e "  ${CYAN}•${NC} <name>      → Spezifisches Plugin-Verzeichnis bauen"
+            echo -e "  ${CYAN}•${NC} all         → Alle Plugin-Verzeichnisse bauen"
+            echo ""
+            read -p "Was möchtest du bauen? [auto]: " build_target
+            build_target=${build_target:-auto}
+            
+            echo ""
+            echo -e "${YELLOW}Version-Typ:${NC}"
+            echo -e "  ${CYAN}•${NC} patch (Standard) → 1.0.0 → 1.0.1"
+            echo -e "  ${CYAN}•${NC} minor            → 1.0.0 → 1.1.0"
+            echo -e "  ${CYAN}•${NC} major            → 1.0.0 → 2.0.0"
+            echo ""
+            read -p "Version-Typ? [patch]: " version_type
+            version_type=${version_type:-patch}
+            
+            echo ""
+            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
+            echo ""
+            read -p "Fortfahren? [j]: " continue_choice
+            if [ "${continue_choice:-j}" = "0" ]; then
+                continue
+            fi
+            
+            run_build "$build_target" "$version_type"
+            ;;
+        2)
+            print_header
+            print_section "Git Push - Commit & Push" "Hauptmenü" "Git Push"
+            
+            # Zeige verfügbare Plugins
+            local plugins=($(find_plugin_directories "$MAIN_DIR"))
+            if [ ${#plugins[@]} -gt 0 ]; then
+                echo -e "${YELLOW}Verfügbare Plugins:${NC}"
+                local i=1
+                for plugin_path in "${plugins[@]}"; do
+                    local version=$(get_plugin_version "$plugin_path")
+                    local name=$(get_plugin_name "$plugin_path")
+                    local relative_path="${plugin_path#$MAIN_DIR/}"
+                    echo -e "   ${CYAN}${i})${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
+                    i=$((i + 1))
+                done
+                echo ""
+            fi
+            
+            echo -e "${YELLOW}Optionen:${NC}"
+            echo -e "  ${CYAN}•${NC} Leer lassen → Auto-Detection (erkennt Änderungen)"
+            echo -e "  ${CYAN}•${NC} <name>      → Spezifisches Plugin-Verzeichnis pushen"
+            echo -e "  ${CYAN}•${NC} all         → Alle Plugin-Verzeichnisse pushen"
+            echo ""
+            read -p "Was möchtest du pushen? [auto]: " push_target
+            push_target=${push_target:-auto}
+            
+            echo ""
+            echo -e "${YELLOW}Commit-Nachricht:${NC}"
+            echo -e "  ${CYAN}•${NC} Leer lassen → Automatische Commit-Nachricht generieren"
+            echo -e "  ${CYAN}•${NC} <text>      → Eigene Commit-Nachricht eingeben"
+            echo ""
+            read -p "Commit-Nachricht? [auto]: " commit_msg
+            commit_msg=${commit_msg:-}
+            
+            echo ""
+            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
+            echo ""
+            read -p "Fortfahren? [j]: " continue_choice
+            if [ "${continue_choice:-j}" = "0" ]; then
+                continue
+            fi
+            
+            if [ -n "$commit_msg" ]; then
+                run_gitpush "$push_target" "$commit_msg"
+            else
+                run_gitpush "$push_target"
+            fi
+            ;;
+        3)
+            print_header
+            print_section "TypeScript - Kompilieren" "Hauptmenü" "TypeScript"
+            
+            echo -e "${GREEN}Verfügbare Optionen:${NC}"
+            echo ""
+            echo -e "   ${YELLOW}1)${NC} ${CYAN}Kompilieren${NC}  ${ARROW} TypeScript kompilieren"
+            echo -e "   ${YELLOW}2)${NC} ${CYAN}Watch${NC}        ${ARROW} Watch-Mode (automatische Kompilierung)"
+            echo ""
+            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
+            echo ""
+            read -p "Wähle eine Option (0-2): " ts_choice
+            echo ""
+            
+            case "$ts_choice" in
+                1) 
+                    ts_mode="normal"
+                    print_header
+                    print_section "TypeScript - Kompilieren" "Hauptmenü" "TypeScript" "Kompilieren"
+                    ;;
+                2) 
+                    ts_mode="watch"
+                    print_header
+                    print_section "TypeScript - Watch Mode" "Hauptmenü" "TypeScript" "Watch"
+                    ;;
+                0) continue ;;
+                *) 
+                    echo -e "${RED}Ungültige Option!${NC}"
+                    sleep 1
+                    continue
+                    ;;
+            esac
+            
+            if [ "$ts_mode" = "watch" ]; then
+                run_typescript "watch"
+            else
+                run_typescript
+            fi
+            ;;
+        4)
+            print_header
+            print_section "DDEV - Verwalten" "Hauptmenü" "DDEV"
+            
+            echo -e "${GREEN}Verfügbare Optionen:${NC}"
+            echo ""
+            echo -e "   ${YELLOW}1)${NC} ${CYAN}Start${NC}      ${ARROW} DDEV starten/Status anzeigen"
+            echo -e "   ${YELLOW}2)${NC} ${CYAN}Logs${NC}      ${ARROW} DDEV starten und Logs anzeigen"
+            echo -e "   ${YELLOW}3)${NC} ${CYAN}Stop${NC}      ${ARROW} DDEV stoppen"
+            echo -e "   ${YELLOW}4)${NC} ${CYAN}Restart${NC}   ${ARROW} DDEV neu starten"
+            echo -e "   ${YELLOW}5)${NC} ${CYAN}Status${NC}    ${ARROW} DDEV Status anzeigen"
+            echo ""
+            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
+            echo ""
+            read -p "Wähle eine Option (0-5): " ddev_choice
+            echo ""
+            
+            case "$ddev_choice" in
+                1) 
+                    ddev_cmd="start"
+                    print_header
+                    print_section "DDEV - Start" "Hauptmenü" "DDEV" "Start"
+                    ;;
+                2) 
+                    ddev_cmd="logs"
+                    print_header
+                    print_section "DDEV - Logs" "Hauptmenü" "DDEV" "Logs"
+                    ;;
+                3) 
+                    ddev_cmd="stop"
+                    print_header
+                    print_section "DDEV - Stop" "Hauptmenü" "DDEV" "Stop"
+                    ;;
+                4) 
+                    ddev_cmd="restart"
+                    print_header
+                    print_section "DDEV - Restart" "Hauptmenü" "DDEV" "Restart"
+                    ;;
+                5) 
+                    ddev_cmd="status"
+                    print_header
+                    print_section "DDEV - Status" "Hauptmenü" "DDEV" "Status"
+                    ;;
+                0) continue ;;
+                *) 
+                    echo -e "${RED}Ungültige Option!${NC}"
+                    sleep 1
+                    continue
+                    ;;
+            esac
+            
+            run_start_ddev "$ddev_cmd"
+            ;;
+        5)
+            print_header
+            print_section "Restore Snapshot - WoltLab wiederherstellen" "Hauptmenü" "Restore Snapshot"
+            
+            echo -e "${YELLOW}${WARNING} Warnung:${NC} Dies wird die komplette WoltLab-Installation"
+            echo -e "         aus dem Snapshot wiederherstellen!"
+            echo ""
+            echo -e "${YELLOW}Optionen:${NC}"
+            echo -e "  ${CYAN}•${NC} j/J → Fortfahren und Snapshot wiederherstellen"
+            echo -e "  ${CYAN}•${NC} Leer lassen → Abbrechen"
+            echo ""
+            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
+            echo ""
+            read -p "Fortfahren? [N]: " confirm
+            if [ "$confirm" = "0" ]; then
+                continue
+            elif [[ "$confirm" =~ ^[Jj]$ ]]; then
+                run_restore_snapshot
+            else
+                echo -e "${YELLOW}Abgebrochen.${NC}"
+                sleep 1
+            fi
+            ;;
+        6)
+            print_header
+            print_section "Setup - Vollständige Installation" "Hauptmenü" "Setup"
+            run_setup
+            ;;
+        7)
+            print_header
+            print_section "WoltLab Download - Core herunterladen" "Hauptmenü" "WoltLab Download"
+            run_download_woltlab
+            ;;
+        8)
+            print_header
+            print_section "Snapshot Manager - Snapshot-Verwaltung" "Hauptmenü" "Snapshot Manager"
+            run_snapshot_manager
+            ;;
+        9)
+            print_header
+            print_section "Credentials - Zugangsdaten-Verwaltung" "Hauptmenü" "Credentials"
+            run_credentials
+            ;;
+        10)
+            print_header
+            print_section "Dockge - Container-Management" "Hauptmenü" "Dockge"
+            
+            echo -e "${GREEN}Verfügbare Optionen:${NC}"
+            echo ""
+            echo -e "   ${YELLOW}1)${NC} ${CYAN}Start${NC}      ${ARROW} Dockge starten/Status anzeigen"
+            echo -e "   ${YELLOW}2)${NC} ${CYAN}Stop${NC}       ${ARROW} Dockge stoppen"
+            echo -e "   ${YELLOW}3)${NC} ${CYAN}Restart${NC}    ${ARROW} Dockge neu starten"
+            echo -e "   ${YELLOW}4)${NC} ${CYAN}Status${NC}     ${ARROW} Dockge Status anzeigen"
+            echo -e "   ${YELLOW}5)${NC} ${CYAN}Open${NC}       ${ARROW} Dockge im Browser öffnen"
+            echo ""
+            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
+            echo ""
+            read -p "Wähle eine Option (0-5): " dockge_choice
+            echo ""
+            
+            case "$dockge_choice" in
+                1) 
+                    dockge_cmd="start"
+                    print_header
+                    print_section "Dockge - Start" "Hauptmenü" "Dockge" "Start"
+                    ;;
+                2) 
+                    dockge_cmd="stop"
+                    print_header
+                    print_section "Dockge - Stop" "Hauptmenü" "Dockge" "Stop"
+                    ;;
+                3) 
+                    dockge_cmd="restart"
+                    print_header
+                    print_section "Dockge - Restart" "Hauptmenü" "Dockge" "Restart"
+                    ;;
+                4) 
+                    dockge_cmd="status"
+                    print_header
+                    print_section "Dockge - Status" "Hauptmenü" "Dockge" "Status"
+                    ;;
+                5) 
+                    dockge_cmd="open"
+                    print_header
+                    print_section "Dockge - Öffnen" "Hauptmenü" "Dockge" "Öffnen"
+                    ;;
+                0) continue ;;
+                *) 
+                    echo -e "${RED}Ungültige Option!${NC}"
+                    sleep 1
+                    continue
+                    ;;
+            esac
+            
+            run_dockge "$dockge_cmd"
+            ;;
+        11)
+            print_header
+            print_section "Hilfe & Dokumentation" "Hauptmenü" "Hilfe"
+            run_help
+            ;;
+        12)
+            print_header
+            print_section "Plugin Validierung" "Hauptmenü" "Plugin Validierung"
+            
+            # Zeige verfügbare Plugins
+            local plugins=($(find_plugin_directories "$MAIN_DIR"))
+            if [ ${#plugins[@]} -gt 0 ]; then
+                echo -e "${YELLOW}Verfügbare Plugins:${NC}"
+                local i=1
+                for plugin_path in "${plugins[@]}"; do
+                    local version=$(get_plugin_version "$plugin_path")
+                    local name=$(get_plugin_name "$plugin_path")
+                    local relative_path="${plugin_path#$MAIN_DIR/}"
+                    echo -e "   ${CYAN}${i})${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
+                    i=$((i + 1))
+                done
+                echo ""
+            fi
+            
+            echo -e "${YELLOW}Was wird geprüft:${NC}"
+            echo -e "  ${CYAN}•${NC} PHP & XML Syntax"
+            echo -e "  ${CYAN}•${NC} Security (SQL-Injection, XSS)"
+            echo -e "  ${CYAN}•${NC} Code-Qualität (Debug-Code, Test-Credentials)"
+            echo -e "  ${CYAN}•${NC} Plugin Store Compliance (Übersetzungen, Minversion)"
+            echo -e "  ${CYAN}•${NC} WoltLab API Best Practices"
+            echo ""
+            echo -e "${YELLOW}Optionen:${NC}"
+            echo -e "  ${CYAN}•${NC} Leer lassen → Aktuelles Verzeichnis prüfen"
+            echo -e "  ${CYAN}•${NC} <name>      → Spezifisches Plugin-Verzeichnis prüfen"
+            echo ""
+            read -p "Welches Plugin soll validiert werden? [aktuelles Verzeichnis]: " validate_target
+            
+            echo ""
+            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
+            echo ""
+            read -p "Fortfahren? [j]: " continue_choice
+            if [ "${continue_choice:-j}" = "0" ]; then
+                continue
+            fi
+            
+            if [ -n "$validate_target" ]; then
+                # Prüfe ob validate_target bereits absoluter Pfad ist
+                if [[ "$validate_target" =~ ^/ ]]; then
+                    run_validate "$validate_target"
+                else
+                    run_validate "$MAIN_DIR/$validate_target"
+                fi
+            else
+                run_validate
+            fi
+            ;;
+        13)
+            print_header
+            print_section "Updates prüfen" "Hauptmenü" "Updates"
+            # set -e temporär deaktivieren, damit Menü immer angezeigt wird
+            set +e
+            show_update_check
+            set -e
+            # show_update_check ist bereits interaktiv und kehrt zurück, wenn "0" gewählt wird
+            ;;
+        0)
+            echo -e "${GREEN}Auf Wiedersehen!${NC}"
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Ungültige Option!${NC}"
+            sleep 1
+            ;;
+    esac
+done

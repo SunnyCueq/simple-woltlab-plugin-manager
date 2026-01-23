@@ -32,6 +32,7 @@ use wcf\util\FileUtil;
  * @property-read   string      $linkTitle          Custom link title
  * @property-read   string      $autoExtractedTitle Auto-extracted page title
  * @property-read   string      $faviconUrl         Cached favicon URL
+ * @property-read   string      $ogImage            Open Graph image path
  * @property-read   int         $isDemo             Demo data flag (0 or 1)
  */
 class ShrinkrLink extends DatabaseObject implements IRouteController
@@ -186,5 +187,20 @@ class ShrinkrLink extends DatabaseObject implements IRouteController
         }
         
         return new self(null, $row);
+    }
+
+    /**
+     * Returns the upload file locations for the ogImage field.
+     * Required by UploadFormField to load existing files.
+     *
+     * @return  string[]
+     */
+    public function getOgImageUploadFileLocations(): array
+    {
+        if (empty($this->ogImage)) {
+            return [];
+        }
+        
+        return [$this->ogImage];
     }
 }

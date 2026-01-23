@@ -44,12 +44,29 @@
 			<templatecode><![CDATA[<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('shrinkr')}acp/style/shrinkr.css" />]]></templatecode>
 		</templatelistener>
 
+		<templatelistener name="shrinkrRequirePaths">
+			<environment>admin</environment>
+			<templatename>header</templatename>
+			<eventname>requirePaths</eventname>
+			<templatecode><![CDATA["d3": "{unsafe:$__wcf->getPath('shrinkr')}js/3rdParty/d3/d3.min",
+				"topojson-client": "{unsafe:$__wcf->getPath('shrinkr')}js/3rdParty/topojson-client/topojson-client",]]></templatecode>
+		</templatelistener>
+
 		<!-- Copyright-Erweiterung -->
 		<templatelistener name="shrinkrCopyright">
 			<environment>user</environment>
 			<templatename>pageFooterCopyright</templatename>
 			<eventname>copyright</eventname>
 			<templatecode><![CDATA[{include file='__shrinkrCopyright' application='shrinkr'}]]></templatecode>
+		</templatelistener>
+
+		<!-- Reaction Button für Redirect-Seite -->
+		<templatelistener name="reactionButtonShrinkr">
+			<environment>user</environment>
+			<templatename>__redirectContainer</templatename>
+			<eventname>beforeRedirectCopyright</eventname>
+			<templatecode><![CDATA[{include file='__reactionButton' application='shrinkr'}]]></templatecode>
+			<nice>2</nice>
 		</templatelistener>
 
 	</import>

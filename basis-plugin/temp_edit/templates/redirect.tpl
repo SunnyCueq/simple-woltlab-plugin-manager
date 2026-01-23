@@ -19,6 +19,26 @@
 	{if !$headContent|empty}
 		{unsafe:$headContent}
 	{/if}
+	
+	<style>
+		woltlab-core-dialog[data-dialog-id*="shrinkr"] button[aria-label*="Schließen" i],
+		woltlab-core-dialog[data-dialog-id*="shrinkr"] button[aria-label*="Abbrechen" i],
+		woltlab-core-dialog[data-dialog-id*="shrinkr"] .dialogClose,
+		woltlab-core-dialog[data-dialog-id*="shrinkr"] button:not([data-dialog-button="primary"]):not([type="submit"]) {
+			display: none !important;
+			visibility: hidden !important;
+			pointer-events: none !important;
+		}
+		
+		/* Passwort-Dialog Styling */
+		woltlab-core-dialog[data-dialog-id*="shrinkr"] {
+			z-index: 9999 !important;
+		}
+		
+		woltlab-core-dialog[data-dialog-id*="shrinkr"] .dialog__content {
+			min-width: 400px;
+		}
+	</style>
 </head>
 
 <body id="tpl_{$templateNameApplication}_{$templateName}"
@@ -29,9 +49,9 @@
 
     <span id="top"></span>
 
-    <div id="pageContainer" class="pageContainer">
+    <div id="pageContainer" class="pageContainer"{if $link && $link->linkID} data-link-id="{$link->linkID}"{/if}>
         {if SHRINKR_NORMAL_PAGE_MODE}
-            {* Fix Missing DOM Elements (nice: -1000) - Zuerst *}
+            {* Fix Missing DOM Elements - Zuerst *}
             {* Vollständige Dummy-Struktur für WoltLab's JavaScript *}
             {* Versteckt, aber vollständig, um JavaScript-Fehler zu vermeiden *}
             <div id="mainMenu" class="mainMenu" style="display: none !important; visibility: hidden; position: absolute; left: -9999px;" aria-hidden="true">
@@ -64,7 +84,7 @@
                 </ul>
             </nav>
 
-            {* Theme Stylesheet (nice: -50) *}
+            {* Theme Stylesheet *}
             {if $activeThemeIdentifier|isset && $activeThemeIdentifier}
                 {* Load theme-specific CSS file *}
                 <link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('shrinkr')}style/themes/{$activeThemeIdentifier}.css" />
@@ -152,7 +172,6 @@
                                 {content}
                                     {event name='boxesSidebarLeftTop'}
                                     
-                                    {* WCF2.1 Fallback *}
                                     {if !$sidebar|empty}
                                         {if !$sidebarOrientation|isset || $sidebarOrientation == 'left'}
                                             {unsafe:$sidebar}
@@ -184,7 +203,6 @@
                         
                         {event name='boxesSidebarRightTop'}
                         
-                        {* WCF2.1 Fallback *}
                         {if !$sidebar|empty}
                             {if !$sidebarOrientation|isset || $sidebarOrientation == 'right'}
                                 {unsafe:$sidebar}
@@ -240,7 +258,7 @@
                         {unsafe:$__wcf->getAdHandler()->getAds('de.sunnyc.wsc.shrinkr.beforeRedirectContainer')}
                     {/if}
 
-                    {* Featured Links Promo Badge (nice: default 0) *}
+                    {* Featured Links Promo Badge *}
                     {* Promotional badge template with discount value and countdown *}
                     {* Badge wird immer angezeigt, auch ohne Discount (leer mit Standardfarben) *}
                     <div class="badge-promo" style="
@@ -286,7 +304,7 @@
 
                     {include application="shrinkr" file='__redirectContainer'}
 
-                    {* Featured Links (nice: -1) *}
+                    {* Featured Links *}
                     {if $featuredLinks|count > 0}
                         <dl class="featuredLinksContainer">
                             {event name='featuredLinksBefore'}
@@ -332,10 +350,8 @@
                             function trackButtonClick(linkID, buttonType, linkID) {
                                 if (!linkID) return;
                                 
-                                // Use WoltLab's Legacy AJAX API
-                                // https://docs.woltlab.com/6.0/javascript/new-api_ajax/
                                 if (typeof require !== 'undefined') {
-                                    require(['Ajax'], function(Ajax) {
+                                    require(['WoltLabSuite/Core/Ajax'], function(Ajax) {
                                         Ajax.apiOnce({
                                             data: {
                                                 actionName: 'trackClick',
@@ -378,7 +394,7 @@
                         {/if}
                     {/if}
 
-                    {* Theme Effects (nice: 10) - Zuletzt *}
+                    {* Theme Effects - Zuletzt *}
                     {* Theme effects template *}
                     {if $activeThemeEffect|isset && $activeThemeEffect.identifier !== 'none'}
                         {if $activeThemeEffect.identifier === 'autumnLeaves'}

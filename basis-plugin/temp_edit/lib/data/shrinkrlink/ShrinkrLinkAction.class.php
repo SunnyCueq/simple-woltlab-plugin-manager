@@ -14,12 +14,22 @@
 namespace shrinkr\data\shrinkrlink;
 
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\data\option\Option;
+use wcf\system\exception\IllegalLinkException;
+use wcf\system\exception\PermissionDeniedException;
+use wcf\system\exception\UserInputException;
+use wcf\system\WCF;
 
 /**
  * Action class for ShrinkrLink database objects.
  */
 class ShrinkrLinkAction extends AbstractDatabaseObjectAction
 {
+    /**
+     * @inheritDoc
+     */
+    protected $className = ShrinkrLinkEditor::class;
+    
     /**
      * @inheritDoc
      */

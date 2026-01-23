@@ -3,7 +3,7 @@
 		<h1>
             {hascontent}
                 {content}
-                    {* Title Icon (nice: 0) *}
+                    {* Title Icon *}
                     {if $titleIconName && $titleIconName|trim && $titleIconName != ';'}
                         <span class="titleIcon">
                             {if $titleIconForceSolid}
@@ -14,7 +14,7 @@
                         </span>
                     {/if}
                     
-                    {* URL Title Show In Template (nice: default 0) *}
+                    {* URL Title Show In Template *}
                     {if $activeThemeIdentifier|isset && $activeThemeIdentifier === 'blackweek'}
                         {* Black Week Theme: Apply glitch effect *}
                         {if $link->linkTitle}
@@ -41,7 +41,7 @@
 		<p>
             {hascontent}
                 {content}
-                    {* Featured Links Descriptions (nice: default 0) *}
+                    {* Featured Links Descriptions *}
                     {if $enableDescriptions && $randomDescription|isset}{unsafe:$randomDescription}{else}{* Prevent empty paragraph *}{/if}
                     
                     {event name='redirectDescription'}
@@ -76,7 +76,7 @@
 			</div>
 		{/if}
 
-        {* Custom Buttons (nice: -5) - Zuerst *}
+        {* Custom Buttons - Zuerst *}
         {if $customButtons|count > 0}
             <div class="customButtonsContainer">
                 {event name='customButtonsBefore'}
@@ -103,10 +103,8 @@
                 function trackButtonClick(linkID, buttonType, linkID) {
                     if (!linkID) return;
                     
-                    // Use WoltLab's Legacy AJAX API
-                    // https://docs.woltlab.com/6.0/javascript/new-api_ajax/
                     if (typeof require !== 'undefined') {
-                        require(['Ajax'], function(Ajax) {
+                        require(['WoltLabSuite/Core/Ajax'], function(Ajax) {
                             Ajax.apiOnce({
                                 data: {
                                     actionName: 'trackClick',
@@ -150,7 +148,7 @@
             {/if}
         {/if}
 
-        {* Featured Links Additional Text (nice: -2) *}
+        {* Featured Links Additional Text *}
         {if $discount && $discount->additionalText}
             <div class="additionalTextContainer">
                 <div class="htmlContent">
@@ -159,7 +157,7 @@
             </div>
         {/if}
 
-        {* Featured Links Codes (nice: -1) *}
+        {* Featured Links Codes *}
         {if $discount && $discount->hasValidCodes()}
             <div class="discountCodesContainer warning">
                 <strong>{#$discount->getCodesCount()} {$discount->getCodesLabel()}</strong>
@@ -192,17 +190,15 @@
             </script>
         {/if}
 
-        {* Forward Button Tracking (nice: 0) - Always load tracking for forward button (works for both 3D and standard button) *}
+        {* Forward Button Tracking - Always load tracking for forward button (works for both 3D and standard button) *}
         <script data-relocate="true">
         (function() {
             // Track button click function (shared with __forwardButton.tpl)
             function trackButtonClick(linkID, buttonType, linkID) {
                 if (!linkID) return;
                 
-                // Use WoltLab's Legacy AJAX API
-                // https://docs.woltlab.com/6.0/javascript/new-api_ajax/
                 if (typeof require !== 'undefined') {
-                    require(['Ajax'], function(Ajax) {
+                    require(['WoltLabSuite/Core/Ajax'], function(Ajax) {
                         Ajax.apiOnce({
                             data: {
                                 actionName: 'trackClick',
@@ -270,7 +266,7 @@
         })();
         </script>
 
-        {* Enhance Forward Button (nice: 1) *}
+        {* Enhance Forward Button *}
         {if SHRINKR_ENABLE_CUSTOM_FORWARD_BUTTON}
         {* Enhanced forward button with 3D effect *}
         <script data-relocate="true">
@@ -382,10 +378,8 @@
             function trackButtonClick(linkID, buttonType, linkID) {
                 if (!linkID) return;
                 
-                // Use WoltLab's Legacy AJAX API
-                // https://docs.woltlab.com/6.0/javascript/new-api_ajax/
                 if (typeof require !== 'undefined') {
-                    require(['Ajax'], function(Ajax) {
+                    require(['WoltLabSuite/Core/Ajax'], function(Ajax) {
                         Ajax.apiOnce({
                             data: {
                                 actionName: 'trackClick',
@@ -418,96 +412,7 @@
         </script>
         {/if}
 
-
-        {* Reaction Button (nice: 2) - Zuletzt *}
-        {* Buttons: Share links, Reaktionen rechts *}
-        {if MODULE_LIKE && $enableReactions && $reactionObjectID}
-            <div class="shrinkrBox__footer" data-object-id="{#$reactionObjectID}">
-                {* WoltLab-Standard Layout: Wie comment__footer mit Grid *}
-                <div class="shrinkrBox__reactions">
-                    {if $__wcf->session->getPermission('user.like.canViewLike')}
-                        {* Eigenes Template mit guestReactionTypeID Support *}
-                        {assign var='__reactionSummaryJson' value='[]'}
-                        {if $reactionData[$reactionObjectID]|isset}
-                            {assign var='__reactionSummaryJson' value=$reactionData[$reactionObjectID]->getReactionsJson()}
-                        {/if}
-                        
-                        {* Determine selected reaction: For guests use guestReactionTypeID, otherwise use reactionTypeID *}
-                        {assign var='__selectedReaction' value='0'}
-                        {if !$__wcf->user->userID && $guestReactionTypeID|isset && $guestReactionTypeID > 0}
-                            {assign var='__selectedReaction' value=$guestReactionTypeID}
-                        {elseif $reactionData[$reactionObjectID]|isset && $reactionData[$reactionObjectID]->reactionTypeID}
-                            {assign var='__selectedReaction' value=$reactionData[$reactionObjectID]->reactionTypeID}
-                        {/if}
-                        
-                        <woltlab-core-reaction-summary
-                            data="{$__reactionSummaryJson}"
-                            object-type="{$reactionObjectType}"
-                            object-id="{#$reactionObjectID}"
-                            selected-reaction="{#$__selectedReaction}"
-                        ></woltlab-core-reaction-summary>
-                    {/if}
-                </div>
-
-                {* Buttons rechts (wie comment__buttons) *}
-                <div class="shrinkrBox__buttons">
-                    {if SHRINKR_ENABLE_SHARE_BUTTON}
-                            <button type="button" class="button small shareButton jsTooltip" title="{lang}wcf.message.share{/lang}" aria-label="{lang}wcf.message.share{/lang}" data-link="{$shareUrl}" data-link-title="{if $link->linkTitle|isset && $link->linkTitle}{$link->linkTitle}{elseif $link->extractedTitle|isset}{$link->extractedTitle}{else}{$link->hash}{/if}">
-                                {icon name='share-nodes'}
-                                <span class="invisible">{lang}wcf.message.share{/lang}</span>
-                            </button>
-                    {/if}
-
-                        {* Reaction button - for logged-in users or guests (if enabled) *}
-                        {if $__wcf->session->getPermission('user.like.canLike') || ($enableGuestReactions && !$__wcf->user->userID)}
-                            {if $__wcf->user->userID}
-                                {* Logged in user *}
-                            <button type="button" class="button small reactButton jsTooltip{if $reactionData[$reactionObjectID]|isset && $reactionData[$reactionObjectID]->reactionTypeID} active{/if}" title="{lang}wcf.reactions.react{/lang}" aria-label="{lang}wcf.reactions.react{/lang}" data-reaction-type-id="{if $reactionData[$reactionObjectID]|isset && $reactionData[$reactionObjectID]->reactionTypeID}{#$reactionData[$reactionObjectID]->reactionTypeID}{else}0{/if}" data-object-type="{$reactionObjectType}" data-object-id="{#$reactionObjectID}">
-                                    {icon name='face-smile'}
-                                    <span class="invisible">{lang}wcf.reactions.react{/lang}</span>
-                            </button>
-                            {else}
-                                {* Guest *}
-                            <button type="button" class="button small reactButton jsGuestReactButton jsTooltip{if $guestReactionTypeID|isset && $guestReactionTypeID > 0} active{/if}" title="{lang}wcf.reactions.react{/lang}" aria-label="{lang}wcf.reactions.react{/lang}" data-reaction-type-id="{if $guestReactionTypeID|isset}{#$guestReactionTypeID}{else}0{/if}" data-object-type="{$reactionObjectType}" data-object-id="{#$reactionObjectID}">
-                                    {icon name='face-smile'}
-                                    <span class="invisible">{lang}wcf.reactions.react{/lang}</span>
-                            </button>
-                        {/if}
-                    {/if}
-                </div>
-            </div>
-
-            {* Initialize reaction handlers *}
-            <script data-relocate="true">
-                {if $__wcf->user->userID || $enableGuestReactions}
-                    {if $__wcf->user->userID}
-                        {* Logged-in users: Use WoltLab's standard UiReactionHandler *}
-                        require(['WoltLabSuite/Core/Ui/Reaction/Handler'], function(UiReactionHandler) {
-                            new UiReactionHandler('{$reactionObjectType}', {
-                                containerSelector: '.shrinkrBox__footer',
-                                buttonSelector: '.reactButton'
-                            });
-                        });
-                    {elseif $enableGuestReactions}
-                        {* Guests: Use GuestReactionHandler.createHandler() *}
-                        require(['Shrinkr/Ui/GuestReactionHandler'], function(GuestReactionHandler) {
-                            GuestReactionHandler.createHandler({
-                                objectType: '{$reactionObjectType}',
-                                containerSelector: '.shrinkrBox__footer',
-                                buttonSelector: '.jsGuestReactButton'
-                            });
-                        });
-                    {/if}
-                {/if}
-
-                {* Initialize share dialog if enabled *}
-                {if SHRINKR_ENABLE_SHARE_BUTTON}
-                require(['WoltLabSuite/Core/Ui/Message/Share/Dialog'], function(UiMessageShareDialog) {
-                    UiMessageShareDialog.setup();
-                });
-                {/if}
-            </script>
-        {/if}
+        {* Reaction Button wird über Template Listener eingefügt (vor Copyright) *}
 
         {event name='beforeRedirectCopyright'}
 
@@ -515,7 +420,7 @@
 </div>
 
 
-{if SHRINKR_TIME_UNTIL_FORWARDING > 0 1}
+{if SHRINKR_TIME_UNTIL_FORWARDING > 0}
 <script>
 	var seconds = {SHRINKR_TIME_UNTIL_FORWARDING};
 	

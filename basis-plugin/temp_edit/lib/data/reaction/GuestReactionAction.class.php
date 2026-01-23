@@ -3,6 +3,7 @@
 namespace shrinkr\data\reaction;
 
 use shrinkr\data\guestreaction\GuestReactionEditor;
+use shrinkr\system\event\listener\ReactionActionGuestReactionListener;
 use wcf\data\option\Option;
 use wcf\data\reaction\ReactionAction;
 use wcf\system\exception\IllegalLinkException;
@@ -10,8 +11,8 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\WCF;
 
 /**
- * Extended ReactionAction that allows guests to react on URL shortener URLs.
- * Guest reactions are stored in the guest_reaction table instead of the standard like table.
+ * Custom ReactionAction for handling guest reactions.
+ * This class overrides validateReact() to allow guests to react.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
@@ -25,101 +26,48 @@ class GuestReactionAction extends ReactionAction
     /**
      * @inheritDoc
      */
-    protected $allowGuestAccess = ['getReactionDetails', 'load', 'react'];
+    protected $allowGuestAccess = ['react', 'getReactionDetails', 'load'];
 
     /**
-     * Flag to indicate if this is a guest reaction (stored in guest table)
-     * @var bool
-     */
-    protected $isGuestReaction = false;
-
-    /**
-     * @inheritDoc
+     * Validates the 'react' method for guests.
+     * Overrides parent to allow guest reactions.
      */
     public function validateReact()
     {
-        $this->readInteger('reactionTypeID', true); // allowEmpty = true because 0 is valid
+        $this->validateObjectParameters();
 
-        $reactionTypeID = isset($this->parameters['reactionTypeID']) ? (int)$this->parameters['reactionTypeID'] : 0;
-        
-        if ($reactionTypeID > 0) {
-            $this->reactionType = \wcf\data\reaction\type\ReactionTypeCache::getInstance()->getReactionTypeByID($reactionTypeID);
-            if (!$this->reactionType || !$this->reactionType->reactionTypeID) {
-                throw new IllegalLinkException();
-            }
+        $this->readInteger('reactionTypeID', false);
+
+        $this->reactionType = \wcf\data\reaction\type\ReactionTypeCache::getInstance()->getReactionTypeByID($this->parameters['reactionTypeID']);
+
+        if (!$this->reactionType->reactionTypeID) {
+            throw new IllegalLinkException();
         }
 
         // Check if guest reactions are enabled
-        $guestReactionsOption = Option::getOptionByName('shrinkr_featuredLinks_enableGuestReactions');
-        $enableGuestReactions = $guestReactionsOption ? $guestReactionsOption->optionValue : 0;
+        $guestReactionsOption = Option::getOptionByName('shrinkr_enable_guest_reactions');
+        $enableGuestReactions = $guestReactionsOption ? ($guestReactionsOption->optionValue == '1' || $guestReactionsOption->optionValue == 1) : false;
 
-        // For guests: Validate parameters manually before calling validateObjectParameters()
-        // This is necessary because validateObjectParameters() may throw exceptions for guests
-        if (!WCF::getUser()->userID && $enableGuestReactions) {
-            // Ensure data array exists
-            if (!isset($this->parameters['data'])) {
-                $this->parameters['data'] = [];
+        // For guests: only allow if guest reactions are enabled
+        if (!WCF::getUser()->userID) {
+            if (!$enableGuestReactions) {
+                throw new PermissionDeniedException();
             }
-            
-            // Try to read objectID and objectType from various possible locations
-            if (!isset($this->parameters['data']['objectID'])) {
-                // Try direct parameter
-                if (isset($this->parameters['objectID'])) {
-                    $this->parameters['data']['objectID'] = (int)$this->parameters['objectID'];
-                } else {
-                    // Try from objectIds array (used by dboAction)
-                    if (!empty($this->objects)) {
-                        $object = reset($this->objects);
-                        $this->parameters['data']['objectID'] = $object->getObjectID();
-                    } else {
-                        throw new IllegalLinkException();
-                    }
-                }
-            }
-            
-            if (!isset($this->parameters['data']['objectType'])) {
-                // Try direct parameter
-                if (isset($this->parameters['objectType'])) {
-                    $this->parameters['data']['objectType'] = $this->parameters['objectType'];
-                } else {
-                    throw new IllegalLinkException();
-                }
-            }
-            
+
             // Check if this is our object type
-            if ($this->parameters['data']['objectType'] === 'de.sunnyc.wsc.shrinkr.likeableUrl') {
-                // Validate object parameters (now that we've ensured they exist)
-                $this->validateObjectParameters();
-                
-                // Verify that the URL object exists and is valid
-                $this->likeableObject = $this->objectTypeProvider->getObjectByID($this->parameters['data']['objectID']);
-                if ($this->likeableObject === null || !$this->likeableObject->getObjectID()) {
-                    throw new IllegalLinkException();
-                }
-                
-                $this->likeableObject->setObjectType($this->objectType);
-                
-                // Mark as guest reaction
-                $this->isGuestReaction = true;
-                
-                // Skip own content check for guests (they don't have userID)
-                
-                if ($this->objectTypeProvider instanceof \wcf\data\like\IRestrictedLikeObjectTypeProvider) {
-                    if (!$this->objectTypeProvider->canLike($this->likeableObject)) {
-                        throw new PermissionDeniedException();
-                    }
-                }
-                
-                // Skip isAssignable check for guests
-                return;
+            if (!isset($this->parameters['data']['objectType']) ||
+                $this->parameters['data']['objectType'] !== 'de.sunnyc.wsc.shrinkr.likeableShrinkrLink') {
+                throw new PermissionDeniedException();
             }
+
+            // For guests, we skip the permission check and own content check
+            $this->likeableObject = $this->objectTypeProvider->getObjectByID($this->parameters['data']['objectID']);
+            $this->likeableObject->setObjectType($this->objectType);
+            return; // Skip further validation for guests
         }
 
-        // For logged-in users or non-guest reactions: Validate object parameters normally
-        $this->validateObjectParameters();
-
-        // For non-guests, use standard validation
-        if (!WCF::getUser()->userID || !WCF::getSession()->getPermission('user.like.canLike')) {
+        // For logged-in users: use standard validation
+        if (!WCF::getSession()->getPermission('user.like.canLike')) {
             throw new PermissionDeniedException();
         }
 
@@ -135,59 +83,71 @@ class GuestReactionAction extends ReactionAction
                 throw new PermissionDeniedException();
             }
         }
-
-        if (!$this->reactionType->isAssignable) {
-            // check, if the reaction is reverted
-            $like = \wcf\data\like\Like::getLike(
-                $this->likeableObject->getObjectType()->objectTypeID,
-                $this->likeableObject->getObjectID(),
-                WCF::getUser()->userID
-            );
-
-            if (!$like->likeID || $like->reactionTypeID !== $this->reactionType->reactionTypeID) {
-                throw new IllegalLinkException();
-            }
-        }
     }
 
     /**
-     * Handles guest reaction - stores in guest_reaction table instead of like table
-     *
-     * @return array
+     * Handles the 'react' action for guests and users.
+     * Overrides parent to handle guest reactions in database and include them for users too.
      */
     public function react()
     {
-        // If this is a guest reaction, use custom logic
-        if ($this->isGuestReaction) {
+        // For guests: handle guest reactions
+        if (!WCF::getUser()->userID) {
             return $this->reactAsGuest();
         }
 
-        // For logged-in users: Use standard reaction logic, but include guest reactions in response
-        $result = parent::react();
+        // For logged-in users: use standard reaction handling BUT include guest reactions in response
+        $reactionData = parent::react();
         
-        // Add guest reactions to the response so the frontend shows all reactions
-        $objectType = $this->parameters['data']['objectType'];
-        $objectID = $this->likeableObject->getObjectID();
-        $reactionDataWithGuests = $this->getReactionDataWithGuests($objectType, $objectID);
+        // Get reaction data including guest reactions for our object type
+        if (isset($this->parameters['data']['objectType']) && 
+            $this->parameters['data']['objectType'] === 'de.sunnyc.wsc.shrinkr.likeableShrinkrLink') {
+            $objectType = $this->parameters['data']['objectType'];
+            $objectID = (int)$this->parameters['data']['objectID'];
+            
+            // Get combined reaction data (user + guest reactions)
+            $combinedReactionData = $this->getReactionDataWithGuests($objectType, $objectID);
+            
+            // Convert full structure to numbers array (like parent::react() does)
+            $reactionsNumbers = [];
+            foreach ($combinedReactionData['cachedReactions'] as $reactionTypeID => $reactionDataItem) {
+                if (is_array($reactionDataItem) && isset($reactionDataItem['reactionCount'])) {
+                    $reactionsNumbers[$reactionTypeID] = $reactionDataItem['reactionCount'];
+                } else {
+                    $reactionsNumbers[$reactionTypeID] = is_numeric($reactionDataItem) ? $reactionDataItem : 0;
+                }
+            }
+            
+            // Return with combined reactions
+            return [
+                'reactions' => $reactionsNumbers,
+                'objectID' => $reactionData['objectID'],
+                'objectType' => $reactionData['objectType'],
+                'reactionTypeID' => $reactionData['reactionTypeID'],
+                'reputationCount' => $combinedReactionData['cumulativeLikes'],
+                '_debug' => [
+                    'source' => 'user_reaction_with_guests',
+                    'reactions_count' => count($reactionsNumbers),
+                    'reactions' => $reactionsNumbers,
+                ],
+            ];
+        }
         
-        // Replace reactions with combined data (normal + guest reactions)
-        $result['reactions'] = $reactionDataWithGuests['cachedReactions'];
-        $result['reputationCount'] = $reactionDataWithGuests['cumulativeLikes'];
-        
-        return $result;
+        // For other object types, return standard response
+        return $reactionData;
     }
 
     /**
-     * Handles guest reaction and stores it in guest_reaction table
+     * Handles guest reaction.
      *
      * @return array
      */
     protected function reactAsGuest()
     {
         $sessionID = WCF::getSession()->sessionID;
-        $objectType = 'de.sunnyc.wsc.shrinkr.likeableUrl';
-        $objectID = $this->parameters['data']['objectID'];
-        $reactionTypeID = isset($this->parameters['reactionTypeID']) ? (int)$this->parameters['reactionTypeID'] : 0;
+        $objectType = 'de.sunnyc.wsc.shrinkr.likeableShrinkrLink';
+        $objectID = (int)$this->parameters['data']['objectID'];
+        $reactionTypeID = (int)$this->parameters['reactionTypeID'];
 
         // Check if guest already reacted on this object
         $sql = "SELECT  guestReactionID, reactionTypeID
@@ -231,13 +191,45 @@ class GuestReactionAction extends ReactionAction
         // Get reaction data including guest reactions
         $reactionData = $this->getReactionDataWithGuests($objectType, $objectID);
 
-        return [
-            'reactions' => $reactionData['cachedReactions'],
+        // #region agent log - Debug info for browser (no file logging, only in response)
+        $debugInfo = [
+            'reactions_structure_before' => is_array($reactionData['cachedReactions']) ? array_keys($reactionData['cachedReactions']) : 'not_array',
+            'reactions_sample_before' => !empty($reactionData['cachedReactions']) ? array_slice($reactionData['cachedReactions'], 0, 1, true) : 'empty',
+        ];
+        // #endregion
+
+        // ReactionAction.react() returns $reactionData['cachedReactions'] from ReactionHandler.react(),
+        // which is [reactionTypeID => count] (numbers only). The JavaScript/Frontend expects numbers
+        // and converts them to the full structure internally (via REACTION_TYPES or similar).
+        // We need to convert our full structure back to numbers to match the expected format.
+        $reactionsNumbers = [];
+        foreach ($reactionData['cachedReactions'] as $reactionTypeID => $reactionDataItem) {
+            if (is_array($reactionDataItem) && isset($reactionDataItem['reactionCount'])) {
+                $reactionsNumbers[$reactionTypeID] = $reactionDataItem['reactionCount'];
+            } else {
+                // Fallback: if it's already a number, use it directly
+                $reactionsNumbers[$reactionTypeID] = is_numeric($reactionDataItem) ? $reactionDataItem : 0;
+            }
+        }
+
+        // #region agent log - Debug info for browser
+        $debugInfo['reactions_numbers'] = $reactionsNumbers;
+        $debugInfo['reactions_count'] = count($reactionsNumbers);
+        $debugInfo['reactions_type'] = gettype($reactionsNumbers);
+        $debugInfo['reactions_is_array'] = is_array($reactionsNumbers);
+        // #endregion
+
+        $returnData = [
+            'reactions' => $reactionsNumbers,
             'objectID' => $objectID,
             'objectType' => $objectType,
             'reactionTypeID' => $reactionTypeID,
             'reputationCount' => $reactionData['cumulativeLikes'],
+            // Debug info - visible in browser AJAX response
+            '_debug' => $debugInfo,
         ];
+
+        return $returnData;
     }
 
     /**
@@ -260,12 +252,7 @@ class GuestReactionAction extends ReactionAction
                 $cachedReactions = [];
                 $cumulativeLikes = 0;
             } else {
-                // getReactions() gibt Objekte zurück, aber wir brauchen Zahlen für cachedReactions
-                $reactions = $likeObject->getReactions();
-                $cachedReactions = [];
-                foreach ($reactions as $reactionTypeID => $reactionData) {
-                    $cachedReactions[$reactionTypeID] = isset($reactionData['reactionCount']) ? $reactionData['reactionCount'] : 0;
-                }
+                $cachedReactions = $likeObject->getReactions();
                 $cumulativeLikes = $likeObject->cumulativeLikes;
             }
         }
@@ -289,80 +276,25 @@ class GuestReactionAction extends ReactionAction
             }
 
             if (!isset($cachedReactions[$reactionTypeID])) {
-                $cachedReactions[$reactionTypeID] = 0;
+                $cachedReactions[$reactionTypeID] = [
+                    'reactionCount' => 0,
+                    'renderedReactionIcon' => $reactionType->renderIcon(),
+                    'renderedReactionIconEncoded' => \wcf\util\JSON::encode($reactionType->renderIcon()),
+                    'reactionTitle' => $reactionType->getTitle(),
+                ];
             }
 
-            $cachedReactions[$reactionTypeID] += $count;
+            $cachedReactions[$reactionTypeID]['reactionCount'] += $count;
             $cumulativeLikes += $count;
         }
+
+        // #region agent log - Debug info only in response, no file logging
+        // Debug info is included in _debug field of AJAX response (visible in browser)
+        // #endregion
 
         return [
             'cachedReactions' => $cachedReactions,
             'cumulativeLikes' => $cumulativeLikes,
         ];
     }
-
-    /**
-     * Gets guest reactions for multiple objects (batch operation)
-     * [PERFORMANCE-OPTIMIERUNG] Loads all guest reactions in one query instead of N+1
-     * Note: Regular reactions should be loaded separately using loadLikeObjects()
-     *
-     * @param string $objectType
-     * @param array $objectIDs Array of object IDs
-     * @return array Array indexed by objectID with guest reaction data only
-     */
-    public function getReactionDataWithGuestsBatch($objectType, array $objectIDs): array
-    {
-        if (empty($objectIDs)) {
-            return [];
-        }
-
-        $result = [];
-        
-        // Initialize result array for all object IDs (only guest reactions)
-        foreach ($objectIDs as $objectID) {
-            $result[$objectID] = [
-                'cachedReactions' => [],
-                'cumulativeLikes' => 0,
-            ];
-        }
-
-        // Get all guest reactions in one query
-        $placeholders = str_repeat('?,', count($objectIDs) - 1) . '?';
-        $sql = "SELECT  objectID, reactionTypeID, COUNT(*) as count
-                FROM    shrinkr" . WCF_N . "_guest_reaction
-                WHERE   objectType = ?
-                    AND objectID IN ({$placeholders})
-                GROUP BY objectID, reactionTypeID";
-        $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute(array_merge([$objectType], $objectIDs));
-
-        while ($row = $statement->fetchArray()) {
-            $objectID = $row['objectID'];
-            $reactionTypeID = $row['reactionTypeID'];
-            $count = $row['count'];
-
-            if (!isset($result[$objectID])) {
-                $result[$objectID] = [
-                    'cachedReactions' => [],
-                    'cumulativeLikes' => 0,
-                ];
-            }
-
-            $reactionType = \wcf\data\reaction\type\ReactionTypeCache::getInstance()->getReactionTypeByID($reactionTypeID);
-            if ($reactionType === null) {
-                continue;
-            }
-
-            if (!isset($result[$objectID]['cachedReactions'][$reactionTypeID])) {
-                $result[$objectID]['cachedReactions'][$reactionTypeID] = 0;
-            }
-
-            $result[$objectID]['cachedReactions'][$reactionTypeID] += $count;
-            $result[$objectID]['cumulativeLikes'] += $count;
-        }
-
-        return $result;
-    }
 }
-

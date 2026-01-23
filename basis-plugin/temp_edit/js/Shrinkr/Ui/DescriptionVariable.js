@@ -9,7 +9,6 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.setup = setup;
-    // No import needed - using native DOM API
     /**
      * Inserts variable at cursor position in textarea.
      *

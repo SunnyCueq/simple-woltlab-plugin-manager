@@ -1,0 +1,919 @@
+[2026-01-18 12:16:56.457] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:16:56.459] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:16:56.461] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:16:56.550] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:16:56.584] [WARNING] [common.sh:debug_warning] get_php_version | not found
+[2026-01-18 12:19:31.112] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:19:31.114] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:19:31.116] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:19:31.204] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:19:44.908] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:19:44.919] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:19:47.645] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: WCF_VERSION
+[2026-01-18 12:19:47.648] [INFO] [common.sh:debug_info] print_header | ddev_version=unknown woltlab_version=WCF_VERSION
+[2026-01-18 12:19:47.650] [INFO] [common.sh:debug_info] check_ddev_status | checking if DDEV is running
+[2026-01-18 12:19:47.711] [ddev_start] [start.sh:main] starting DDEV
+[2026-01-18 12:21:28.175] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:21:28.177] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:21:28.179] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:21:28.267] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:21:35.453] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:21:35.464] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:21:36.981] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: WCF_VERSION
+[2026-01-18 12:21:36.984] [INFO] [common.sh:debug_info] print_header | ddev_version=unknown woltlab_version=WCF_VERSION
+[2026-01-18 12:21:36.986] [INFO] [common.sh:debug_info] check_ddev_status | checking if DDEV is running
+[2026-01-18 12:21:37.047] [INFO] [common.sh:debug_info] ddev_start | starting DDEV
+[2026-01-18 12:21:37.049] [INFO] [common.sh:debug_info] ddev_start | current_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:21:37.051] [INFO] [common.sh:debug_info] ddev_start | script_dir=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:21:37.111] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:21:37.113] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command
+[2026-01-18 12:21:37.307] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start command finished with exit_code=1
+[2026-01-18 12:26:14.075] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:26:14.079] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:26:14.081] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:26:14.170] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:26:23.788] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:26:23.799] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:26:25.623] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:26:25.694] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 12:26:25.696] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:26:25.850] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:26:25.852] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command
+[2026-01-18 12:28:25.863] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-18 12:30:33.308] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:30:33.312] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:30:33.314] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:30:33.413] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:30:42.177] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:30:42.188] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:30:43.544] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:30:43.632] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 12:30:43.635] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:30:44.179] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 12:30:56.805] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:30:56.819] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command
+[2026-01-18 12:46:54.707] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:46:54.709] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:46:54.711] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:46:54.806] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:47:01.001] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:47:01.006] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-18 12:47:01.008] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-18 12:47:01.049] [INFO] [common.sh:debug_info] check_updates | checking for available updates
+[2026-01-18 12:47:01.051] [print_section] [common.sh:print_section] title=Update-Prüfung
+[2026-01-18 12:47:01.596] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:47:19.577] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:47:19.589] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:47:19.600] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:47:19.709] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:47:33.068] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:47:33.079] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:47:34.333] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:47:34.419] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 12:47:34.422] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:47:34.956] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 12:47:47.580] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:47:47.582] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 12:52:47.587] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-18 12:52:47.589] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-18 12:52:50.636] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-18 12:52:50.659] [INFO] [common.sh:debug_info] ddev_router_status | router=0
+0
+[2026-01-18 12:52:52.264] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-18 12:52:52.266] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-18 12:52:52.269] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers to be ready
+[2026-01-18 12:52:57.313] [INFO] [common.sh:debug_info] ddev_containers_ready | both containers are running
+[2026-01-18 12:52:57.944] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts
+[2026-01-18 12:52:59.947] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-18 12:53:00.604] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32780 HTTPS=32781 MySQL=32779 URL=https://woltlab.ddev.site
+[2026-01-18 12:53:00.646] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
+[2026-01-18 12:54:19.181] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:54:19.185] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:54:19.188] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:54:19.312] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:54:22.677] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:54:22.680] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-18 12:54:22.682] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-18 12:54:22.725] [INFO] [common.sh:debug_info] check_updates | checking for available updates
+[2026-01-18 12:54:22.727] [print_section] [common.sh:print_section] title=Update-Prüfung
+[2026-01-18 12:54:37.849] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:54:37.851] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:54:37.853] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:54:37.944] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:54:41.147] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:54:41.149] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:54:42.727] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:54:42.815] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 12:54:42.817] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 12:54:43.346] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 12:54:55.994] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 12:54:56.005] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 12:58:19.929] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:58:19.932] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:58:19.935] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:58:20.029] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:58:23.405] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:58:23.407] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:58:28.668] [print_header] [common.sh:print_header] title=DDEV - Status
+[2026-01-18 12:58:42.755] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:58:42.757] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 12:58:42.759] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 12:58:42.851] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 12:58:44.072] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 12:58:44.075] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 12:58:51.018] [print_header] [common.sh:print_header] title=DDEV - Logs
+[2026-01-18 13:00:05.979] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:00:05.981] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 13:00:05.983] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 13:00:06.080] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:00:07.833] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:00:07.844] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 13:00:15.087] [print_header] [common.sh:print_header] title=DDEV - Restart
+[2026-01-18 13:00:15.089] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 13:02:33.068] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:02:33.070] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 13:02:33.072] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 13:02:33.172] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:02:34.697] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:02:34.708] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 13:02:35.856] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:02:35.947] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 13:02:35.949] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 13:02:36.504] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 13:02:49.496] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 13:02:49.507] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 13:07:49.527] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-18 13:07:49.538] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-18 13:07:52.592] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-18 13:07:52.613] [INFO] [common.sh:debug_info] ddev_router_status | router=0
+0
+[2026-01-18 13:07:53.151] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-18 13:07:53.153] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-18 13:07:53.155] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers and router to be ready
+[2026-01-18 13:07:58.162] [INFO] [common.sh:debug_info] ddev_router_check | checking router status
+[2026-01-18 13:07:58.193] [INFO] [common.sh:debug_info] ddev_router_status | router_running=0
+0
+[2026-01-18 13:07:58.195] [INFO] [common.sh:debug_info] ddev_router_ok | router is already running
+[2026-01-18 13:07:58.805] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts (containers + router)
+[2026-01-18 13:08:00.813] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-18 13:08:01.373] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32795 HTTPS=32796 MySQL=32794 URL=https://woltlab.ddev.site
+[2026-01-18 13:08:01.416] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
+[2026-01-18 13:45:25.891] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:45:25.893] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-18 13:45:25.896] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-18 13:45:25.993] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:45:28.864] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-18 13:45:28.866] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-18 13:45:30.747] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-18 13:45:30.834] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-18 13:45:30.836] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-18 13:45:31.365] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-18 13:45:43.976] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-18 13:45:43.988] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-18 13:50:44.009] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-18 13:50:44.020] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-18 13:50:47.074] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-18 13:50:47.096] [INFO] [common.sh:debug_info] ddev_router_status | router=0 (count=0)
+[2026-01-18 13:50:47.653] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-18 13:50:47.655] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-18 13:50:47.657] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers and router to be ready
+[2026-01-18 13:50:52.664] [INFO] [common.sh:debug_info] ddev_router_check | checking router status
+[2026-01-18 13:50:52.699] [INFO] [common.sh:debug_info] ddev_router_status | router_running=0 (count=0)
+[2026-01-18 13:50:52.701] [WARNING] [common.sh:debug_warning] ddev_router_missing | router not running, starting explicitly
+[2026-01-18 13:50:52.735] [INFO] [common.sh:debug_info] ddev_router_start | exit_code=255
+[2026-01-18 13:51:18.213] [INFO] [common.sh:debug_info] ddev_containers_ready | all containers including router are running
+[2026-01-18 13:51:18.771] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts (containers + router)
+[2026-01-18 13:51:20.780] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-18 13:51:21.355] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32802 HTTPS=32803 MySQL=32805 URL=https://woltlab.ddev.site
+[2026-01-18 13:51:21.398] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
+[2026-01-18 16:41:43.015] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 16:41:53.252] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 16:42:01.310] [print_header] [common.sh:print_header] title=Push abgeschlossen
+[2026-01-18 16:43:03.129] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 16:43:41.613] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 16:43:47.200] [print_header] [common.sh:print_header] title=Release abgeschlossen
+[2026-01-18 16:45:42.095] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 16:45:47.774] [print_header] [common.sh:print_header] title=Release abgeschlossen
+[2026-01-18 16:48:30.985] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 16:48:36.483] [print_header] [common.sh:print_header] title=Release abgeschlossen
+[2026-01-18 17:06:44.978] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-18 17:06:50.725] [print_header] [common.sh:print_header] title=Release abgeschlossen
+[2026-01-19 06:43:30.430] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 06:43:30.433] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 06:43:30.436] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 06:43:30.591] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 06:44:04.653] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 06:44:04.664] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-19 06:44:06.912] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 06:44:06.997] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-19 06:44:06.999] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-19 06:44:07.537] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-19 06:44:07.539] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-19 06:49:07.551] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-19 06:49:07.562] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-19 06:49:10.614] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-19 06:49:10.635] [INFO] [common.sh:debug_info] ddev_router_status | router=0 (count=0)
+[2026-01-19 06:49:11.178] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-19 06:49:11.181] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-19 06:49:11.183] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers and router to be ready
+[2026-01-19 06:49:16.190] [INFO] [common.sh:debug_info] ddev_router_check | checking router status
+[2026-01-19 06:49:16.229] [INFO] [common.sh:debug_info] ddev_router_status | router_running=0 (count=0)
+[2026-01-19 06:49:16.231] [WARNING] [common.sh:debug_warning] ddev_router_missing | router not running, starting explicitly
+[2026-01-19 06:49:16.267] [INFO] [common.sh:debug_info] ddev_router_start | exit_code=255
+[2026-01-19 06:49:41.661] [INFO] [common.sh:debug_info] ddev_containers_ready | all containers including router are running
+[2026-01-19 06:49:42.202] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts (containers + router)
+[2026-01-19 06:49:44.211] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-19 06:49:44.792] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32771 HTTPS=32772 MySQL=32774 URL=https://woltlab.ddev.site
+[2026-01-19 06:49:44.832] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
+[2026-01-19 07:51:58.458] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 07:51:58.460] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 07:51:58.463] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 07:51:58.617] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 07:52:01.671] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 07:52:01.682] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 07:52:01.685] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 07:52:01.766] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 07:52:02.731] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 07:52:02.742] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-19 07:52:04.637] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 07:52:04.723] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-19 07:52:04.725] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-19 07:52:05.259] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-19 07:52:05.262] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-19 07:57:05.268] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-19 07:57:05.272] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-19 07:57:08.317] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-19 07:57:08.339] [INFO] [common.sh:debug_info] ddev_router_status | router=0 (count=0)
+[2026-01-19 07:57:09.793] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-19 07:57:09.795] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-19 07:57:09.797] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers and router to be ready
+[2026-01-19 07:57:14.804] [INFO] [common.sh:debug_info] ddev_router_check | checking router status
+[2026-01-19 07:57:14.835] [INFO] [common.sh:debug_info] ddev_router_status | router_running=0 (count=0)
+[2026-01-19 07:57:14.837] [WARNING] [common.sh:debug_warning] ddev_router_missing | router not running, starting explicitly
+[2026-01-19 07:57:14.871] [INFO] [common.sh:debug_info] ddev_router_start | exit_code=255
+[2026-01-19 07:57:40.923] [INFO] [common.sh:debug_info] ddev_containers_ready | all containers including router are running
+[2026-01-19 07:57:41.471] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts (containers + router)
+[2026-01-19 07:57:43.480] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-19 07:57:44.055] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32775 HTTPS=32776 MySQL=32771 URL=https://woltlab.ddev.site
+[2026-01-19 07:57:44.096] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
+[2026-01-19 10:36:12.686] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 10:36:12.698] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 10:36:12.710] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 10:36:12.822] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 10:36:14.525] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 10:36:14.537] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-19 10:36:16.180] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 10:36:16.274] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-19 10:36:16.277] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-19 10:36:16.857] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-19 10:36:30.155] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-19 10:36:30.167] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-19 10:41:30.181] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-19 10:41:30.183] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-19 10:41:33.225] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-19 10:41:33.247] [INFO] [common.sh:debug_info] ddev_router_status | router=0 (count=0)
+[2026-01-19 10:41:33.794] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-19 10:41:33.796] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-19 10:41:33.798] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers and router to be ready
+[2026-01-19 10:41:38.805] [INFO] [common.sh:debug_info] ddev_router_check | checking router status
+[2026-01-19 10:41:38.846] [INFO] [common.sh:debug_info] ddev_router_status | router_running=0 (count=0)
+[2026-01-19 10:41:38.848] [WARNING] [common.sh:debug_warning] ddev_router_missing | router not running, starting explicitly
+[2026-01-19 10:41:38.883] [INFO] [common.sh:debug_info] ddev_router_start | exit_code=255
+[2026-01-19 10:42:04.443] [INFO] [common.sh:debug_info] ddev_containers_ready | all containers including router are running
+[2026-01-19 10:42:05.014] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts (containers + router)
+[2026-01-19 10:42:07.019] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-19 10:42:07.600] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32782 HTTPS=32783 MySQL=32785 URL=https://woltlab.ddev.site
+[2026-01-19 10:42:07.641] [INFO] [common.sh:debug_info] portainer_status | Portainer is running on port 9000
+[2026-01-19 10:47:34.194] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-19 10:52:34.209] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-19 10:52:34.211] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-19 10:52:37.256] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-19 10:52:37.281] [INFO] [common.sh:debug_info] ddev_router_status | router=0 (count=0)
+[2026-01-19 10:52:37.973] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-19 10:54:09.551] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 10:54:09.554] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 10:54:09.556] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 10:54:09.676] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 11:12:46.702] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 11:12:46.704] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 11:12:46.706] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 11:12:46.795] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 11:12:53.263] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 11:12:53.265] [print_section] [common.sh:print_section] title=Dockge - Container-Management
+[2026-01-19 11:16:37.555] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 11:16:37.557] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 11:16:37.559] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 11:16:37.651] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 11:16:39.978] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 11:16:39.990] [print_section] [common.sh:print_section] title=Dockge - Container-Management
+[2026-01-19 11:16:41.076] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 11:17:26.008] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 11:17:26.010] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 11:17:26.013] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 11:17:26.126] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 11:17:29.310] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 11:17:29.317] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-19 11:17:31.736] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 11:17:31.827] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-19 11:17:31.829] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-19 11:17:32.382] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-19 11:17:44.979] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-19 11:17:44.985] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-19 11:32:16.866] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 11:32:16.869] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 11:32:16.871] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 11:32:17.854] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 11:32:33.156] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 11:32:33.159] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-19 11:32:36.120] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 11:32:36.209] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-19 11:32:36.211] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-19 11:32:36.740] [INFO] [common.sh:debug_info] ddev_status | DDEV is already running
+[2026-01-19 11:32:49.389] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-19 11:32:49.400] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV command (waiting for full startup including router)
+[2026-01-19 11:37:49.414] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=124
+[2026-01-19 11:37:49.416] [INFO] [common.sh:debug_info] ddev_start_check | checking if DDEV is fully running (containers + router)
+[2026-01-19 11:37:50.458] [INFO] [common.sh:debug_info] ddev_containers_status | web=1 db=1
+[2026-01-19 11:37:50.479] [INFO] [common.sh:debug_info] ddev_router_status | router=0 (count=0)
+[2026-01-19 11:37:51.104] [INFO] [common.sh:debug_info] ddev_start_success | DDEV is fully running (containers + router)
+[2026-01-19 11:37:51.106] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-19 11:37:51.108] [INFO] [common.sh:debug_info] ddev_wait | waiting for containers and router to be ready
+[2026-01-19 11:37:52.112] [INFO] [common.sh:debug_info] ddev_router_check | checking router status
+[2026-01-19 11:37:52.136] [INFO] [common.sh:debug_info] ddev_router_status | router_running=0 (count=0)
+[2026-01-19 11:37:52.138] [WARNING] [common.sh:debug_warning] ddev_router_missing | router not running, starting explicitly
+[2026-01-19 11:37:52.177] [INFO] [common.sh:debug_info] ddev_router_start | exit_code=255
+[2026-01-19 11:38:18.266] [INFO] [common.sh:debug_info] ddev_containers_ready | all containers including router are running
+[2026-01-19 11:38:18.849] [INFO] [common.sh:debug_info] ddev_ready | DDEV is ready after 1 attempts (containers + router)
+[2026-01-19 11:38:18.851] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-19 11:38:19.437] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32802 HTTPS=32803 MySQL=32805 URL=https://woltlab.ddev.site
+[2026-01-19 11:38:19.476] [INFO] [common.sh:debug_info] dockge_status | Dockge is running on port 5001
+[2026-01-19 15:50:51.958] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 15:50:51.960] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 15:50:51.963] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 15:50:52.066] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 15:53:41.674] [print_header] [common.sh:print_header] title=Push zum alternativen Repository
+[2026-01-19 15:53:47.648] [print_header] [common.sh:print_header] title=Release abgeschlossen
+[2026-01-19 17:57:58.644] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 17:57:58.646] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 17:57:58.648] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 17:57:58.819] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 17:58:08.227] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 17:58:08.229] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-19 17:58:10.481] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 17:58:10.578] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-19 17:58:10.580] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-19 17:58:11.240] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-19 17:58:11.243] [INFO] [common.sh:debug_info] ddev_start_before | about to call ddev_start_quiet at 1768841891
+[2026-01-19 17:58:11.246] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV containers directly (not waiting for router) at 1768841891
+[2026-01-19 17:58:11.248] [INFO] [common.sh:debug_info] ddev_start_quiet | starting containers with docker compose
+[2026-01-19 17:58:21.538] [INFO] [common.sh:debug_info] ddev_start_quiet | containers are running after 10s
+[2026-01-19 17:58:21.540] [INFO] [common.sh:debug_info] ddev_start_quiet | containers started successfully, ddev start continues in background
+[2026-01-19 17:58:21.542] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=0
+[2026-01-19 17:58:21.545] [INFO] [common.sh:debug_info] ddev_start_after | ddev_start_quiet returned with exit_code=0 at 1768841901
+[2026-01-19 17:58:21.548] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-19 17:58:21.550] [INFO] [common.sh:debug_info] ddev_wait | containers are running, starting router in background
+[2026-01-19 18:05:55.227] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 18:05:55.231] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 18:05:55.234] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 18:05:55.409] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:15:34.225] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 18:15:34.228] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 18:15:34.230] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 18:15:34.318] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:22:59.055] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:22:59.059] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:22:59.170] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:25:23.477] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:25:23.481] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:25:23.593] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:35:15.228] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:35:57.426] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:35:57.429] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:35:57.541] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:38:44.385] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:38:44.388] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:38:44.588] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:39:32.776] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:39:32.780] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:39:32.982] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:39:48.025] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:39:48.028] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:39:48.231] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:39:57.173] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:39:57.177] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:39:57.378] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:40:22.546] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:40:22.550] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:40:22.781] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:41:00.872] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:41:00.876] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:41:01.087] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:42:06.696] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:42:06.700] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:42:06.912] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:42:32.842] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:42:32.846] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:42:33.059] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:43:45.531] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:43:45.535] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:43:45.768] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 18:43:59.269] [INFO] [unknown:main] show_system_overview | displaying system overview
+[2026-01-19 18:43:59.273] [print_section] [unknown:main] title=System-Übersicht
+[2026-01-19 18:43:59.485] [INFO] [unknown:main] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:09:34.387] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:09:34.390] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:09:34.393] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:09:34.596] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:10:04.238] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:10:04.249] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-19 19:10:04.252] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:14:02.115] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:14:02.117] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:14:02.121] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:14:02.333] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:14:15.615] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:14:15.627] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-19 19:14:15.629] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:14:38.543] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:14:38.545] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:14:38.549] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:14:38.752] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:16:57.740] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:16:57.742] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:16:57.744] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:16:57.944] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:17:08.454] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:17:08.465] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-19 19:17:08.467] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:17:35.420] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:17:35.423] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:17:35.425] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:17:35.623] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:17:37.589] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:17:37.601] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-19 19:17:37.604] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:20:24.006] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:20:24.010] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:20:24.012] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:20:24.204] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:20:50.796] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:20:50.807] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-19 19:20:50.810] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:23:58.008] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:23:58.010] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:23:58.012] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:23:58.208] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:24:00.264] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:24:00.267] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-19 19:24:00.269] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:37:06.508] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:37:06.510] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:37:06.513] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:37:06.708] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:37:09.056] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:37:09.068] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-19 19:37:09.085] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:37:09.195] [INFO] [common.sh:debug_info] check_updates | checking for available updates
+[2026-01-19 19:37:31.609] [print_section] [common.sh:print_section] title=MySQL/MariaDB Installation/Update
+[2026-01-19 19:37:49.262] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:39:13.821] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:39:13.825] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:39:13.827] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:39:14.026] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:39:16.100] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:39:16.104] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-19 19:39:16.109] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:39:16.179] [INFO] [common.sh:debug_info] check_updates | checking for available updates
+[2026-01-19 19:39:19.293] [print_section] [common.sh:print_section] title=MySQL/MariaDB Installation/Update
+[2026-01-19 19:39:24.225] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:40:47.155] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:40:47.159] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-19 19:40:47.161] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-19 19:40:47.354] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-19 19:40:48.875] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:40:48.877] [print_section] [common.sh:print_section] title=Updates prüfen
+[2026-01-19 19:40:48.881] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:40:48.955] [INFO] [common.sh:debug_info] check_updates | checking for available updates
+[2026-01-19 19:40:51.046] [print_section] [common.sh:print_section] title=MySQL/MariaDB Installation/Update
+[2026-01-19 19:40:53.568] [INFO] [common.sh:debug_info] check_woltlab_requirements | checking WoltLab system requirements
+[2026-01-19 19:40:53.665] [INFO] [common.sh:debug_info] check_updates | checking for available updates
+[2026-01-19 19:41:00.005] [print_section] [common.sh:print_section] title=phpMyAdmin Installation
+[2026-01-19 19:41:00.025] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:41:07.682] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:41:07.695] [print_section] [common.sh:print_section] title=Installations-Zusammenfassung
+[2026-01-19 19:41:07.716] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:41:07.719] [print_section] [common.sh:print_section] title=Installation
+[2026-01-19 19:41:49.748] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-19 19:50:05.178] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 19:50:05.188] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 19:50:07.619] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:50:07.725] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:52:24.178] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 19:52:24.189] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 19:52:26.506] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:52:26.610] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:53:10.939] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 19:53:10.949] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 19:53:13.399] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:53:13.506] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:56:31.068] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 19:56:31.078] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 19:56:33.437] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:56:33.539] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:57:55.165] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 19:57:55.175] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 19:57:57.488] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:57:57.593] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:58:53.340] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 19:58:53.350] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 19:58:55.813] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 19:58:55.916] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:03:17.220] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:03:17.230] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:03:55.102] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:03:55.112] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:03:57.530] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:03:57.635] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:04:43.595] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:04:43.606] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:04:46.041] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:04:46.145] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:05:52.588] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:05:52.598] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:05:55.185] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:05:55.294] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:06:22.646] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:06:22.656] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:06:25.081] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:06:25.190] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:07:00.808] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:07:00.818] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:07:03.303] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:07:03.408] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:07:36.462] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:07:36.473] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:07:38.940] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:07:39.045] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:09:11.484] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:09:11.495] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:09:14.101] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:09:14.219] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:14:06.216] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:14:06.226] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:14:08.688] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:14:08.793] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:14:29.116] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:14:29.126] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:14:31.621] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:14:31.727] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:15:35.422] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:15:35.432] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:15:37.871] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:15:37.979] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:15:56.282] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:15:56.293] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:15:58.720] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:15:58.827] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:17:52.275] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:17:52.285] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:17:54.654] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:17:54.758] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:21:28.785] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:21:28.796] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:21:48.110] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:21:48.121] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:21:50.676] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:21:50.787] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:24:41.993] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:24:42.004] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:26:15.883] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:26:15.894] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:26:18.461] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:26:18.567] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:30:22.680] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:30:22.692] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:30:25.690] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:30:25.810] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:41:04.853] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:41:04.863] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:41:07.252] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:41:07.357] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:47:29.956] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:47:29.966] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:47:32.396] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:47:32.503] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:49:17.911] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:49:17.921] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:49:20.312] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:49:20.416] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:50:43.068] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:50:43.079] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:50:45.643] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:50:45.749] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:57:45.421] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:57:45.431] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:57:48.072] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:57:48.182] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:59:31.934] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 20:59:31.944] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 20:59:34.268] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 20:59:34.375] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:01:18.944] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 21:01:18.954] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:01:21.382] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:01:21.487] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:03:03.655] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 21:03:03.665] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:03:06.339] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:03:06.448] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:04:39.312] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 21:04:39.324] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:04:41.951] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:04:42.059] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:06:38.446] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 21:06:38.459] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:06:41.095] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:06:41.202] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:08:25.610] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 21:08:25.620] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:08:28.516] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:08:28.625] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:10:42.844] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 21:10:42.854] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:10:45.544] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:10:45.659] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:12:09.647] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 21:12:09.658] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:12:12.092] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:12:12.197] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:12:47.257] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:12:49.684] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:19:47.703] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 21:19:47.714] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:19:50.354] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:19:50.460] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:22:24.919] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-19 21:22:24.929] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-19 21:22:27.371] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-19 21:22:27.477] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 06:01:03.712] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-20 06:01:03.715] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-20 06:01:03.717] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-20 06:01:04.009] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-20 06:01:54.143] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-20 06:01:54.145] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-20 06:01:55.499] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-20 06:01:55.501] [print_section] [common.sh:print_section] title=DDEV - Start
+[2026-01-20 06:01:56.334] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-20 06:01:56.430] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-20 06:01:56.432] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-20 06:01:57.040] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-20 06:01:57.043] [INFO] [common.sh:debug_info] ddev_start_before | about to call ddev_start_quiet at 1768885317
+[2026-01-20 06:01:57.045] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV containers directly (not waiting for router) at 1768885317
+[2026-01-20 06:01:57.047] [INFO] [common.sh:debug_info] ddev_start_quiet | starting containers with docker compose
+[2026-01-20 06:02:04.559] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 06:02:04.569] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 06:02:07.375] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 06:02:07.502] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 06:02:07.560] [INFO] [common.sh:debug_info] ddev_start_quiet | containers are running after 10s
+[2026-01-20 06:02:07.562] [INFO] [common.sh:debug_info] ddev_start_quiet | containers started successfully, ddev start continues in background
+[2026-01-20 06:02:07.564] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=0
+[2026-01-20 06:02:07.568] [INFO] [common.sh:debug_info] ddev_start_after | ddev_start_quiet returned with exit_code=0 at 1768885327
+[2026-01-20 06:02:07.570] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-20 06:02:07.572] [INFO] [common.sh:debug_info] ddev_wait | containers are running, starting router in background
+[2026-01-20 06:02:07.574] [INFO] [common.sh:debug_info] ddev_router_background | router starting in background (pid=18535)
+[2026-01-20 06:02:07.577] [INFO] [common.sh:debug_info] ddev_ready | containers are running, router starting in background - proceeding immediately
+[2026-01-20 06:02:07.580] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-20 06:02:08.419] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32772 HTTPS=32773 MySQL=32771 URL=https://woltlab.ddev.site
+[2026-01-20 06:02:08.467] [INFO] [common.sh:debug_info] dockge_status | Dockge is running on port 5001
+[2026-01-20 06:02:08.470] [print_section] [common.sh:print_section] title=WoltLab Development Environment
+[2026-01-20 07:06:21.120] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 07:06:21.130] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 07:06:23.451] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 07:06:23.549] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 07:28:01.619] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 07:28:01.629] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 07:28:03.848] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 07:28:03.951] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 07:36:12.593] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 07:36:12.603] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 07:36:14.868] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 07:36:14.971] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 07:36:27.183] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 07:36:27.193] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 07:36:29.535] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 07:36:29.639] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 08:38:43.142] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 08:38:43.152] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 08:38:45.490] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 08:38:45.514] [ERROR] [common.sh:log_error_with_context] redirect.tpl enthält KEINE neuen Debug-Logs! | script=build.sh function=main context=Template wurde möglicherweise nicht korrekt aktualisiert! timestamp=2026-01-20 08:38:45
+[2026-01-20 08:46:02.679] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 08:46:02.689] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 08:46:05.042] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 08:46:05.068] [ERROR] [common.sh:log_error_with_context] redirect.tpl enthält KEINE neuen Debug-Logs! | script=build.sh function=main context=Template wurde möglicherweise nicht korrekt aktualisiert! timestamp=2026-01-20 08:46:05
+[2026-01-20 08:55:24.783] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 08:55:24.794] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 08:55:27.123] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:02:17.528] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:02:17.541] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:02:21.001] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:08:43.483] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:08:43.493] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:08:46.154] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:14:41.960] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:14:41.970] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:14:44.755] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:21:30.541] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:21:30.552] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:21:33.283] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:22:34.203] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:22:34.214] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:22:36.707] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:24:07.816] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:24:07.830] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:24:10.373] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:24:27.686] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:24:27.696] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:24:30.126] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:25:42.094] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:25:42.105] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:25:44.659] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:34:37.609] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:34:37.619] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:34:39.900] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:44:34.916] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:44:34.926] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:44:37.099] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 09:49:43.511] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 09:49:43.522] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 09:49:45.964] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 10:16:28.449] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 10:16:28.459] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 10:16:30.756] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 10:16:30.847] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 10:33:34.070] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 10:33:34.080] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 10:33:36.239] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 10:33:36.330] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 10:39:30.700] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 10:39:30.711] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 10:39:33.023] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 10:39:33.116] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 10:46:51.771] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 10:46:51.781] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 10:46:54.057] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 10:46:54.146] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 14:57:12.890] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 14:57:12.901] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 14:57:15.034] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 14:57:15.117] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:05:05.531] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 15:05:05.541] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 15:05:07.927] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:05:08.017] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:28:03.943] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 15:28:03.954] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 15:28:06.149] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:28:06.239] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:34:22.231] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 15:34:22.242] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 15:34:24.489] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:34:24.580] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:41:52.133] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 15:41:52.144] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 15:41:54.363] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:41:54.451] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:55:20.423] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-20 15:55:20.433] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-20 15:55:22.779] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-20 15:55:22.871] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-21 18:42:48.245] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-21 18:42:48.247] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-21 18:42:48.249] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-21 18:42:49.417] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-21 18:42:53.566] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-21 18:42:53.577] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-21 18:42:53.588] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-21 18:42:53.796] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-21 18:42:55.956] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-21 18:42:55.967] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-21 18:42:57.259] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-21 18:42:57.272] [print_section] [common.sh:print_section] title=DDEV - Start
+[2026-01-21 18:42:58.120] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-21 18:42:58.212] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-21 18:42:58.214] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-21 18:42:58.783] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-21 18:42:58.786] [INFO] [common.sh:debug_info] ddev_start_before | about to call ddev_start_quiet at 1769017378
+[2026-01-21 18:42:58.788] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV containers directly (not waiting for router) at 1769017378
+[2026-01-21 18:42:58.790] [INFO] [common.sh:debug_info] ddev_start_quiet | starting containers with docker compose
+[2026-01-21 18:43:09.271] [INFO] [common.sh:debug_info] ddev_start_quiet | containers are running after 10s
+[2026-01-21 18:43:09.273] [INFO] [common.sh:debug_info] ddev_start_quiet | containers started successfully, ddev start continues in background
+[2026-01-21 18:43:09.275] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=0
+[2026-01-21 18:43:09.279] [INFO] [common.sh:debug_info] ddev_start_after | ddev_start_quiet returned with exit_code=0 at 1769017389
+[2026-01-21 18:43:09.281] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-21 18:43:09.284] [INFO] [common.sh:debug_info] ddev_wait | containers are running, starting router in background
+[2026-01-21 18:43:09.286] [INFO] [common.sh:debug_info] ddev_router_background | router starting in background (pid=11266)
+[2026-01-21 18:43:09.288] [INFO] [common.sh:debug_info] ddev_ready | containers are running, router starting in background - proceeding immediately
+[2026-01-21 18:43:09.292] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-21 18:43:10.025] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32772 HTTPS=32773 MySQL=32769 URL=https://woltlab.ddev.site
+[2026-01-21 18:43:10.072] [INFO] [common.sh:debug_info] dockge_status | Dockge is running on port 5001
+[2026-01-21 18:43:10.075] [print_section] [common.sh:print_section] title=WoltLab Development Environment
+[2026-01-21 18:45:42.435] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-21 18:45:42.446] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-21 18:45:45.030] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-21 18:45:45.132] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-21 18:46:23.423] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-21 18:46:23.433] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-21 18:46:25.738] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-21 18:46:25.830] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-21 19:08:18.616] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-21 19:08:18.628] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-21 19:08:21.119] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-21 19:08:21.211] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 05:12:49.389] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-23 05:12:49.392] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-01-23 05:12:49.394] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-01-23 05:12:50.375] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-23 05:12:59.937] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-23 05:12:59.949] [print_section] [common.sh:print_section] title=DDEV - Verwalten
+[2026-01-23 05:13:01.561] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-01-23 05:13:01.573] [print_section] [common.sh:print_section] title=DDEV - Start
+[2026-01-23 05:13:02.423] [INFO] [common.sh:debug_info] get_woltlab_version | found in WCF.class.php: 6.1.15
+[2026-01-23 05:13:02.516] [print_header] [common.sh:print_header] title=DDEV v1.24.10 - WoltLab Suite 6.1
+[2026-01-23 05:13:02.518] [INFO] [common.sh:debug_info] ddev_start | working_directory=/home/benny/Dokumente/woltlab-development/tools/woltlab-dev
+[2026-01-23 05:13:03.090] [INFO] [common.sh:debug_info] ddev_start | calling ddev_start_quiet
+[2026-01-23 05:13:03.093] [INFO] [common.sh:debug_info] ddev_start_before | about to call ddev_start_quiet at 1769141583
+[2026-01-23 05:13:03.095] [INFO] [common.sh:debug_info] ddev_start_quiet | starting DDEV containers directly (not waiting for router) at 1769141583
+[2026-01-23 05:13:03.097] [INFO] [common.sh:debug_info] ddev_start_quiet | starting containers with docker compose
+[2026-01-23 05:13:13.585] [INFO] [common.sh:debug_info] ddev_start_quiet | containers are running after 10s
+[2026-01-23 05:13:13.587] [INFO] [common.sh:debug_info] ddev_start_quiet | containers started successfully, ddev start continues in background
+[2026-01-23 05:13:13.589] [INFO] [common.sh:debug_info] ddev_start_quiet | DDEV start finished with exit_code=0
+[2026-01-23 05:13:13.592] [INFO] [common.sh:debug_info] ddev_start_after | ddev_start_quiet returned with exit_code=0 at 1769141593
+[2026-01-23 05:13:13.594] [INFO] [common.sh:debug_info] ddev_start_result | exit_code=0
+[2026-01-23 05:13:13.596] [INFO] [common.sh:debug_info] ddev_wait | containers are running, starting router in background
+[2026-01-23 05:13:13.598] [INFO] [common.sh:debug_info] ddev_router_background | router starting in background (pid=49085)
+[2026-01-23 05:13:13.600] [INFO] [common.sh:debug_info] ddev_ready | containers are running, router starting in background - proceeding immediately
+[2026-01-23 05:13:13.603] [INFO] [common.sh:debug_info] extract_ddev_info | starting extraction
+[2026-01-23 05:13:14.355] [INFO] [common.sh:debug_info] extract_ddev_info_result | HTTP=32772 HTTPS=32773 MySQL=32768 URL=https://woltlab.ddev.site
+[2026-01-23 05:13:14.400] [INFO] [common.sh:debug_info] dockge_status | Dockge is running on port 5001
+[2026-01-23 05:13:14.403] [print_section] [common.sh:print_section] title=WoltLab Development Environment
+[2026-01-23 06:06:17.338] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 06:06:17.350] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 06:06:19.680] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 06:06:19.778] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 06:16:38.608] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 06:16:38.619] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 06:16:40.988] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 06:16:41.078] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 06:42:36.546] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 06:42:36.556] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 06:42:38.842] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 06:42:38.929] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 06:49:44.177] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 06:49:44.188] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 06:49:46.613] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 06:49:46.701] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 07:20:27.502] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 07:20:27.513] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 07:20:29.755] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 07:20:29.843] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 07:43:29.045] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 07:43:31.280] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 07:51:23.168] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 07:51:23.178] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 07:51:25.445] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 07:51:25.541] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 07:53:18.265] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 07:53:20.520] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 07:56:22.364] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 07:56:22.374] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 07:56:24.723] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 07:56:24.820] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 07:59:12.637] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 07:59:14.894] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:00:36.766] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 08:00:39.015] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:01:58.898] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 08:01:58.908] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 08:02:01.218] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:02:01.308] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:05:11.974] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 08:05:11.985] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 08:05:14.287] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:05:14.377] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:17:21.076] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 08:17:21.087] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 08:17:23.376] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:17:23.470] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:20:11.719] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 08:20:11.730] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 08:20:13.959] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:20:14.049] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:30:43.836] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 08:30:43.847] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 08:30:46.075] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:30:46.164] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:37:20.750] [print_section] [common.sh:print_section] title=WoltLab Plugin Builder
+[2026-01-23 08:37:20.761] [print_section] [common.sh:print_section] title=WoltLab TypeScript Build
+[2026-01-23 08:37:23.011] [print_section] [common.sh:print_section] title=Build abgeschlossen
+[2026-01-23 08:37:23.107] [print_section] [common.sh:print_section] title=Build abgeschlossen

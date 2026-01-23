@@ -1,6 +1,3 @@
-/**
- * @module Shrinkr/Ui/Snow
- */
 define(["require", "exports", "tslib", "Shrinkr/3rdParty/three.min", "WoltLabSuite/Core/Environment"], function (require, exports, tslib_1, THREE, Environment) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -14,8 +11,8 @@ define(["require", "exports", "tslib", "Shrinkr/3rdParty/three.min", "WoltLabSui
     class ScSnow {
         options;
         engines = [];
-        containers;
-        isActive;
+        containers = [];
+        isActive = false;
         /**
          * Initializes the snow effect.
          *
