@@ -8,60 +8,82 @@ use wcf\system\WCF;
 
 /**
  * ACP page for listing all descriptions.
+ * 
+ * Provides a sortable list of description texts with filtering capabilities.
+ * Supports filtering by title, description text, and active status. Used for
+ * managing description texts displayed on shortened link redirect pages.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.page
  *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.page
- *
- * @property DescriptionList $objectList
+ * @property   DescriptionList $objectList  The database object list instance
  */
 class DescriptionListPage extends MultipleLinkPage
 {
     /**
-     * @inheritDoc
+     * Class name of the database object list.
+     *
+     * @var    string
      */
     public $objectListClassName = DescriptionList::class;
 
     /**
-     * @inheritDoc
+     * Default sort field.
+     *
+     * @var    string
      */
     public $sortField = 'descriptionID';
 
     /**
-     * @inheritDoc
+     * Default sort order.
+     *
+     * @var    string
      */
     public $sortOrder = 'ASC';
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.description.list';
 
     /**
-     * @inheritDoc
+     * Required permissions to access this page.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageDescriptions'];
 
     /**
-     * @inheritDoc
+     * Valid sort fields for the list.
+     *
+     * @var    string[]
      */
     public $validSortFields = ['descriptionID', 'title', 'isActive'];
 
     /**
-     * Filter: Title
+     * Filter: Title to search for.
+     *
+     * @var    string
      */
     public $title;
 
     /**
-     * Filter: Description Text
+     * Filter: Description text to search for.
+     *
+     * @var    string
      */
     public $descriptionText;
 
     /**
-     * Filter: Active flag
+     * Filter: Active status (1 = active, 0 = inactive).
+     *
+     * @var    int
      */
     public $isActive;
 

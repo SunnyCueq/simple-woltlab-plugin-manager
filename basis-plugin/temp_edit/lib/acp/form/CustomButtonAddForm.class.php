@@ -17,43 +17,63 @@ use wcf\util\HeaderUtil;
 
 /**
  * Form for adding a new custom button.
+ * 
+ * ACP form for creating custom buttons for shortened links. Requires linkID
+ * parameter from URL query. Provides form fields for target URL, title, and
+ * sort order. Uses WoltLab's FormBuilder API.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 class CustomButtonAddForm extends AbstractFormBuilderForm
 {
     /**
-     * @inheritDoc
+     * Required permissions to access this form.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageCustomButtons'];
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.menu';
 
     /**
-     * @inheritDoc
+     * Action class for handling form submissions.
+     *
+     * @var    string
      */
     public $objectActionClass = CustomButtonAction::class;
 
     /**
-     * URL ID (required parameter from URL query)
+     * URL ID (required parameter from URL query).
+     *
+     * @var    int
      */
     public int $linkID = 0;
 
     /**
-     * URL hash for display
+     * URL hash for display purposes.
+     *
+     * @var    string
      */
     public string $urlHash = '';
 
     /**
-     * @inheritDoc
+     * Reads request parameters and validates linkID.
+     * 
+     * Extracts linkID from request parameters and loads the URL hash for display.
+     * Throws IllegalLinkException if linkID is missing or link doesn't exist.
+     *
+     * @return  void
+     * @throws  IllegalLinkException  If linkID is invalid or link doesn't exist
      */
     #[\Override]
     public function readParameters()
@@ -64,12 +84,10 @@ class CustomButtonAddForm extends AbstractFormBuilderForm
             $this->linkID = (int) $_REQUEST['linkID'];
         }
 
-        // URL ID is required
         if ($this->linkID === 0) {
             throw new IllegalLinkException();
         }
 
-        // Load URL data (hash)
         $sql = "SELECT hash FROM shrinkr1_link WHERE linkID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute([$this->linkID]);

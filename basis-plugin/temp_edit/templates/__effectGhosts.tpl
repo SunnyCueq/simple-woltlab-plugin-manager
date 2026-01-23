@@ -1,3 +1,34 @@
+{*
+ * Template-Zweck: Ghosts-Effekt Initialisierung
+ * 
+ * Initialisiert den Ghosts-Effekt für Halloween-Themes. Lädt das Ghosts-Modul
+ * und konfiguriert es basierend auf Theme-Einstellungen und Gerätetyp
+ * (Desktop/Mobile).
+ * 
+ * Variablen:
+ * @var array $effect - Effekt-Konfiguration mit mobile/desktop-Einstellungen
+ * @var string $effect.selector - CSS-Selektor für Container
+ * @var int $effect.mobile.num - Anzahl Partikel (Mobile)
+ * @var int $effect.desktop.num - Anzahl Partikel (Desktop)
+ * @var float $effect.speed - Geschwindigkeit
+ * @var int $effect.minScale - Minimale Partikel-Größe
+ * @var int $effect.maxScale - Maximale Partikel-Größe
+ * @var float $effect.opacity - Opazität
+ * @var bool $effect.fadeScroll - Ob Effekt beim Scrollen ausblendet
+ * @var bool $effect.enableMobile - Ob Effekt auf Mobile aktiviert ist
+ * @var bool $effect.enableInteraction - Ob Pointer-Interaktion aktiviert ist
+ * 
+ * Logik:
+ * - Lädt Ghosts-Modul über require
+ * - Erkennt Gerätetyp (Desktop/Mobile)
+ * - Konfiguriert Effekt mit gerätespezifischen Einstellungen
+ * - Initialisiert Effekt für alle Container mit dem Selektor
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {if $effect|isset}
 	<script data-relocate="true">
 		require(['Shrinkr/Ui/Ghosts', 'WoltLabSuite/Core/Environment'], function(module, Environment) {

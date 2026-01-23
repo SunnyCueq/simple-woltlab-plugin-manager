@@ -1,3 +1,26 @@
+{*
+ * Template-Zweck: Rewrite Rules Ausgabe-Dialog
+ * 
+ * Zeigt generierte Rewrite Rules für Apache (.htaccess) und/oder nginx
+ * in einem Dialog an. Enthält Anweisungen zur Installation und die
+ * vollständigen Rewrite Rules zum Kopieren.
+ * 
+ * Variablen:
+ * @var array $rewriteRules - Array mit Rewrite Rules pro Webserver
+ * @var string $rewriteRules['apache']['.htaccess'] - Apache .htaccess Regeln
+ * @var string $rewriteRules['nginx']['nginx.conf'] - nginx location-Blöcke
+ * @var string $detectedWebserver - Erkannte Webserver-Typ ('apache', 'nginx', null)
+ * 
+ * Logik:
+ * - Zeigt Installations-Anweisungen
+ * - Zeigt Rewrite Rules für erkannten Webserver (oder beide wenn unbekannt)
+ * - Zeigt Dateiname und Inhalt für jede Regel
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 <p>{lang}shrinkr.acp.rewrite.description{/lang}</p>
 
 <ol>

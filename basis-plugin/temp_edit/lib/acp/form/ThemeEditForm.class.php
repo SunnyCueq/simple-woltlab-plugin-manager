@@ -16,29 +16,42 @@ use wcf\system\WCF;
 
 /**
  * Form for editing an existing theme.
+ * 
+ * ACP form for editing themes. Extends ThemeAddForm and adds a CSS tab for
+ * editing custom CSS content. Loads the theme object from the database.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 
 class ThemeEditForm extends ThemeAddForm
 {
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.theme.list';
 
     /**
-     * @inheritDoc
+     * Form action name (edit, update, delete).
+     *
+     * @var    string
      */
     public $formAction = 'edit';
 
     /**
-     * @inheritDoc
+     * Reads request parameters and loads the theme to edit.
+     * 
+     * Validates the theme ID from query parameters and loads the Theme object.
+     * Throws IllegalLinkException if the theme doesn't exist.
+     *
+     * @return  void
+     * @throws  IllegalLinkException  If theme ID is invalid or theme doesn't exist
      */
     public function readParameters()
     {

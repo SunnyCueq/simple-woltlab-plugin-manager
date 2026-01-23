@@ -5,23 +5,25 @@ define(["require", "exports", "tslib", "qr-creator"], function (require, exports
     /**
      * Renders a QR code for a single table cell.
      *
-     * @param cell The table cell containing the URL data
+     * Creates a hidden canvas element, renders the QR code using qr-creator,
+     * and sets up download functionality for the QR code image.
+     *
+     * @param   {HTMLElement}  cell  The table cell containing the URL data (must have data-url attribute)
+     * @returns {void}
      */
     function renderQrCode(cell) {
         const url = cell.dataset.url;
         if (!url) {
             return;
         }
-        // Create canvas element (if not already present)
         let canvas = cell.querySelector("canvas");
         if (!canvas) {
             canvas = document.createElement("canvas");
             canvas.width = 200;
             canvas.height = 200;
-            canvas.style.display = "none"; // Hidden, only for download
+            canvas.style.display = "none";
             cell.insertBefore(canvas, cell.firstChild);
         }
-        // Render QR code to canvas
         try {
             qr_creator_1.default.render({
                 text: url,
@@ -32,13 +34,11 @@ define(["require", "exports", "tslib", "qr-creator"], function (require, exports
             console.error("Failed to render QR code:", e);
             return;
         }
-        // Attach download handler to button
         const downloadButton = cell.querySelector(".qrDownloadLink");
         if (downloadButton && !downloadButton.dataset.qrInitialized) {
             downloadButton.dataset.qrInitialized = "true";
             downloadButton.addEventListener("click", (e) => {
                 e.preventDefault();
-                // Convert canvas to blob and trigger download
                 canvas.toBlob((blob) => {
                     if (!blob) {
                         console.error("Failed to create blob from canvas");
@@ -57,11 +57,16 @@ define(["require", "exports", "tslib", "qr-creator"], function (require, exports
         }
     }
     /**
-     * Public API
+     * Public API for QR code rendering.
      */
     exports.default = {
         /**
          * Renders all QR codes in the current page.
+         *
+         * Finds all table cells with class "columnQR" and data-url attribute,
+         * then renders QR codes for each of them.
+         *
+         * @returns {void}
          */
         renderAll() {
             document.querySelectorAll(".columnQR[data-url]").forEach(renderQrCode);
@@ -69,7 +74,10 @@ define(["require", "exports", "tslib", "qr-creator"], function (require, exports
         /**
          * Renders a QR code for a specific cell.
          *
-         * @param cell The table cell
+         * Renders a QR code for a single table cell element.
+         *
+         * @param   {HTMLElement}  cell  The table cell element to render QR code for
+         * @returns {void}
          */
         render(cell) {
             renderQrCode(cell);

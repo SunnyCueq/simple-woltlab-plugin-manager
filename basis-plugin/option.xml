@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Datei-Zweck: Optionen-Registration für Shr1nkr Plugin
+    
+    Diese XML-Datei registriert Plugin-Optionen für das Shr1nkr Plugin.
+    Definiert alle konfigurierbaren Einstellungen in Kategorien organisiert.
+    
+    Struktur:
+    - <import>: Importiert Optionen für das Plugin
+    - <categories>: Definiert Optionen-Kategorien (Tabs)
+    - <options>: Definiert einzelne Optionen mit Typ, Standardwert, Validierung, etc.
+    
+    Optionen-Kategorien:
+    1. shrinkr.general: Allgemeine Einstellungen (Plugin aktivieren, etc.)
+    2. shrinkr.redirect: Weiterleitungseinstellungen (Timer, Bestätigung, etc.)
+    3. shrinkr.target: Ziel-URL-Einstellungen (URL-Validierung, etc.)
+    4. shrinkr.hash: Hash-Konfiguration (Länge, Zeichensatz, etc.)
+    5. shrinkr.interaction: Interaktionseinstellungen (Reactions, Buttons, etc.)
+    6. shrinkr.design: Design-Einstellungen (Themes, Effekte, etc.)
+    7. shrinkr.advanced: Erweiterte Einstellungen (Expertenmodus)
+    
+    @author Sunny C
+    @copyright 2026 Sunny C
+    @package de.sunnyc.wsc.shrinkr
+    @see https://sunnyc.de
+-->
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/option.xsd">
 	<import>
 

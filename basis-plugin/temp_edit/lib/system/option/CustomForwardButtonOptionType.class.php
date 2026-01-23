@@ -9,51 +9,68 @@ use wcf\system\WCF;
 
 /**
  * Option type implementation for custom forward button style with preview.
- *
- * Provides a checkbox to enable/disable the custom 3D button style
- * and shows a static preview of how the button will look.
+ * 
+ * Custom option type for ACP options that provides a checkbox to enable/disable
+ * the custom 3D button style. Renders a custom template with a static preview
+ * of how the button will look.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage system.option
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  system.option
  */
 class CustomForwardButtonOptionType extends AbstractOptionType
 {
     /**
-     * @inheritDoc
+     * Returns the form element for this option type.
+     * 
+     * Renders a custom template with checkbox and preview for the custom
+     * forward button style option.
+     *
+     * @param   Option  $option  The option object
+     * @param   mixed   $value    The current option value
+     * @return  string            Rendered HTML form element
      */
     public function getFormElement(Option $option, $value)
     {
-        // Assign variables to template
         WCF::getTPL()->assign([
             'option' => $option,
             'value' => $value ? 1 : 0,
         ]);
         
-        // Render using custom template for option type
         return WCF::getTPL()->fetch('customForwardButtonOptionType', 'shrinkr');
     }
 
     /**
-     * @inheritDoc
+     * Validates the option value.
+     * 
+     * Ensures the value is a valid boolean (0, 1, empty string, or null).
+     *
+     * @param   Option  $option    The option object
+     * @param   mixed   $newValue  The new value to validate
+     * @return  void
+     * @throws  UserInputException If the value is invalid
      */
     public function validate(Option $option, $newValue)
     {
-        // Boolean option - validate that it's 0 or 1
         if ($newValue !== '0' && $newValue !== '1' && $newValue !== '' && $newValue !== null) {
             throw new UserInputException($option->optionName, 'invalidValue');
         }
     }
 
     /**
-     * @inheritDoc
+     * Processes the option value for storage.
+     * 
+     * Converts various boolean representations to 1 or 0 for database storage.
+     *
+     * @param   Option  $option    The option object
+     * @param   mixed   $newValue  The new value to process
+     * @return  int                 1 if enabled, 0 if disabled
      */
     public function getData(Option $option, $newValue)
     {
-        // Return 1 if checked, 0 if not
         return ($newValue == '1' || $newValue === true || $newValue === 'true') ? 1 : 0;
     }
 }

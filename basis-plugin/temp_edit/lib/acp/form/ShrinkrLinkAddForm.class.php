@@ -19,52 +19,69 @@ use wcf\system\WCF;
 
 /**
  * Form for adding a new short link.
+ * 
+ * ACP form for creating new shortened links. Provides form fields for URL,
+ * custom title, hash, and Open Graph image. Uses WoltLab's FormBuilder API
+ * for dynamic form generation with tabbed interface.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 class ShrinkrLinkAddForm extends AbstractFormBuilderForm
 {
     /**
-     * @inheritDoc
+     * Required permissions to access this form.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageLinks'];
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.link.add';
 
     /**
-     * @inheritDoc
+     * Action class for handling form submissions.
+     *
+     * @var    string
      */
     public $objectActionClass = ShrinkrLinkAction::class;
 
     /**
-     * @inheritDoc
+     * Form action name (create, update, delete).
+     *
+     * @var    string
      */
     public $formAction = 'create';
 
     /**
-     * Maximum length for URL title field (VARCHAR)
+     * Maximum length for URL title field (matches database VARCHAR length).
+     *
+     * @var    int
      */
     private const MAX_URL_TITLE_LENGTH = 255;
 
     /**
-     * @inheritDoc
+     * Creates the form structure using WoltLab's FormBuilder API.
+     * 
+     * Builds a tabbed form with basic fields (URL, title, hash, Open Graph image).
+     * The design tab is only available in the edit form (ShrinkrLinkEditForm).
+     *
+     * @return  void
      */
     protected function createForm()
     {
         parent::createForm();
 
-        // Create tab menu container
         $tabMenu = TabMenuFormContainer::create('linkTabMenu');
 
-        // === BASIC TAB ===
         $basicTab = TabFormContainer::create('basicTab')
             ->label('wcf.global.form.data');
 
@@ -98,16 +115,16 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
         $basicTab->appendChild($basicContainer);
         $tabMenu->appendChild($basicTab);
 
-        // === DESIGN TAB (only for edit) ===
-        // Will be populated in ShrinkrLinkEditForm
-
         $this->form->appendChild($tabMenu);
     }
 
     /**
      * Generates a default hash for new links.
+     * 
+     * Creates a unique hash identifier using ShrinkrUtil::generateHash().
+     * This hash is used as the short URL identifier (e.g., /r/{hash}/).
      *
-     * @return string
+     * @return  string  A generated hash string
      */
     protected function getDefaultHash(): string
     {

@@ -1,3 +1,37 @@
+{*
+ * Template-Zweck: Redirect-Container für verkürzte URLs
+ * 
+ * Container-Template für den Hauptinhalt der Redirect-Seite. Wird von redirect.tpl
+ * eingebunden. Zeigt Titel, Beschreibung, Buttons, Discount Codes und Featured Links
+ * in einer zentrierten Box an. Unterstützt verschiedene Themes und Button-Typen.
+ * 
+ * Variablen:
+ * @var \shrinkr\data\shrinkrlink\ShrinkrLink $link - Link-Objekt mit URL-Daten
+ * @var string $extractedTitle - Extrahierter oder auto-generierter Seitentitel
+ * @var string $activeThemeIdentifier - Theme-Identifier (z.B. 'blackweek')
+ * @var string $titleIconName - Font Awesome Icon-Name für Titel
+ * @var bool $titleIconForceSolid - Ob Solid-Icon verwendet werden soll
+ * @var bool $enableDescriptions - Ob Beschreibungen aktiviert sind
+ * @var string $randomDescription - Zufällige Beschreibung für diese URL
+ * @var array $customButtons - Array von Custom Button-Objekten
+ * @var \shrinkr\data\discount\Discount $discount - Discount-Objekt (falls vorhanden)
+ * @var bool SHRINKR_FORWARDING_MUST_CONFIRMED - Ob Bestätigung erforderlich ist
+ * @var int SHRINKR_TIME_UNTIL_FORWARDING - Sekunden bis zur Weiterleitung
+ * @var bool SHRINKR_ENABLE_CUSTOM_FORWARD_BUTTON - Ob 3D-Button aktiviert ist
+ * 
+ * Logik:
+ * - Zeigt Titel mit optionalem Icon und Theme-spezifischen Effekten
+ * - Zeigt Beschreibung oder Standard-Text
+ * - Zeigt Forward-Button oder Countdown-Timer
+ * - Zeigt Custom Buttons mit Click-Tracking
+ * - Zeigt Discount Codes mit Copy-Funktionalität
+ * - Initialisiert JavaScript für Button-Tracking und Copy-Funktionalität
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 <div class="shrinkrContainer">
 	<div class="shrinkrBox">
 		<h1>

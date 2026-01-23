@@ -29,72 +29,92 @@ use wcf\util\StringUtil;
 
 /**
  * Handles the redirect page display for shortened links.
- * Manages countdown, discounts, specials, featured links, reactions, and visual effects.
+ * 
+ * This page class manages the display of shortened link redirect pages, including
+ * countdown timers, discount codes, special events, featured links, reactions,
+ * and seasonal visual effects. It also handles click tracking, analytics, and
+ * meta tag generation for social media sharing.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
  * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  page
  */
 class RedirectPage extends AbstractPage
 {
     /**
      * The shortened link object being displayed.
-     * @var ShrinkrLink|null
+     *
+     * @var    ShrinkrLink|null
      */
     public ?ShrinkrLink $link = null;
 
     /**
      * Featured links associated with this shortened link.
-     * @var array<string, array{title: string, host: string, linkID: int}>
+     * 
+     * Array indexed by featured link ID, containing title, host, and linkID.
+     *
+     * @var    array<string, array{title: string, host: string, linkID: int}>
      */
     public array $featuredLinks = [];
 
     /**
      * Custom buttons for this shortened link.
-     * @var array<int, array{title: string, targetUrl: string, customButtonID: int}>
+     * 
+     * Array indexed by custom button ID, containing title, targetUrl, and customButtonID.
+     *
+     * @var    array<int, array{title: string, targetUrl: string, customButtonID: int}>
      */
     public array $customButtons = [];
 
     /**
      * Active discount for display (if applicable).
-     * @var ViewableDiscount|null
+     *
+     * @var    ViewableDiscount|null
      */
     public ?ViewableDiscount $discount = null;
 
     /**
      * Active special event configuration.
-     * @var Special|null
+     *
+     * @var    Special|null
      */
     public ?Special $special = null;
 
     /**
      * Theme associated with the active special.
-     * @var Theme|null
+     *
+     * @var    Theme|null
      */
     public ?Theme $specialTheme = null;
     
     /**
      * Shortened theme name for display in promo badge.
-     * @var string|null
+     *
+     * @var    string|null
      */
     public ?string $specialThemeShortName = null;
 
     /**
      * Random description text to display on the page.
-     * @var string
+     *
+     * @var    string
      */
     public string $randomDescription = '';
 
     /**
      * Extracted or auto-generated page title.
-     * @var string
+     *
+     * @var    string
      */
     private string $extractedTitle = '';
 
     /**
      * Internal cache for loaded theme objects.
-     * @var array<string, Theme|null>
+     *
+     * @var    array<string, Theme|null>
      */
     private array $themeCache = [];
 

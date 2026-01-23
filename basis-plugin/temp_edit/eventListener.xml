@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Datei-Zweck: Event Listener Registration für Shr1nkr Plugin
+    
+    Diese XML-Datei registriert Event Listener für verschiedene Events im WoltLab Framework.
+    Die Listener werden automatisch beim Plugin-Installation geladen und aktiviert.
+    
+    Struktur:
+    - <import>: Importiert Event Listener für das Plugin
+    - <eventlistener>: Definiert Event Listener für spezifische Events
+    
+    Event Listener:
+    1. optionFormDemoData: Wird ausgelöst wenn Optionen gespeichert werden, erstellt Demo-Daten
+    2. shrinkrLinkListPageReaction: Lädt Reaktions-Daten für die ACP-Link-Liste inkl. Gast-Reaktionen
+    
+    @author Sunny C
+    @copyright 2026 Sunny C
+    @package de.sunnyc.wsc.shrinkr
+    @see https://sunnyc.de
+-->
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/eventListener.xsd">
 	<import>
+		<!--
+		    Event Listener: OptionFormDemoDataListener
+		    - Event-Klasse: wcf\acp\form\OptionForm
+		    - Event-Name: saved
+		    - Listener-Klasse: shrinkr\system\event\listener\OptionFormDemoDataListener
+		    - Environment: admin (nur im ACP aktiv)
+		    - Zweck: Erstellt Demo-Daten wenn Optionen gespeichert werden
+		-->
 		<eventlistener name="optionFormDemoData">
 			<eventclassname>wcf\acp\form\OptionForm</eventclassname>
 			<eventname>saved</eventname>
 			<listenerclassname>shrinkr\system\event\listener\OptionFormDemoDataListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
+		<!--
+		    Event Listener: ShrinkrLinkListPageReactionListener
+		    - Event-Klasse: shrinkr\acp\page\ShrinkrLinkListPage
+		    - Event-Name: assignVariables
+		    - Listener-Klasse: shrinkr\system\event\listener\ShrinkrLinkListPageReactionListener
+		    - Environment: admin (nur im ACP aktiv)
+		    - Zweck: Lädt Reaktions-Daten inkl. Gast-Reaktionen für die ACP-Link-Liste
+		-->
 		<eventlistener name="shrinkrLinkListPageReaction">
 			<eventclassname>shrinkr\acp\page\ShrinkrLinkListPage</eventclassname>
 			<eventname>assignVariables</eventname>

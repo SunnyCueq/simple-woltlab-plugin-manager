@@ -1,4 +1,24 @@
-{* Template wird von TemplateFormNode gerendert, daher kein äußerer section-Wrapper nötig *}
+{*
+ * Template-Zweck: Custom Buttons Sektion für URL-Bearbeitung
+ * 
+ * Zeigt alle Custom Buttons für eine URL in einer sortierbaren Liste an.
+ * Unterstützt Drag-and-Drop-Sortierung und direkte Bearbeitung/Löschung.
+ * Wird in der URL-Bearbeitungsseite als Sektion eingebunden.
+ * 
+ * Variablen:
+ * @var array $urlCustomButtons - Array von CustomButton-Objekten für diese URL
+ * 
+ * Logik:
+ * - Zeigt sortierbare Liste mit allen Custom Buttons
+ * - Unterstützt Drag-and-Drop-Sortierung
+ * - Zeigt Bearbeiten- und Löschen-Buttons
+ * - Zeigt Hinzufügen-Button wenn keine Buttons vorhanden
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 <header class="sectionHeader">
     <p class="sectionDescription">{lang}wcf.shrinkr.customButton.section.description{/lang}</p>
 </header>

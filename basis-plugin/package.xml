@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Datei-Zweck: Package-Definition für Shr1nkr Plugin
+    
+    Diese XML-Datei definiert das WoltLab Plugin-Paket. Enthält Metadaten,
+    Abhängigkeiten, Installationsanweisungen und alle Komponenten die beim
+    Installieren/Updaten des Plugins verarbeitet werden müssen.
+    
+    Struktur:
+    - <packageinformation>: Plugin-Metadaten (Name, Beschreibung, Version, etc.)
+    - <authorinformation>: Autor-Informationen
+    - <requiredpackages>: Abhängigkeiten (WoltLab Suite 6.1.0+)
+    - <excludedpackages>: Ausgeschlossene Versionen (6.2.0 Alpha 1)
+    - <instructions>: Installationsanweisungen (Dateien, Templates, XML-Konfigurationen, etc.)
+    
+    Installationsanweisungen:
+    - Dateien: Alle Dateien aus temp_edit/ werden kopiert
+    - Templates: Frontend-Templates werden registriert
+    - ACP Templates: ACP-Templates werden registriert
+    - Database: Datenbank-Installationsskript wird ausgeführt
+    - Script: Post-Installationsskript wird ausgeführt
+    - XML: Optionen, Seiten, Sprachen, Menüs, Listener, etc. werden registriert
+    
+    @author Sunny C
+    @copyright 2026 Sunny C
+    @package de.sunnyc.wsc.shrinkr
+    @see https://sunnyc.de
+-->
 <package name="de.sunnyc.wsc.shrinkr" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/tornado/package.xsd">
 	<packageinformation>
 		<packagename>Shr1nkr</packagename>
 		<packagename language="de">Shr1nkr</packagename>
 		<packagedescription>Transform URLs into marketing tools. Short links with discount badges, countdown timers, seasonal effects, custom buttons, featured links, click tracking, QR codes, and analytics. Perfect for promotions and affiliate marketing.</packagedescription>
 		<packagedescription language="de">Verwandle URLs in Marketing-Tools. Kurz-URLs mit Rabatt-Badges, Countdown-Timern, saisonalen Effekten, Custom Buttons, Featured Links, Klick-Tracking, QR-Codes und Statistiken. Perfekt für Promotions und Affiliate-Marketing.</packagedescription>
-		<version>1.1.207</version>
+		<version>1.1.214</version>
 		<date>2026-01-23</date>
 		<packageurl><![CDATA[https://sunnyc.de]]></packageurl>
 		<isapplication>1</isapplication>

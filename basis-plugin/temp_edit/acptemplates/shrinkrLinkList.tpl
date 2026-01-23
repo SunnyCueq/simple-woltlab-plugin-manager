@@ -1,3 +1,36 @@
+{*
+ * Template-Zweck: ACP-Liste für verkürzte URLs
+ * 
+ * ACP-Template für die Anzeige aller verkürzten URLs in einer sortierbaren
+ * und filterbaren Tabelle. Zeigt Hash, URL, URL Goal, Counter, QR-Codes,
+ * Featured Links, Specials, Custom Buttons und Reactions an. Unterstützt
+ * Filterung nach Hash/URL Goal und Titel.
+ * 
+ * Variablen:
+ * @var array $objects - Array von ShrinkrLink-Objekten
+ * @var string $q - Suchfilter für Hash/URL Goal
+ * @var string $qTitle - Suchfilter für Titel
+ * @var string $sortField - Sortierfeld (hash, url, urlGoal, counter, etc.)
+ * @var string $sortOrder - Sortierreihenfolge (ASC, DESC)
+ * @var int $pageNo - Aktuelle Seitenzahl
+ * @var bool SHRINKR_ACTIVE - Ob Plugin aktiv ist
+ * @var bool SHRINKR_COUNTER_ACTIVE - Ob Counter aktiviert ist
+ * @var bool MODULE_LIKE - Ob Like/Reaction-Modul aktiv ist
+ * @var array $reactionData - Reaction-Daten (von Template Listener)
+ * 
+ * Logik:
+ * - Zeigt Filter-Formular für Hash/URL Goal und Titel
+ * - Zeigt sortierbare Tabelle mit allen URLs
+ * - Zeigt QR-Codes mit Download-Funktionalität
+ * - Zeigt Featured Links, Specials, Custom Buttons als Icons/Badges
+ * - Zeigt Reactions (wenn Modul aktiv)
+ * - Initialisiert QR-Code-Rendering und Image Viewer
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {include file='header' pageTitle='shrinkr.acp.url.list'}
 
 <script data-relocate="true" src="{unsafe:$__wcf->getPath()}js/WCF.ImageViewer.js?v={unsafe:LAST_UPDATE_TIME}"></script>
@@ -11,7 +44,7 @@
     {if SHRINKR_ACTIVE}
         <nav class="contentHeaderNavigation">
             <ul>
-                <li><a href="{link application='shrinkr' controller='ShrinkrLinkAdd'}{/link}" class="button">{icon name='plus'} <span>{lang}shrinkr.acp.menu.link.link.add{/lang}</span></a></li>
+                <li><a href="{link controller='ShrinkrLinkAdd'}{/link}" class="button">{icon name='plus'} <span>{lang}shrinkr.acp.menu.link.link.add{/lang}</span></a></li>
                 
                 {event name='contentHeaderNavigation'}
             </ul>
@@ -22,7 +55,7 @@
 {include file='formError'}
 
 {if SHRINKR_ACTIVE && $objects|count}
-	<form action="{link application='shrinkr' controller='ShrinkrLinkList'}{/link}" method="POST">
+	<form action="{link controller='ShrinkrLinkList'}{/link}" method="POST">
 		<section class="section">
             <h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
@@ -61,7 +94,7 @@
 
     {hascontent}
         <div class="paginationTop">
-            {content}{pages print=true assign=pagesLinks application='shrinkr' controller="ShrinkrLinkList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&q=$q"}{/content}
+            {content}{pages print=true assign=pagesLinks controller="ShrinkrLinkList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&q=$q"}{/content}
         </div>
     {/hascontent}
 
@@ -70,19 +103,19 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="columnID columnUrlID{if $sortField == 'linkID'} active {unsafe:$sortOrder}{/if}" colspan="2"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=linkID&sortOrder={if $sortField == 'linkID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.global.objectID{/lang}</a></th>
-                        <th class="columnTitle columnHash{if $sortField == 'hash'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=hash&sortOrder={if $sortField == 'hash' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url.hash{/lang}</a></th>
-                        <th class="columnTitle columnUrl{if $sortField == 'url'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=url&sortOrder={if $sortField == 'url' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url{/lang}</a></th>
-                        <th class="columnTitle columnUrlGoal{if $sortField == 'urlGoal'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=urlGoal&sortOrder={if $sortField == 'urlGoal' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.urlGoal{/lang}</a></th>
+                        <th class="columnID columnUrlID{if $sortField == 'linkID'} active {unsafe:$sortOrder}{/if}" colspan="2"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=linkID&sortOrder={if $sortField == 'linkID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.global.objectID{/lang}</a></th>
+                        <th class="columnTitle columnHash{if $sortField == 'hash'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=hash&sortOrder={if $sortField == 'hash' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url.hash{/lang}</a></th>
+                        <th class="columnTitle columnUrl{if $sortField == 'url'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=url&sortOrder={if $sortField == 'url' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url{/lang}</a></th>
+                        <th class="columnTitle columnUrlGoal{if $sortField == 'urlGoal'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=urlGoal&sortOrder={if $sortField == 'urlGoal' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.urlGoal{/lang}</a></th>
                         {if SHRINKR_COUNTER_ACTIVE}
-                            <th class="columnTitle columnCounter text-center{if $sortField == 'counter'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=counter&sortOrder={if $sortField == 'counter' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url.counter{/lang}</a></th>
+                            <th class="columnTitle columnCounter text-center{if $sortField == 'counter'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=counter&sortOrder={if $sortField == 'counter' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url.counter{/lang}</a></th>
                         {/if}
                         <th class="columnTitle columnQR text-center"><span class="qrIconHeader">{icon size=24 name='qrcode'}</span></th>
                         
                         {* URL List Column Heads (from template listeners) *}
-                        <th class="columnTitle columnFeaturedLinks text-center{if $sortField == 'featuredLinks'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=featuredLinks&sortOrder={if $sortField == 'featuredLinks' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.featuredLink.section{/lang}</a></th>
-                        <th class="columnTitle columnSpecial text-center{if $sortField == 'special'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=special&sortOrder={if $sortField == 'special' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.special{/lang}</a></th>
-                        <th class="columnTitle columnCustomButtons text-center{if $sortField == 'customButtons'} active {unsafe:$sortOrder}{/if}"><a href="{link application='shrinkr' controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=customButtons&sortOrder={if $sortField == 'customButtons' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.customButton.section{/lang}</a></th>
+                        <th class="columnTitle columnFeaturedLinks text-center{if $sortField == 'featuredLinks'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=featuredLinks&sortOrder={if $sortField == 'featuredLinks' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.featuredLink.section{/lang}</a></th>
+                        <th class="columnTitle columnSpecial text-center{if $sortField == 'special'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=special&sortOrder={if $sortField == 'special' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.special{/lang}</a></th>
+                        <th class="columnTitle columnCustomButtons text-center{if $sortField == 'customButtons'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=customButtons&sortOrder={if $sortField == 'customButtons' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.customButton.section{/lang}</a></th>
                         
                         {if MODULE_LIKE && $__wcf->session->getPermission('user.like.canViewLike')}
                             <th class="columnTitle text-center">{lang}wcf.reactions.summary.title{/lang}</th>
@@ -96,13 +129,13 @@
                     {foreach from=$objects item=url}
                         <tr class="jsUrlRow jsObjectActionObject" data-object-id="{unsafe:$url->getObjectID()}">
                             <td class="columnIcon">
-                                <a href="{link application='shrinkr' controller='ShrinkrLinkEdit' id=$url->linkID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
+                                <a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$url->linkID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
                                 {objectAction action="delete" objectTitle=$url->hash}
                                 
                                 {event name='rowButtons'}
                             </td>
                             <td class="columnID">{#$url->linkID}</td>
-                            <td class="columnTitle columnHash"><a href="{link application='shrinkr' controller='ShrinkrLinkEdit' object=$url}{/link}">{$url->hash}</a></td>
+                            <td class="columnTitle columnHash"><a href="{link controller='ShrinkrLinkEdit' application='shrinkr' object=$url}{/link}">{$url->hash}</a></td>
                             <td class="columnTitle columnUrl">
                             <button class="copyUrlButton" data-copy-link="{$url->getShortedUrl(true)}" data-tooltip="{lang}wcf.shrinkr.copyUrl{/lang}" aria-label="{lang}wcf.shrinkr.copyUrl{/lang}">{icon name='copy'}</button>
                             <kbd>{$url->getShortedUrl(true)}</kbd>
@@ -123,10 +156,10 @@
                                 {/if}
                                 {if $featuredLinksCount > 0}
                                     {* Featured Links vorhanden: Anzahl + Bearbeiten-Button (zur URL-Edit-Seite) *}
-                                    {$featuredLinksCount} <a href="{link application='shrinkr' controller='ShrinkrLinkEdit' id=$url->linkID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
+                                    {$featuredLinksCount} <a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$url->linkID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
                                 {else}
                                     {* Keine Featured Links vorhanden: 0 + *}
-                                    0 <a href="{link application='shrinkr' controller='FeaturedLinkAdd'}linkID={#$url->linkID}{/link}" title="{lang}wcf.shrinkr.featuredLink.add{/lang}" class="jsTooltip">{icon name='plus'}</a>
+                                    0 <a href="{link controller='FeaturedLinkAdd'}linkID={#$url->linkID}{/link}" title="{lang}wcf.shrinkr.featuredLink.add{/lang}" class="jsTooltip">{icon name='plus'}</a>
                                 {/if}
                             </td>
                             <td class="columnTitle columnSpecial text-center">
@@ -135,18 +168,18 @@
                                     <div class="text-center specialBadgeContainer">
                                         <span class="badge green">{lang}wcf.shrinkr.special.status.active{/lang}</span>
                                         {if $linksArray[$url->linkID]['firstActiveSpecialID']|isset && $linksArray[$url->linkID]['firstActiveSpecialID']}
-                                            <a href="{link application='shrinkr' controller='SpecialEdit' id=$linksArray[$url->linkID]['firstActiveSpecialID']}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
+                                            <a href="{link controller='SpecialEdit' application='shrinkr' id=$linksArray[$url->linkID]['firstActiveSpecialID']}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
                                         {/if}
                                     </div>
                                 {elseif $linksArray|isset && $linksArray[$url->linkID]|isset && $linksArray[$url->linkID]['firstSpecialID']|isset && $linksArray[$url->linkID]['firstSpecialID']}
                                     {* Inaktives Special vorhanden: Inaktiv Badge + Bearbeiten-Button *}
                                     <div class="text-center specialBadgeContainer">
                                         <span class="badge red">{lang}wcf.shrinkr.special.status.inactive{/lang}</span>
-                                        <a href="{link application='shrinkr' controller='SpecialEdit' id=$linksArray[$url->linkID]['firstSpecialID']}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
+                                        <a href="{link controller='SpecialEdit' application='shrinkr' id=$linksArray[$url->linkID]['firstSpecialID']}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
                                     </div>
                                 {else}
                                     {* Kein Special vorhanden: 0 + *}
-                                    0 <a href="{link application='shrinkr' controller='SpecialAdd'}linkID={#$url->linkID}{/link}" title="{lang}wcf.shrinkr.special.add{/lang}" class="jsTooltip">{icon name='plus'}</a>
+                                    0 <a href="{link controller='SpecialAdd'}linkID={#$url->linkID}{/link}" title="{lang}wcf.shrinkr.special.add{/lang}" class="jsTooltip">{icon name='plus'}</a>
                                 {/if}
                             </td>
                             <td class="columnTitle columnCustomButtons text-center">
@@ -156,10 +189,10 @@
                                 {/if}
                                 {if $customButtonsCount > 0}
                                     {* Custom Buttons vorhanden: Anzahl + Bearbeiten-Button (zur URL-Edit-Seite) *}
-                                    {$customButtonsCount} <a href="{link application='shrinkr' controller='ShrinkrLinkEdit' id=$url->linkID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
+                                    {$customButtonsCount} <a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$url->linkID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
                                 {else}
                                     {* Keine Custom Buttons vorhanden: 0 + *}
-                                    0 <a href="{link application='shrinkr' controller='CustomButtonAdd'}linkID={#$url->linkID}{/link}" title="{lang}wcf.shrinkr.customButton.add{/lang}" class="jsTooltip">{icon name='plus'}</a>
+                                    0 <a href="{link controller='CustomButtonAdd'}linkID={#$url->linkID}{/link}" title="{lang}wcf.shrinkr.customButton.add{/lang}" class="jsTooltip">{icon name='plus'}</a>
                                 {/if}
                             </td>
                             {if MODULE_LIKE && $__wcf->session->getPermission('user.like.canViewLike')}
@@ -201,7 +234,7 @@
             
             <nav class="contentFooterNavigation">
                 <ul>
-                    <li><a href="{link application='shrinkr' controller='ShrinkrLinkAdd'}{/link}" class="button">{icon name='plus'} <span>{lang}shrinkr.acp.menu.link.link.add{/lang}</span></a></li>
+                    <li><a href="{link controller='ShrinkrLinkAdd'}{/link}" class="button">{icon name='plus'} <span>{lang}shrinkr.acp.menu.link.link.add{/lang}</span></a></li>
                     
                     {event name='contentFooterNavigation'}
                 </ul>
@@ -223,10 +256,10 @@
                     'wcf.shrinkr.qrCode': '{jslang}wcf.shrinkr.qrCode{/jslang}',
                 });
 
-                if (Qr && typeof Qr.renderAll === 'function') {
-                    Qr.renderAll();
-                } else if (Qr && Qr.default && typeof Qr.default.renderAll === 'function') {
-                    Qr.default.renderAll();
+                // Handle both default export and direct export
+                const qrModule = Qr && Qr.default ? Qr.default : Qr;
+                if (qrModule && typeof qrModule.renderAll === 'function') {
+                    qrModule.renderAll();
                 }
             });
         </script>

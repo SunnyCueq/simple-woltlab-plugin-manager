@@ -9,33 +9,47 @@ use wcf\system\exception\IllegalLinkException;
 
 /**
  * Form for editing an existing custom button.
+ * 
+ * ACP form for editing custom buttons. Extends CustomButtonAddForm and loads
+ * the custom button object from the database. Handles linkID and URL hash
+ * loading for form initialization.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 class CustomButtonEditForm extends CustomButtonAddForm
 {
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.customButton.edit';
 
     /**
-     * @inheritDoc
+     * Form action name (edit, update, delete).
+     *
+     * @var    string
      */
     public $formAction = 'edit';
 
     /**
-     * @inheritDoc
+     * Reads request parameters and loads the custom button to edit.
+     * 
+     * Loads the CustomButton object first to get linkID, then loads the URL hash.
+     * Calls parent readParameters without the linkID check since we already
+     * have the linkID from the custom button object.
+     *
+     * @return  void
+     * @throws  IllegalLinkException  If custom button ID is invalid or link doesn't exist
      */
     #[\Override]
     public function readParameters()
     {
-        // Load CustomButton first (before parent, to get linkID)
         try {
             $queryParameters = Helper::mapQueryParameters(
                 $_GET,
@@ -51,13 +65,11 @@ class CustomButtonEditForm extends CustomButtonAddForm
                 throw new IllegalLinkException();
             }
 
-            // Set linkID from loaded object (needed for parent::readParameters)
             $this->linkID = $this->formObject->linkID;
         } catch (MappingError) {
             throw new IllegalLinkException();
         }
 
-        // Now load URL hash (parent expects linkID to be set)
         $sql = "SELECT hash FROM shrinkr1_link WHERE linkID = ?";
         $statement = \wcf\system\WCF::getDB()->prepareStatement($sql);
         $statement->execute([$this->linkID]);
@@ -67,7 +79,6 @@ class CustomButtonEditForm extends CustomButtonAddForm
             throw new IllegalLinkException();
         }
 
-        // Call parent WITHOUT readParameters (to avoid linkID check from query)
         \wcf\form\AbstractFormBuilderForm::readParameters();
     }
 

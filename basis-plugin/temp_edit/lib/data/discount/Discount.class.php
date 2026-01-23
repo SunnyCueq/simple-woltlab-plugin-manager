@@ -9,33 +9,41 @@ use wcf\system\WCF;
 
 /**
  * Represents a discount object with associated data.
+ * 
+ * Database object for discount codes and promotions. Stores discount information
+ * including codes, colors, countdown timers, and host restrictions. Implements
+ * ITitledObject for moderation queue compatibility.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.discount
  *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.discount
- *
- * @property int    $discountID
- * @property string $discountValue
- * @property string $hosts
- * @property int    $special
- * @property string $specialIdentifier
- * @property string $additionalText
- * @property string $codes
- * @property string $favicon
- * @property string $primaryColor
- * @property string $secondaryColor
- * @property string $primaryTextColor
- * @property string $secondaryTextColor
- * @property int    $countdownStart
- * @property int    $countdownEnd
+ * @property-read int    $discountID        Unique ID of the discount
+ * @property-read string $discountValue     Discount text/value (e.g., "30%")
+ * @property-read string $hosts            Comma-separated list of hostnames this discount applies to
+ * @property-read int    $special          Special event ID (optional)
+ * @property-read string $specialIdentifier Special event identifier (optional)
+ * @property-read string $additionalText    Additional HTML text for display
+ * @property-read string $codes             Discount codes (comma-separated)
+ * @property-read string $favicon           Favicon URL or path
+ * @property-read string $primaryColor      Primary background color (RGBA format)
+ * @property-read string $secondaryColor    Secondary background color (RGBA format)
+ * @property-read string $primaryTextColor  Primary text color (RGBA format)
+ * @property-read string $secondaryTextColor Secondary text color (RGBA format)
+ * @property-read int    $countdownStart    Countdown start timestamp (UNIX timestamp)
+ * @property-read int    $countdownEnd      Countdown end timestamp (UNIX timestamp)
  */
 class Discount extends DatabaseObject implements ITitledObject
 {
     /**
-     * @inheritdoc
+     * Returns the title of the discount.
+     * 
+     * Implements ITitledObject interface. Returns the discount value as title.
+     *
+     * @return  string  The discount value (e.g., "30%")
      */
     public function getTitle(): string
     {
@@ -43,7 +51,9 @@ class Discount extends DatabaseObject implements ITitledObject
     }
 
     /**
-     * @inheritdoc
+     * Returns the discount value as string representation.
+     *
+     * @return  string  The discount value
      */
     public function __toString(): string
     {
@@ -51,7 +61,9 @@ class Discount extends DatabaseObject implements ITitledObject
     }
 
     /**
-     * Returns true, if current user can add discounts
+     * Checks if the current user can add discounts.
+     *
+     * @return  bool    True if user has admin.shrinkr.canManageDiscounts permission
      */
     public function canAdd(): bool
     {
@@ -59,7 +71,9 @@ class Discount extends DatabaseObject implements ITitledObject
     }
 
     /**
-     * Returns true, if current user can edit the discount.
+     * Checks if the current user can edit this discount.
+     *
+     * @return  bool    True if user has admin.shrinkr.canManageDiscounts permission
      */
     public function canEdit(): bool
     {
@@ -67,7 +81,9 @@ class Discount extends DatabaseObject implements ITitledObject
     }
 
     /**
-     * Returns true, if current user can delete the discount.
+     * Checks if the current user can delete this discount.
+     *
+     * @return  bool    True if user has admin.shrinkr.canManageDiscounts permission
      */
     public function canDelete(): bool
     {

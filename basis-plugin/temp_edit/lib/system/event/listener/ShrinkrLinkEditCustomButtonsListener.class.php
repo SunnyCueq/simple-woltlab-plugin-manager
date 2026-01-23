@@ -9,18 +9,27 @@ use wcf\system\WCF;
 
 /**
  * Loads custom buttons for URL edit page.
+ * 
+ * Event listener that loads and assigns custom buttons for a shortened link
+ * when editing. Retrieves buttons from the database and sorts them by sortOrder.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage system.event.listener
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  system.event.listener
  */
 class ShrinkrLinkEditCustomButtonsListener extends AbstractEventListener
 {
     /**
-     * @inheritDoc
+     * Assigns custom buttons to the template.
+     * 
+     * Loads custom buttons for the link being edited and assigns them to the
+     * template for display in the edit form.
+     *
+     * @param   ShrinkrLinkAddForm  $page  The form page instance
+     * @return  void
      */
     public function onAssignVariables(ShrinkrLinkAddForm $page): void
     {

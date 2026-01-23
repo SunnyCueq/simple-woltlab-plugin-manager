@@ -1,3 +1,30 @@
+{*
+ * Template-Zweck: ACP-Liste für Discounts
+ * 
+ * ACP-Template für die Anzeige aller Discounts in einer sortierbaren
+ * und filterbaren Tabelle. Zeigt Discount-Wert, Codes, Hosts, Special
+ * und Countdown an. Unterstützt Filterung nach Discount-Wert, Codes und Hosts.
+ * 
+ * Variablen:
+ * @var array $objects - Array von Discount-Objekten
+ * @var string $discountValue - Filter: Discount-Wert
+ * @var string $codes - Filter: Discount-Codes
+ * @var string $hosts - Filter: Hostnames
+ * @var string $sortField - Sortierfeld
+ * @var string $sortOrder - Sortierreihenfolge
+ * 
+ * Logik:
+ * - Zeigt Filter-Formular für Discount-Wert, Codes und Hosts
+ * - Zeigt sortierbare Tabelle mit allen Discounts
+ * - Zeigt Countdown für aktive Discounts
+ * - Initialisiert Countdown-Timer für Liste
+ * - Unterstützt Pagination
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {include file='header' pageTitle='shrinkr.acp.menu.link.discount.list'}
 
 <header class="contentHeader">
@@ -7,7 +34,7 @@
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='DiscountAdd' application='shrinkr'}{/link}"
+			<li><a href="{link controller='DiscountAdd'}{/link}"
 					class="button">{icon size=16 name='plus'}
 					<span>{lang}shrinkr.acp.menu.link.discount.add{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
@@ -18,7 +45,7 @@
 {include file='formError'}
 
 {if $objects|count || $discountValue || $codes || $hosts}
-	<form action="{link controller='DiscountList' application='shrinkr'}{/link}" method="POST">
+	<form action="{link controller='DiscountList'}{/link}" method="POST">
 		<section class="section">
 			<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
@@ -62,7 +89,7 @@
 {hascontent}
 <div class="paginationTop">
 	{content}
-{pages print=true assign=pagesLinks application='shrinkr' controller="DiscountList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&discountValue=$discountValue&codes=$codes&hosts=$hosts"}
+{pages print=true assign=pagesLinks controller="DiscountList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&discountValue=$discountValue&codes=$codes&hosts=$hosts"}
 	{/content}
 </div>
 {/hascontent}
@@ -74,12 +101,12 @@
 				<tr>
 					<th></th>
 					<th class="columnID columnDiscountID{if $sortField == 'discountID'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='DiscountList' application='shrinkr'}pageNo={#$pageNo}&sortField=discountID&sortOrder={if $sortField == 'discountID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&discountValue={$discountValue}&codes={$codes}&hosts={$hosts}{/link}">
+						<a href="{link controller='DiscountList'}pageNo={#$pageNo}&sortField=discountID&sortOrder={if $sortField == 'discountID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&discountValue={$discountValue}&codes={$codes}&hosts={$hosts}{/link}">
 							{lang}wcf.global.objectID{/lang}
 						</a>
 					</th>
 					<th class="columnTitle columnDiscountValue{if $sortField == 'discountValue'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='DiscountList' application='shrinkr'}pageNo={#$pageNo}&sortField=discountValue&sortOrder={if $sortField == 'discountValue' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&discountValue={$discountValue}&codes={$codes}&hosts={$hosts}{/link}">
+						<a href="{link controller='DiscountList'}pageNo={#$pageNo}&sortField=discountValue&sortOrder={if $sortField == 'discountValue' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&discountValue={$discountValue}&codes={$codes}&hosts={$hosts}{/link}">
 							{lang}wcf.shrinkr.discount{/lang}
 						</a>
 					</th>
@@ -92,7 +119,7 @@
 				{foreach from=$objects item=object}
 					<tr class="jsObjectActionObject" data-object-id="{#$object->discountID}">
 						<td class="columnIcon">
-							<a href="{link controller='DiscountEdit' id=$object->discountID application='shrinkr'}{/link}"
+							<a href="{link controller='DiscountEdit' application='shrinkr' id=$object->discountID}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->discountID}
 							{event name='rowButtons'}
@@ -139,7 +166,7 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='DiscountAdd' application='shrinkr'}{/link}"
+				<li><a href="{link controller='DiscountAdd'}{/link}"
 						class="button">{icon size=16 name='plus'}
 						<span>{lang}shrinkr.acp.menu.link.discount.add{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}

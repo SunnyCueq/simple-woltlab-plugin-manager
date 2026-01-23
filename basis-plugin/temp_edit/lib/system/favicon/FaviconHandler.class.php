@@ -9,60 +9,68 @@ use wcf\util\StringUtil;
 
 /**
  * Handles favicon fetching from URLs.
- *
- * Fetches favicons from websites without using external services.
- * Policy-compliant implementation for WoltLab Plugin Store.
+ * 
+ * Fetches favicons from websites without using external services. Implements
+ * caching to reduce HTTP requests and improve performance. Policy-compliant
+ * implementation for WoltLab Plugin Store. Also provides page title extraction
+ * functionality.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage system.favicon
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  system.favicon
  */
 class FaviconHandler extends SingletonFactory
 {
     /**
      * Cache directory for favicons (relative to WCF_DIR).
+     *
+     * @var    string
      */
     private const CACHE_DIR = 'images/favicons/';
 
     /**
-     * Target size for favicon (16x16 is standard).
+     * Target size for favicon in pixels (16x16 is standard).
+     *
+     * @var    int
      */
     private const TARGET_SIZE = 16;
 
     /**
-     * Cache lifetime in seconds (7 days).
+     * Cache lifetime in seconds (7 days = 604800 seconds).
+     *
+     * @var    int
      */
     private const CACHE_LIFETIME = 604800;
 
     /**
      * Returns the favicon URL for a given URL.
+     * 
+     * Checks cache first, then attempts to fetch favicon from the target URL.
+     * Caches the favicon for future use. Returns null if favicon cannot be found
+     * or downloaded.
      *
-     * @param string $url The URL to fetch favicon from
-     * @return string|null Relative path to cached favicon, or null if not found
+     * @param   string  $url  The URL to fetch favicon from
+     * @return  string|null    Relative path to cached favicon, or null if not found
      */
     public function getFaviconPath(string $url): ?string
     {
-        // Normalize URL
         $url = StringUtil::trim($url);
 
         if (empty($url) || !$this->isValidUrl($url)) {
             return null;
         }
 
-        // Parse URL
         $urlParts = \parse_url($url);
         if (empty($urlParts['host'])) {
             return null;
         }
 
-        // Generate cache filename based on host
         $cacheFilename = $this->getCacheFilename($urlParts['host']);
         $cachePath = WCF_DIR . self::CACHE_DIR . $cacheFilename;
 
-        // Return cached favicon if exists and not expired
         if (\file_exists($cachePath)) {
             $fileAge = TIME_NOW - \filemtime($cachePath);
             if ($fileAge < self::CACHE_LIFETIME) {
@@ -70,7 +78,6 @@ class FaviconHandler extends SingletonFactory
             }
         }
 
-        // Try to fetch favicon
         $faviconUrl = $this->findFaviconUrl($url, $urlParts);
 
         if ($faviconUrl && $this->downloadFavicon($faviconUrl, $cachePath)) {
@@ -82,9 +89,13 @@ class FaviconHandler extends SingletonFactory
 
     /**
      * Extracts the page title from a given URL.
+     * 
+     * Fetches the HTML content of the page and extracts the title from the
+     * <title> tag or Open Graph og:title meta tag. Uses WoltLab's HttpFactory
+     * for HTTP requests.
      *
-     * @param string $url The URL to fetch title from
-     * @return string|null Page title, or null if not found
+     * @param   string  $url  The URL to fetch title from
+     * @return  string|null   Page title, or null if not found or on error
      */
     public function extractPageTitle(string $url): ?string
     {

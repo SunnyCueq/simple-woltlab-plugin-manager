@@ -7,47 +7,67 @@ use wcf\system\exception\UserInputException;
 
 /**
  * Executes theme-related actions.
+ * 
+ * Action class for performing operations on Theme database objects.
+ * Handles AJAX requests for theme management, including color validation,
+ * effect validation, identifier uniqueness checks, and toggle functionality.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.theme
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.theme
  */
 class ThemeAction extends AbstractDatabaseObjectAction
 {
+    /**
+     * Allowed visual effect identifiers.
+     *
+     * @var    string[]
+     */
     private const ALLOWED_EFFECTS = ['none', 'autumnLeaves', 'snow', 'ghosts'];
 
     /**
-     * @inheritDoc
+     * Required permissions for create action.
+     *
+     * @var    string[]
      */
     protected $permissionsCreate = ['admin.shrinkr.canManageThemes'];
 
     /**
-     * @inheritDoc
+     * Required permissions for update action.
+     *
+     * @var    string[]
      */
     protected $permissionsUpdate = ['admin.shrinkr.canManageThemes'];
 
     /**
-     * @inheritDoc
+     * Required permissions for delete action.
+     *
+     * @var    string[]
      */
     protected $permissionsDelete = ['admin.shrinkr.canManageThemes'];
 
     /**
-     * @inheritDoc
+     * Actions that require ACP access.
+     *
+     * @var    string[]
      */
     protected $requireACP = ['create', 'update', 'delete', 'toggle'];
 
     /**
-     * @inheritDoc
+     * Creates a new theme object.
+     * 
+     * Validates color values, effect identifier, and identifier uniqueness
+     * before creating the theme entry in the database.
+     *
+     * @return  Theme  The created theme object
+     * @throws  UserInputException  If validation fails
      */
     public function create()
     {
-        // Validate color values before creating
         $this->validateColors();
-
-        // Validate identifier uniqueness
         $this->validateIdentifier();
 
         $this->validateEffectIdentifier();

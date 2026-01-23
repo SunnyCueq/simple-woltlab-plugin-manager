@@ -14,12 +14,17 @@ use wcf\util\StringUtil;
 
 /**
  * Utility class for Shr1nkr link management and validation.
- * Provides methods for URL/hash validation and link generation.
+ * 
+ * Provides static methods for URL validation, hash validation, and link generation.
+ * Handles validation of target URLs (HTTPS requirement, blacklist, forwarding chains)
+ * and hash identifiers (pattern matching, uniqueness checks).
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
  * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  util
  */
 final class ShrinkrUtil
 {

@@ -8,13 +8,17 @@ use wcf\data\object\type\ObjectType;
 
 /**
  * Likeable object implementation for ShrinkrLink.
+ * 
+ * Decorator class that makes ShrinkrLink objects compatible with WoltLab's reaction system.
+ * Implements ILikeObject interface to enable reactions (likes) on shortened links.
+ * Since ShrinkrLink objects don't have owners, notifications are not sent.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.shrinkrlink
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.shrinkrlink
  *
  * @method  ShrinkrLink getDecoratedObject()
  * @mixin   ShrinkrLink
@@ -22,18 +26,25 @@ use wcf\data\object\type\ObjectType;
 class LikeableShrinkrLink extends DatabaseObjectDecorator implements ILikeObject
 {
     /**
-     * @inheritDoc
+     * Base class name for this decorator.
+     *
+     * @var    string
      */
     protected static $baseClass = ShrinkrLink::class;
 
     /**
-     * object type
-     * @var ObjectType
+     * Object type instance for this likeable object.
+     *
+     * @var    ObjectType
      */
     protected $objectType;
 
     /**
-     * @inheritDoc
+     * Returns the title of the likeable object.
+     * 
+     * Delegates to the decorated ShrinkrLink object's getTitle() method.
+     *
+     * @return  string  The link hash (used as title)
      */
     public function getTitle(): string
     {
@@ -41,7 +52,11 @@ class LikeableShrinkrLink extends DatabaseObjectDecorator implements ILikeObject
     }
 
     /**
-     * @inheritDoc
+     * Returns the URL of the likeable object.
+     * 
+     * Returns the shortened URL of the link.
+     *
+     * @return  string  The shortened URL
      */
     public function getURL()
     {
@@ -49,16 +64,23 @@ class LikeableShrinkrLink extends DatabaseObjectDecorator implements ILikeObject
     }
 
     /**
-     * @inheritDoc
+     * Returns the user ID of the object owner.
+     * 
+     * ShrinkrLink objects don't have owners, so this always returns null.
+     *
+     * @return  null    Always null (no owner)
      */
     public function getUserID()
     {
-        // ShrinkrLink objects don't have a userID
         return null;
     }
 
     /**
-     * @inheritDoc
+     * Returns the object ID.
+     * 
+     * Returns the linkID of the decorated ShrinkrLink object.
+     *
+     * @return  int     The link ID
      */
     public function getObjectID()
     {
@@ -66,15 +88,22 @@ class LikeableShrinkrLink extends DatabaseObjectDecorator implements ILikeObject
     }
 
     /**
-     * @inheritDoc
+     * Updates the like counter.
+     * 
+     * ShrinkrLink doesn't store cumulative likes in the database, so this
+     * method does nothing. Likes are calculated dynamically from the reaction system.
+     *
+     * @param   int     $cumulativeLikes  The cumulative likes count (ignored)
+     * @return  void
      */
     public function updateLikeCounter($cumulativeLikes)
     {
-        // ShrinkrLink doesn't store cumulative likes, so we don't need to update anything
     }
 
     /**
-     * @inheritDoc
+     * Returns the object type instance.
+     *
+     * @return  ObjectType  The object type instance
      */
     public function getObjectType()
     {
@@ -82,7 +111,10 @@ class LikeableShrinkrLink extends DatabaseObjectDecorator implements ILikeObject
     }
 
     /**
-     * @inheritDoc
+     * Sets the object type instance.
+     *
+     * @param   ObjectType  $objectType  The object type instance to set
+     * @return  void
      */
     public function setObjectType(ObjectType $objectType)
     {
@@ -90,15 +122,23 @@ class LikeableShrinkrLink extends DatabaseObjectDecorator implements ILikeObject
     }
 
     /**
-     * @inheritDoc
+     * Sends a notification when the object is liked.
+     * 
+     * ShrinkrLink objects don't have owners, so no notifications are sent.
+     *
+     * @param   \wcf\data\like\Like  $like  The like object (ignored)
+     * @return  void
      */
     public function sendNotification(\wcf\data\like\Like $like)
     {
-        // ShrinkrLink objects don't have owners, so no notifications needed
     }
 
     /**
-     * @inheritDoc
+     * Returns the language ID of the object.
+     * 
+     * ShrinkrLink objects are language-independent, so this returns null.
+     *
+     * @return  null    Always null (no language)
      */
     public function getLanguageID()
     {

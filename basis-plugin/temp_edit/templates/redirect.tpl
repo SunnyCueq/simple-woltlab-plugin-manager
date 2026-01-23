@@ -1,3 +1,45 @@
+{*
+ * Template-Zweck: Haupt-Redirect-Seite für verkürzte URLs
+ * 
+ * Haupttemplate für die Anzeige von verkürzten URLs. Zeigt Titel, Beschreibung,
+ * Countdown-Timer, Forward-Button, Custom Buttons, Featured Links, Discount Codes,
+ * Reaction Buttons und Copyright an. Unterstützt verschiedene Themes und Modi
+ * (Normal Page Mode vs. Minimal Mode). Enthält JavaScript für Countdown, Button
+ * Tracking, Copy-Funktionalität und 3D-Button-Enhancement.
+ * 
+ * Variablen:
+ * @var \shrinkr\data\shrinkrlink\ShrinkrLink $link - Link-Objekt mit URL-Daten
+ * @var string $extractedTitle - Extrahierter oder auto-generierter Seitentitel
+ * @var string $activeThemeIdentifier - Theme-Identifier (z.B. 'blackweek', 'halloween')
+ * @var string $titleIconName - Font Awesome Icon-Name für Titel
+ * @var bool $titleIconForceSolid - Ob Solid-Icon verwendet werden soll
+ * @var bool $enableDescriptions - Ob Beschreibungen aktiviert sind
+ * @var string $randomDescription - Zufällige Beschreibung für diese URL
+ * @var array $customButtons - Array von Custom Button-Objekten
+ * @var \shrinkr\data\discount\Discount $discount - Discount-Objekt (falls vorhanden)
+ * @var string $canonicalURL - Canonical URL für SEO
+ * @var string $headContent - Zusätzlicher Head-Content
+ * @var string $pageTitle - Seitentitel
+ * @var bool SHRINKR_NORMAL_PAGE_MODE - Ob Normal Page Mode aktiv ist
+ * @var bool SHRINKR_FORWARDING_MUST_CONFIRMED - Ob Bestätigung erforderlich ist
+ * @var int SHRINKR_TIME_UNTIL_FORWARDING - Sekunden bis zur Weiterleitung
+ * @var bool SHRINKR_ENABLE_CUSTOM_FORWARD_BUTTON - Ob 3D-Button aktiviert ist
+ * 
+ * Logik:
+ * - Erstellt Dummy-DOM-Elemente für WoltLab JavaScript (wenn Normal Page Mode)
+ * - Lädt Theme-spezifisches CSS
+ * - Zeigt Titel mit optionalem Icon und Glitch-Effekt (Black Week Theme)
+ * - Zeigt Beschreibung oder Standard-Text
+ * - Zeigt Forward-Button oder Countdown-Timer (je nach Konfiguration)
+ * - Zeigt Custom Buttons mit Click-Tracking
+ * - Zeigt Discount Codes mit Copy-Funktionalität
+ * - Initialisiert JavaScript für Countdown, Tracking und Button-Enhancement
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {include file='documentHeader'}
 
 <head>

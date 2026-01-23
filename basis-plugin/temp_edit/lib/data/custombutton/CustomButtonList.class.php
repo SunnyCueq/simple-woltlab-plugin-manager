@@ -6,13 +6,17 @@ use wcf\data\DatabaseObjectList;
 
 /**
  * Represents a list of custom buttons.
+ * 
+ * Database object list for querying and retrieving multiple custom button entries.
+ * Extends DatabaseObjectList to provide filtering, sorting, and pagination capabilities
+ * for the ACP custom button list page.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.custombutton
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.custombutton
  *
  * @method CustomButton       current()
  * @method CustomButton[]     getObjects()
@@ -23,7 +27,9 @@ use wcf\data\DatabaseObjectList;
 class CustomButtonList extends DatabaseObjectList
 {
     /**
-     * @inheritDoc
+     * Class name of the objects in this list.
+     *
+     * @var    string
      */
     public $className = CustomButton::class;
 }

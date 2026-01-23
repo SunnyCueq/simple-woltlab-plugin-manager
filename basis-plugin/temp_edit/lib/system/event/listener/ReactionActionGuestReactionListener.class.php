@@ -12,18 +12,34 @@ use wcf\system\WCF;
 
 /**
  * Event listener for ReactionAction to handle guest reactions.
+ * 
+ * Intercepts ReactionAction events to enable guest reactions for Shr1nkr links.
+ * Uses reflection to modify allowGuestAccess before validation, allowing guests
+ * to react when guest reactions are enabled. This listener is used as a fallback
+ * mechanism, but the primary handling is done by GuestReactionAction class.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage system.event.listener
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  system.event.listener
  */
 class ReactionActionGuestReactionListener implements IParameterizedEventListener
 {
     /**
-     * @inheritDoc
+     * Executes the event listener.
+     * 
+     * Listens to ReactionAction events (initializeAction, validateAction, finalizeAction)
+     * for the 'react' action. Uses reflection to enable guest reactions by modifying
+     * allowGuestAccess before validation. Note: This listener is a fallback mechanism;
+     * the primary handling is done by GuestReactionAction class via JavaScript interception.
+     *
+     * @param   object  $eventObj    The event object (ReactionAction instance)
+     * @param   string  $className   The class name of the event object
+     * @param   string  $eventName   The event name ('initializeAction', 'validateAction', 'finalizeAction')
+     * @param   array   $parameters  Event parameters (passed by reference)
+     * @return  void
      */
     public function execute($eventObj, $className, $eventName, array &$parameters)
     {
@@ -31,9 +47,6 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
             return;
         }
 
-        // Use the action-specific method name pattern
-        // IMPORTANT: We need to set allowGuestAccess BEFORE validateAction() checks it
-        // So we hook into initializeAction which is called before validateAction
         if ($eventName === 'initializeAction' && $eventObj->getActionName() === 'react') {
             $this->onInitializeActionReact($eventObj, $parameters);
         }
@@ -48,33 +61,36 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
     }
 
     /**
-     * Called during initializeAction - we can modify allowGuestAccess here BEFORE validateAction() checks it
+     * Called during initializeAction to enable guest reactions.
+     * 
+     * Uses reflection to modify allowGuestAccess before validateAction() checks it.
+     * This allows guests to pass the initial permission check, though validateReact()
+     * may still throw exceptions. The primary handling is done by GuestReactionAction.
+     *
+     * @param   ReactionAction  $action      The ReactionAction instance
+     * @param   array           $parameters Event parameters (passed by reference)
+     * @return  void
      */
     public function onInitializeActionReact(ReactionAction $action, array &$parameters)
     {
-        // Only handle guests
         if (WCF::getUser()->userID) {
             return;
         }
 
-        // Check if guest reactions are enabled
         $guestReactionsOption = Option::getOptionByName('shrinkr_enable_guest_reactions');
         $enableGuestReactions = $guestReactionsOption ? ($guestReactionsOption->optionValue == '1' || $guestReactionsOption->optionValue == 1) : false;
 
         if (!$enableGuestReactions) {
-            return; // Let standard validation handle it (will fail for guests)
+            return;
         }
 
-        // Check if this is our object type
         if (!isset($action->parameters['data']['objectType']) ||
             $action->parameters['data']['objectType'] !== 'de.sunnyc.wsc.shrinkr.likeableShrinkrLink') {
-            return; // Not our object type, let standard validation handle it
+            return;
         }
 
-        // Mark that we should handle this as guest reaction
         $action->parameters['_isGuestReaction'] = true;
         
-        // Use reflection to set allowGuestAccess so validateAction() allows it
         $reflection = new \ReflectionClass($action);
         $allowGuestAccessProperty = $reflection->getProperty('allowGuestAccess');
         $allowGuestAccessProperty->setAccessible(true);
@@ -83,45 +99,35 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
             $currentAccess[] = 'react';
             $allowGuestAccessProperty->setValue($action, $currentAccess);
         }
-        
-        // IMPORTANT: validateReact() still checks "if (!WCF::getUser()->userID || !WCF::getSession()->getPermission('user.like.canLike'))"
-        // Even though allowGuestAccess is set, validateReact() will still throw an exception for guests.
-        // We need to use reflection to create a wrapper method that intercepts validateReact() calls.
-        // However, PHP doesn't allow runtime method replacement easily.
-        // The solution: We need to catch the PermissionDeniedException and handle it in finalizeAction.
-        // But if validateReact() throws, we never reach finalizeAction.
-        // Actually, wait - if allowGuestAccess includes 'react', validateAction() passes the first check.
-        // But validateReact() still does its own check. So we need to prevent that check.
-        // The only way: Use a custom ReactionAction class that overrides validateReact().
-        // But we can't do that via event listener. So we need a different approach.
-        // Let me check if we can use a closure or runkit to modify the method...
-        // Actually, the best approach: Create a custom ReactionAction class via object type provider.
-        // But that's complex. Let's try a simpler approach: Use reflection to modify the method at runtime.
-        // Actually, we can't modify methods at runtime in PHP easily.
-        // The solution: We need to catch the exception in a try-catch in validateAction, but we can't do that.
-        // Wait - maybe the old plugin uses a different approach. Let me check the JavaScript side...
-        // Actually, the old plugin might intercept the AJAX call on the client side!
     }
 
     /**
-     * Called during validateAction - this is called AFTER validateReact(), so we can't prevent the exception here
-     * The actual work is done in onInitializeActionReact() which is called BEFORE validateAction()
-     * But we still need to handle the case where validateReact() throws an exception for guests
+     * Called during validateAction (after validateReact()).
+     * 
+     * This is called AFTER validateReact(), so if validateReact() throws an exception,
+     * we never get here. The actual work is done in onInitializeActionReact().
+     *
+     * @param   ReactionAction  $action      The ReactionAction instance
+     * @param   array           $parameters  Event parameters (passed by reference)
+     * @return  void
      */
     public function onValidateActionReact(ReactionAction $action, array &$parameters)
     {
-        // This is called AFTER validateReact(), so if validateReact() throws an exception,
-        // we never get here. The actual work is done in onInitializeActionReact().
-        // However, if validateReact() doesn't throw an exception (because allowGuestAccess was set),
-        // we can still mark it as guest reaction here.
     }
 
     /**
-     * Called after react() - we can override the return values
+     * Called after react() to handle guest reactions.
+     * 
+     * If the action was marked as a guest reaction and guest reactions are enabled,
+     * delegates to the react() method to handle guest reaction storage and return
+     * values override.
+     *
+     * @param   ReactionAction  $action      The ReactionAction instance
+     * @param   array           $parameters  Event parameters (passed by reference)
+     * @return  void
      */
     public function onFinalizeActionReact(ReactionAction $action, array &$parameters)
     {
-        // Check if this should be handled as guest reaction
         if (!WCF::getUser()->userID && 
             isset($action->parameters['data']['objectType']) &&
             $action->parameters['data']['objectType'] === 'de.sunnyc.wsc.shrinkr.likeableShrinkrLink') {
@@ -136,11 +142,16 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
     }
 
     /**
-     * Handles guest reaction
+     * Handles guest reaction creation, update, or removal.
+     * 
+     * Stores guest reactions in the database using session ID. Supports toggle behavior.
+     * Uses reflection to override the action's return values with combined reaction data.
+     *
+     * @param   ReactionAction  $action  The ReactionAction instance
+     * @return  void
      */
     protected function react(ReactionAction $action)
     {
-        // Only handle if marked as guest reaction
         if (!isset($action->parameters['_isGuestReaction']) || !$action->parameters['_isGuestReaction']) {
             return;
         }
@@ -150,7 +161,6 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
         $objectID = (int)$action->parameters['data']['objectID'];
         $reactionTypeID = (int)$action->parameters['reactionTypeID'];
 
-        // Check if guest already reacted on this object
         $sql = "SELECT  guestReactionID, reactionTypeID
                 FROM    shrinkr" . WCF_N . "_guest_reaction
                 WHERE   sessionID = ?
@@ -161,16 +171,13 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
         $existingReaction = $statement->fetchArray();
 
         if ($existingReaction) {
-            // Check if same reaction type - if so, remove it (toggle)
             if ($existingReaction['reactionTypeID'] == $reactionTypeID) {
-                // Remove reaction (toggle off)
                 $sql = "DELETE FROM shrinkr" . WCF_N . "_guest_reaction
                         WHERE   guestReactionID = ?";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute([$existingReaction['guestReactionID']]);
-                $reactionTypeID = 0; // No reaction
+                $reactionTypeID = 0;
             } else {
-                // Update to new reaction type
                 $sql = "UPDATE  shrinkr" . WCF_N . "_guest_reaction
                         SET     reactionTypeID = ?,
                                 time = ?
@@ -179,7 +186,6 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
                 $statement->execute([$reactionTypeID, TIME_NOW, $existingReaction['guestReactionID']]);
             }
         } else {
-            // Create new reaction
             GuestReactionEditor::create([
                 'sessionID' => $sessionID,
                 'objectType' => $objectType,
@@ -189,10 +195,8 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
             ]);
         }
 
-        // Get reaction data including guest reactions
         $reactionData = $this->getReactionDataWithGuests($objectType, $objectID);
 
-        // Override return values
         $reflection = new \ReflectionClass($action);
         $returnValuesProperty = $reflection->getProperty('returnValues');
         $returnValuesProperty->setAccessible(true);
@@ -206,15 +210,17 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
     }
 
     /**
-     * Gets reaction data including guest reactions
+     * Gets reaction data including both user and guest reactions.
+     * 
+     * Retrieves regular user reactions from the LikeObject system and merges them
+     * with guest reactions from the guest_reaction table.
      *
-     * @param string $objectType
-     * @param int $objectID
-     * @return array
+     * @param   string  $objectType  The object type identifier
+     * @param   int     $objectID    The object ID to get reactions for
+     * @return  array   Array containing cachedReactions and cumulativeLikes
      */
     protected function getReactionDataWithGuests($objectType, $objectID)
     {
-        // Get regular reactions
         $objectTypeObj = \wcf\system\reaction\ReactionHandler::getInstance()->getObjectType($objectType);
         if ($objectTypeObj === null) {
             $cachedReactions = [];
@@ -230,7 +236,6 @@ class ReactionActionGuestReactionListener implements IParameterizedEventListener
             }
         }
 
-        // Get guest reactions
         $sql = "SELECT  reactionTypeID, COUNT(*) as count
                 FROM    shrinkr" . WCF_N . "_guest_reaction
                 WHERE   objectType = ?

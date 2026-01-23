@@ -2,12 +2,16 @@
 
 /**
  * Shr1nkr Database Installation
+ * 
+ * Defines database table structure for the Shr1nkr plugin. Creates all required
+ * tables including links, discounts, specials, themes, descriptions, visits,
+ * button clicks, guest reactions, and featured links. Uses WoltLab's database
+ * table builder API for type-safe table definitions.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
  * @link        https://sunnyc.de
- *
  * @package     de.sunnyc.wsc.shrinkr
  */
 

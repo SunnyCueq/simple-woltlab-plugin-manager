@@ -6,24 +6,30 @@ use shrinkr\data\theme\ThemeList;
 
 /**
  * Helper class for managing special themes.
+ * 
+ * Provides static methods to retrieve theme data from the database or fallback
+ * to default themes. Used by special events to get color schemes and theme
+ * configurations.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage system.special
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  system.special
  */
 class SpecialThemeHelper
 {
     /**
      * Returns all available themes with their colors from database.
+     * 
+     * Loads active themes from the database and returns them in a structured format.
+     * Falls back to default themes if no themes are found in the database.
      *
-     * @return array Array with structure: ['themeKey' => ['name' => 'Display Name', 'primaryColor' => '...', ...]]
+     * @return  array   Array with structure: ['themeKey' => ['name' => 'Display Name', 'primaryColor' => '...', ...]]
      */
     public static function getThemes(): array
     {
-        // Load themes from database
         $themeList = new ThemeList();
         $themeList->getConditionBuilder()->add('isActive = ?', [1]);
         $themeList->sqlOrderBy = 'sortOrder ASC';
@@ -40,12 +46,16 @@ class SpecialThemeHelper
             ];
         }
 
-        // Fallback to default themes if database is empty
         return !empty($themes) ? $themes : self::getDefaultThemes();
     }
 
     /**
-     * Returns default themes.
+     * Returns default theme configurations.
+     * 
+     * Provides fallback themes (Halloween, Black Week, Christmas) with predefined
+     * color schemes when no themes are configured in the database.
+     *
+     * @return  array   Array of default theme configurations
      */
     private static function getDefaultThemes(): array
     {

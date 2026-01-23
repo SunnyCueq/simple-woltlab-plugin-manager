@@ -1,3 +1,27 @@
+{*
+ * Template-Zweck: ACP-Liste für Themes
+ * 
+ * ACP-Template für die Anzeige aller Themes in einer sortierbaren
+ * und filterbaren Tabelle. Zeigt Identifier, Titel, Effekt und Status an.
+ * Unterstützt Filterung nach Titel und Identifier.
+ * 
+ * Variablen:
+ * @var array $objects - Array von Theme-Objekten
+ * @var string $title - Filter: Titel
+ * @var string $identifier - Filter: Identifier
+ * @var string $sortField - Sortierfeld
+ * @var string $sortOrder - Sortierreihenfolge
+ * 
+ * Logik:
+ * - Zeigt Filter-Formular für Titel und Identifier
+ * - Zeigt sortierbare Tabelle mit allen Themes
+ * - Unterstützt Pagination
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {include file='header' pageTitle='shrinkr.acp.menu.link.theme.list'}
 
 <header class="contentHeader">
@@ -8,7 +32,7 @@
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='ThemeAdd' application='shrinkr'}{/link}"
+			<li><a href="{link controller='ThemeAdd'}{/link}"
 					class="button">{icon size=16 name='plus'}
 					<span>{lang}shrinkr.acp.menu.link.theme.add{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
@@ -19,7 +43,7 @@
 {include file='formError'}
 
 {if $objects|count || $title || $identifier}
-	<form action="{link controller='ThemeList' application='shrinkr'}{/link}" method="POST">
+	<form action="{link controller='ThemeList'}{/link}" method="POST">
 		<section class="section">
 			<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
@@ -67,9 +91,9 @@
 <div class="paginationTop">
 	{content}
 {if $sortField == 'sortOrder'}
-	{pages print=true assign=pagesLinks application='shrinkr' controller="ThemeList" link="pageNo=%d&sortField=themeID&sortOrder=ASC&title=$title&identifier=$identifier&isActive=$isActiveFilter"}
+	{pages print=true assign=pagesLinks controller="ThemeList" link="pageNo=%d&sortField=themeID&sortOrder=ASC&title=$title&identifier=$identifier&isActive=$isActiveFilter"}
 {else}
-	{pages print=true assign=pagesLinks application='shrinkr' controller="ThemeList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&identifier=$identifier&isActive=$isActiveFilter"}
+	{pages print=true assign=pagesLinks controller="ThemeList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&identifier=$identifier&isActive=$isActiveFilter"}
 {/if}
 	{/content}
 </div>
@@ -81,17 +105,17 @@
 			<thead>
 				<tr>
 					<th class="columnID columnThemeID{if $sortField == 'themeID'} active {unsafe:$sortOrder}{/if}" colspan="2">
-						<a href="{link controller='ThemeList' application='shrinkr'}pageNo={unsafe:$pageNo}&sortField=themeID&sortOrder={if $sortField == 'themeID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
+						<a href="{link controller='ThemeList'}pageNo={unsafe:$pageNo}&sortField=themeID&sortOrder={if $sortField == 'themeID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
 							{lang}wcf.global.objectID{/lang}
 						</a>
 					</th>
 					<th class="columnTitle columnThemeIdentifier{if $sortField == 'identifier'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='ThemeList' application='shrinkr'}pageNo={unsafe:$pageNo}&sortField=identifier&sortOrder={if $sortField == 'identifier' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
+						<a href="{link controller='ThemeList'}pageNo={unsafe:$pageNo}&sortField=identifier&sortOrder={if $sortField == 'identifier' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
 							{lang}wcf.shrinkr.theme.identifier{/lang}
 						</a>
 					</th>
 					<th class="columnTitle columnThemeTitle{if $sortField == 'title'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='ThemeList' application='shrinkr'}pageNo={unsafe:$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
+						<a href="{link controller='ThemeList'}pageNo={unsafe:$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&identifier={$identifier}&isActive={$isActiveFilter}{/link}">
 							{lang}wcf.shrinkr.theme.title{/lang}
 						</a>
 					</th>
@@ -109,7 +133,7 @@
 								{assign var='themeIsDisabled' value=false}
 							{/if}
 							{objectAction action="toggle" isDisabled=$themeIsDisabled disableTitle='wcf.shrinkr.theme.isActive.yes' enableTitle='wcf.shrinkr.theme.isActive.no'}
-							<a href="{link controller='ThemeEdit' id=$object->themeID application='shrinkr'}{/link}"
+							<a href="{link controller='ThemeEdit' application='shrinkr' id=$object->themeID}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->title}
 							{event name='rowButtons'}
@@ -149,7 +173,7 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='ThemeAdd' application='shrinkr'}{/link}"
+				<li><a href="{link controller='ThemeAdd'}{/link}"
 						class="button">{icon size=16 name='plus'}
 						<span>{lang}shrinkr.acp.menu.link.theme.add{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
@@ -162,7 +186,7 @@
 	<footer class="contentFooter">
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='ThemeAdd' application='shrinkr'}{/link}"
+				<li><a href="{link controller='ThemeAdd'}{/link}"
 						class="button">{icon size=16 name='plus'}
 						<span>{lang}shrinkr.acp.menu.link.theme.add{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}

@@ -11,39 +11,53 @@ use wcf\system\form\builder\field\TextFormField;
 
 /**
  * Form for adding a new description.
+ * 
+ * ACP form for creating description texts displayed on shortened link redirect
+ * pages. Provides form fields for title and description text (multilingual via I18n).
+ * Uses WoltLab's FormBuilder API.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 class DescriptionAddForm extends AbstractFormBuilderForm
 {
     /**
-     * @inheritDoc
+     * Required permissions to access this form.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageDescriptions'];
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.description.add';
 
     /**
-     * @inheritDoc
+     * Action class for handling form submissions.
+     *
+     * @var    string
      */
     public $objectActionClass = DescriptionAction::class;
 
     /**
-     * @inheritDoc
+     * Creates the form structure using WoltLab's FormBuilder API.
+     * 
+     * Builds a form with fields for title and description text. The description
+     * text supports multilingual content via I18n and Smarty template variables.
+     *
+     * @return  void
      */
     protected function createForm()
     {
         parent::createForm();
 
-        // === BASIC SETTINGS ===
         $basicContainer = FormContainer::create('basic')
             ->label('wcf.shrinkr.form.section.basic')
             ->description('wcf.shrinkr.form.section.basic.description.description')
@@ -66,12 +80,16 @@ class DescriptionAddForm extends AbstractFormBuilderForm
     }
 
     /**
-     * @inheritDoc
+     * Saves the form and sets default values.
+     * 
+     * Sets isActive to true by default for new descriptions since the field
+     * was removed from the form UI.
+     *
+     * @return  void
      */
     #[\Override]
     public function save()
     {
-        // Set isActive to true by default if not set (since field was removed from form)
         if ($this->formAction === 'create') {
             $this->additionalFields['isActive'] = 1;
         }

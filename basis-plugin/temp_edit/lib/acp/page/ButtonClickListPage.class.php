@@ -9,73 +9,101 @@ use wcf\system\WCF;
 
 /**
  * ACP page for listing all button clicks.
+ * 
+ * Provides a sortable list of button clicks with filtering capabilities and
+ * statistics. Supports filtering by link ID, button type, and date range.
+ * Displays analytics including time series charts and aggregations.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.page
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.page
  */
 class ButtonClickListPage extends MultipleLinkPage
 {
     /**
-     * @inheritDoc
+     * Class name of the database object list.
+     *
+     * @var    string
      */
     public $objectListClassName = ButtonClickList::class;
 
     /**
-     * @inheritDoc
+     * Default sort field.
+     *
+     * @var    string
      */
     public $sortField = 'clickTime';
 
     /**
-     * @inheritDoc
+     * Default sort order.
+     *
+     * @var    string
      */
     public $sortOrder = 'DESC';
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.statistics.list';
 
     /**
-     * @inheritDoc
+     * Required permissions to access this page.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageButtonClicks'];
 
     /**
-     * @inheritDoc
+     * Valid sort fields for the list.
+     *
+     * @var    string[]
      */
     public $validSortFields = ['clickID', 'linkID', 'buttonType', 'clickTime'];
 
     /**
-     * Filter: URL ID
+     * Filter: URL ID to filter clicks by.
+     *
+     * @var    int
      */
     public $linkID;
 
     /**
-     * Filter: Button Type
+     * Filter: Button type to filter clicks by.
+     *
+     * @var    string
      */
     public $buttonType;
 
     /**
-     * Filter: Date from
+     * Filter: Start date for date range filtering.
+     *
+     * @var    string
      */
     public $dateFrom;
 
     /**
-     * Filter: Date to
+     * Filter: End date for date range filtering.
+     *
+     * @var    string
      */
     public $dateTo;
 
     /**
-     * Time granularity for time series (day or hour)
+     * Time granularity for time series charts ('day' or 'hour').
+     *
+     * @var    string
      */
     public $timeGranularity = 'day';
 
     /**
-     * Statistics data
+     * Statistics data for display (aggregations, charts, etc.).
+     *
+     * @var    array
      */
     public array $statistics = [];
 
@@ -205,6 +233,7 @@ class ButtonClickListPage extends MultipleLinkPage
             'statistics' => $this->statistics,
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
+            'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.statistics.list',
         ]);
     }
 

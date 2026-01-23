@@ -9,63 +9,87 @@ use wcf\system\WCF;
 
 /**
  * ACP page for listing all specials.
+ * 
+ * Provides a sortable list of special events/promotions with filtering capabilities.
+ * Supports filtering by title, theme, active status, and short URL hash/ID.
+ * Displays special information including theme, time range, and active status.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.page
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.page
  */
 class SpecialListPage extends MultipleLinkPage
 {
     /**
-     * @inheritDoc
+     * Class name of the database object list.
+     *
+     * @var    string
      */
     public $objectListClassName = SpecialList::class;
 
     /**
-     * @inheritDoc
+     * Default sort field.
+     *
+     * @var    string
      */
     public $sortField = 'specialID';
 
     /**
-     * @inheritDoc
+     * Default sort order.
+     *
+     * @var    string
      */
     public $sortOrder = 'DESC';
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.special.list';
 
     /**
-     * @inheritDoc
+     * Required permissions to access this page.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageSpecials'];
 
     /**
-     * @inheritDoc
+     * Valid sort fields for the list.
+     *
+     * @var    string[]
      */
     public $validSortFields = ['specialID', 'title', 'theme', 'startTime', 'endTime', 'isActive'];
 
     /**
-     * Filter: Title
+     * Filter: Title to search for.
+     *
+     * @var    string
      */
     public $title;
 
     /**
-     * Filter: Theme
+     * Filter: Theme identifier to filter by.
+     *
+     * @var    string
      */
     public $theme;
 
     /**
-     * Filter: Active status
+     * Filter: Active status (1 = active, 0 = inactive).
+     *
+     * @var    int
      */
     public $isActive;
 
     /**
-     * Filter: Short URL hash / ID
+     * Filter: Short URL hash or ID to search for.
+     *
+     * @var    string
      */
     public $shortUrlQuery;
 

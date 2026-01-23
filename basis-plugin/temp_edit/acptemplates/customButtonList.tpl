@@ -1,3 +1,31 @@
+{*
+ * Template-Zweck: ACP-Liste für Custom Buttons
+ * 
+ * ACP-Template für die Anzeige aller Custom Buttons für eine spezifische URL
+ * in einer sortierbaren und filterbaren Tabelle. Zeigt Titel, Ziel-URL,
+ * Sortierreihenfolge und Status an. Unterstützt Filterung nach Titel.
+ * 
+ * Variablen:
+ * @var array $objects - Array von CustomButton-Objekten
+ * @var int $linkID - Link-ID für diese Buttons
+ * @var string $urlHash - URL-Hash für Anzeige
+ * @var string $urlTarget - Ziel-URL für Anzeige
+ * @var string $q - Suchfilter für Titel
+ * @var string $sortField - Sortierfeld
+ * @var string $sortOrder - Sortierreihenfolge
+ * 
+ * Logik:
+ * - Zeigt Filter-Formular für Titel
+ * - Zeigt sortierbare Tabelle mit allen Custom Buttons
+ * - Zeigt Navigation zurück zur URL-Bearbeitung
+ * - Unterstützt Drag-and-Drop-Sortierung
+ * - Unterstützt Pagination
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {include file='header' pageTitle='shrinkr.acp.menu.link.customButton.list'}
 
 <header class="contentHeader">
@@ -17,7 +45,7 @@
 			<li><a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$linkID}{/link}"
 					class="button buttonPrimary">{icon size=16 name='pen-to-square'}
 					<span>{lang}wcf.shrinkr.customButton.backToUrl{/lang}</span></a></li>
-			<li><a href="{link controller='CustomButtonAdd' application='shrinkr'}linkID={#$linkID}{/link}"
+			<li><a href="{link controller='CustomButtonAdd'}linkID={#$linkID}{/link}"
 					class="button">{icon size=16 name='plus'}
 					<span>{lang}shrinkr.acp.menu.link.customButton.add{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
@@ -28,7 +56,7 @@
 {include file='formError'}
 
 {if $objects|count || $q}
-	<form action="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}{/link}" method="POST">
+	<form action="{link controller='CustomButtonList'}linkID={#$linkID}{/link}" method="POST">
 		<section class="section">
 			<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
@@ -58,7 +86,7 @@
 {hascontent}
 <div class="paginationTop">
 	{content}
-	{pages print=true assign=pagesLinks application='shrinkr' controller="CustomButtonList" link="linkID=$linkID&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&q=$q"}
+	{pages print=true assign=pagesLinks controller="CustomButtonList" link="linkID=$linkID&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&q=$q"}
 	{/content}
 </div>
 {/hascontent}
@@ -69,22 +97,22 @@
 			<thead>
 				<tr>
 					<th class="columnID columnCustomButtonID{if $sortField == 'customButtonID'} active {$sortOrder}{/if}" colspan="2">
-						<a href="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=customButtonID&sortOrder={if $sortField == 'customButtonID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
+						<a href="{link controller='CustomButtonList'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=customButtonID&sortOrder={if $sortField == 'customButtonID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
 							{lang}wcf.global.objectID{/lang}
 						</a>
 					</th>
 					<th class="columnTitle{if $sortField == 'title'} active {$sortOrder}{/if}">
-						<a href="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
+						<a href="{link controller='CustomButtonList'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
 							{lang}wcf.global.title{/lang}
 						</a>
 					</th>
 					<th class="columnText{if $sortField == 'targetUrl'} active {$sortOrder}{/if}">
-						<a href="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=targetUrl&sortOrder={if $sortField == 'targetUrl' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
+						<a href="{link controller='CustomButtonList'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=targetUrl&sortOrder={if $sortField == 'targetUrl' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
 							{lang}wcf.shrinkr.customButton.targetUrl{/lang}
 						</a>
 					</th>
 					<th class="columnDigits columnSortOrder{if $sortField == 'sortOrder'} active {$sortOrder}{/if}">
-						<a href="{link controller='CustomButtonList' application='shrinkr'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=sortOrder&sortOrder={if $sortField == 'sortOrder' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
+						<a href="{link controller='CustomButtonList'}linkID={#$linkID}&pageNo={#$pageNo}&sortField=sortOrder&sortOrder={if $sortField == 'sortOrder' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">
 							{lang}wcf.shrinkr.customButton.sortOrder{/lang}
 						</a>
 					</th>
@@ -94,7 +122,7 @@
 				{foreach from=$objects item=object}
 					<tr class="jsObjectActionObject" data-object-id="{#$object->customButtonID}">
 						<td class="columnIcon">
-							<a href="{link controller='CustomButtonEdit' id=$object->customButtonID application='shrinkr'}{/link}"
+							<a href="{link controller='CustomButtonEdit' application='shrinkr' id=$object->customButtonID}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->getTitle()}
 							{event name='rowButtons'}
@@ -122,7 +150,7 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='CustomButtonAdd' application='shrinkr'}linkID={#$linkID}{/link}"
+				<li><a href="{link controller='CustomButtonAdd'}linkID={#$linkID}{/link}"
 						class="button">{icon size=16 name='plus'}
 						<span>{lang}shrinkr.acp.menu.link.customButton.add{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
@@ -133,7 +161,7 @@
 	<woltlab-core-notice type="info">{lang}wcf.shrinkr.customButton.noItems{/lang}</woltlab-core-notice>
 	
 	<div class="section">
-		<a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button buttonPrimary">
+		<a href="{link controller='ShrinkrLinkList'}{/link}" class="button buttonPrimary">
 			{icon size=16 name='list'}
 			<span>{lang}wcf.shrinkr.customButton.goToUrls{/lang}</span>
 		</a>

@@ -9,29 +9,33 @@ use shrinkr\system\favicon\FaviconHandler;
 
 /**
  * Represents a special promotion for a shortened URL.
+ * 
+ * Database object for special events/promotions (e.g., Halloween, Black Week, Christmas).
+ * Associates themes, colors, discount codes, and time-based activation with shortened links.
+ * Implements ITitledObject for moderation queue compatibility.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.special
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.special
  *
  * @property-read int    $specialID         Unique ID of the special
- * @property-read int    $linkID              ID of the associated URL
- * @property-read string $theme              Theme identifier (halloween, blackweek, etc.)
- * @property-read string $title              Display title for the overview (not shown on redirect page)
- * @property-read string $discount            Discount text (e.g. "30%") - shown on redirect page
- * @property-read int    $discountID         ID of the associated discount (optional, reserved for future use)
- * @property-read string $codes              Discount codes (comma-separated)
- * @property-read string $primaryColor       Primary background color (RGBA)
- * @property-read string $secondaryColor     Secondary background color (RGBA)
- * @property-read string $primaryTextColor   Primary text color (RGBA)
- * @property-read string $secondaryTextColor Secondary text color (RGBA)
- * @property-read string $additionalText     Additional HTML text
- * @property-read int    $startTime          Start timestamp
- * @property-read int    $endTime            End timestamp
- * @property-read bool   $isActive           Is the special active
+ * @property-read int    $linkID            ID of the associated shortened URL
+ * @property-read string $theme             Theme identifier (halloween, blackweek, christmas, etc.)
+ * @property-read string $title             Display title for the overview (not shown on redirect page)
+ * @property-read string $discount          Discount text (e.g. "30%") - shown on redirect page
+ * @property-read int    $discountID        ID of the associated discount (optional, reserved for future use)
+ * @property-read string $codes             Discount codes (comma-separated)
+ * @property-read string $primaryColor      Primary background color (RGBA format)
+ * @property-read string $secondaryColor    Secondary background color (RGBA format)
+ * @property-read string $primaryTextColor  Primary text color (RGBA format)
+ * @property-read string $secondaryTextColor Secondary text color (RGBA format)
+ * @property-read string $additionalText    Additional HTML text for display
+ * @property-read int    $startTime         Start timestamp (UNIX timestamp)
+ * @property-read int    $endTime           End timestamp (UNIX timestamp)
+ * @property-read bool   $isActive          Whether the special is currently active
  */
 class Special extends DatabaseObject implements ITitledObject
 {

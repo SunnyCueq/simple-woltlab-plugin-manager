@@ -1,3 +1,29 @@
+{*
+ * Template-Zweck: ACP-Statistik-Seite für Button-Klicks
+ * 
+ * ACP-Template für die Anzeige von Button-Klick-Statistiken. Zeigt Filter-
+ * Formular, Statistik-Übersicht (Karten) und detaillierte Tabelle mit allen
+ * Button-Klicks. Unterstützt Filterung nach Link-ID, Button-Typ und Datum.
+ * 
+ * Variablen:
+ * @var array $objects - Array von ButtonClick-Objekten
+ * @var int $linkID - Filter: Link-ID
+ * @var string $buttonType - Filter: Button-Typ ('forward', 'featured_link', 'custom')
+ * @var string $dateFrom - Filter: Startdatum
+ * @var string $dateTo - Filter: Enddatum
+ * @var array $statistics - Statistik-Daten (total, forward, featured_link, custom, etc.)
+ * 
+ * Logik:
+ * - Zeigt Filter-Formular für Link-ID, Button-Typ und Datum
+ * - Zeigt Statistik-Karten mit Gesamtzahlen
+ * - Zeigt detaillierte Tabelle mit allen Button-Klicks
+ * - Unterstützt Pagination
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {include file='header' pageTitle='shrinkr.acp.menu.link.statistics.list'}
 
 <header class="contentHeader">
@@ -7,7 +33,7 @@
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}"
+			<li><a href="{link controller='ShrinkrLinkList'}{/link}"
 					class="button">{icon size=16 name='link'}
 					<span>{lang}wcf.shrinkr.special.urlList{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
@@ -18,7 +44,7 @@
 {include file='formError'}
 
 {* Filter Form *}
-<form method="get" action="{link controller='ButtonClickList' application='shrinkr'}{/link}">
+<form method="get" action="{link controller='ButtonClickList'}{/link}">
 	<section class="section">
 		<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 		
@@ -62,7 +88,7 @@
 		<div class="formSubmit">
 			<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s">
 			{if $linkID || $buttonType || $dateFrom || $dateTo}
-				<a href="{link controller='ButtonClickList' application='shrinkr'}{/link}" class="button">{lang}wcf.global.button.reset{/lang}</a>
+				<a href="{link controller='ButtonClickList'}{/link}" class="button">{lang}wcf.global.button.reset{/lang}</a>
 			{/if}
 		</div>
 	</section>
@@ -584,7 +610,7 @@
 {hascontent}
 <div class="paginationTop">
 	{content}
-{pages print=true assign=pagesLinks application='shrinkr' controller="ButtonClickList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&linkID=$linkID&buttonType=$buttonType&dateFrom=$dateFrom&dateTo=$dateTo"}
+{pages print=true assign=pagesLinks controller="ButtonClickList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&linkID=$linkID&buttonType=$buttonType&dateFrom=$dateFrom&dateTo=$dateTo"}
 	{/content}
 </div>
 {/hascontent}
@@ -596,23 +622,23 @@
 				<tr>
 					<th class="columnIcon"></th>
 					<th class="columnID columnClickID{if $sortField == 'clickID'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='ButtonClickList' application='shrinkr'}pageNo={#$pageNo}&sortField=clickID&sortOrder={if $sortField == 'clickID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&linkID={$linkID}&buttonType={$buttonType}&dateFrom={$dateFrom}&dateTo={$dateTo}{/link}">
+						<a href="{link controller='ButtonClickList'}pageNo={#$pageNo}&sortField=clickID&sortOrder={if $sortField == 'clickID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&linkID={$linkID}&buttonType={$buttonType}&dateFrom={$dateFrom}&dateTo={$dateTo}{/link}">
 							{lang}wcf.global.objectID{/lang}
 						</a>
 					</th>
 					<th class="columnTitle columnUrlHash{if $sortField == 'linkID'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='ButtonClickList' application='shrinkr'}pageNo={#$pageNo}&sortField=linkID&sortOrder={if $sortField == 'linkID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&linkID={$linkID}&buttonType={$buttonType}&dateFrom={$dateFrom}&dateTo={$dateTo}{/link}">
+						<a href="{link controller='ButtonClickList'}pageNo={#$pageNo}&sortField=linkID&sortOrder={if $sortField == 'linkID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&linkID={$linkID}&buttonType={$buttonType}&dateFrom={$dateFrom}&dateTo={$dateTo}{/link}">
 							{lang}wcf.shrinkr.special.urlHash{/lang}
 						</a>
 					</th>
 					<th class="columnText columnButtonType{if $sortField == 'buttonType'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='ButtonClickList' application='shrinkr'}pageNo={#$pageNo}&sortField=buttonType&sortOrder={if $sortField == 'buttonType' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&linkID={$linkID}&buttonType={$buttonType}&dateFrom={$dateFrom}&dateTo={$dateTo}{/link}">
+						<a href="{link controller='ButtonClickList'}pageNo={#$pageNo}&sortField=buttonType&sortOrder={if $sortField == 'buttonType' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&linkID={$linkID}&buttonType={$buttonType}&dateFrom={$dateFrom}&dateTo={$dateTo}{/link}">
 							{lang}wcf.shrinkr.buttonClick.buttonType{/lang}
 						</a>
 					</th>
 					<th class="columnDigits">{lang}wcf.shrinkr.buttonClick.buttonID{/lang}</th>
 					<th class="columnDigits columnClickTime{if $sortField == 'clickTime'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='ButtonClickList' application='shrinkr'}pageNo={#$pageNo}&sortField=clickTime&sortOrder={if $sortField == 'clickTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&linkID={$linkID}&buttonType={$buttonType}&dateFrom={$dateFrom}&dateTo={$dateTo}{/link}">
+						<a href="{link controller='ButtonClickList'}pageNo={#$pageNo}&sortField=clickTime&sortOrder={if $sortField == 'clickTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&linkID={$linkID}&buttonType={$buttonType}&dateFrom={$dateFrom}&dateTo={$dateTo}{/link}">
 							{lang}wcf.shrinkr.buttonClick.clickTime{/lang}
 						</a>
 					</th>

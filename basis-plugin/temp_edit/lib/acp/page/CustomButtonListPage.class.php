@@ -10,65 +10,89 @@ use wcf\util\StringUtil;
 
 /**
  * ACP page for listing custom buttons for a specific URL.
+ * 
+ * Provides a sortable list of custom buttons for a shortened link. Requires
+ * linkID parameter from URL query. Displays button information including
+ * target URL, title, and sort order.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.page
  *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.page
- *
- * @property CustomButtonList $objectList
+ * @property   CustomButtonList $objectList  The database object list instance
  */
 class CustomButtonListPage extends MultipleLinkPage
 {
     /**
-     * @inheritDoc
+     * Class name of the database object list.
+     *
+     * @var    string
      */
     public $objectListClassName = CustomButtonList::class;
 
     /**
-     * @inheritDoc
+     * Default sort field.
+     *
+     * @var    string
      */
     public $sortField = 'sortOrder';
 
     /**
-     * @inheritDoc
+     * Default sort order.
+     *
+     * @var    string
      */
     public $sortOrder = 'ASC';
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.menu';
 
     /**
-     * @inheritDoc
+     * Required permissions to access this page.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageCustomButtons'];
 
     /**
-     * @inheritDoc
+     * Valid sort fields for the list.
+     *
+     * @var    string[]
      */
     public $validSortFields = ['customButtonID', 'targetUrl', 'title', 'sortOrder'];
 
     /**
-     * URL ID (required parameter from URL query)
+     * URL ID (required parameter from URL query).
+     *
+     * @var    int
      */
     public int $linkID = 0;
 
     /**
-     * Hash of the short URL.
+     * Hash of the short URL (for display).
+     *
+     * @var    string
      */
     public string $urlHash = '';
 
     /**
-     * Destination URL of the short URL.
+     * Destination URL of the short URL (for display).
+     *
+     * @var    string
      */
     public string $urlTarget = '';
 
     /**
-     * Query string for filtering
+     * Query string for filtering buttons.
+     *
+     * @var    string
      */
     public $q;
 

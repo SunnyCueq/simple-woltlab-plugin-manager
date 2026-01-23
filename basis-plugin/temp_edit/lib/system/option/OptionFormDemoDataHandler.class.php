@@ -8,27 +8,32 @@ use wcf\system\WCF;
 /**
  * Handles demo data installation and deletion when the shrinkr_install_demo_data option is changed.
  * 
+ * Manages the creation and deletion of demo data (test URLs, discounts, specials, featured links)
+ * based on the shrinkr_install_demo_data option value. Called when options are saved in the ACP.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     Commercial License
+ * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
  * @package     de.sunnyc.wsc.shrinkr
- * @subpackage system.option
+ * @subpackage  system.option
  */
 class OptionFormDemoDataHandler
 {
     /**
      * Handles the OptionForm::saved event.
      * 
+     * Checks the shrinkr_install_demo_data option value and either installs
+     * or deletes demo data accordingly. Uses isDemo flag if available, otherwise
+     * falls back to hash pattern matching.
      *
-     * @param OptionForm $form The option form that was saved
+     * @param   OptionForm  $form  The option form that was saved
+     * @return  void
      */
     public function handleSaved(OptionForm $form): void
     {
-        // Log that the handler was called
         $this->log('OptionFormDemoDataHandler: Handler called for OptionForm::saved');
         
-        // Check current value from database (option was already saved at this point)
         try {
             $option = \wcf\data\option\Option::getOptionByName('shrinkr_install_demo_data');
             if (!$option) {
@@ -44,17 +49,13 @@ class OptionFormDemoDataHandler
             return;
         }
         
-        // If option is disabled, delete demo data (check and delete regardless of count)
         if (!$installDemoData) {
             $this->log('OptionFormDemoDataHandler: Option is disabled, checking for demo data to delete...');
             $this->deleteDemoData();
             return;
         }
         
-        // Check if demo data already exists (only if option is enabled)
-        // Use isDemo flag if available, otherwise fallback to hash pattern
         try {
-            // Check if isDemo column exists
             $isDemoColumnExists = false;
             try {
                 $sql = "SHOW COLUMNS FROM shrinkr1_link LIKE 'isDemo'";
@@ -62,7 +63,6 @@ class OptionFormDemoDataHandler
                 $statement->execute();
                 $isDemoColumnExists = ($statement->fetchSingleColumn() !== false);
             } catch (\Exception) {
-                // Column doesn't exist
             }
             
             if ($isDemoColumnExists) {
@@ -72,7 +72,6 @@ class OptionFormDemoDataHandler
                 $existingCount = $statement->fetchSingleColumn();
                 $this->log('OptionFormDemoDataHandler: Existing demo URLs count (by isDemo flag): ' . $existingCount);
             } else {
-                // Fallback to hash pattern
                 $sql = "SELECT COUNT(*) FROM shrinkr1_link WHERE hash LIKE 'DEMO-%'";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute();
@@ -84,12 +83,8 @@ class OptionFormDemoDataHandler
             return;
         }
         
-        // Option is enabled - check if we need to install or complete demo data
-        // Even if URLs exist, we might need to create Featured Links/Custom Buttons
         if ($existingCount > 0) {
-            // URLs exist, but check if Featured Links/Custom Buttons are missing
             try {
-                // Check if Featured Links exist for demo URLs
                 $featuredLinksCount = 0;
                 $customButtonsCount = 0;
                 

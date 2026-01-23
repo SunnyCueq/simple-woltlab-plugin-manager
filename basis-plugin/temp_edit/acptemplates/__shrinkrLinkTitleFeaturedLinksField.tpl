@@ -1,3 +1,23 @@
+{*
+ * Template-Zweck: URL-Titel Feld für URL-Formular
+ * 
+ * Zeigt Eingabefeld für URL-Titel im URL-Hinzufügen/Bearbeiten-Formular.
+ * Unterstützt Validierung und Fehleranzeige.
+ * 
+ * Variablen:
+ * @var string $linkTitle - Aktueller Titel-Wert
+ * @var string $errorField - Feld mit Fehler (falls vorhanden)
+ * @var string $errorType - Fehlertyp (falls vorhanden)
+ * 
+ * Logik:
+ * - Zeigt Text-Input für URL-Titel
+ * - Zeigt Fehlermeldung wenn Validierung fehlschlägt
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 <dl{if $errorField == 'linkTitle'} class="formError"{/if}>
     <dt><label for="linkTitle">{lang}wcf.shrinkr.url.linkTitle{/lang}</label></dt>
     <dd>

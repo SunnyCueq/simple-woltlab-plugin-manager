@@ -6,13 +6,17 @@ use wcf\data\DatabaseObjectEditor;
 
 /**
  * Provides functions to edit visits.
+ * 
+ * Editor class for Visit database objects. Extends DatabaseObjectEditor
+ * to provide create, update, and delete functionality for visit tracking entries.
+ * Visits are typically created automatically by the system, not manually.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.visit
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.visit
  *
  * @method static Visit create(array $parameters = [])
  * @method      Visit getDecoratedObject()
@@ -21,7 +25,9 @@ use wcf\data\DatabaseObjectEditor;
 class VisitEditor extends DatabaseObjectEditor
 {
     /**
-     * @inheritDoc
+     * Base class name for this editor.
+     *
+     * @var    string
      */
     protected static $baseClass = Visit::class;
 }

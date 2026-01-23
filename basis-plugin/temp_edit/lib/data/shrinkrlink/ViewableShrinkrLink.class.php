@@ -2,13 +2,17 @@
 
 /**
  * Viewable ShrinkrLink wrapper used for moderation queue integration.
+ * 
+ * Decorator class that makes ShrinkrLink objects compatible with WoltLab's
+ * moderation queue system. Implements IUserContent interface to provide user
+ * information, timestamps, and titles for moderation purposes.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
  * @link        https://sunnyc.de
- *
  * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.shrinkrlink
  */
 
 namespace shrinkr\data\shrinkrlink;
@@ -25,18 +29,25 @@ use wcf\system\cache\runtime\UserProfileRuntimeCache;
 class ViewableShrinkrLink extends DatabaseObjectDecorator implements IUserContent
 {
     /**
-     * @inheritDoc
+     * Base class name for this decorator.
+     *
+     * @var    string
      */
     protected static $baseClass = ShrinkrLink::class;
 
     /**
-     * User profile object
-     * @var UserProfile|null
+     * Cached user profile object.
+     *
+     * @var    UserProfile|null
      */
     protected ?UserProfile $userProfile = null;
 
     /**
-     * @inheritDoc
+     * Returns the creation timestamp of the link.
+     * 
+     * Implements IUserContent interface. Returns 0 if time is not set.
+     *
+     * @return  int     The UNIX timestamp (0 if not set)
      */
     public function getTime(): int
     {
@@ -44,7 +55,11 @@ class ViewableShrinkrLink extends DatabaseObjectDecorator implements IUserConten
     }
 
     /**
-     * @inheritDoc
+     * Returns the user ID of the link creator.
+     * 
+     * Implements IUserContent interface. Returns 0 if userID is not set.
+     *
+     * @return  int     The user ID (0 if not set)
      */
     public function getUserID(): int
     {
@@ -52,7 +67,11 @@ class ViewableShrinkrLink extends DatabaseObjectDecorator implements IUserConten
     }
 
     /**
-     * @inheritDoc
+     * Returns the username of the link creator.
+     * 
+     * Implements IUserContent interface. Returns empty string if username is not set.
+     *
+     * @return  string  The username (empty string if not set)
      */
     public function getUsername(): string
     {
@@ -61,6 +80,11 @@ class ViewableShrinkrLink extends DatabaseObjectDecorator implements IUserConten
 
     /**
      * Returns the user profile object.
+     * 
+     * Loads the user profile from cache if userID is set, or creates a minimal
+     * profile with username if only username is available.
+     *
+     * @return  UserProfile  The user profile object
      */
     public function getUserProfile(): UserProfile
     {
@@ -78,7 +102,12 @@ class ViewableShrinkrLink extends DatabaseObjectDecorator implements IUserConten
     }
 
     /**
-     * @inheritDoc
+     * Returns the title of the link.
+     * 
+     * Implements IUserContent interface. Returns linkTitle if set, otherwise
+     * autoExtractedTitle, otherwise the hash as fallback.
+     *
+     * @return  string  The link title
      */
     public function getTitle(): string
     {
@@ -94,7 +123,11 @@ class ViewableShrinkrLink extends DatabaseObjectDecorator implements IUserConten
     }
 
     /**
-     * @inheritDoc
+     * Returns the URL of the link.
+     * 
+     * Implements IUserContent interface. Returns the shortened URL.
+     *
+     * @return  string  The shortened URL
      */
     public function getLink(): string
     {

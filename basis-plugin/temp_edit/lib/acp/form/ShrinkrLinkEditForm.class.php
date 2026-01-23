@@ -16,28 +16,42 @@ use wcf\system\WCF;
 
 /**
  * Form for editing an existing short link.
+ * 
+ * ACP form for editing shortened links. Extends ShrinkrLinkAddForm and adds
+ * additional tabs for featured links, custom buttons, and special events.
+ * Uses WoltLab's FormBuilder API with template nodes for complex sections.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 class ShrinkrLinkEditForm extends ShrinkrLinkAddForm
 {
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.menu';
 
     /**
-     * @inheritDoc
+     * Form action name (edit, update, delete).
+     *
+     * @var    string
      */
     public $formAction = 'edit';
 
     /**
-     * @inheritDoc
+     * Reads request parameters and loads the link to edit.
+     * 
+     * Validates the link ID from query parameters and loads the ShrinkrLink object.
+     * Throws IllegalLinkException if the link doesn't exist.
+     *
+     * @return  void
+     * @throws  IllegalLinkException  If link ID is invalid or link doesn't exist
      */
     public function readParameters()
     {
@@ -63,23 +77,25 @@ class ShrinkrLinkEditForm extends ShrinkrLinkAddForm
     }
 
     /**
-     * @inheritDoc
+     * Creates the form structure with additional tabs for edit form.
+     * 
+     * Extends the base form from ShrinkrLinkAddForm and adds tabs for
+     * featured links, custom buttons, and special events using template nodes.
+     *
+     * @return  void
      */
     protected function createForm()
     {
         parent::createForm();
 
-        // Get the tab menu container
         $tabMenu = $this->form->getNodeById('linkTabMenu');
 
         if ($tabMenu) {
-            // === FEATURED LINKS TAB ===
             $featuredLinksTab = TabFormContainer::create('featuredLinksTab')
                 ->label('wcf.shrinkr.featuredLink.section');
 
             $featuredLinksContainer = FormContainer::create('featuredLinksContainer');
             
-            // Use TemplateFormNode for Featured Links content
             $featuredLinksTemplate = TemplateFormNode::create('featuredLinksTemplate')
                 ->application('shrinkr')
                 ->templateName('__shrinkrLinkEditFeaturedLinksSection')
@@ -92,7 +108,6 @@ class ShrinkrLinkEditForm extends ShrinkrLinkAddForm
             $featuredLinksContainer->appendChild($featuredLinksTemplate);
             $featuredLinksTab->appendChild($featuredLinksContainer);
 
-            // === CUSTOM BUTTONS TAB ===
             $customButtonsTab = TabFormContainer::create('customButtonsTab')
                 ->label('wcf.shrinkr.customButton.section');
 

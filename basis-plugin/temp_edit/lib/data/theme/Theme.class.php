@@ -8,30 +8,38 @@ use wcf\system\WCF;
 
 /**
  * Represents a theme object with color scheme and visual effects.
+ * 
+ * Database object for themes that can be applied to shortened link redirect pages.
+ * Themes define color schemes, visual effects (e.g., snow, autumn leaves), and
+ * custom CSS. Implements ITitledObject for moderation queue compatibility.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.theme
  *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.theme
- *
- * @property int    $themeID
- * @property string $identifier
- * @property string $title
- * @property string $effectIdentifier
- * @property string $primaryColor
- * @property string $secondaryColor
- * @property string $primaryTextColor
- * @property string $secondaryTextColor
- * @property int    $isActive
- * @property int    $sortOrder
- * @property string $cssContent
+ * @property-read int    $themeID            Unique ID of the theme
+ * @property-read string $identifier         Theme identifier (e.g., 'halloween', 'blackweek')
+ * @property-read string $title              Display title of the theme
+ * @property-read string $effectIdentifier   Visual effect identifier (e.g., 'snow', 'autumnLeaves')
+ * @property-read string $primaryColor       Primary background color (RGBA format)
+ * @property-read string $secondaryColor     Secondary background color (RGBA format)
+ * @property-read string $primaryTextColor   Primary text color (RGBA format)
+ * @property-read string $secondaryTextColor Secondary text color (RGBA format)
+ * @property-read int    $isActive           Active status (1 = active, 0 = inactive)
+ * @property-read int    $sortOrder          Sort order for display (lower = higher priority)
+ * @property-read string $cssContent         Custom CSS content for the theme
  */
 class Theme extends DatabaseObject implements ITitledObject
 {
     /**
-     * @inheritdoc
+     * Returns the title of the theme.
+     * 
+     * Implements ITitledObject interface.
+     *
+     * @return  string  The theme title
      */
     public function getTitle(): string
     {
@@ -39,7 +47,9 @@ class Theme extends DatabaseObject implements ITitledObject
     }
 
     /**
-     * @inheritdoc
+     * Returns the theme title as string representation.
+     *
+     * @return  string  The theme title
      */
     public function __toString(): string
     {
@@ -47,7 +57,9 @@ class Theme extends DatabaseObject implements ITitledObject
     }
 
     /**
-     * Returns true, if current user can add themes
+     * Checks if the current user can add themes.
+     *
+     * @return  bool    True if user has admin.shrinkr.canManageThemes permission
      */
     public function canAdd(): bool
     {
@@ -55,7 +67,9 @@ class Theme extends DatabaseObject implements ITitledObject
     }
 
     /**
-     * Returns true, if current user can edit the theme.
+     * Checks if the current user can edit this theme.
+     *
+     * @return  bool    True if user has admin.shrinkr.canManageThemes permission
      */
     public function canEdit(): bool
     {
@@ -63,7 +77,9 @@ class Theme extends DatabaseObject implements ITitledObject
     }
 
     /**
-     * Returns true, if current user can delete the theme.
+     * Checks if the current user can delete this theme.
+     *
+     * @return  bool    True if user has admin.shrinkr.canManageThemes permission
      */
     public function canDelete(): bool
     {
@@ -72,9 +88,12 @@ class Theme extends DatabaseObject implements ITitledObject
 
     /**
      * Validates if the given color string is a safe rgba/rgb value.
+     * 
+     * Checks that the color matches a valid CSS rgba() or rgb() format
+     * to prevent XSS attacks through malicious color values.
      *
-     * @param string $color The color value to validate
-     * @return bool True if valid, false otherwise
+     * @param   string  $color  The color value to validate
+     * @return  bool            True if valid rgba/rgb format, false otherwise
      */
     public static function isValidColor(string $color): bool
     {

@@ -2,13 +2,17 @@
 
 /**
  * Represents a shortened link in Shr1nkr.
+ * 
+ * This class represents a database object for shortened URLs. It provides methods
+ * to generate shortened URLs, retrieve links by hash, and manage link metadata
+ * such as titles, favicons, and Open Graph images.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
  * @link        https://sunnyc.de
- *
  * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.shrinkrlink
  */
 
 namespace shrinkr\data\shrinkrlink;
@@ -38,17 +42,23 @@ use wcf\util\FileUtil;
 class ShrinkrLink extends DatabaseObject implements IRouteController
 {
     /**
-     * @inheritDoc
+     * Database table name for links.
+     *
+     * @var    string
      */
     protected static $databaseTableName = 'link';
 
     /**
-     * @inheritDoc
+     * Primary key column name.
+     *
+     * @var    string
      */
     protected static $databaseTableIndexName = 'linkID';
 
     /**
-     * @inheritDoc
+     * Returns the hash as string representation.
+     *
+     * @return  string  The link hash
      */
     public function __toString(): string
     {
@@ -56,7 +66,11 @@ class ShrinkrLink extends DatabaseObject implements IRouteController
     }
     
     /**
-     * @inheritDoc
+     * Returns the link title (hash).
+     * 
+     * Implements IRouteController interface requirement.
+     *
+     * @return  string  The link hash
      */
     public function getTitle(): string
     {

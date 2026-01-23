@@ -10,37 +10,43 @@ use wcf\system\WCF;
 
 /**
  * Option type implementation for Font Awesome icon selection.
- *
- * Uses IconFormField to provide a user-friendly icon picker with preview.
+ * 
+ * Custom option type for ACP options that provides a user-friendly icon picker
+ * with preview. Uses WoltLab's IconFormField and FontAwesomeIcon classes for
+ * icon selection and validation.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage system.option
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  system.option
  */
 class IconOptionType extends AbstractOptionType
 {
     /**
-     * @inheritDoc
+     * Returns the form element for this option type.
+     * 
+     * Renders a custom template with icon picker using WoltLab's IconFormField.
+     * Ensures JavaScript is only included once across multiple icon options.
+     *
+     * @param   Option  $option  The option object
+     * @param   mixed   $value    The current option value (icon string)
+     * @return  string            Rendered HTML form element
      */
     public function getFormElement(Option $option, $value)
     {
-        // Parse icon value
         $icon = null;
         if ($value && FontAwesomeIcon::isValidString($value)) {
             $icon = FontAwesomeIcon::fromString($value);
         }
         
-        // Get HTML variables for JavaScript inclusion (from IconFormField)
         static $includeJavaScript = true;
         $includeJavaScriptValue = $includeJavaScript;
         if ($includeJavaScript) {
             $includeJavaScript = false;
         }
         
-        // Assign variables to template
         WCF::getTPL()->assign([
             'option' => $option,
             'value' => $value ?: '',
@@ -48,12 +54,18 @@ class IconOptionType extends AbstractOptionType
             '__iconFormFieldIncludeJavaScript' => $includeJavaScriptValue,
         ]);
         
-        // Render using custom template for option type
         return WCF::getTPL()->fetch('iconOptionType', 'shrinkr');
     }
 
     /**
-     * @inheritDoc
+     * Validates the option value.
+     * 
+     * Ensures the value is a valid Font Awesome icon string if provided.
+     *
+     * @param   Option  $option    The option object
+     * @param   mixed   $newValue  The new value to validate
+     * @return  void
+     * @throws  UserInputException If the value is not a valid icon string
      */
     public function validate(Option $option, $newValue)
     {
@@ -63,16 +75,20 @@ class IconOptionType extends AbstractOptionType
     }
 
     /**
-     * @inheritDoc
+     * Processes the option value for storage.
+     * 
+     * Validates and returns the icon string, or empty string if invalid.
+     *
+     * @param   Option  $option    The option object
+     * @param   mixed   $newValue  The new value to process
+     * @return  string             Valid icon string or empty string
      */
     public function getData(Option $option, $newValue)
     {
-        // Return empty string if no value or invalid
         if (empty($newValue)) {
             return '';
         }
         
-        // Validate and return the icon string
         if (FontAwesomeIcon::isValidString($newValue)) {
             return $newValue;
         }

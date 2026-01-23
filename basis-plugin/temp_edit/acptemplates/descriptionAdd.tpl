@@ -1,3 +1,24 @@
+{*
+ * Template-Zweck: ACP-Formular für Hinzufügen von Descriptions
+ * 
+ * ACP-Template für das Hinzufügen von Descriptions. Zeigt Formular-Felder
+ * für Titel und Beschreibungstext (mit Smarty-Variablen). Initialisiert
+ * DescriptionVariable-Modul für Click-to-Insert-Funktionalität.
+ * 
+ * Variablen:
+ * @var string $action - Formular-Aktion ('add')
+ * @var object $form - FormBuilder-Formular-Objekt
+ * 
+ * Logik:
+ * - Zeigt Formular für Description-Hinzufügen
+ * - Zeigt Navigation zur Description-Liste
+ * - Initialisiert DescriptionVariable für Variable-Insertion
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {include file='header' pageTitle='shrinkr.acp.menu.link.description.'|concat:$action}
 
 <header class="contentHeader">
@@ -7,7 +28,7 @@
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='DescriptionList' application='shrinkr'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.description.list{/lang}</span></a></li>
+			<li><a href="{link controller='DescriptionList'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.description.list{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
 		</ul>
 	</nav>
@@ -26,7 +47,7 @@
 		<nav class="contentFooterNavigation">
 			<ul>
 				{content}
-					<li><a href="{link controller='DescriptionList' application='shrinkr'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.description.list{/lang}</span></a></li>
+					<li><a href="{link controller='DescriptionList'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.description.list{/lang}</span></a></li>
 					{event name='contentFooterNavigation'}
 				{/content}
 			</ul>

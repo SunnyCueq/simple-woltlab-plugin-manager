@@ -10,65 +10,89 @@ use wcf\util\StringUtil;
 
 /**
  * ACP page for listing featured links for a specific URL.
+ * 
+ * Provides a sortable list of featured links for a shortened link. Requires
+ * linkID parameter from URL query. Displays link information including URL,
+ * title, and sort order.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.page
  *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.page
- *
- * @property FeaturedLinkList $objectList
+ * @property   FeaturedLinkList $objectList  The database object list instance
  */
 class FeaturedLinkListPage extends MultipleLinkPage
 {
     /**
-     * @inheritDoc
+     * Class name of the database object list.
+     *
+     * @var    string
      */
     public $objectListClassName = FeaturedLinkList::class;
 
     /**
-     * @inheritDoc
+     * Default sort field.
+     *
+     * @var    string
      */
     public $sortField = 'sortOrder';
 
     /**
-     * @inheritDoc
+     * Default sort order.
+     *
+     * @var    string
      */
     public $sortOrder = 'ASC';
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.menu';
 
     /**
-     * @inheritDoc
+     * Required permissions to access this page.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageFeaturedLinks'];
 
     /**
-     * @inheritDoc
+     * Valid sort fields for the list.
+     *
+     * @var    string[]
      */
     public $validSortFields = ['linkID', 'url', 'title', 'sortOrder'];
 
     /**
-     * URL ID (required parameter from URL query)
+     * URL ID (required parameter from URL query).
+     *
+     * @var    int
      */
     public int $linkID = 0;
 
     /**
-     * Hash of the short URL.
+     * Hash of the short URL (for display).
+     *
+     * @var    string
      */
     public string $urlHash = '';
 
     /**
-     * Destination URL of the short URL.
+     * Destination URL of the short URL (for display).
+     *
+     * @var    string
      */
     public string $urlTarget = '';
 
     /**
-     * Query string for filtering
+     * Query string for filtering featured links.
+     *
+     * @var    string
      */
     public $q;
 

@@ -20,10 +20,11 @@
  * │ DEMO-5   │ Special (Autumn) + Future start (Nike)                        │
  * │ DEMO-6   │ Special (Christmas) + Expired (IKEA)                          │
  * │ DEMO-7   │ Featured Links only (no discount/special) (WoltLab)           │
+ * │ DEMO-8   │ Reaktionen für Benutzer & Gäste (Demo für Reactions)          │
  * └──────────┴────────────────────────────────────────────────────────────────┘
  * 
  * Created data:
- * - 7 test URLs (DEMO-1 to DEMO-7)
+ * - 8 test URLs (DEMO-1 to DEMO-8)
  * - 2 discounts (Amazon with countdown, MediaMarkt without)
  * - 4 specials (Halloween active, Black Week active, Summer future, Christmas expired)
  * - 13 featured links distributed across URLs
@@ -38,7 +39,8 @@
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     Commercial License
+ * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
  * @package     de.sunnyc.wsc.shrinkr
  */
 
@@ -489,6 +491,11 @@ if ($urlTableExists && ($installDemoData || $fromEvent)) {
                 'hash' => 'DEMO-7',
                 'url' => 'https://www.google.de/search?q=woltlab+suite',
                 'discountValue' => 'WoltLab Suite - Nur Featured Links',
+            ],
+            [
+                'hash' => 'DEMO-8',
+                'url' => 'https://www.example.com/demo-reactions',
+                'discountValue' => 'Demo: Reaktionen für Benutzer & Gäste',
             ],
         ];
         
@@ -1217,6 +1224,146 @@ if ($urlTableExists && ($installDemoData || $fromEvent)) {
                 } else {
                     logPostInstall('Post-install: No URL IDs available for custom buttons');
                 }
+            }
+            
+            // ========================================================================
+            // 5.6 Create test reactions for DEMO-8 (User and Guest reactions)
+            // ========================================================================
+            if (isset($insertedUrlIDs['DEMO-8']) && $insertedUrlIDs['DEMO-8']) {
+                $demo8LinkID = $insertedUrlIDs['DEMO-8'];
+                logPostInstall('Post-install: Creating reactions for DEMO-8 (linkID: ' . $demo8LinkID . ')...');
+                
+                // Check if shrinkr1_guest_reaction table exists
+                $guestReactionTableExists = false;
+                try {
+                    $sql = "SHOW TABLES LIKE 'shrinkr1_guest_reaction'";
+                    $statement = WCF::getDB()->prepareStatement($sql);
+                    $statement->execute();
+                    $guestReactionTableExists = ($statement->fetchSingleColumn() !== false);
+                } catch (\Exception) {
+                    // Table doesn't exist
+                }
+                
+                // Check if wcf1_like table exists (for user reactions)
+                $likeTableExists = false;
+                try {
+                    $sql = "SHOW TABLES LIKE 'wcf" . WCF_N . "_like'";
+                    $statement = WCF::getDB()->prepareStatement($sql);
+                    $statement->execute();
+                    $likeTableExists = ($statement->fetchSingleColumn() !== false);
+                } catch (\Exception) {
+                    // Table doesn't exist
+                }
+                
+                // Get default reaction type IDs (usually 1 = Like, 2 = Haha, etc.)
+                // We'll use reaction type 1 (Like) as default
+                $reactionTypeID = 1;
+                
+                // Create guest reactions (if table exists)
+                // For DEMO-8, always create reactions (delete existing ones first to ensure fresh demo data)
+                if ($guestReactionTableExists) {
+                    try {
+                        // Delete existing guest reactions for DEMO-8 to ensure fresh demo data
+                        $sql = "DELETE FROM shrinkr1_guest_reaction WHERE objectID = ? AND objectType = ?";
+                        $statement = WCF::getDB()->prepareStatement($sql);
+                        $statement->execute([$demo8LinkID, 'de.sunnyc.wsc.shrinkr.likeableShrinkrLink']);
+                        $deletedCount = $statement->getAffectedRows();
+                        if ($deletedCount > 0) {
+                            logPostInstall('Post-install: Deleted ' . $deletedCount . ' existing guest reactions for DEMO-8 (refreshing demo data)');
+                        }
+                        
+                        // Create 3 guest reactions with different session IDs
+                        $guestReactions = [
+                            ['sessionID' => 'demo_guest_session_1', 'reactionTypeID' => 1], // Like
+                            ['sessionID' => 'demo_guest_session_2', 'reactionTypeID' => 2], // Haha
+                            ['sessionID' => 'demo_guest_session_3', 'reactionTypeID' => 1], // Like
+                        ];
+                        
+                        $sql = "INSERT INTO shrinkr1_guest_reaction (sessionID, objectType, objectID, reactionTypeID, time) VALUES (?, ?, ?, ?, ?)";
+                        $statement = WCF::getDB()->prepareStatement($sql);
+                        
+                        foreach ($guestReactions as $reaction) {
+                            $statement->execute([
+                                $reaction['sessionID'],
+                                'de.sunnyc.wsc.shrinkr.likeableShrinkrLink',
+                                $demo8LinkID,
+                                $reaction['reactionTypeID'],
+                                TIME_NOW,
+                            ]);
+                        }
+                        logPostInstall('Post-install: Created ' . count($guestReactions) . ' guest reactions for DEMO-8');
+                    } catch (\Exception $e) {
+                        logPostInstall('Post-install: Failed to create guest reactions: ' . $e->getMessage());
+                        logPostInstall('Post-install: Stack trace: ' . $e->getTraceAsString());
+                    }
+                } else {
+                    logPostInstall('Post-install: Guest reaction table does not exist, skipping guest reaction creation');
+                }
+                
+                // Create user reactions (if table exists and users exist)
+                // For DEMO-8, always create reactions (delete existing ones first to ensure fresh demo data)
+                if ($likeTableExists) {
+                    try {
+                        // Get objectTypeID for Shr1nkr links first
+                        $sql = "SELECT objectTypeID FROM wcf" . WCF_N . "_object_type WHERE objectType = ?";
+                        $statement = WCF::getDB()->prepareStatement($sql);
+                        $statement->execute(['de.sunnyc.wsc.shrinkr.likeableShrinkrLink']);
+                        $objectTypeID = $statement->fetchSingleColumn();
+                        
+                        if ($objectTypeID) {
+                            // Delete existing user reactions for DEMO-8 to ensure fresh demo data
+                            $sql = "DELETE FROM wcf" . WCF_N . "_like WHERE objectID = ? AND objectTypeID = ?";
+                            $statement = WCF::getDB()->prepareStatement($sql);
+                            $statement->execute([$demo8LinkID, $objectTypeID]);
+                            $deletedCount = $statement->getAffectedRows();
+                            if ($deletedCount > 0) {
+                                logPostInstall('Post-install: Deleted ' . $deletedCount . ' existing user reactions for DEMO-8 (refreshing demo data)');
+                            }
+                            
+                            // Get first 2 users (excluding guest user with userID = 0)
+                            $sql = "SELECT userID FROM wcf" . WCF_N . "_user WHERE userID > 0 ORDER BY userID ASC LIMIT 2";
+                            $statement = WCF::getDB()->prepareStatement($sql);
+                            $statement->execute();
+                            $users = [];
+                            while ($row = $statement->fetchArray()) {
+                                $users[] = $row['userID'];
+                            }
+                            
+                            if (count($users) >= 2) {
+                                // Create 2 user reactions
+                                $userReactions = [
+                                    ['userID' => $users[0], 'reactionTypeID' => 1], // Like
+                                    ['userID' => $users[1], 'reactionTypeID' => 2], // Haha
+                                ];
+                                
+                                $sql = "INSERT INTO wcf" . WCF_N . "_like (objectTypeID, objectID, userID, reactionTypeID, time) VALUES (?, ?, ?, ?, ?)";
+                                $statement = WCF::getDB()->prepareStatement($sql);
+                                
+                                foreach ($userReactions as $reaction) {
+                                    $statement->execute([
+                                        $objectTypeID,
+                                        $demo8LinkID,
+                                        $reaction['userID'],
+                                        $reaction['reactionTypeID'],
+                                        TIME_NOW,
+                                    ]);
+                                }
+                                logPostInstall('Post-install: Created ' . count($userReactions) . ' user reactions for DEMO-8');
+                            } else {
+                                logPostInstall('Post-install: Not enough users found for creating user reactions (found: ' . count($users) . ', needed: 2)');
+                            }
+                        } else {
+                            logPostInstall('Post-install: Object type ID not found for Shr1nkr links, skipping user reaction creation');
+                        }
+                    } catch (\Exception $e) {
+                        logPostInstall('Post-install: Failed to create user reactions: ' . $e->getMessage());
+                        logPostInstall('Post-install: Stack trace: ' . $e->getTraceAsString());
+                    }
+                } else {
+                    logPostInstall('Post-install: Like table does not exist, skipping user reaction creation');
+                }
+            } else {
+                logPostInstall('Post-install: DEMO-8 URL ID not available, skipping reaction creation');
             }
         } else {
             logPostInstall('Post-install: No URL IDs available for creating Specials, Featured Links and Custom Buttons');

@@ -1,4 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Datei-Zweck: Template Listener Registration für Shr1nkr Plugin
+    
+    Diese XML-Datei registriert Template Listener für verschiedene Templates
+    im WoltLab Framework. Die Listener werden automatisch beim Plugin-Installation
+    geladen und aktiviert.
+    
+    Struktur:
+    - <import>: Importiert Template Listener für das Plugin
+    - <templatelistener>: Definiert Template Listener für spezifische Templates/Events
+    
+    Template Listener:
+    1. shrinkrACPCSS: Lädt ACP-Stylesheet für spezifische Templates
+    2. shrinkrOptionFormReloadLink: Fügt Reload-Button zu Option-Formular hinzu
+    3. acpHeaderReactionTypesAfterFirstScript: Definiert REACTION_TYPES für ACP
+    4. shrinkrAcpStylesheet: Lädt ACP-Stylesheet global
+    5. shrinkrRequirePaths: Definiert Require-Pfade für JavaScript-Module
+    6. shrinkrLinkListPageReaction: Lädt Reaction-Daten für URL-Liste
+    7. shrinkrLinkAddLinkTitle: Fügt Link-Titel-Feld zu URL-Formular hinzu
+    8. shrinkrLinkEditCustomButtons: Lädt Custom Buttons für URL-Bearbeitung
+    9. shrinkrLinkEditFeaturedLinks: Lädt Featured Links für URL-Bearbeitung
+    10. shrinkrLinkEditFormSpecialHint: Zeigt Hinweis zu vorhandenen Specials
+    11. redirectReactionButton: Fügt Reaction-Button zu Redirect-Seite hinzu
+    12. redirectCopyright: Fügt Copyright zu Redirect-Seite hinzu
+    13. redirectEffect: Fügt visuelle Effekte (Snow, Ghosts, Autumn Leaves) hinzu
+    
+    @author Sunny C
+    @copyright 2026 Sunny C
+    @package de.sunnyc.wsc.shrinkr
+    @see https://sunnyc.de
+-->
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/templateListener.xsd">
 	<import>
 		<!-- admin -->

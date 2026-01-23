@@ -7,19 +7,31 @@ use wcf\util\StringUtil;
 
 /**
  * Returns discounts accessible for a specific URL and host.
- * Filters discounts by host matching and URL validation.
+ * 
+ * Filters discounts by host matching and URL validation. Supports special
+ * event identifiers via URL query parameters. Normalizes hostnames (removes
+ * www. prefix) for better matching. Extends ViewableDiscountList to provide
+ * filtered discount lists for frontend display.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.discount
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.discount
  */
 class AccessibleDiscountList extends ViewableDiscountList
 {
     /**
-     * @inheritDoc
+     * Constructs a new AccessibleDiscountList.
+     * 
+     * Validates the hostname format, checks for special event identifiers
+     * in URL query parameters, and applies host-based filtering. Limits
+     * results to 1 discount per URL.
+     *
+     * @param   string  $url   Target URL to find discounts for
+     * @param   string  $host  Hostname extracted from URL (optional, will be validated)
+     * @return  void
      */
     public function __construct(
         protected string $url,
@@ -27,7 +39,6 @@ class AccessibleDiscountList extends ViewableDiscountList
     ) {
         parent::__construct();
 
-        // Validate hostname format
         if (!empty($this->host) && !$this->isValidHostname($this->host)) {
             $this->host = '';
         }
@@ -39,19 +50,14 @@ class AccessibleDiscountList extends ViewableDiscountList
             $discountIDs = $specialDiscount->getObjectIDs();
             $this->getConditionBuilder()->add('discount.discountID IN (?)', [$discountIDs]);
         } elseif (!empty($this->host)) {
-            // Normalize host: remove www. prefix for matching
             $normalizedHost = preg_replace('/^www\./i', '', $this->host);
             
-            // Match either:
-            // 1. URL host is contained in stored hosts (e.g. stored: "mediamarkt.de", URL: "mediamarkt.de")
-            // 2. Stored host is contained in URL host (e.g. stored: "mediamarkt.de", URL: "www.mediamarkt.de")
-            // Use normalized host without www for better matching
             $this->getConditionBuilder()->add(
                 '(discount.hosts LIKE ? OR discount.hosts LIKE ? OR ? LIKE CONCAT(\'%\', discount.hosts, \'%\'))',
                 [
-                    '%' . $this->host . '%',           // Original host (mit www)
-                    '%' . $normalizedHost . '%',       // Ohne www
-                    $this->host                        // URL-Host enthält gespeicherten Host
+                    '%' . $this->host . '%',
+                    '%' . $normalizedHost . '%',
+                    $this->host
                 ]
             );
         }
@@ -59,6 +65,12 @@ class AccessibleDiscountList extends ViewableDiscountList
 
     /**
      * Validates if the given hostname is in a valid format.
+     * 
+     * Checks hostname format using RFC-compliant regex pattern. Allows
+     * alphanumeric characters, hyphens, and dots.
+     *
+     * @param   string  $hostname  Hostname to validate
+     * @return  bool              True if hostname format is valid, false otherwise
      */
     private function isValidHostname(string $hostname): bool
     {
@@ -67,6 +79,12 @@ class AccessibleDiscountList extends ViewableDiscountList
 
     /**
      * Returns discount list for special identifier or null if not found.
+     * 
+     * Parses URL query parameters for a "special" parameter and matches it
+     * against stored special identifiers. Returns a DiscountList if a match
+     * is found, null otherwise.
+     *
+     * @return  DiscountList|null  Discount list for special identifier, or null if not found
      */
     protected function getSpecial(): ?DiscountList
     {

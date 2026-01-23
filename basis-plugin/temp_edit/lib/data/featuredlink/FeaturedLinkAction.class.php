@@ -10,13 +10,17 @@ use wcf\system\WCF;
 
 /**
  * Executes featured link-related actions.
+ * 
+ * Action class for performing operations on FeaturedLink database objects.
+ * Handles AJAX requests for featured link management and implements ISortableAction
+ * for drag-and-drop sorting functionality.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.featuredlink
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.featuredlink
  *
  * @method FeaturedLink       create()
  * @method FeaturedLinkEditor[]   getObjects()
@@ -25,27 +29,41 @@ use wcf\system\WCF;
 class FeaturedLinkAction extends AbstractDatabaseObjectAction implements ISortableAction
 {
     /**
-     * @inheritDoc
+     * Required permissions for create action.
+     *
+     * @var    string[]
      */
     protected $permissionsCreate = ['admin.shrinkr.canManageFeaturedLinks'];
 
     /**
-     * @inheritDoc
+     * Required permissions for update action.
+     *
+     * @var    string[]
      */
     protected $permissionsUpdate = ['admin.shrinkr.canManageFeaturedLinks'];
 
     /**
-     * @inheritDoc
+     * Required permissions for delete action.
+     *
+     * @var    string[]
      */
     protected $permissionsDelete = ['admin.shrinkr.canManageFeaturedLinks'];
 
     /**
-     * @inheritDoc
+     * Actions that require ACP access.
+     *
+     * @var    string[]
      */
     protected $requireACP = ['create', 'update', 'delete', 'updatePosition'];
 
     /**
-     * @inheritDoc
+     * Validates the updatePosition action for drag-and-drop sorting.
+     * 
+     * Implements ISortableAction interface. Validates that objects can be sorted.
+     *
+     * @return  void
+     * @throws  PermissionDeniedException  If user lacks permission
+     * @throws  UserInputException          If input is invalid
      */
     public function validateUpdatePosition()
     {

@@ -1,3 +1,29 @@
+{*
+ * Template-Zweck: ACP-Liste für Specials
+ * 
+ * ACP-Template für die Anzeige aller Special-Events in einer sortierbaren
+ * und filterbaren Tabelle. Zeigt Titel, Theme, Zeitraum, Status und zugehörige
+ * URLs an. Unterstützt Filterung nach Titel, Theme und Status.
+ * 
+ * Variablen:
+ * @var array $objects - Array von Special-Objekten
+ * @var string $title - Filter: Titel
+ * @var string $theme - Filter: Theme-Identifier
+ * @var bool $isActive - Filter: Status (aktiv/inaktiv)
+ * @var string $sortField - Sortierfeld
+ * @var string $sortOrder - Sortierreihenfolge
+ * 
+ * Logik:
+ * - Zeigt Filter-Formular für Titel, Theme und Status
+ * - Zeigt sortierbare Tabelle mit allen Specials
+ * - Zeigt Countdown für aktive Specials
+ * - Unterstützt Pagination
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {include file='header' pageTitle='shrinkr.acp.menu.link.special.list'}
 
 <header class="contentHeader">
@@ -7,7 +33,7 @@
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}"
+			<li><a href="{link controller='ShrinkrLinkList'}{/link}"
 					class="button">{icon size=16 name='link'}
 					<span>{lang}wcf.shrinkr.special.urlList{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
@@ -18,7 +44,7 @@
 {include file='formError'}
 
 {if $objects|count || $title || $theme || $isActive !== null}
-	<form action="{link controller='SpecialList' application='shrinkr'}{/link}" method="POST">
+	<form action="{link controller='SpecialList'}{/link}" method="POST">
 		<section class="section">
 			<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
@@ -79,7 +105,7 @@
 {hascontent}
 <div class="paginationTop">
 	{content}
-{pages print=true assign=pagesLinks application='shrinkr' controller="SpecialList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&theme=$theme&isActive=$isActive&shortUrl=$shortUrl"}
+{pages print=true assign=pagesLinks controller="SpecialList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&theme=$theme&isActive=$isActive&shortUrl=$shortUrl"}
 	{/content}
 </div>
 {/hascontent}
@@ -91,31 +117,31 @@
 				<tr>
 					<th></th>
 					<th class="columnID columnSpecialID{if $sortField == 'specialID'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='SpecialList' application='shrinkr'}pageNo={#$pageNo}&sortField=specialID&sortOrder={if $sortField == 'specialID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
+						<a href="{link controller='SpecialList'}pageNo={#$pageNo}&sortField=specialID&sortOrder={if $sortField == 'specialID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
 							{lang}wcf.global.objectID{/lang}
 						</a>
 					</th>
 					<th class="columnTitle columnSpecialTitle{if $sortField == 'title'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='SpecialList' application='shrinkr'}pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
+						<a href="{link controller='SpecialList'}pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
 							{lang}wcf.global.title{/lang}
 						</a>
 					</th>
 					<th>{lang}wcf.shrinkr.special.urlHash{/lang}</th>
 					<th class="columnText columnSpecialTheme{if $sortField == 'theme'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='SpecialList' application='shrinkr'}pageNo={#$pageNo}&sortField=theme&sortOrder={if $sortField == 'theme' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
+						<a href="{link controller='SpecialList'}pageNo={#$pageNo}&sortField=theme&sortOrder={if $sortField == 'theme' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
 							{lang}wcf.shrinkr.special.theme{/lang}
 						</a>
 					</th>
 					<th>{lang}wcf.shrinkr.codes{/lang}</th>
 					<th>{lang}wcf.shrinkr.special.timeRange{/lang}</th>
 					<th class="columnDigits columnSpecialEndTime{if $sortField == 'endTime'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='SpecialList' application='shrinkr'}pageNo={#$pageNo}&sortField=endTime&sortOrder={if $sortField == 'endTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
+						<a href="{link controller='SpecialList'}pageNo={#$pageNo}&sortField=endTime&sortOrder={if $sortField == 'endTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
 							{lang}wcf.shrinkr.countdownEnd{/lang}
 						</a>
 					</th>
 					<th>{lang}wcf.shrinkr.special.status.expired{/lang}</th>
 					<th class="columnDigits columnSpecialIsActive{if $sortField == 'isActive'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='SpecialList' application='shrinkr'}pageNo={#$pageNo}&sortField=isActive&sortOrder={if $sortField == 'isActive' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
+						<a href="{link controller='SpecialList'}pageNo={#$pageNo}&sortField=isActive&sortOrder={if $sortField == 'isActive' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&theme={$theme}&isActive={$isActive}&shortUrl={$shortUrl}{/link}">
 							{lang}wcf.shrinkr.special.status{/lang}
 						</a>
 					</th>
@@ -130,7 +156,7 @@
 								{assign var='specialIsDisabled' value=false}
 							{/if}
 							{objectAction action="toggle" isDisabled=$specialIsDisabled disableTitle='wcf.shrinkr.special.isActive.yes' enableTitle='wcf.shrinkr.special.isActive.no'}
-							<a href="{link controller='SpecialEdit' id=$object->specialID application='shrinkr'}{/link}"
+							<a href="{link controller='SpecialEdit' application='shrinkr' id=$object->specialID}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->specialID}
 							{event name='rowButtons'}
@@ -245,7 +271,7 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button">{icon size=16 name='link'} <span>{lang}wcf.shrinkr.special.urlList{/lang}</span></a></li>
+				<li><a href="{link controller='ShrinkrLinkList'}{/link}" class="button">{icon size=16 name='link'} <span>{lang}wcf.shrinkr.special.urlList{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
 			</ul>
 		</nav>
@@ -259,7 +285,7 @@
 				<small>
 					{lang}wcf.shrinkr.special.noItems.howToAdd.text{/lang}
 					<ul class="nativeList">
-						<li>In der <a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}">URL-Liste</a> über den <a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}">+-Button</a> in der Special-Spalte</li>
+						<li>In der <a href="{link controller='ShrinkrLinkList'}{/link}">URL-Liste</a> über den <a href="{link controller='ShrinkrLinkList'}{/link}">+-Button</a> in der Special-Spalte</li>
 						<li>{lang}wcf.shrinkr.special.noItems.howToAdd.viaLinkEdit{/lang}</li>
 					</ul>
 				</small>
@@ -282,7 +308,7 @@
 	<footer class="contentFooter">
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='ShrinkrLinkList' application='shrinkr'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.link.list{/lang}</span></a></li>
+				<li><a href="{link controller='ShrinkrLinkList'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}shrinkr.acp.menu.link.link.list{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}
 			</ul>
 		</nav>

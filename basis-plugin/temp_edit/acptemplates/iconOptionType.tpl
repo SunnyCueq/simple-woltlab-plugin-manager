@@ -1,3 +1,28 @@
+{*
+ * Template-Zweck: Font Awesome Icon Option Type
+ * 
+ * Zeigt Icon-Auswahl-Dialog für Optionen. Ermöglicht Auswahl eines
+ * Font Awesome Icons mit Option für Solid-Style. Zeigt Vorschau des
+ * ausgewählten Icons.
+ * 
+ * Variablen:
+ * @var \wcf\data\option\Option $option - Option-Objekt
+ * @var string $option->optionName - Option-Name
+ * @var string $value - Aktueller Wert (Format: "iconName;forceSolid")
+ * @var \wcf\system\style\FontAwesomeIcon|null $icon - Aktuelles Icon-Objekt
+ * @var bool $__iconFormFieldIncludeJavaScript - Ob JavaScript eingebunden werden soll
+ * 
+ * Logik:
+ * - Zeigt aktuelles Icon (wenn vorhanden)
+ * - Zeigt Bearbeiten-Button zum Öffnen des Icon-Dialogs
+ * - Zeigt Löschen-Button (wenn Icon vorhanden)
+ * - Initialisiert Font Awesome Dialog
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 <span id="{$option->optionName}_icon">
 	{if $icon}
 		{unsafe:$icon->toHtml(64)}

@@ -8,32 +8,37 @@ use wcf\system\WCF;
 
 /**
  * Listens to option changes and installs demo data when shrinkr_install_demo_data is enabled.
+ * 
+ * Event listener for OptionAction that triggers demo data installation when the
+ * shrinkr_install_demo_data option is enabled. Delegates to the post-install script
+ * for actual installation logic.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     Commercial License
+ * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
  * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  system.event.listener
  */
 class OptionActionDemoDataListener extends AbstractEventListener
 {
     /**
-     * @inheritDoc
+     * Executes the event listener when OptionAction is finalized.
+     * 
+     * Checks if shrinkr_install_demo_data is enabled and installs demo data
+     * if it doesn't already exist. Includes a small delay to ensure database
+     * transaction is committed before reading the option value.
+     *
+     * @param   OptionAction  $action  The OptionAction instance
+     * @return  void
      */
     public function onFinalizeAction(OptionAction $action): void
     {
-        // Log that the event listener was called
         $this->log('Event listener called for OptionAction');
         $this->log('Action name: ' . $action->getActionName());
         
-        // Check current value from database (option was already saved at this point)
-        // We check the database because:
-        // 1. For 'updateAll', options are updated by ID, not by name
-        // 2. The option is already saved when finalizeAction is called
-        // 3. This is the most reliable way to get the current value
         try {
-            // Small delay to ensure database transaction is committed
-            // (finalizeAction is called after the action, but transaction might not be committed yet)
-            usleep(100000); // 100ms delay
+            usleep(100000);
             
             $option = \wcf\data\option\Option::getOptionByName('shrinkr_install_demo_data');
             if (!$option) {
@@ -49,13 +54,11 @@ class OptionActionDemoDataListener extends AbstractEventListener
             return;
         }
         
-        // Only install if option is enabled
         if (!$installDemoData) {
             $this->log('Option is disabled, skipping demo data installation');
             return;
         }
         
-        // Check if demo data already exists
         try {
             $sql = "SELECT COUNT(*) FROM shrinkr1_link WHERE hash LIKE 'DEMO-%'";
             $statement = WCF::getDB()->prepareStatement($sql);
@@ -65,7 +68,6 @@ class OptionActionDemoDataListener extends AbstractEventListener
             $this->log('Existing demo URLs count: ' . $existingCount);
             
             if ($existingCount > 0) {
-                // Demo data already exists, skip installation
                 $this->log('Demo data already exists, skipping installation');
                 return;
             }
@@ -74,9 +76,6 @@ class OptionActionDemoDataListener extends AbstractEventListener
             return;
         }
         
-        // Call the demo data installation function from the post-install script
-        // We'll include the post-install script which contains the installation logic
-        // The script checks if demo data already exists, so it's safe to call multiple times
         $postInstallScript = WCF_DIR . 'shrinkr/acp/install_de.sunnyc.wsc.shrinkr_postInstall.php';
         
         $this->log('Post-install script path: ' . $postInstallScript);

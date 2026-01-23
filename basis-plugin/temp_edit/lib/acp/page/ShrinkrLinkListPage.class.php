@@ -10,53 +10,79 @@ use wcf\system\WCF;
 use wcf\util\StringUtil;
 
 /**
- * @author      Sunny C, Sunny C <https://sunnyc.de>
- * @link        https://sunnyc.de
- * @copyright   2026 Sunny C Websites & Co.
- * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
+ * ACP page for listing and managing shortened links.
+ * 
+ * Provides a sortable list of all shortened links with search functionality.
+ * Supports filtering by URL, title, and custom sorting for featured links and
+ * special events. Integrates with reaction system to display reaction counts.
  *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.page
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.page
  */
 class ShrinkrLinkListPage extends SortablePage
 {
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.link.list';
     
     /**
-     * @inheritDoc
+     * Required permissions to access this page.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageLinks'];
     
     /**
-     * @inheritDoc
+     * Class name of the database object list.
+     *
+     * @var    string
      */
     public $objectListClassName = ShrinkrLinkList::class;
     
     /**
-     * @inheritDoc
+     * Valid sort fields for the list.
+     * 
+     * Note: 'featuredLinks' and 'special' require PHP-based sorting as they
+     * are not direct database fields.
+     *
+     * @var    string[]
      */
     public $validSortFields = ['linkID', 'hash', 'url', 'counter', 'linkTitle', 'featuredLinks', 'special'];
 
     /**
-     * query string
+     * Search query string for URL filtering.
+     *
+     * @var    string
      */
     public $q;
 
     /**
-     * Search query for title filtering
+     * Search query for title filtering.
+     *
+     * @var    string
      */
     public $qTitle;
 
     /**
-     * Custom sort field for PHP-based sorting (featuredLinks, special)
+     * Custom sort field for PHP-based sorting (featuredLinks, special).
+     * 
+     * Used when sorting by fields that are not direct database columns.
+     *
+     * @var    string
      */
     public $sortFieldCustom;
 
     /**
-     * Custom sort order for PHP-based sorting
+     * Custom sort order for PHP-based sorting (ASC, DESC).
+     *
+     * @var    string
      */
     public $sortOrderCustom;
 

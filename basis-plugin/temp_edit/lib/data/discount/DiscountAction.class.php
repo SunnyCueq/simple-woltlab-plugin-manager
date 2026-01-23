@@ -8,44 +8,57 @@ use wcf\system\file\upload\UploadFile;
 
 /**
  * Executes discount-related actions.
+ * 
+ * Action class for performing operations on Discount database objects.
+ * Handles AJAX requests for discount management, including favicon upload
+ * and color validation.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.discount
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.discount
  */
 class DiscountAction extends AbstractDatabaseObjectAction
 {
     /**
-     * @inheritDoc
+     * Required permissions for create action.
+     *
+     * @var    string[]
      */
     protected $permissionsCreate = ['admin.shrinkr.canManageDiscounts'];
 
     /**
-     * @inheritDoc
+     * Required permissions for update action.
+     *
+     * @var    string[]
      */
     protected $permissionsUpdate = ['admin.shrinkr.canManageDiscounts'];
 
     /**
-     * @inheritDoc
+     * Required permissions for delete action.
+     *
+     * @var    string[]
      */
     protected $permissionsDelete = ['admin.shrinkr.canManageDiscounts'];
 
     /**
-     * @inheritDoc
+     * Creates a new discount object.
+     * 
+     * Validates color values and handles favicon upload before creating
+     * the discount entry in the database.
+     *
+     * @return  Discount  The created discount object
+     * @throws  UserInputException  If color validation fails
      */
     public function create()
     {
-        // Validate color values before creating
         $this->validateColors();
 
-        // create discount
         $discount = \call_user_func([$this->className, 'create'], $this->parameters['data']);
         $discountEditor = new DiscountEditor($discount);
 
-        // image
         $updateData = [];
         if (isset($this->parameters['favicon']) && \is_array($this->parameters['favicon']) && \count($this->parameters['favicon'])) {
             $favicon = \reset($this->parameters['favicon']);

@@ -8,59 +8,81 @@ use wcf\system\WCF;
 
 /**
  * ACP page for listing all themes.
+ * 
+ * Provides a sortable list of themes with filtering capabilities. Supports
+ * filtering by title, identifier, and active status. Used for managing
+ * theme configurations for special events.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.page
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.page
  */
 
 class ThemeListPage extends MultipleLinkPage
 {
     /**
-     * @inheritDoc
+     * Class name of the database object list.
+     *
+     * @var    string
      */
     public $objectListClassName = ThemeList::class;
 
     /**
-     * @inheritDoc
+     * Default sort field.
+     *
+     * @var    string
      */
     public $sortField = 'sortOrder';
 
     /**
-     * @inheritDoc
+     * Default sort order.
+     *
+     * @var    string
      */
     public $sortOrder = 'ASC';
 
     /**
-     * @inheritDoc
+     * Valid sort fields for the list.
+     *
+     * @var    string[]
      */
     public $validSortFields = ['themeID', 'identifier', 'title', 'sortOrder', 'isActive'];
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.theme.list';
 
     /**
-     * @inheritDoc
+     * Required permissions to access this page.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageThemes'];
 
     /**
-     * Filter: Title
+     * Filter: Title to search for.
+     *
+     * @var    string
      */
     public $title;
 
     /**
-     * Filter: Identifier
+     * Filter: Theme identifier to filter by.
+     *
+     * @var    string
      */
     public $identifier;
 
     /**
-     * Filter: Active state
+     * Filter: Active status (1 = active, 0 = inactive).
+     *
+     * @var    int
      */
     public $isActive;
 

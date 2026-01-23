@@ -22,48 +22,71 @@ use wcf\system\WCF;
 
 /**
  * Form for adding a new special.
+ * 
+ * ACP form for creating special events/promotions. Requires linkID parameter
+ * from URL query. Provides form fields for theme, colors, discount codes,
+ * time range, and additional text. Uses WoltLab's FormBuilder API with
+ * tabbed interface.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 class SpecialAddForm extends AbstractFormBuilderForm
 {
     /**
-     * @inheritDoc
+     * Required permissions to access this form.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageSpecials'];
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.special.list';
 
     /**
-     * @inheritDoc
+     * Action class for handling form submissions.
+     *
+     * @var    string
      */
     public $objectActionClass = SpecialAction::class;
 
     /**
-     * @inheritDoc
+     * Additional fields to save with the form object.
+     *
+     * @var    array
      */
     public $additionalFields = ['discountID' => 0];
 
     /**
-     * URL ID (required parameter from URL query)
+     * URL ID (required parameter from URL query).
+     *
+     * @var    int
      */
     public int $linkID = 0;
 
     /**
-     * URL hash for display
+     * URL hash for display purposes.
+     *
+     * @var    string
      */
     public string $urlHash = '';
 
     /**
-     * @inheritDoc
+     * Reads request parameters and validates linkID.
+     * 
+     * Extracts linkID from request parameters. Throws IllegalLinkException
+     * if linkID is missing.
+     *
+     * @return  void
+     * @throws  IllegalLinkException  If linkID is invalid
      */
     #[\Override]
     public function readParameters()
@@ -74,7 +97,6 @@ class SpecialAddForm extends AbstractFormBuilderForm
             $this->linkID = (int) $_REQUEST['linkID'];
         }
 
-        // URL ID is required
         if ($this->linkID === 0) {
             throw new IllegalLinkException();
         }

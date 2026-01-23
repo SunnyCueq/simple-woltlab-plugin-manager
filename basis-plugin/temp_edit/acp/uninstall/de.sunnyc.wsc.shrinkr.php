@@ -4,11 +4,12 @@
  * Uninstall script for URL Shortener: Affiliate System
  * 
  * This script runs during uninstallation and removes all demo data:
- * - Demo URLs (DEMO-1 to DEMO-7)
+ * - Demo URLs (DEMO-1 to DEMO-8)
  * - Associated Featured Links
  * - Associated Custom Buttons
  * - Associated Specials
  * - Associated Discounts (if they were created for demo URLs)
+ * - Associated Reactions (both user reactions from wcf1_like and guest reactions from guest_reaction)
  *
  * NOTE: This script is automatically executed by WoltLab's PackageUninstallationDispatcher
  * when a package is uninstalled. It must be located at:
@@ -16,7 +17,8 @@
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
- * @license     Commercial License
+ * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
  * @package     de.sunnyc.wsc.shrinkr
  */
 
@@ -342,6 +344,75 @@ try {
         }
     } catch (\Exception $e) {
         logUninstall('Error deleting discounts: ' . $e->getMessage());
+    }
+    
+    // Step 5.5: Delete associated Reactions (User and Guest reactions)
+    try {
+        // Delete guest reactions for demo URLs
+        $guestReactionTableExists = false;
+        try {
+            $sql = "SHOW TABLES LIKE 'shrinkr1_guest_reaction'";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute();
+            $guestReactionTableExists = ($statement->fetchSingleColumn() !== false);
+        } catch (\Exception) {
+            // Table doesn't exist
+        }
+        
+        if ($guestReactionTableExists && !empty($demoUrlIDs)) {
+            // SECURITY: Only delete guest reactions for verified demo URLs
+            // Additional safety: Join with url table to ensure hash starts with DEMO-
+            $placeholders = str_repeat('?,', count($demoUrlIDs) - 1) . '?';
+            $sql = "DELETE gr FROM shrinkr1_guest_reaction gr 
+                    INNER JOIN shrinkr1_link u ON gr.objectID = u.linkID 
+                    WHERE gr.objectID IN ({$placeholders}) 
+                    AND gr.objectType = 'de.sunnyc.wsc.shrinkr.likeableShrinkrLink'
+                    AND u.hash LIKE 'DEMO-%'";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute($demoUrlIDs);
+            $deletedGuestReactions = $statement->getAffectedRows();
+            logUninstall('Deleted ' . $deletedGuestReactions . ' guest reactions (with DEMO- hash verification)');
+        }
+        
+        // Delete user reactions (likes) for demo URLs
+        $likeTableExists = false;
+        try {
+            $sql = "SHOW TABLES LIKE 'wcf" . WCF_N . "_like'";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute();
+            $likeTableExists = ($statement->fetchSingleColumn() !== false);
+        } catch (\Exception) {
+            // Table doesn't exist
+        }
+        
+        if ($likeTableExists && !empty($demoUrlIDs)) {
+            // Get objectTypeID for Shr1nkr links
+            $sql = "SELECT objectTypeID FROM wcf" . WCF_N . "_object_type WHERE objectType = ?";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute(['de.sunnyc.wsc.shrinkr.likeableShrinkrLink']);
+            $objectTypeID = $statement->fetchSingleColumn();
+            
+            if ($objectTypeID) {
+                // SECURITY: Only delete user reactions for verified demo URLs
+                // Additional safety: Join with url table to ensure hash starts with DEMO-
+                $placeholders = str_repeat('?,', count($demoUrlIDs) - 1) . '?';
+                $sql = "DELETE l FROM wcf" . WCF_N . "_like l 
+                        INNER JOIN shrinkr1_link u ON l.objectID = u.linkID 
+                        WHERE l.objectID IN ({$placeholders}) 
+                        AND l.objectTypeID = ?
+                        AND u.hash LIKE 'DEMO-%'";
+                $statement = WCF::getDB()->prepareStatement($sql);
+                $params = array_merge($demoUrlIDs, [$objectTypeID]);
+                $statement->execute($params);
+                $deletedUserReactions = $statement->getAffectedRows();
+                logUninstall('Deleted ' . $deletedUserReactions . ' user reactions (likes) (with DEMO- hash verification)');
+            } else {
+                logUninstall('Object type ID not found for Shr1nkr links, skipping user reaction deletion');
+            }
+        }
+    } catch (\Exception $e) {
+        logUninstall('Error deleting reactions: ' . $e->getMessage());
+        logUninstall('Stack trace: ' . $e->getTraceAsString());
     }
     
     // Step 6: Delete demo URLs themselves (ONLY verified demo URLs by ID - same as OptionFormDemoDataListener)

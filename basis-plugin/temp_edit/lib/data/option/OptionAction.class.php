@@ -8,44 +8,63 @@ use wcf\system\WCF;
 
 /**
  * Handles option-related actions.
+ * 
+ * Action class for performing operations on WoltLab option objects. Provides
+ * functionality to generate rewrite rules (Apache .htaccess and nginx.conf)
+ * for URL shortener configuration. Detects webserver type automatically.
  *
- * @author      Sunny C, Sunny C <https://sunnyc.de>
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  * @link        https://sunnyc.de
- * @copyright   2026 Sunny C Websites & Co.
- * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage data.option
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  data.option
  */
 class OptionAction extends AbstractDatabaseObjectAction
 {
     /**
-     * @inheritDoc
+     * Editor class name for options.
+     *
+     * @var    string
      */
     protected $className = \wcf\data\option\OptionEditor::class;
 
     /**
-     * @inheritDoc
+     * Actions accessible for guests without authentication.
+     *
+     * @var    string[]
      */
     protected $allowGuestAccess = ['generateRewriteRules'];
 
     /**
-     * @inheritDoc
+     * Required permissions for delete action.
+     *
+     * @var    string[]
      */
     protected $permissionsDelete = ['admin.configuration.canEditOption'];
 
     /**
-     * @inheritDoc
+     * Required permissions for update action.
+     *
+     * @var    string[]
      */
     protected $permissionsUpdate = ['admin.configuration.canEditOption'];
 
     /**
-     * @inheritDoc
+     * Actions that require ACP access.
+     *
+     * @var    string[]
      */
     protected $requireACP = ['generateRewriteRules'];
 
     /**
      * Validates the generateRewriteRules action.
+     * 
+     * Checks if the user has permission to manage links (required for
+     * generating rewrite rules).
+     *
+     * @return  void
+     * @throws  PermissionDeniedException  If user lacks permission
      */
     public function validateGenerateRewriteRules()
     {
@@ -54,8 +73,12 @@ class OptionAction extends AbstractDatabaseObjectAction
 
     /**
      * Generates the rewrite rules for the URL shortener.
+     * 
+     * Detects the webserver type (Apache or nginx) and generates appropriate
+     * rewrite rules. Returns rendered template output with the rewrite rules
+     * for the detected webserver (or both if detection fails).
      *
-     * @return string
+     * @return  string  Rendered template output with rewrite rules
      */
     public function generateRewriteRules()
     {
@@ -96,11 +119,14 @@ class OptionAction extends AbstractDatabaseObjectAction
     /**
      * Detects the webserver type (Apache or nginx).
      * 
-     * @return string|null 'apache', 'nginx', or null if unknown
+     * Checks SERVER_SOFTWARE environment variable first, then falls back to
+     * checking for .htaccess file existence (indicates Apache). Returns null
+     * if webserver type cannot be determined.
+     *
+     * @return  string|null  'apache', 'nginx', or null if unknown
      */
     protected function detectWebserver(): ?string
     {
-        // Prüfe SERVER_SOFTWARE
         if (isset($_SERVER['SERVER_SOFTWARE'])) {
             $serverSoftware = \strtolower($_SERVER['SERVER_SOFTWARE']);
             if (\strpos($serverSoftware, 'nginx') !== false) {
@@ -111,7 +137,6 @@ class OptionAction extends AbstractDatabaseObjectAction
             }
         }
         
-        // Fallback: Prüfe ob .htaccess existiert (Apache)
         $rootDir = null;
         foreach (ApplicationHandler::getInstance()->getApplications() as $app) {
             $packageDir = $app->getPackage()->getAbsolutePackageDir();
@@ -128,15 +153,17 @@ class OptionAction extends AbstractDatabaseObjectAction
             }
         }
         
-        // Wenn .htaccess nicht existiert, könnte es nginx sein
-        // Aber wir können nicht sicher sein, daher null zurückgeben
         return null;
     }
 
     /**
      * Returns the rewrite rules for Apache and nginx.
+     * 
+     * Generates rewrite rules for both Apache (.htaccess) and nginx (location
+     * blocks) to rewrite /r/ URLs to /shrinkr/r/. Includes language-specific
+     * instructions and notes for nginx configuration.
      *
-     * @return array Array with 'apache' and 'nginx' keys
+     * @return  array  Array with 'apache' and 'nginx' keys containing rewrite rules
      */
     protected function fetchRewriteRules()
     {

@@ -6,9 +6,14 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Language"], function (
     Language = tslib_1.__importStar(Language);
     /**
      * Formats seconds into countdown string (DD:HH:MM:SS).
+     *
+     * Converts total seconds into a formatted string with days, hours, minutes,
+     * and seconds, each zero-padded to 2 digits.
+     *
+     * @param   {number}  seconds  Total remaining seconds
+     * @returns {string}           Formatted countdown string (DD:HH:MM:SS)
      */
     function formatCountdown(seconds) {
-        // Round to integer to avoid decimal places
         const totalSeconds = Math.floor(seconds);
         const days = Math.floor(totalSeconds / 86400);
         const hours = Math.floor((totalSeconds % 86400) / 3600);
@@ -17,10 +22,14 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Language"], function (
         return `${String(days).padStart(2, "0")}:${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
     }
     /**
-     * Initializes the countdown timer.
+     * Initializes the countdown timer for a single element.
      *
-     * @param elementId - ID of the element to update
-     * @param initialSeconds - Initial remaining seconds from server
+     * Sets up a countdown timer that updates every second. When the countdown
+     * expires, displays an "expired" message and stops the interval.
+     *
+     * @param   {string}  elementId        ID of the DOM element to update
+     * @param   {number}  initialSeconds   Initial remaining seconds from server
+     * @returns {void}
      */
     function init(elementId, initialSeconds) {
         const element = document.getElementById(elementId);
@@ -29,13 +38,10 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Language"], function (
             return;
         }
         let remainingSeconds = initialSeconds;
-        // Update immediately
         updateDisplay(element, remainingSeconds);
-        // Update every second
         const interval = window.setInterval(() => {
             remainingSeconds--;
             if (remainingSeconds <= 0) {
-                // Countdown expired
                 element.textContent = Language.get("wcf.shrinkr.countdown.expired");
                 window.clearInterval(interval);
             }
@@ -45,17 +51,25 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Language"], function (
         }, 1000);
     }
     /**
-     * Updates the countdown display.
+     * Updates the countdown display element.
      *
-     * @param element - DOM element to update
-     * @param seconds - Remaining seconds
+     * Formats the remaining seconds and updates the element's text content.
+     *
+     * @param   {HTMLElement}  element  DOM element to update
+     * @param   {number}       seconds  Remaining seconds
+     * @returns {void}
      */
     function updateDisplay(element, seconds) {
         element.textContent = formatCountdown(seconds);
     }
     /**
      * Initializes all countdowns in a list (e.g., ACP discount list).
+     *
      * Finds all elements with class "discount-countdown" and data-end-time attribute.
+     * Calculates remaining time from end timestamp and sets up individual countdown
+     * timers for each element. Updates visual state (green/red) based on expiration.
+     *
+     * @returns {void}
      */
     function initList() {
         const countdownElements = document.querySelectorAll(".discount-countdown[data-end-time]");

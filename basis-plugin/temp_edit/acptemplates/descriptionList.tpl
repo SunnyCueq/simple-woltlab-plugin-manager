@@ -1,3 +1,27 @@
+{*
+ * Template-Zweck: ACP-Liste für Descriptions
+ * 
+ * ACP-Template für die Anzeige aller Descriptions in einer sortierbaren
+ * und filterbaren Tabelle. Zeigt Titel, Beschreibungstext und Status an.
+ * Unterstützt Filterung nach Titel und Beschreibungstext.
+ * 
+ * Variablen:
+ * @var array $objects - Array von Description-Objekten
+ * @var string $title - Filter: Titel
+ * @var string $descriptionText - Filter: Beschreibungstext
+ * @var string $sortField - Sortierfeld
+ * @var string $sortOrder - Sortierreihenfolge
+ * 
+ * Logik:
+ * - Zeigt Filter-Formular für Titel und Beschreibungstext
+ * - Zeigt sortierbare Tabelle mit allen Descriptions
+ * - Unterstützt Pagination
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
+ *}
 {include file='header' pageTitle='shrinkr.acp.menu.link.description.list'}
 
 <header class="contentHeader">
@@ -7,7 +31,7 @@
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='DescriptionAdd' application='shrinkr'}{/link}"
+			<li><a href="{link controller='DescriptionAdd'}{/link}"
 					class="button">{icon size=16 name='plus'}
 					<span>{lang}shrinkr.acp.menu.link.description.add{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
@@ -18,7 +42,7 @@
 {include file='formError'}
 
 {if $objects|count || $title || $descriptionText}
-	<form action="{link controller='DescriptionList' application='shrinkr'}{/link}" method="POST">
+	<form action="{link controller='DescriptionList'}{/link}" method="POST">
 		<section class="section">
 			<h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
 
@@ -65,7 +89,7 @@
 {hascontent}
 <div class="paginationTop">
 	{content}
-{pages print=true assign=pagesLinks application='shrinkr' controller="DescriptionList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&descriptionText=$descriptionText&isActive=$isActiveFilter"}
+{pages print=true assign=pagesLinks controller="DescriptionList" link="pageNo=%d&sortField=$sortField&sortOrder=$sortOrder&title=$title&descriptionText=$descriptionText&isActive=$isActiveFilter"}
 	{/content}
 </div>
 {/hascontent}
@@ -76,12 +100,12 @@
 			<thead>
 				<tr>
 					<th class="columnID columnDescriptionID{if $sortField == 'descriptionID'} active {unsafe:$sortOrder}{/if}" colspan="2">
-						<a href="{link controller='DescriptionList' application='shrinkr'}pageNo={#$pageNo}&sortField=descriptionID&sortOrder={if $sortField == 'descriptionID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
+						<a href="{link controller='DescriptionList'}pageNo={#$pageNo}&sortField=descriptionID&sortOrder={if $sortField == 'descriptionID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
 							{lang}wcf.global.objectID{/lang}
 						</a>
 					</th>
 					<th class="columnTitle{if $sortField == 'title'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='DescriptionList' application='shrinkr'}pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
+						<a href="{link controller='DescriptionList'}pageNo={#$pageNo}&sortField=title&sortOrder={if $sortField == 'title' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
 							{lang}wcf.global.title{/lang}
 						</a>
 					</th>
@@ -89,7 +113,7 @@
 						{lang}wcf.shrinkr.description.preview{/lang}
 					</th>
 					<th class="columnDigits columnIsActive{if $sortField == 'isActive'} active {unsafe:$sortOrder}{/if}">
-						<a href="{link controller='DescriptionList' application='shrinkr'}pageNo={#$pageNo}&sortField=isActive&sortOrder={if $sortField == 'isActive' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
+						<a href="{link controller='DescriptionList'}pageNo={#$pageNo}&sortField=isActive&sortOrder={if $sortField == 'isActive' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&title={$title}&descriptionText={$descriptionText}&isActive={$isActiveFilter}{/link}">
 							{lang}wcf.shrinkr.description.status{/lang}
 						</a>
 					</th>
@@ -104,7 +128,7 @@
 								{assign var='descriptionIsDisabled' value=false}
 							{/if}
 							{objectAction action="toggle" isDisabled=$descriptionIsDisabled disableTitle='wcf.shrinkr.description.isActive.yes' enableTitle='wcf.shrinkr.description.isActive.no'}
-							<a href="{link controller='DescriptionEdit' id=$object->descriptionID application='shrinkr'}{/link}"
+							<a href="{link controller='DescriptionEdit' application='shrinkr' id=$object->descriptionID}{/link}"
 								title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
 							{objectAction action="delete" objectTitle=$object->getTitle()}
 							{event name='rowButtons'}
@@ -140,7 +164,7 @@
 
 		<nav class="contentFooterNavigation">
 			<ul>
-				<li><a href="{link controller='DescriptionAdd' application='shrinkr'}{/link}"
+				<li><a href="{link controller='DescriptionAdd'}{/link}"
 						class="button">{icon size=16 name='plus'}
 						<span>{lang}shrinkr.acp.menu.link.description.add{/lang}</span></a></li>
 				{event name='contentFooterNavigation'}

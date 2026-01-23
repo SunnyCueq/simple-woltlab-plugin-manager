@@ -22,30 +22,40 @@ use wcf\system\WCF;
 
 /**
  * Form for adding a new discount.
+ * 
+ * ACP form for creating discount codes and promotions. Provides form fields
+ * for discount value, codes, hosts, colors, countdown timers, and favicon.
+ * Uses WoltLab's FormBuilder API with tabbed interface.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 
 class DiscountAddForm extends AbstractFormBuilderForm
 {
     /**
-     * @inheritDoc
+     * Required permissions to access this form.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageDiscounts'];
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.discount.add';
 
     /**
-    * @inheritDoc
-    */
+     * Action class for handling form submissions.
+     *
+     * @var    string
+     */
     public $objectActionClass = DiscountAction::class;
 
     /**

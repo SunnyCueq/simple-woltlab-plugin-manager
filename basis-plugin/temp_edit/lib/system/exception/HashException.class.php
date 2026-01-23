@@ -3,25 +3,28 @@
 namespace shrinkr\system\exception;
 
 /**
- * Class HashException
+ * Exception thrown when hash validation or generation fails.
+ * 
+ * Used when a hash is invalid, already exists, or doesn't match the required pattern.
+ * Extends PHP's Exception class to provide custom error handling for hash-related operations.
  *
- * @author      Sunny C, Sunny C <https://sunnyc.de>
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  * @link        https://sunnyc.de
- * @copyright   2026 Sunny C Websites & Co.
- * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage system.exception
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  system.exception
  */
 class HashException extends \Exception
 {
     /**
      * Creates a new HashException.
      *
-     * @param   string		$message	    error message
-     * @param	integer		$code		    error code
-     * @param	string		$description	description of the error
-     * @param	\Exception	$previous	    repacked Exception
+     * @param   string      $message     Error message describing what went wrong
+     * @param   int         $code        Error code (default: 0)
+     * @param   string      $description Additional error description (currently unused)
+     * @param   \Exception  $previous     Previous exception for exception chaining
+     * @return  void
      */
     public function __construct($message = '', $code = 0, $description = '', ?\Exception $previous = null)
     {

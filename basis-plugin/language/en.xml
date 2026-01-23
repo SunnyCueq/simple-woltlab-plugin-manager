@@ -24,7 +24,7 @@
 		<item name="wcf.acp.option.shrinkr_active"><![CDATA[Activate the Shr1nkr]]></item>
 		<item name="wcf.acp.option.shrinkr_active.description"><![CDATA[Activates the Shr1nkr. After activation, you can create and manage short URLs.]]></item>
 		<item name="wcf.acp.option.shrinkr_counter_active"><![CDATA[Activate the visit counter for short URLs]]></item>
-		<item name="wcf.acp.option.shrinkr_counter_active.description"><![CDATA[Shows how many times a short URL has been accessed. The counter is displayed in the <a href="{link application='shrinkr' controller='UrlList'}{/link}">URL list</a> and can be reset if needed.]]></item>
+		<item name="wcf.acp.option.shrinkr_counter_active.description"><![CDATA[Shows how many times a short URL has been accessed. The counter is displayed in the <a href="{link controller='ShrinkrLinkList'}{/link}">URL list</a> and can be reset if needed.]]></item>
 		<item name="wcf.acp.option.shrinkr_forwarding_must_confirmed"><![CDATA[Forwarding must be confirmed]]></item>
 		<item name="wcf.acp.option.shrinkr_forwarding_must_confirmed.description"><![CDATA[On the redirect page, a button must first be clicked before redirecting to the target URL. This increases security and prevents automatic redirects. If "Delayed forwarding" is activated, the button can only be pressed after the waiting time has elapsed.]]></item>
 		<item name="wcf.acp.option.shrinkr_time_until_forwarding"><![CDATA[Delayed forwarding (in seconds)]]></item>

@@ -11,37 +11,47 @@ use wcf\system\WCF;
 
 /**
  * Event listener to synchronize guest reactions with user account upon registration.
+ * 
+ * When a guest registers a new user account, this listener converts all guest
+ * reactions (stored with session ID) to regular user reactions (stored with user ID).
+ * This ensures that reactions made as a guest are preserved after registration.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage system.event.listener
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  system.event.listener
  */
 class UserActionGuestReactionSyncListener implements IParameterizedEventListener
 {
     /**
-     * @inheritDoc
+     * Executes the event listener.
+     * 
+     * Listens to UserAction finalizeAction event for 'create' action. When a new
+     * user is created (registration), converts all guest reactions from the current
+     * session to regular user reactions and deletes the guest reaction entries.
+     *
+     * @param   object  $eventObj    The event object (UserAction instance)
+     * @param   string  $className   The class name of the event object
+     * @param   string  $eventName   The event name ('finalizeAction')
+     * @param   array   $parameters  Event parameters (passed by reference)
+     * @return  void
      */
     public function execute($eventObj, $className, $eventName, array &$parameters)
     {
         if ($eventName === 'finalizeAction' && $eventObj instanceof UserAction) {
             if ($eventObj->getActionName() === 'create') {
-                // Get the created user
                 $returnValues = $eventObj->getReturnValues();
                 if (isset($returnValues['returnValues']) && $returnValues['returnValues'] instanceof \wcf\data\user\User) {
                     $user = $returnValues['returnValues'];
                     $sessionID = WCF::getSession()->sessionID;
                     
-                    // Get all guest reactions for this session
                     $guestReactionList = new GuestReactionList();
                     $guestReactionList->getConditionBuilder()->add('sessionID = ?', [$sessionID]);
                     $guestReactionList->readObjects();
                     
-                    // Convert guest reactions to regular reactions
                     foreach ($guestReactionList as $guestReaction) {
-                        // Check if user already reacted on this object
                         $objectType = \wcf\system\reaction\ReactionHandler::getInstance()->getObjectType($guestReaction->objectType);
                         if ($objectType === null) {
                             continue;
@@ -54,12 +64,11 @@ class UserActionGuestReactionSyncListener implements IParameterizedEventListener
                         );
                         
                         if (!$like->likeID) {
-                            // Create regular reaction from guest reaction
                             $reactionAction = new ReactionAction([], 'create', [
                                 'data' => [
                                     'objectID' => $guestReaction->objectID,
                                     'objectTypeID' => $objectType->objectTypeID,
-                                    'objectUserID' => null, // ShrinkrLink objects don't have a userID
+                                    'objectUserID' => null,
                                     'userID' => $user->userID,
                                     'time' => $guestReaction->time,
                                     'likeValue' => 1,
@@ -69,7 +78,6 @@ class UserActionGuestReactionSyncListener implements IParameterizedEventListener
                             $reactionAction->executeAction();
                         }
                         
-                        // Delete guest reaction
                         $guestReactionEditor = new GuestReactionEditor($guestReaction);
                         $guestReactionEditor->delete();
                     }

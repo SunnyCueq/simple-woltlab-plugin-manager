@@ -11,33 +11,47 @@ use wcf\system\WCF;
 
 /**
  * Form for editing an existing special.
+ * 
+ * ACP form for editing special events/promotions. Extends SpecialAddForm
+ * and loads the special object from the database. Handles linkID and URL hash
+ * loading for form initialization.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 class SpecialEditForm extends SpecialAddForm
 {
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.special.list';
 
     /**
-     * @inheritDoc
+     * Form action name (edit, update, delete).
+     *
+     * @var    string
      */
     public $formAction = 'edit';
 
     /**
-     * @inheritDoc
+     * Reads request parameters and loads the special to edit.
+     * 
+     * Loads the Special object first to get linkID, then loads the URL hash.
+     * Calls parent readParameters without the linkID check since we already
+     * have the linkID from the special object.
+     *
+     * @return  void
+     * @throws  IllegalLinkException  If special ID is invalid or link doesn't exist
      */
     #[\Override]
     public function readParameters()
     {
-        // Load Special first (before parent, to get linkID)
         try {
             $queryParameters = Helper::mapQueryParameters(
                 $_GET,
@@ -53,13 +67,11 @@ class SpecialEditForm extends SpecialAddForm
                 throw new IllegalLinkException();
             }
 
-            // Set linkID from loaded object (needed for parent::readParameters)
             $this->linkID = $this->formObject->linkID;
         } catch (MappingError) {
             throw new IllegalLinkException();
         }
 
-        // Now load URL hash (parent expects linkID to be set)
         $sql = "SELECT hash FROM shrinkr1_link WHERE linkID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute([$this->linkID]);
@@ -69,7 +81,6 @@ class SpecialEditForm extends SpecialAddForm
             throw new IllegalLinkException();
         }
 
-        // Call parent WITHOUT readParameters (to avoid linkID check from query)
         \wcf\form\AbstractFormBuilderForm::readParameters();
     }
 

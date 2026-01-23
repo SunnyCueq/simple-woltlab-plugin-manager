@@ -1,15 +1,24 @@
 {*
- * Custom Forward Button Option Type Template
+ * Template-Zweck: Custom Forward Button Option Type
  * 
- * Shows a checkbox to enable/disable the custom button style
- * and displays a static preview of the button.
+ * Zeigt Checkbox zum Aktivieren/Deaktivieren des 3D-Button-Stils und
+ * eine statische Vorschau des Buttons. Enthält Inline-Styles für
+ * Button-Vorschau (75% der Originalgröße).
  * 
- * Note: This template only returns the content for the <dd> element.
- * WoltLab's AbstractOptionListForm wraps it in <dl><dt><dd> automatically.
- * Styles must be inline because Option Templates don't have access to ACP stylesheets.
- *
- * @author      Sunny C
- * @since 2.3.8
+ * Variablen:
+ * @var \wcf\data\option\Option $option - Option-Objekt
+ * @var string $option->optionName - Option-Name
+ * @var int $value - Aktueller Wert (0 oder 1)
+ * 
+ * Logik:
+ * - Zeigt Radio-Buttons für Ja/Nein
+ * - Zeigt statische Button-Vorschau mit 3D-Effekt
+ * - Styles sind inline (kein Zugriff auf ACP-Stylesheets)
+ * 
+ * @author Sunny C
+ * @copyright 2026 Sunny C
+ * @package de.sunnyc.wsc.shrinkr
+ * @see https://sunnyc.de
  *}
 <style>
 /* Custom Forward Button Preview Styles (75% of original size) */

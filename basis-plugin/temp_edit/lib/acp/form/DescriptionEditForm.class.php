@@ -9,28 +9,41 @@ use wcf\system\exception\IllegalLinkException;
 
 /**
  * Form for editing an existing description.
+ * 
+ * ACP form for editing description texts. Extends DescriptionAddForm and loads
+ * the description object from the database.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.form
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.form
  */
 class DescriptionEditForm extends DescriptionAddForm
 {
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.description.list';
 
     /**
-     * @inheritDoc
+     * Form action name (edit, update, delete).
+     *
+     * @var    string
      */
     public $formAction = 'edit';
 
     /**
-     * @inheritDoc
+     * Reads request parameters and loads the description to edit.
+     * 
+     * Validates the description ID from query parameters and loads the Description object.
+     * Throws IllegalLinkException if the description doesn't exist.
+     *
+     * @return  void
+     * @throws  IllegalLinkException  If description ID is invalid or description doesn't exist
      */
     public function readParameters()
     {

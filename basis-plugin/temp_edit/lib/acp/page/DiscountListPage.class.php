@@ -8,54 +8,74 @@ use wcf\system\WCF;
 
 /**
  * ACP page for listing all discounts.
+ * 
+ * Provides a sortable list of discounts with filtering capabilities. Supports
+ * filtering by discount value, codes, and hosts. Used for managing discount
+ * codes and promotions.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.page
+ * @link        https://sunnyc.de
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.page
  */
 
 class DiscountListPage extends MultipleLinkPage
 {
     /**
-     * @inheritDoc
+     * Class name of the database object list.
+     *
+     * @var    string
      */
     public $objectListClassName = DiscountList::class;
 
     /**
-     * @inheritDoc
+     * Default sort field.
+     *
+     * @var    string
      */
     public $sortField = 'discountID';
 
     /**
-     * @inheritDoc
+     * Default sort order.
+     *
+     * @var    string
      */
     public $sortOrder = 'ASC';
 
     /**
-     * @inheritDoc
+     * Valid sort fields for the list.
+     *
+     * @var    string[]
      */
     public $validSortFields = ['discountID', 'discountValue'];
 
     /**
-     * @inheritDoc
+     * Active menu item identifier for navigation highlighting.
+     *
+     * @var    string
      */
     public $activeMenuItem = 'shrinkr.acp.menu.link.discount.list';
 
     /**
-     * Filter: Discount value
+     * Filter: Discount value to search for.
+     *
+     * @var    string
      */
     public $discountValue;
 
     /**
-     * Filter: Codes
+     * Filter: Discount codes to search for.
+     *
+     * @var    string
      */
     public $codes;
 
     /**
-     * Filter: Hosts
+     * Filter: Hostnames to filter by.
+     *
+     * @var    string
      */
     public $hosts;
 

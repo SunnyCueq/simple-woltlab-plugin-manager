@@ -8,41 +8,53 @@ use wcf\system\WCF;
 
 /**
  * Displays rewrite rules in a dialog.
+ * 
+ * ACP page that generates and displays Apache .htaccess and Nginx rewrite rules
+ * for shortened URLs. Used by the rewrite rule generator in the ACP options.
+ * Determines the correct .htaccess path based on WoltLab installation structure.
  *
- * @author      Sunny C, Sunny C <https://sunnyc.de>
+ * @author      Sunny C
+ * @copyright   2026 Sunny C
+ * @license     License for Commercial Plugins
  * @link        https://sunnyc.de
- * @copyright   2026 Sunny C Websites & Co.
- * @license     License for Commercial Plugins <https://sunnyc.de/lizenz/>
- *
- * @package    de.sunnyc.wsc.shrinkr
- * @subpackage acp.page
+ * @package     de.sunnyc.wsc.shrinkr
+ * @subpackage  acp.page
  */
 class RewriteRulesPage extends AbstractPage
 {
     /**
-     * @inheritDoc
+     * Required permissions to access this page.
+     *
+     * @var    string[]
      */
     public $neededPermissions = ['admin.shrinkr.canManageLinks'];
     
     /**
-     * @inheritDoc
+     * Template name for rendering rewrite rules.
+     *
+     * @var    string
      */
     public $templateName = '__shrinkrRewriteRulesOutput';
     
     /**
-     * @inheritDoc
+     * Application name for template lookup.
+     *
+     * @var    string
      */
     public $templateNameApplication = 'shrinkr';
     
     /**
-     * @inheritDoc
+     * Reads data and generates rewrite rules.
+     * 
+     * Determines the .htaccess path based on WoltLab installation structure
+     * and generates rewrite rules for both Apache and Nginx.
+     *
+     * @return  void
      */
     public function readData()
     {
         parent::readData();
         
-        // Get .htaccess path (root directory)
-        // WoltLab-Methode: Verwende ApplicationHandler wie in OptionAction::fetchRewriteRules()
         $rootDir = null;
         foreach (ApplicationHandler::getInstance()->getApplications() as $app) {
             $packageDir = $app->getPackage()->getAbsolutePackageDir();
@@ -51,8 +63,6 @@ class RewriteRulesPage extends AbstractPage
             }
         }
         
-        // WoltLab-Methode: $htaccess = "{$dir}.htaccess" (siehe OptionAction::fetchRewriteRules Zeile 192)
-        // getAbsolutePackageDir() should already have a trailing slash, but check for safety
         if ($rootDir !== null) {
             $rootDir = \rtrim($rootDir, '/') . '/';
             $htaccessPath = $rootDir . '.htaccess';
@@ -60,10 +70,8 @@ class RewriteRulesPage extends AbstractPage
             $htaccessPath = '.htaccess';
         }
         
-        // Generate rewrite rules
         $rewriteRules = $this->fetchRewriteRules();
         
-        // Assign to template
         WCF::getTPL()->assign([
             'rewriteRules' => [
                 'apache' => [
@@ -77,9 +85,12 @@ class RewriteRulesPage extends AbstractPage
     }
     
     /**
-     * Returns the rewrite rules for Apache and nginx.
+     * Returns the rewrite rules for Apache and Nginx.
+     * 
+     * Generates Apache .htaccess rewrite rules and Nginx configuration snippets
+     * for redirecting shortened URLs from /r/ to /shrinkr/r/.
      *
-     * @return array Array with 'apache' and 'nginx' keys
+     * @return  array   Array with 'apache' and 'nginx' keys containing rewrite rules
      */
     protected function fetchRewriteRules()
     {

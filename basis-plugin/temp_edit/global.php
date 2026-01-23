@@ -1,9 +1,15 @@
 <?php
 
 /**
+ * Global configuration file for Shr1nkr plugin (frontend).
+ * 
+ * Includes application configuration and WoltLab core global.php. Sets up
+ * paths and configuration for frontend requests.
+ *
  * @author      Sunny C
  * @copyright   2026 Sunny C
  * @license     License for Commercial Plugins
+ * @link        https://sunnyc.de
  * @package     de.sunnyc.wsc.shrinkr
  */
 
