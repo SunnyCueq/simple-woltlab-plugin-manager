@@ -9,7 +9,7 @@ SNAPSHOT_DIR="$TOOLS_DIR/../woltlab-snapshot"
 PUBLIC_DIR="$TOOLS_DIR/../woltlab-dev/public"
 DDEV_DIR="$TOOLS_DIR/../woltlab-dev"
 ENV_FILE="$TOOLS_DIR/../.env"
-COMMON_SH="$TOOLS_DIR/../../common.sh"
+COMMON_SH="$TOOLS_DIR/../common.sh"
 
 # Lade gemeinsame Funktionen falls vorhanden
 if [ -f "$COMMON_SH" ]; then
@@ -37,10 +37,16 @@ else
         echo ""
     }
     
-    print_success() { print_success "$1${NC}"; }
+    print_success() { echo -e "${GREEN}✓ $1${NC}"; }
     print_error() { echo -e "${RED}✗ $1${NC}"; }
-    print_warning() { print_warning "$1${NC}"; }
-    print_info() { print_info "$1${NC}"; }
+    print_warning() { echo -e "${YELLOW}⚠ $1${NC}"; }
+    print_info() { echo -e "${YELLOW}ℹ $1${NC}"; }
+    log_error_with_context() {
+        local message="$1"
+        local context="${2:-}"
+        echo -e "${RED}✗ ${message}${NC}" >&2
+        [ -n "$context" ] && echo -e "${YELLOW}   ${context}${NC}" >&2
+    }
 fi
 
 # Lade .env Datei falls vorhanden
@@ -52,11 +58,6 @@ fi
 DB_NAME="${DB_NAME:-db}"
 DB_USER="${DB_USER:-db}"
 DB_PASSWORD="${DB_PASSWORD:-db}"
-HEIDISQL_HOST="${HEIDISQL_HOST:-127.0.0.1}"
-HEIDISQL_PORT="${HEIDISQL_PORT:-3306}"
-HEIDISQL_USER="${HEIDISQL_USER:-db}"
-HEIDISQL_PASSWORD="${HEIDISQL_PASSWORD:-db}"
-HEIDISQL_DATABASE="${HEIDISQL_DATABASE:-db}"
 
 print_section "WoltLab Instant-Installation" "Hauptmenü" "Snapshot"
 
@@ -178,7 +179,7 @@ docker exec ddev-woltlab-db mysql -uroot -proot $DB_NAME -e "SET FOREIGN_KEY_CHE
 TABLES=$(docker exec ddev-woltlab-db mysql -uroot -proot $DB_NAME -e "SHOW TABLES;" 2>/dev/null | tail -n +2 | wc -l)
 print_success "Datenbank importiert ($TABLES Tabellen, Fremdschlüssel-Checks aktiviert)${NC}\n"
 
-# [6/6] Logs/Caches löschen, HeidiSQL konfigurieren, Firefox starten
+# [6/6] Logs/Caches löschen, phpMyAdmin-Infos anzeigen, Browser starten
 echo -e "${YELLOW}[6/6] Finalisiere...${NC}"
 # Logs und Caches löschen
 find "$PUBLIC_DIR/log" -type f ! -name ".htaccess" -delete 2>/dev/null || true
@@ -208,126 +209,12 @@ else
     echo -e "${GREEN}  ✓ MySQL-Port: $MYSQL_PORT${NC}"
 fi
 
-# HeidiSQL konfigurieren
-HEIDISQL_CONFIG="$HOME/.config/heidisql/settings.json"
-mkdir -p "$HOME/.config/heidisql"
-# Verwende Passwort aus .env oder aus HeidiSQL-Config oder Standard
-SAVED_PASSWORD=$(jq -r '.Servers["Woltlab Local"].Password // empty' "$HEIDISQL_CONFIG" 2>/dev/null || echo "")
-if [ -z "$SAVED_PASSWORD" ]; then
-    # Konvertiere Passwort zu HeidiSQL-Format (Hex-Shift) falls nötig
-    # Für jetzt verwenden wir das Passwort direkt aus .env
-    SAVED_PASSWORD="$HEIDISQL_PASSWORD"
-fi
-
-# Warte bis MySQL auf dem Port antwortet (für HeidiSQL)
-echo -e "${YELLOW}  Warte auf MySQL-Port-Bereitschaft...${NC}"
-for i in {1..30}; do
-    if timeout 1 bash -c "echo > /dev/tcp/127.0.0.1/$MYSQL_PORT" 2>/dev/null; then
-        echo -e "${GREEN}  ✓ MySQL-Port $MYSQL_PORT ist bereit${NC}"
-        break
-    fi
-    sleep 1
-done
-
-# HeidiSQL-Konfiguration komplett neu schreiben (nicht nur aktualisieren)
-# Lade bestehende Config, behalte andere Server, aber überschreibe "Woltlab Local" komplett
-if command -v jq &> /dev/null && [ -f "$HEIDISQL_CONFIG" ]; then
-    # Lade bestehende Config und überschreibe nur "Woltlab Local"
-    jq --arg port "$MYSQL_PORT" --arg pwd "$SAVED_PASSWORD" --arg user "$HEIDISQL_USER" --arg db "$HEIDISQL_DATABASE" --arg host "$HEIDISQL_HOST" '
-      .Servers["Woltlab Local"] = {
-        Host: $host,
-        Port: ($port | tonumber),
-        User: $user,
-        Password: $pwd,
-        SessionColor: 49407,
-        Databases: $db,
-        NetType: 0,
-        Compressed: false,
-        LoginPrompt: false,
-        WantSSL: false
-      } | .LastActiveSession = "Woltlab Local" | del(.Servers.Woltlab)
-    ' "$HEIDISQL_CONFIG" > "${HEIDISQL_CONFIG}.tmp" 2>/dev/null
-    if [ $? -eq 0 ] && [ -f "${HEIDISQL_CONFIG}.tmp" ]; then
-        mv "${HEIDISQL_CONFIG}.tmp" "$HEIDISQL_CONFIG"
-        echo -e "${GREEN}  ✓ HeidiSQL konfiguriert (Port: $MYSQL_PORT)${NC}"
-    else
-        # Fallback: Config komplett neu erstellen
-        jq -n --arg port "$MYSQL_PORT" --arg pwd "$SAVED_PASSWORD" --arg user "$HEIDISQL_USER" --arg db "$HEIDISQL_DATABASE" --arg host "$HEIDISQL_HOST" '{
-          Servers: {
-            "Woltlab Local": {
-              Host: $host,
-              Port: ($port | tonumber),
-              User: $user,
-              Password: $pwd,
-              SessionColor: 49407,
-              Databases: $db,
-              NetType: 0,
-              Compressed: false,
-              LoginPrompt: false,
-              WantSSL: false
-            }
-          },
-          LastActiveSession: "Woltlab Local"
-        }' > "$HEIDISQL_CONFIG"
-        echo -e "${GREEN}  ✓ HeidiSQL konfiguriert (Port: $MYSQL_PORT) - Neue Config erstellt${NC}"
-    fi
-else
-    # Neue Config komplett erstellen (ohne jq oder wenn Config nicht existiert)
-    if command -v jq &> /dev/null; then
-        jq -n --arg port "$MYSQL_PORT" --arg pwd "$SAVED_PASSWORD" --arg user "$HEIDISQL_USER" --arg db "$HEIDISQL_DATABASE" --arg host "$HEIDISQL_HOST" '{
-          Servers: {
-            "Woltlab Local": {
-              Host: $host,
-              Port: ($port | tonumber),
-              User: $user,
-              Password: $pwd,
-              SessionColor: 49407,
-              Databases: $db,
-              NetType: 0,
-              Compressed: false,
-              LoginPrompt: false,
-              WantSSL: false
-            }
-          },
-          LastActiveSession: "Woltlab Local"
-        }' > "$HEIDISQL_CONFIG"
-    else
-        cat > "$HEIDISQL_CONFIG" <<EOF
-{
-  "Servers": {
-    "Woltlab Local": {
-      "Host": "$HEIDISQL_HOST",
-      "Port": $MYSQL_PORT,
-      "User": "$HEIDISQL_USER",
-      "Password": "$SAVED_PASSWORD",
-      "SessionColor": 49407,
-      "Databases": "$HEIDISQL_DATABASE",
-      "NetType": 0,
-      "Compressed": false,
-      "LoginPrompt": false,
-      "WantSSL": false
-    }
-  },
-  "LastActiveSession": "Woltlab Local"
-}
-EOF
-    fi
-    echo -e "${GREEN}  ✓ HeidiSQL konfiguriert (Port: $MYSQL_PORT)${NC}"
-fi
-
-# HeidiSQL starten (wenn verfügbar)
-if command -v heidisql &> /dev/null; then
-    # Prüfe ob HeidiSQL bereits läuft
-    if pgrep -x heidisql > /dev/null; then
-        echo -e "${YELLOW}  ⚠️  HeidiSQL läuft bereits - bitte manuell neu laden oder neu starten${NC}"
-        echo -e "${YELLOW}     (Die Config wurde aktualisiert, Port: $MYSQL_PORT)${NC}"
-    else
-        # Starte HeidiSQL im Hintergrund
-        heidisql > /dev/null 2>&1 &
-        sleep 2
-        echo -e "${GREEN}  ✓ HeidiSQL gestartet${NC}"
-    fi
-fi
+print_list "phpMyAdmin"
+print_list_item "•" "URL: ${BLUE}https://woltlab.ddev.site/phpmyadmin${NC}"
+print_list_item "•" "Benutzer: ${BLUE}${DB_USER}${NC}"
+print_list_item "•" "Passwort: ${BLUE}${DB_PASSWORD}${NC}"
+print_list_item "•" "Datenbank: ${BLUE}${DB_NAME}${NC}"
+echo ""
 
 # Firefox starten
 # Browser öffnen (mit Fallbacks)
@@ -354,4 +241,5 @@ echo -e "   🌐 Frontend: ${BLUE}https://woltlab.ddev.site/${NC}"
 echo -e "   🔧 ACP:      ${BLUE}https://woltlab.ddev.site/acp/${NC}"
 echo -e "   👤 Admin:    ${BLUE}Admin${NC}"
 echo -e "   🔑 Passwort: ${BLUE}123456${NC}"
-echo -e "   🗄️  Datenbank: HeidiSQL (Port: $MYSQL_PORT)\n"
+echo -e "   🗄️  Datenbank: phpMyAdmin\n"
+echo -e "   🔗 phpMyAdmin: ${BLUE}https://woltlab.ddev.site/phpmyadmin${NC}\n"

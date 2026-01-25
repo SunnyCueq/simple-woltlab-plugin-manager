@@ -11,7 +11,7 @@ cd ~/Dokumente/woltlab-development
 
 Das Setup-Script installiert automatisch:
 - DDEV
-- HeidiSQL
+- phpMyAdmin (über DDEV)
 - Node.js/npm
 - WoltLab Core
 - Erstellt .env Datei

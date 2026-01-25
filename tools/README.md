@@ -19,7 +19,7 @@ Die **WoltLab Development Tools** sind eine Sammlung von automatisierten Skripte
 - ✅ **Snapshots erstellen/wiederherstellen** - Schnelle Backups der kompletten Installation
 - ✅ **Zugangsdaten verwalten** - Zentrale Verwaltung aller Passwörter und Einstellungen
 - ✅ **Dockge verwalten** - Container-Management für Docker (moderne Alternative zu Portainer)
-- ✅ **HeidiSQL konfigurieren** - Automatische Datenbank-Verbindung einrichten
+- ✅ **phpMyAdmin nutzen** - Datenbank-Verwaltung über DDEV
 - ✅ **Plugin Validierung** - Security-Checks & Plugin Store Compliance prüfen
 
 ---
@@ -156,57 +156,27 @@ docker run -d \
 
 ---
 
-### 🗄️ HeidiSQL - Datenbank-Verwaltung (Optional)
+### 🗄️ phpMyAdmin - Datenbank-Verwaltung (über DDEV)
 
-**Was ist HeidiSQL?**
-HeidiSQL ist ein kostenloses Datenbank-Verwaltungstool für MySQL, MariaDB und andere Datenbanken. Es ermöglicht es dir, die WoltLab-Datenbank visuell zu verwalten.
+**Was ist phpMyAdmin?**
+phpMyAdmin ist ein webbasiertes Tool zur Verwaltung von MySQL- und MariaDB-Datenbanken. Es ist direkt über DDEV verfügbar.
 
-**Warum HeidiSQL?**
-- ✅ Kostenlos und Open Source
-- ✅ Einfache Bedienung
-- ✅ Visuelle Datenbank-Verwaltung
-- ✅ SQL-Abfragen ausführen
-- ✅ Daten exportieren/importieren
+**Warum phpMyAdmin?**
+- ✅ Keine lokale Installation nötig
+- ✅ Läuft im DDEV-Container
+- ✅ Zugriff über den Browser
+- ✅ SQL-Abfragen, Import/Export und Verwaltung
 
-**Installation:**
-
-**Automatisch (empfohlen):**
-1. Führe das Setup-Skript aus (Option 6)
-2. Das Skript installiert HeidiSQL automatisch (falls verfügbar)
-3. Die Verbindung wird automatisch konfiguriert
-
-**Manuell (Linux):**
-```bash
-# Ubuntu/Debian
-sudo apt update
-sudo apt install heidisql
-
-# Arch Linux (AUR)
-yay -S heidisql
-
-# Oder lade von der offiziellen Website herunter
-```
-
-**Windows:**
-1. Lade HeidiSQL von https://www.heidisql.com/download.php herunter
-2. Installiere das Programm
-3. Die Verbindung wird automatisch vom Setup-Skript konfiguriert
-
-**Verbindung konfigurieren:**
-1. Öffne HeidiSQL
-2. Erstelle eine neue Verbindung:
-   - **Host:** 127.0.0.1 (oder localhost)
-   - **Port:** 3306 (oder der MySQL-Port von DDEV)
-   - **Benutzer:** db (Standard-DDEV-Benutzer)
-   - **Passwort:** db (Standard-DDEV-Passwort)
-   - **Datenbank:** db (Standard-DDEV-Datenbank)
+**Zugriff:**
+1. Starte DDEV (Option 4)
+2. Öffne `https://woltlab.ddev.site/phpmyadmin`
+3. Nutze die DDEV-Standardzugangsdaten:
+   - **Benutzer:** db
+   - **Passwort:** db
+   - **Datenbank:** db
 
 **📖 Offizielle Dokumentation:**
-- **Hilfe:** https://www.heidisql.com/help.php
-- **Download:** https://www.heidisql.com/download.php
-- **Dokumentation:** https://www.heidisql.com/doc/
-
-**Tipp:** Das Setup-Skript (Option 6) konfiguriert HeidiSQL automatisch mit den richtigen Zugangsdaten!
+- https://ddev.readthedocs.io/en/stable/users/quickstart/#phpmyadmin
 
 ---
 
@@ -422,7 +392,7 @@ Stellt eine komplette WoltLab-Installation aus einem vorher erstellten Snapshot 
 1. Datenbank wird zurückgesetzt
 2. Alle Dateien werden kopiert
 3. Caches werden geleert
-4. HeidiSQL-Konfiguration wird aktualisiert
+4. phpMyAdmin-Infos werden angezeigt
 5. Optional: Firefox mit ACP wird geöffnet
 
 **Dauer:** Ca. 8-10 Sekunden
@@ -451,11 +421,10 @@ Installiert und konfiguriert automatisch alle benötigten Tools für die WoltLab
    - Erstellt `.ddev` Konfiguration
    - **Dokumentation:** https://github.com/ddev/ddev
 
-2. **HeidiSQL** (falls nicht vorhanden)
-   - Versucht HeidiSQL zu installieren (falls verfügbar)
-   - Konfiguriert automatisch die Datenbank-Verbindung
-   - Speichert Passwort in HeidiSQL-Konfiguration
-   - **Dokumentation:** https://www.heidisql.com/help.php
+2. **phpMyAdmin** (über DDEV)
+   - Wird über DDEV bereitgestellt (kein extra Install)
+   - Zugriff über Browser mit DDEV-Standardzugangsdaten
+   - **Dokumentation:** https://ddev.readthedocs.io/en/stable/users/quickstart/#phpmyadmin
 
 3. **Node.js und npm**
    - Installiert Node.js für TypeScript-Kompilierung
@@ -470,7 +439,7 @@ Installiert und konfiguriert automatisch alle benötigten Tools für die WoltLab
 5. **.env Datei**
    - Erstellt Konfigurationsdatei mit allen Zugangsdaten
    - Generiert sichere Passwörter (optional)
-   - Speichert DDEV, MySQL, HeidiSQL und WoltLab Zugangsdaten
+   - Speichert DDEV, MySQL, phpMyAdmin und WoltLab Zugangsdaten
 
 6. **Git Repository**
    - Initialisiert Git (falls noch nicht geschehen)
@@ -505,7 +474,7 @@ Installiert und konfiguriert automatisch alle benötigten Tools für die WoltLab
 
 2. **Folge den Fragen:**
    - Soll DDEV installiert werden? → **Ja** (empfohlen)
-   - Soll HeidiSQL installiert werden? → **Ja** (optional, aber empfohlen)
+   - Soll phpMyAdmin genutzt werden? → **Ja** (über DDEV)
    - Soll Node.js installiert werden? → **Ja** (für TypeScript)
    - Soll WoltLab heruntergeladen werden? → **Ja** (falls noch nicht vorhanden)
    - Sollen Passwörter generiert werden? → **Ja** (für Sicherheit)
@@ -527,10 +496,9 @@ Installiert und konfiguriert automatisch alle benötigten Tools für die WoltLab
   - Installiere Docker manuell: https://docs.docker.com/get-docker/
   - Versuche DDEV manuell zu installieren: https://github.com/ddev/ddev
 
-- **HeidiSQL Installation schlägt fehl:**
-  - Kein Problem! HeidiSQL ist optional
-  - Du kannst es später manuell installieren: https://www.heidisql.com/download.php
-  - Die Datenbank-Verbindung kann auch später konfiguriert werden
+- **phpMyAdmin Zugriff fehlt:**
+  - Stelle sicher, dass DDEV läuft
+  - Öffne: https://woltlab.ddev.site/phpmyadmin
 
 - **WoltLab Download schlägt fehl:**
   - Prüfe deine Internetverbindung
@@ -540,7 +508,7 @@ Installiert und konfiguriert automatisch alle benötigten Tools für die WoltLab
 **Weitere Hilfe:**
 - **DDEV:** https://github.com/ddev/ddev
 - **Dockge:** https://dockge.kuma.pet/
-- **HeidiSQL:** https://www.heidisql.com/help.php
+- **phpMyAdmin:** https://ddev.readthedocs.io/en/stable/users/quickstart/#phpmyadmin
 - **WoltLab:** https://manual.woltlab.com/de/installation/
 
 ---
@@ -613,8 +581,8 @@ Wenn du einen Snapshot mit einer sauberen Datenbank erstellst, kannst du **jeder
    - **WICHTIG:** Erstelle KEINE Test-Daten
 
 3. **Prüfe die Datenbank:**
-   - Öffne HeidiSQL
-   - Verbinde dich mit der Datenbank
+   - Öffne phpMyAdmin: `https://woltlab.ddev.site/phpmyadmin`
+   - Melde dich mit den DDEV-Zugangsdaten an
    - Prüfe die Tabellen:
      - `wcf1_user` sollte nur 1 Benutzer enthalten (dein Admin)
      - `wcf1_post` sollte leer sein (0 Zeilen)
@@ -837,7 +805,7 @@ Das Skript führt automatisch aus (in ~8 Sekunden):
 
 6. **[6/6] Aufräumen & Konfiguration**
    - Leert Caches (für sauberen Start)
-   - Konfiguriert HeidiSQL automatisch
+   - Zeigt phpMyAdmin-Infos
    - Öffnet optional Firefox mit ACP
    - Dauer: ~1 Sekunde
 
@@ -846,7 +814,7 @@ Nach dem Restore hast du:
 - ✅ Eine **identische Kopie** der Installation zum Zeitpunkt des Snapshots
 - ✅ Alle Dateien wiederhergestellt
 - ✅ Die komplette Datenbank wiederhergestellt
-- ✅ HeidiSQL konfiguriert (Passwort automatisch gespeichert)
+- ✅ phpMyAdmin-Infos angezeigt
 - ✅ Optional: Firefox mit ACP geöffnet
 
 **Zugriff:**
@@ -1045,10 +1013,10 @@ Im Terminal oder in der Datei: `tools/woltlab-snapshot/metadata.txt`
 3. Stelle sicher, dass DDEV gestoppt ist während des Kopiervorgangs
 4. Versuche es erneut
 
-**Problem: "HeidiSQL-Konfiguration fehlgeschlagen"**
+**Problem: "phpMyAdmin nicht erreichbar"**
 **Lösung:**
-1. Prüfe, ob HeidiSQL installiert ist: `which heidisql`
-2. Manuell konfigurieren: Im Menü Option `9` → Option `5` (HeidiSQL Passwort speichern)
+1. Prüfe, ob DDEV läuft: `cd tools/woltlab-dev && ddev describe`
+2. Öffne: `https://woltlab.ddev.site/phpmyadmin`
 3. Prüfe MySQL-Port: `cd tools/woltlab-dev && ddev describe`
 
 ---
@@ -1121,7 +1089,7 @@ Verwende diese Checkliste vor einem Restore:
 - [ ] Frontend ist erreichbar: `https://woltlab.ddev.site/`
 - [ ] ACP ist erreichbar: `https://woltlab.ddev.site/acp/`
 - [ ] Login funktioniert (Admin / Passwort)
-- [ ] HeidiSQL-Verbindung funktioniert (falls konfiguriert)
+- [ ] phpMyAdmin erreichbar: `https://woltlab.ddev.site/phpmyadmin`
 
 ---
 
@@ -1180,7 +1148,7 @@ Verwaltet alle Passwörter, Benutzernamen und Einstellungen zentral in einer `.e
 2. **Zugangsdaten anzeigen**
    - Zeigt alle gespeicherten Zugangsdaten
    - Passwörter werden maskiert (als `****` angezeigt)
-   - Zeigt MySQL, WoltLab Admin, HeidiSQL, etc.
+   - Zeigt MySQL, WoltLab Admin, phpMyAdmin, etc.
 
 3. **Zugangsdaten validieren**
    - Prüft, ob MySQL-Verbindung funktioniert
@@ -1191,9 +1159,8 @@ Verwaltet alle Passwörter, Benutzernamen und Einstellungen zentral in einer `.e
    - Erstellt ein sicheres, zufälliges Passwort
    - Kann für verschiedene Zwecke verwendet werden
 
-5. **HeidiSQL Passwort speichern**
-   - Speichert Datenbank-Passwort automatisch in HeidiSQL
-   - Konfiguriert HeidiSQL-Verbindung
+5. **phpMyAdmin Info**
+   - Zeigt URL und Zugangsdaten für phpMyAdmin
    - Ermittelt automatisch MySQL-Port von DDEV
 
 **Verwendung:**
@@ -1372,11 +1339,10 @@ woltlab-development/
    - Größe: ~200MB
    - Benötigt: Administrator-Rechte
 
-3. **HeidiSQL** (falls nicht vorhanden)
-   - Version: Neueste stabile Version
-   - Was: Datenbank-Verwaltungstool
-   - Größe: ~50MB
-   - Installation: Via pacman (Arch Linux)
+3. **phpMyAdmin** (über DDEV)
+   - Version: Über DDEV bereitgestellt
+   - Was: Datenbank-Verwaltung im Browser
+   - Zugriff: https://woltlab.ddev.site/phpmyadmin
 
 4. **Node.js und npm**
    - Version: LTS (Long Term Support)
@@ -1478,11 +1444,11 @@ woltlab-development/
 2. Prüfe Git-Konfiguration: `git config --list`
 3. Prüfe Internetverbindung
 
-### Q: Wie öffne ich HeidiSQL?
+### Q: Wie öffne ich phpMyAdmin?
 **A:**
-1. Starte HeidiSQL (im System-Menü oder Terminal: `heidisql`)
-2. Die Verbindung "WoltLab DDEV" sollte automatisch vorhanden sein
-3. Falls nicht: Im Menü Option `9` → Option `5` (HeidiSQL Passwort speichern)
+1. Stelle sicher, dass DDEV läuft
+2. Öffne: `https://woltlab.ddev.site/phpmyadmin`
+3. Melde dich mit `db` / `db` an
 
 ### Q: Was ist Dockge und brauche ich es?
 **A:** Dockge ist optional. Es bietet eine moderne Web-Oberfläche zur Verwaltung von Docker-Containern. Du kannst es verwenden, um DDEV visuell zu verwalten, aber es ist nicht zwingend notwendig. Dockge ist eine schnellere, modernere Alternative zu Portainer.
@@ -1505,10 +1471,7 @@ sudo systemctl enable docker  # Für automatischen Start
 ```
 
 ### Problem: "Permission denied"
-**Lösung:** Stelle sicher, dass die Skripte ausführbar sind:
-```bash
-chmod +x tools/*.sh
-```
+**Lösung:** Die Tools setzen fehlende Ausführungsrechte automatisch (Self-Healing). Falls es dennoch passiert, prüfe die Dateirechte in `tools/`.
 
 ### Problem: "Ports werden nicht angezeigt"
 **Lösung:** 
@@ -1516,11 +1479,11 @@ chmod +x tools/*.sh
 2. Starte DDEV neu: `ddev restart`
 3. Prüfe, ob jq installiert ist: `sudo pacman -S jq`
 
-### Problem: "HeidiSQL findet keine Verbindung"
+### Problem: "phpMyAdmin ist nicht erreichbar"
 **Lösung:**
 1. Stelle sicher, dass DDEV läuft
-2. Im Menü: Option `9` → Option `5` (HeidiSQL Passwort speichern)
-3. Starte HeidiSQL neu
+2. Öffne: `https://woltlab.ddev.site/phpmyadmin`
+3. Prüfe DDEV-Status: `cd tools/woltlab-dev && ddev describe`
 
 ---
 
@@ -1565,7 +1528,7 @@ Bei Problemen oder Fragen:
 
 ### Version 2.0
 - ✅ Dockge-Integration hinzugefügt (Migration von Portainer)
-- ✅ HeidiSQL automatische Konfiguration
+- ✅ phpMyAdmin-Integration (über DDEV)
 - ✅ Verbesserte Plugin-Suche (auch in Unterverzeichnissen)
 - ✅ Gruppierte Plugin-Anzeige
 - ✅ Verbesserte Navigation mit Zurück-Optionen

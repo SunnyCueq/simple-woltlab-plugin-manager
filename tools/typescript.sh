@@ -3,7 +3,7 @@
 #################################################################
 # WoltLab TypeScript Build-Skript
 # Kompiliert TypeScript → JavaScript
-# Kopiert D3.js und TopoJSON nach temp_edit/js/3rdParty/
+# Entfernt alte d3.js/TopoJSON Dateien (nicht mehr benötigt, ersetzt durch flot.js)
 #
 # Usage:
 #   ./tools/typescript.sh        → Kompiliert TypeScript
@@ -307,34 +307,20 @@ else
     fi
 fi
 
-# D3.js kopieren
-print_info "[3/4] D3.js kopieren..."
-if [ -f "node_modules/d3/dist/d3.min.js" ]; then
-    mkdir -p js/3rdParty/d3
-    cp node_modules/d3/dist/d3.min.js js/3rdParty/d3/d3.js
-    print_success "D3.js kopiert nach js/3rdParty/d3/d3.js"
-    echo ""
-else
-    print_warning "D3.js nicht gefunden in node_modules/d3/dist/d3.min.js"
-    print_warning "Überspringe D3.js Kopie"
+# D3.js und TopoJSON werden nicht mehr benötigt (ersetzt durch flot.js)
+# Die Dateien werden nicht mehr automatisch kopiert
+# Falls sie noch vorhanden sind, werden sie beim nächsten Build entfernt
+if [ -d "js/3rdParty/d3" ]; then
+    print_info "[3/4] Entferne alte d3.js Dateien (nicht mehr benötigt)..."
+    rm -rf js/3rdParty/d3
+    print_success "d3.js Verzeichnis entfernt"
     echo ""
 fi
 
-# TopoJSON kopieren
-print_info "[4/4] TopoJSON kopieren..."
-if [ -f "node_modules/topojson-client/dist/topojson-client.js" ]; then
-    mkdir -p js/3rdParty/topojson-client
-    cp node_modules/topojson-client/dist/topojson-client.js js/3rdParty/topojson-client/
-    print_success "TopoJSON kopiert nach js/3rdParty/topojson-client/topojson-client.js"
-    echo ""
-elif [ -f "node_modules/topojson-client/dist/topojson-client.min.js" ]; then
-    mkdir -p js/3rdParty/topojson-client
-    cp node_modules/topojson-client/dist/topojson-client.min.js js/3rdParty/topojson-client/topojson-client.js
-    print_success "TopoJSON kopiert nach js/3rdParty/topojson-client/topojson-client.js"
-    echo ""
-else
-    print_warning "TopoJSON nicht gefunden in node_modules/topojson-client/dist/"
-    print_warning "Überspringe TopoJSON Kopie"
+if [ -d "js/3rdParty/topojson-client" ]; then
+    print_info "[4/4] Entferne alte TopoJSON Dateien (nicht mehr benötigt)..."
+    rm -rf js/3rdParty/topojson-client
+    print_success "TopoJSON Verzeichnis entfernt"
     echo ""
 fi
 

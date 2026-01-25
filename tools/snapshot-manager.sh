@@ -18,7 +18,13 @@ SNAPSHOT_DIR="$TOOLS_DIR/woltlab-snapshot"
 
 # Lade gemeinsame Funktionen
 if [ -f "$TOOLS_DIR/common.sh" ]; then
+    # #region agent log
+    echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:21\",\"message\":\"loading_common_sh\",\"data\":{\"tools_dir\":\"$TOOLS_DIR\"},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+    # #endregion
     source "$TOOLS_DIR/common.sh"
+    # #region agent log
+    echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:24\",\"message\":\"common_sh_loaded\",\"data\":{\"arrow_defined\":\"${ARROW:-undefined}\"},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+    # #endregion
 else
     RED='\033[0;31m'
     GREEN='\033[0;32m'
@@ -26,21 +32,22 @@ else
     BLUE='\033[0;34m'
     CYAN='\033[0;36m'
     NC='\033[0m'
+    ARROW="→"
     
     print_header() {
         clear
-        print_info "╔═══════════════════════════════════════════════════════╗${NC}"
-        print_info "║                                                       ║${NC}"
-        print_info "║     ${CYAN}Snapshot Manager${BLUE}                            ║${NC}"
-        print_info "║                                                       ║${NC}"
-        print_info "╚═══════════════════════════════════════════════════════╝${NC}"
+        echo -e "${YELLOW}╔═══════════════════════════════════════════════════════╗${NC}"
+        echo -e "${YELLOW}║                                                       ║${NC}"
+        echo -e "${YELLOW}║     ${CYAN}Snapshot Manager${YELLOW}                            ║${NC}"
+        echo -e "${YELLOW}║                                                       ║${NC}"
+        echo -e "${YELLOW}╚═══════════════════════════════════════════════════════╝${NC}"
         echo ""
     }
     
-    print_success() { print_success "$1${NC}"; }
+    print_success() { echo -e "${GREEN}✓ $1${NC}"; }
     print_error() { echo -e "${RED}✗ $1${NC}"; }
     print_info() { echo -e "${YELLOW}→ $1${NC}"; }
-    print_warning() { print_warning "$1${NC}"; }
+    print_warning() { echo -e "${YELLOW}⚠ $1${NC}"; }
 fi
 
 # Funktion: Snapshot erstellen
@@ -51,6 +58,11 @@ create_snapshot() {
         print_error "snapshot.sh nicht gefunden!"
         return 1
     fi
+
+    ensure_executable "$SNAPSHOT_TOOLS_DIR/snapshot.sh" || {
+        print_error "Keine Berechtigung für snapshot.sh"
+        return 1
+    }
     
     print_info "Starte Snapshot-Erstellung..."
     echo ""
@@ -61,12 +73,23 @@ create_snapshot() {
 
 # Funktion: Snapshot wiederherstellen
 restore_snapshot() {
+    # #region agent log
+    echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:63\",\"message\":\"restore_snapshot_called\",\"data\":{},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+    # #endregion
     print_header
+    # #region agent log
+    echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:65\",\"message\":\"print_header_completed\",\"data\":{},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+    # #endregion
     
     if [ ! -f "$SNAPSHOT_TOOLS_DIR/restore.sh" ]; then
         print_error "restore.sh nicht gefunden!"
         return 1
     fi
+
+    ensure_executable "$SNAPSHOT_TOOLS_DIR/restore.sh" || {
+        print_error "Keine Berechtigung für restore.sh"
+        return 1
+    }
     
     if [ ! -d "$SNAPSHOT_DIR" ] || [ ! -f "$SNAPSHOT_DIR/database.sql.gz" ]; then
         print_error "Snapshot nicht gefunden!"
@@ -77,9 +100,7 @@ restore_snapshot() {
     fi
     
     print_warning "Achtung: Alle aktuellen Daten werden überschrieben!"
-    read -p "$(echo -e "${YELLOW}Fortfahren?${NC} [y/N]: ")" confirm
-    
-    if [ "${confirm:-n}" != "y" ]; then
+    if ! ask_yes_no "Fortfahren?" "N"; then
         print_info "Abgebrochen"
         return 0
     fi
@@ -144,9 +165,7 @@ delete_snapshot() {
     fi
     
     print_warning "Achtung: Der Snapshot wird unwiderruflich gelöscht!"
-    read -p "$(echo -e "${YELLOW}Wirklich löschen?${NC} [y/N]: ")" confirm
-    
-    if [ "${confirm:-n}" != "y" ]; then
+    if ! ask_yes_no "Wirklich löschen?" "N"; then
         print_info "Abgebrochen"
         return 0
     fi
@@ -201,7 +220,13 @@ check_snapshot_status() {
 
 # Funktion: Menü
 show_menu() {
+    # #region agent log
+    echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:203\",\"message\":\"show_menu_called\",\"data\":{},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"C\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+    # #endregion
     print_header
+    # #region agent log
+    echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:205\",\"message\":\"show_menu_header_completed\",\"data\":{},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"C\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+    # #endregion
     
     echo -e "${GREEN}Verfügbare Optionen:${NC}"
     echo ""
@@ -223,14 +248,29 @@ if [ "$1" = "create" ]; then
 fi
 
 while true; do
+    # #region agent log
+    echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:225\",\"message\":\"menu_loop_iteration\",\"data\":{},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"D\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+    # #endregion
     show_menu
+    # #region agent log
+    echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:228\",\"message\":\"show_menu_completed\",\"data\":{},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"D\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+    # #endregion
     read -p "$(echo -e "${YELLOW}Option wählen${NC}: ")" choice
+    # #region agent log
+    echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:231\",\"message\":\"choice_read\",\"data\":{\"choice\":\"$choice\"},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"D\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+    # #endregion
     
     case "$choice" in
         1)
+            # #region agent log
+            echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:232\",\"message\":\"choice_1_selected\",\"data\":{},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"D\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+            # #endregion
             create_snapshot
             ;;
         2)
+            # #region agent log
+            echo "{\"timestamp\":$(date +%s),\"location\":\"snapshot-manager.sh:237\",\"message\":\"choice_2_selected\",\"data\":{},\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"D\"}" >> /home/benny/Dokumente/woltlab-development/basis-plugin/.cursor/debug.log 2>/dev/null || true
+            # #endregion
             restore_snapshot
             ;;
         3)

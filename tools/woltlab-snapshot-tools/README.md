@@ -55,7 +55,7 @@ cd /home/benny/Dokumente/woltlab-development/tools/woltlab-snapshot-tools
 1. ✅ Public-Ordner wiederhergestellt (7420 Dateien)
 2. ✅ Datenbank wiederhergestellt (161 Tabellen)
 3. ✅ Caches geleert
-4. ✅ HeidiSQL konfiguriert & gestartet
+4. ✅ phpMyAdmin-Infos angezeigt
 5. ✅ Firefox mit ACP geöffnet
 
 **Ergebnis:**
@@ -109,15 +109,15 @@ cd ../woltlab-snapshot-tools
 | **Snapshot erstellen** | ~2 Min | Einmalig (inkl. manuelle Installation) |
 | **Restore ausführen** | **~8 Sek** | 7420 Dateien + 161 Tabellen |
 | DDEV Start | ~3 Sek | Falls noch nicht läuft |
-| HeidiSQL Config | <1 Sek | Passwort-Kodierung automatisch |
+| phpMyAdmin Zugriff | <1 Sek | URL + Zugangsdaten anzeigen |
 
 ## 🔧 Technische Details
 
-### HeidiSQL Automatik
-- Passwort `db` wird als Hex-Shift kodiert (z.B. `716FD`)
-- Wird in `~/.config/heidisql/settings.json` gespeichert
-- `LoginPrompt: false` → Keine Passwort-Abfrage
-- MySQL-Port wird dynamisch erkannt
+### phpMyAdmin Zugriff
+- URL: `https://woltlab.ddev.site/phpmyadmin`
+- Benutzer: `db`
+- Passwort: `db`
+- Datenbank: `db`
 
 ### DDEV Integration
 - Nutzt `ddev describe -j` für Port-Erkennung
@@ -126,11 +126,8 @@ cd ../woltlab-snapshot-tools
 
 ## ❓ Häufige Fragen
 
-### "HeidiSQL fragt nach Passwort"
-**Beim ersten Mal:**
-1. Passwort `db` eingeben
-2. ✅ "Passwort speichern" aktivieren
-3. Beim nächsten Restore wird es automatisch genutzt
+### "phpMyAdmin Login"
+- Verwende die DDEV-Standardzugangsdaten (`db` / `db`)
 
 ### "Snapshot nicht gefunden"
 Erst `./snapshot.sh` ausführen!
@@ -147,8 +144,8 @@ cd ../woltlab-dev && ddev logs
 # WoltLab-Logs
 ls -la ../woltlab-dev/public/log/
 
-# HeidiSQL-Config
-cat ~/.config/heidisql/settings.json | jq
+# phpMyAdmin
+echo "https://woltlab.ddev.site/phpmyadmin"
 ```
 
 ## 🎉 Fertig!

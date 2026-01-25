@@ -35,6 +35,22 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Funktion: Stellt sicher, dass ein Script ausführbar ist
+ensure_executable() {
+    local script_path="$1"
+    if [ -z "$script_path" ]; then
+        return 1
+    fi
+    if [ -f "$script_path" ] && [ ! -x "$script_path" ]; then
+        chmod +x "$script_path" 2>/dev/null || {
+            print_warning "Keine Berechtigung, um ${script_path} ausführbar zu machen."
+            return 1
+        }
+        print_info "Ausführungsrecht gesetzt: ${script_path}"
+    fi
+    return 0
+}
+
 # Funktion: grep mit Perl-Regex (plattformkompatibel)
 # Falls grep -P nicht verfügbar ist, verwende perl oder awk
 grep_perl() {
@@ -432,47 +448,51 @@ get_phpmyadmin_version() {
     debug_trace "get_phpmyadmin_version" "starting"
     local version=""
     
-    # Methode 1: Prüfe ob phpMyAdmin über DDEV verfügbar ist (auch wenn DDEV nicht läuft)
+    # Methode 1: Prüfe ob phpMyAdmin über DDEV verfügbar ist
+    # DDEV liefert phpMyAdmin standardmäßig als Container mit
     if command -v ddev &> /dev/null; then
         local tools_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
         local ddev_dir="$tools_dir/woltlab-dev"
-        if [ -d "$ddev_dir" ]; then
-            # Prüfe ob phpMyAdmin als DDEV Add-on installiert ist (auch wenn DDEV nicht läuft)
-            # phpMyAdmin wird als Add-on installiert und erstellt Dateien in .ddev/commands/web/
-            if [ -f "$ddev_dir/.ddev/commands/web/phpmyadmin" ] || [ -f "$ddev_dir/.ddev/commands/web/phpMyAdmin" ]; then
-                debug_debug "get_phpmyadmin_version" "found DDEV add-on (phpMyAdmin command exists)"
-                echo "available via DDEV"
-                return 0
-            fi
+        if [ -d "$ddev_dir" ] && [ -f "$ddev_dir/.ddev/config.yaml" ]; then
+            # DDEV-Projekt existiert → phpMyAdmin ist grundsätzlich verfügbar
+            debug_debug "get_phpmyadmin_version" "DDEV project found, phpMyAdmin available by default"
             
-            # Prüfe ob phpMyAdmin in .ddev/.ddev-addon.yaml oder ähnlichen Dateien konfiguriert ist
-            if [ -f "$ddev_dir/.ddev/.ddev-addon.yaml" ]; then
-                if grep -qi "phpmyadmin\|phpMyAdmin" "$ddev_dir/.ddev/.ddev-addon.yaml" 2>/dev/null; then
-                    debug_debug "get_phpmyadmin_version" "found in DDEV add-on config"
+            # Prüfe ob phpMyAdmin-Container läuft
+            if command -v docker &> /dev/null; then
+                local pma_container=$(docker ps --format "{{.Names}}" 2>/dev/null | grep -E "ddev-.*-phpmyadmin|ddev-woltlab-phpmyadmin" | head -1)
+                if [ -n "$pma_container" ]; then
+                    debug_debug "get_phpmyadmin_version" "phpMyAdmin container running: $pma_container"
                     echo "available via DDEV"
                     return 0
                 fi
             fi
             
-            # Prüfe ob DDEV läuft und phpMyAdmin erreichbar ist (als zusätzliche Bestätigung)
+            # Prüfe ob DDEV läuft und phpMyAdmin erreichbar ist
             if _is_ddev_running; then
-                # Versuche phpMyAdmin-Version über HTTP zu ermitteln
+                # Versuche phpMyAdmin-URL aus ddev describe zu extrahieren
+                cd "$ddev_dir" 2>/dev/null || true
                 local pma_url=$(ddev describe 2>/dev/null | grep -oE 'https?://[^/]+/phpmyadmin' | head -1)
+                cd - > /dev/null 2>&1 || true
                 if [ -n "$pma_url" ]; then
                     debug_debug "get_phpmyadmin_version" "found via DDEV (running): $pma_url"
                     echo "available via DDEV"
                     return 0
                 fi
-            fi
-            
-            # Prüfe ob phpMyAdmin in DDEV-Konfiguration aktiviert ist
-            if [ -f "$ddev_dir/.ddev/config.yaml" ]; then
-                if grep -qi "phpmyadmin\|phpMyAdmin" "$ddev_dir/.ddev/config.yaml" 2>/dev/null; then
-                    debug_debug "get_phpmyadmin_version" "configured in DDEV config.yaml"
-                    echo "available via DDEV"
-                    return 0
+                
+                # Fallback: Prüfe ob phpMyAdmin-Container existiert (auch wenn gestoppt)
+                if command -v docker &> /dev/null; then
+                    local pma_container_all=$(docker ps -a --format "{{.Names}}" 2>/dev/null | grep -E "ddev-.*-phpmyadmin|ddev-woltlab-phpmyadmin" | head -1)
+                    if [ -n "$pma_container_all" ]; then
+                        debug_debug "get_phpmyadmin_version" "phpMyAdmin container exists: $pma_container_all"
+                        echo "available via DDEV"
+                        return 0
+                    fi
                 fi
             fi
+            
+            # DDEV-Projekt existiert → phpMyAdmin ist verfügbar (wird beim Start automatisch gestartet)
+            echo "available via DDEV"
+            return 0
         fi
     fi
     
@@ -1459,6 +1479,25 @@ print_list() {
     fi
 }
 
+# Funktion: Einheitliche Ja/Nein-Abfrage (J/N)
+ask_yes_no() {
+    local question="$1"
+    local default="${2:-N}"
+    local answer=""
+
+    while true; do
+        read -r -p "$(echo -e "${YELLOW}${question}${NC} [J/N]: ")" answer
+        if [ -z "$answer" ]; then
+            answer="$default"
+        fi
+        case "$answer" in
+            j|J|y|Y) return 0 ;;
+            n|N) return 1 ;;
+            *) print_warning "Bitte J oder N eingeben." ;;
+        esac
+    done
+}
+
 # Funktion: Navigation anzeigen (Vor/Zurück)
 print_navigation() {
     local back_text="${1:-Zurück}"
@@ -1865,6 +1904,5 @@ safe_remove() {
     return 1
 }
 
-# DEPRECATED: HeidiSQL-Funktionen wurden entfernt - phpMyAdmin wird jetzt verwendet
 # Diese Funktionen werden nicht mehr benötigt, da phpMyAdmin über DDEV bereitgestellt wird
 # und keine separate Konfiguration benötigt.

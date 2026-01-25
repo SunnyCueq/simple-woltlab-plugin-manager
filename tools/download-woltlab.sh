@@ -160,8 +160,7 @@ main() {
     # Prüfe ob bereits vorhanden
     if [ -f "$WOLTLAB_CORE_DIR/WCFSetup.tar.gz" ]; then
         print_warning "WCFSetup.tar.gz existiert bereits"
-        read -p "$(echo -e "${YELLOW}Neu herunterladen?${NC} [y/N]: ")" redownload
-        if [ "${redownload:-n}" != "y" ]; then
+        if ! ask_yes_no "Neu herunterladen?" "N"; then
             print_info "Abgebrochen"
             exit 0
         fi

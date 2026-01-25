@@ -98,9 +98,7 @@ if [ "$volume_exists" = true ]; then
 fi
 echo "   4. Dockge wird installiert"
 echo ""
-read -p "Fortfahren? (j/N): " confirm
-
-if [[ ! "$confirm" =~ ^[Jj]$ ]]; then
+if ! ask_yes_no "Fortfahren?" "N"; then
     print_info "Migration abgebrochen"
     exit 0
 fi

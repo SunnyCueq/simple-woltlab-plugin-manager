@@ -31,7 +31,23 @@ else
         echo -e "${BLUE}==========================================${NC}"
         echo ""
     }
+    ensure_executable() {
+        local script_path="$1"
+        if [ -f "$script_path" ] && [ ! -x "$script_path" ]; then
+            chmod +x "$script_path" 2>/dev/null || return 1
+        fi
+    }
 fi
+
+run_tool_script() {
+    local script_path="$1"
+    shift
+    ensure_executable "$script_path" || {
+        print_error "Script nicht ausführbar: $script_path"
+        return 1
+    }
+    "$script_path" "$@"
+}
 
 print_menu() {
     # Zeige System-Übersicht
@@ -137,7 +153,7 @@ print_menu() {
 run_build() {
     echo -e "${YELLOW}${ARROW} Starte Build.sh...${NC}"
     echo ""
-    "$TOOLS_DIR/build.sh" "$@"
+    run_tool_script "$TOOLS_DIR/build.sh" "$@"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -145,7 +161,7 @@ run_build() {
 run_gitpush() {
     echo -e "${YELLOW}${ARROW} Starte Gitpush.sh...${NC}"
     echo ""
-    "$TOOLS_DIR/gitpush.sh" "$@"
+    run_tool_script "$TOOLS_DIR/gitpush.sh" "$@"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -153,7 +169,7 @@ run_gitpush() {
 run_start_ddev() {
     echo -e "${YELLOW}${ARROW} Starte DDEV...${NC}"
     echo ""
-    "$TOOLS_DIR/start-ddev.sh" "$@"
+    run_tool_script "$TOOLS_DIR/start-ddev.sh" "$@"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -161,7 +177,7 @@ run_start_ddev() {
 run_typescript() {
     echo -e "${YELLOW}${ARROW} Starte TypeScript.sh...${NC}"
     echo ""
-    "$TOOLS_DIR/typescript.sh" "$@"
+    run_tool_script "$TOOLS_DIR/typescript.sh" "$@"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -169,7 +185,7 @@ run_typescript() {
 run_restore_snapshot() {
     echo -e "${YELLOW}${ARROW} Stelle Snapshot wieder her...${NC}"
     echo ""
-    "$TOOLS_DIR/restore-snapshot.sh"
+    run_tool_script "$TOOLS_DIR/restore-snapshot.sh"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -177,7 +193,7 @@ run_restore_snapshot() {
 run_setup() {
     echo -e "${YELLOW}${ARROW} Starte Setup...${NC}"
     echo ""
-    "$TOOLS_DIR/setup.sh"
+    run_tool_script "$TOOLS_DIR/setup.sh"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -185,7 +201,7 @@ run_setup() {
 run_download_woltlab() {
     echo -e "${YELLOW}${ARROW} Lade WoltLab Core herunter...${NC}"
     echo ""
-    "$TOOLS_DIR/download-woltlab.sh"
+    run_tool_script "$TOOLS_DIR/download-woltlab.sh"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -193,7 +209,7 @@ run_download_woltlab() {
 run_snapshot_manager() {
     echo -e "${YELLOW}${ARROW} Öffne Snapshot Manager...${NC}"
     echo ""
-    "$TOOLS_DIR/snapshot-manager.sh"
+    run_tool_script "$TOOLS_DIR/snapshot-manager.sh"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -201,7 +217,7 @@ run_snapshot_manager() {
 run_credentials() {
     echo -e "${YELLOW}${ARROW} Öffne Credentials Manager...${NC}"
     echo ""
-    "$TOOLS_DIR/credentials.sh"
+    run_tool_script "$TOOLS_DIR/credentials.sh"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -209,7 +225,7 @@ run_credentials() {
 run_dockge() {
     echo -e "${YELLOW}${ARROW} Öffne Dockge...${NC}"
     echo ""
-    "$TOOLS_DIR/dockge.sh" "$@"
+    run_tool_script "$TOOLS_DIR/dockge.sh" "$@"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -217,7 +233,7 @@ run_dockge() {
 run_help() {
     echo -e "${YELLOW}${ARROW} Zeige Dokumentation...${NC}"
     echo ""
-    "$TOOLS_DIR/help.sh"
+    run_tool_script "$TOOLS_DIR/help.sh"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -225,7 +241,7 @@ run_help() {
 run_validate() {
     echo -e "${YELLOW}${ARROW} Starte Plugin Validierung...${NC}"
     echo ""
-    "$TOOLS_DIR/validate-plugin.sh" "$@"
+    run_tool_script "$TOOLS_DIR/validate-plugin.sh" "$@"
     echo ""
     read -p "Drücke ENTER um fortzufahren..."
 }
@@ -276,10 +292,7 @@ while true; do
             version_type=${version_type:-patch}
             
             echo ""
-            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
-            echo ""
-            read -p "Fortfahren? [j]: " continue_choice
-            if [ "${continue_choice:-j}" = "0" ]; then
+            if ! ask_yes_no "Fortfahren?" "J"; then
                 continue
             fi
             
@@ -321,10 +334,7 @@ while true; do
             commit_msg=${commit_msg:-}
             
             echo ""
-            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
-            echo ""
-            read -p "Fortfahren? [j]: " continue_choice
-            if [ "${continue_choice:-j}" = "0" ]; then
+            if ! ask_yes_no "Fortfahren?" "J"; then
                 continue
             fi
             
@@ -433,16 +443,8 @@ while true; do
             echo -e "${YELLOW}${WARNING} Warnung:${NC} Dies wird die komplette WoltLab-Installation"
             echo -e "         aus dem Snapshot wiederherstellen!"
             echo ""
-            echo -e "${YELLOW}Optionen:${NC}"
-            echo -e "  ${CYAN}•${NC} j/J → Fortfahren und Snapshot wiederherstellen"
-            echo -e "  ${CYAN}•${NC} Leer lassen → Abbrechen"
             echo ""
-            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
-            echo ""
-            read -p "Fortfahren? [N]: " confirm
-            if [ "$confirm" = "0" ]; then
-                continue
-            elif [[ "$confirm" =~ ^[Jj]$ ]]; then
+            if ask_yes_no "Snapshot wiederherstellen?" "N"; then
                 run_restore_snapshot
             else
                 echo -e "${YELLOW}Abgebrochen.${NC}"
@@ -560,10 +562,7 @@ while true; do
             read -p "Welches Plugin soll validiert werden? [aktuelles Verzeichnis]: " validate_target
             
             echo ""
-            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
-            echo ""
-            read -p "Fortfahren? [j]: " continue_choice
-            if [ "${continue_choice:-j}" = "0" ]; then
+            if ! ask_yes_no "Fortfahren?" "J"; then
                 continue
             fi
             

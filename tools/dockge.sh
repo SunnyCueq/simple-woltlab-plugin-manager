@@ -334,8 +334,7 @@ case "$COMMAND" in
     remove)
         print_section "Dockge - Container Management" "Hauptmenü" "Dockge"
         print_warning "Dies wird den Dockge Container entfernen!"
-        read -p "Fortfahren? (j/N): " confirm
-        if [[ "$confirm" =~ ^[Jj]$ ]]; then
+        if ask_yes_no "Fortfahren?" "N"; then
             dockge_remove
         else
             print_info "Abgebrochen"

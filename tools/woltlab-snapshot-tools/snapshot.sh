@@ -8,7 +8,7 @@ MAIN_DIR="$(dirname "$(dirname "$TOOLS_DIR")")"
 SNAPSHOT_DIR="$TOOLS_DIR/../woltlab-snapshot"
 PUBLIC_DIR="$TOOLS_DIR/../woltlab-dev/public"
 ENV_FILE="$TOOLS_DIR/../.env"
-COMMON_SH="$TOOLS_DIR/../../common.sh"
+COMMON_SH="$TOOLS_DIR/../common.sh"
 
 # Lade gemeinsame Funktionen falls vorhanden
 if [ -f "$COMMON_SH" ]; then
@@ -36,10 +36,10 @@ else
         echo ""
     }
     
-    print_success() { print_success "$1${NC}"; }
+    print_success() { echo -e "${GREEN}✓ $1${NC}"; }
     print_error() { echo -e "${RED}✗ $1${NC}"; }
-    print_warning() { print_warning "$1${NC}"; }
-    print_info() { print_info "$1${NC}"; }
+    print_warning() { echo -e "${YELLOW}⚠ $1${NC}"; }
+    print_info() { echo -e "${YELLOW}ℹ $1${NC}"; }
 fi
 
 # Lade .env Datei falls vorhanden

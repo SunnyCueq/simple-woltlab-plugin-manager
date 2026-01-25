@@ -55,29 +55,29 @@ INIT_GIT=""
 CREATE_SNAPSHOT=""
 ERROR_HANDLING="ask"
 
-# Funktion: Frage mit Standard-Wert
+# Funktion: Frage mit Standard-Wert (J/N)
 ask_yes_no() {
     local prompt="$1"
     local default="${2:-y}"
     local answer
-    
+
     if [ "$MODE" = "auto" ]; then
         echo "$default"
         return
     fi
-    
+
     while true; do
         if [ "$default" = "y" ]; then
-            read -p "$(echo -e "${YELLOW}$prompt${NC} [Y/n]: ")" answer
+            read -p "$(echo -e "${YELLOW}$prompt${NC} [J/n]: ")" answer
         else
-            read -p "$(echo -e "${YELLOW}$prompt${NC} [y/N]: ")" answer
+            read -p "$(echo -e "${YELLOW}$prompt${NC} [j/N]: ")" answer
         fi
-        
+
         answer="${answer:-$default}"
         case "$answer" in
-            [Yy]* ) echo "y"; return;;
+            [JjYy]* ) echo "y"; return;;
             [Nn]* ) echo "n"; return;;
-            * ) echo -e "${RED}Bitte Y oder N eingeben${NC}";;
+            * ) echo -e "${RED}Bitte J oder N eingeben${NC}";;
         esac
     done
 }

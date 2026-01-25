@@ -100,8 +100,7 @@ create_env() {
     
     if [ -f "$ENV_FILE" ]; then
         print_warning ".env Datei existiert bereits"
-        read -p "$(echo -e "${YELLOW}Überschreiben?${NC} [y/N]: ")" overwrite
-        if [ "${overwrite:-n}" != "y" ]; then
+        if ! ask_yes_no "Überschreiben?" "N"; then
             print_info "Abgebrochen"
             return 0
         fi
@@ -117,9 +116,7 @@ create_env() {
     
     echo ""
     print_info "Möchtest du sichere Passwörter generieren?"
-    read -p "$(echo -e "${YELLOW}Generieren?${NC} [y/N]: ")" generate
-    
-    if [ "${generate:-n}" = "y" ]; then
+    if ask_yes_no "Generieren?" "N"; then
         local db_password=$(openssl rand -base64 12 | tr -d "=+/" | cut -c1-16)
         local admin_password=$(openssl rand -base64 12 | tr -d "=+/" | cut -c1-16)
         

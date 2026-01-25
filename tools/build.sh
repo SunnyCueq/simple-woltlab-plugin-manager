@@ -349,26 +349,58 @@ if ! grep -qE '<instruction[^>]*type="file"[^>]*application\s*=\s*"wcf"[^>]*>fil
     VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
 fi
 
-# 2. Pruefe kritische JavaScript-Dateien
-CRITICAL_JS_FILES=(
-    "js/Shrinkr/Acp/Ui/Statistics/TimeSeriesChart.js"
-    "js/3rdParty/d3/d3.js"
-)
+# 2. DYNAMISCHE VALIDIERUNG: Pruefe alle TypeScript -> JavaScript Dateien
+print_info "Pruefe TypeScript -> JavaScript Kompilierung..."
+TS_COUNT=0
+JS_MISSING=0
+MINJS_MISSING=0
+MISSING_FILES=()
 
-for js_file in "${CRITICAL_JS_FILES[@]}"; do
-    if ! tar -tf files_wcf.tar 2>/dev/null | grep -q "^${js_file}$"; then
-        log_error_with_context "Kritische Datei fehlt in files_wcf.tar: ${js_file}" "Validierung fehlgeschlagen"
+if [ -d "temp_edit/ts" ]; then
+    while IFS= read -r -d '' ts_file; do
+        # Überspringe .d.ts Dateien (TypeScript Definition Files)
+        if [[ "$ts_file" == *.d.ts ]]; then
+            continue
+        fi
+        
+        TS_COUNT=$((TS_COUNT + 1))
+        # Konvertiere .ts Pfad zu .js Pfad (temp_edit/ts/... -> temp_edit/js/...)
+        js_file="${ts_file/\/ts\//\/js\/}"
+        js_file="${js_file%.ts}.js"
+        minjs_file="${js_file%.js}.min.js"
+        
+        # Prüfe ob .js existiert
+        if [ ! -f "$js_file" ]; then
+            print_error "JavaScript fehlt: $js_file (aus $(basename $ts_file))"
+            MISSING_FILES+=("$js_file")
+            JS_MISSING=$((JS_MISSING + 1))
+        fi
+        
+        # Prüfe ob .min.js existiert
+        if [ ! -f "$minjs_file" ]; then
+            print_error "Minified JavaScript fehlt: $minjs_file"
+            MISSING_FILES+=("$minjs_file")
+            MINJS_MISSING=$((MINJS_MISSING + 1))
+        fi
+    done < <(find temp_edit/ts -type f -name "*.ts" -print0)
+    
+    if [ $JS_MISSING -gt 0 ] || [ $MINJS_MISSING -gt 0 ]; then
+        echo ""
+        log_error_with_context "$JS_MISSING .js und $MINJS_MISSING .min.js Dateien fehlen!" "TypeScript-Kompilierung unvollständig"
+        print_error "Fehlende Dateien:"
+        for missing in "${MISSING_FILES[@]}"; do
+            echo "  - $missing"
+        done
+        print_error ""
+        print_error "Führe 'bash tools/typescript.sh' aus, um die fehlenden Dateien zu erstellen"
         VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
     else
-        print_success "${js_file} vorhanden"
+        print_success "Alle $TS_COUNT TypeScript-Dateien korrekt kompiliert (.js und .min.js vorhanden)"
     fi
-done
-
-# 3. Pruefe ob d3.min.js (falsch) vorhanden ist statt d3.js (korrekt)
-if tar -tf files_wcf.tar 2>/dev/null | grep -q "js/3rdParty/d3/d3\.min\.js$"; then
-    log_error_with_context "d3.min.js gefunden [falsch]! Sollte d3.js sein [ohne .min]" "Woltlab fuegt automatisch .min.js hinzu, Dateiname darf kein .min enthalten"
-    VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
 fi
+
+# 3. d3.js wird nicht mehr verwendet (ersetzt durch flot.js)
+# Validierung entfernt, da d3.js nicht mehr benötigt wird
 
 
 # 6. Pruefe Template-Referenzen: Finde alle {js application='shrinkr' file='...'} Referenzen
