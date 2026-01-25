@@ -23,59 +23,26 @@ set -e
 TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MAIN_DIR="$(dirname "$TOOLS_DIR")"
 
-# Lade gemeinsame Funktionen
-if [ -f "$TOOLS_DIR/common.sh" ]; then
-    source "$TOOLS_DIR/common.sh"
-else
-    # Fallback
-    RED='\033[0;31m'
-    GREEN='\033[0;32m'
-    YELLOW='\033[1;33m'
-    BLUE='\033[0;34m'
-    CYAN='\033[0;36m'
-    NC='\033[0m'
-    
-    get_plugin_version() {
-        local plugin_dir="$1"
-        if [ -f "$plugin_dir/package.xml" ]; then
-            grep -oP '<version>\K[^<]+' "$plugin_dir/package.xml" 2>/dev/null || echo "unknown"
-        else
-            echo "unknown"
-        fi
-    }
-    
-    find_plugin_directories() {
-        local main_dir="$1"
-        local plugins=()
-        for dir in "${main_dir}"/*; do
-            if [ -d "$dir" ] && [ -f "$dir/package.xml" ]; then
-                plugins+=("$(basename "$dir")")
-            fi
-        done
-        printf '%s\n' "${plugins[@]}"
-    }
-    
-    print_section() {
-        local title="$1"
-        shift
-        local breadcrumbs=("$@")
-        if [ ${#breadcrumbs[@]} -gt 0 ]; then
-            echo -e "${BLUE}Navigation:${NC} ${CYAN}${breadcrumbs[*]}${NC}"
-            echo ""
-        fi
-        echo -e "${CYAN}==========================================${NC}"
-        echo -e "${CYAN}${title}${NC}"
-        echo -e "${CYAN}==========================================${NC}"
-        echo ""
-    }
-    
-    print_success() { echo -e "${GREEN}✓ $1${NC}"; }
-    print_error() { echo -e "${RED}✗ $1${NC}"; }
-    print_warning() { echo -e "${YELLOW}⚠ $1${NC}"; }
-    print_info() { echo -e "${CYAN}ℹ $1${NC}"; }
+# Lade gemeinsame Funktionen (erforderlich)
+if [ ! -f "$TOOLS_DIR/common.sh" ]; then
+    echo "Fehler: common.sh nicht gefunden in $TOOLS_DIR" >&2
+    exit 1
 fi
+source "$TOOLS_DIR/common.sh"
 
 cd "${MAIN_DIR}"
+
+# Hilfsfunktion: Normalisiere Plugin-Pfad (prüft ob bereits vollständig)
+normalize_plugin_path() {
+    local plugin_path="$1"
+    if [[ "$plugin_path" =~ ^/ ]]; then
+        # Bereits vollständiger Pfad
+        echo "$plugin_path"
+    else
+        # Relativer Pfad - füge MAIN_DIR hinzu
+        echo "$MAIN_DIR/$plugin_path"
+    fi
+}
 
 # Finde alle Plugin-Verzeichnisse
 PLUGIN_DIRS=($(find_plugin_directories "$MAIN_DIR"))
@@ -110,8 +77,9 @@ print_header "Git Push - Multi-Plugin"
 if [ "$PLUGIN_COUNT" -gt 0 ]; then
     print_list "Gefundene Plugins (${PLUGIN_COUNT})"
     for plugin_dir in "${PLUGIN_DIRS[@]}"; do
-        version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-        name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+        plugin_path=$(normalize_plugin_path "$plugin_dir")
+        version=$(get_plugin_version "$plugin_path")
+        name=$(get_plugin_name "$plugin_path")
         print_list_item "•" "${name} ${YELLOW}(v${version})${NC}"
     done
     echo ""
@@ -225,7 +193,8 @@ if [ "$TARGET" = "auto" ]; then
 
     print_list "Erkannte Änderungen"
     for plugin_dir in "${CHANGED_PLUGINS[@]}"; do
-        name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+        plugin_path=$(normalize_plugin_path "$plugin_dir")
+        name=$(get_plugin_name "$plugin_path")
         print_list_item "•" "${name}"
     done
     [ "$CHANGED_ROOT" -gt 0 ] && print_list_item "•" "Root-Dateien (Skripte, README etc.)"
@@ -266,11 +235,24 @@ if [ -z "$(git status --porcelain)" ]; then
     exit 0
 fi
 
-# Verwende Version des ersten Plugins als Hauptversion (nur für Commit-Message)
-if [ ${#TO_PUSH_PLUGINS[@]} -gt 0 ]; then
-    VERSION=$(get_plugin_version "$MAIN_DIR/${TO_PUSH_PLUGINS[0]}")
-else
-    VERSION="unknown"
+# Verwende Version des ersten Plugins als Hauptversion (erforderlich)
+if [ ${#TO_PUSH_PLUGINS[@]} -eq 0 ]; then
+    print_error "Keine Plugins zum Pushen gefunden"
+    exit 1
+fi
+
+# Version aus package.xml lesen - diese MUSS immer vorhanden sein
+# package.xml ist Teil des Plugin-Quellcodes und wird niemals gelöscht
+PLUGIN_PATH=$(normalize_plugin_path "${TO_PUSH_PLUGINS[0]}")
+VERSION=$(get_plugin_version "$PLUGIN_PATH")
+if [ -z "$VERSION" ] || [ "$VERSION" = "" ] || [ "$VERSION" = "unknown" ]; then
+    print_error "KRITISCHER FEHLER: Version konnte nicht aus ${TO_PUSH_PLUGINS[0]}/package.xml gelesen werden"
+    print_error "Gelesene Version: '${VERSION}'"
+    print_error "Pfad: $PLUGIN_PATH/package.xml"
+    print_error ""
+    print_error "Die package.xml MUSS immer vorhanden sein, da sie Teil des Plugin-Quellcodes ist."
+    print_error "Wenn package.xml fehlt, ist das ein schwerwiegender Fehler im Workflow!"
+    exit 1
 fi
 DATE=$(date +%Y-%m-%d)
 
@@ -283,8 +265,9 @@ echo ""
 if [ -z "$COMMIT_MESSAGE" ]; then
     PLUGIN_VERSIONS=""
     for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-        version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-        name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+        plugin_path=$(normalize_plugin_path "$plugin_dir")
+        version=$(get_plugin_version "$plugin_path")
+        name=$(get_plugin_name "$plugin_path")
         PLUGIN_VERSIONS="${PLUGIN_VERSIONS}${name} v${version}, "
     done
     PLUGIN_VERSIONS="${PLUGIN_VERSIONS%, }"  # Entferne letztes Komma
@@ -331,13 +314,14 @@ fi
 LATEST_TAR=""
 if [ ${#TO_PUSH_PLUGINS[@]} -gt 0 ]; then
     for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
+        plugin_path=$(normalize_plugin_path "$plugin_dir")
         # Finde neuestes TAR-File für dieses Plugin (plattformkompatibel)
         if command_exists stat; then
             # GNU/Linux: Verwende find mit -printf (sortiert nach Modifikationszeit)
-            PLUGIN_TAR=$(find "${plugin_dir}" -maxdepth 1 -name "*.tar.gz" -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -n 1 | cut -d' ' -f2-)
+            PLUGIN_TAR=$(find "${plugin_path}" -maxdepth 1 -name "*.tar.gz" -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -n 1 | cut -d' ' -f2-)
         else
             # Fallback: Verwende ls -t (sortiert nach Modifikationszeit)
-            PLUGIN_TAR=$(ls -t "${plugin_dir}"/*.tar.gz 2>/dev/null | head -n 1)
+            PLUGIN_TAR=$(ls -t "${plugin_path}"/*.tar.gz 2>/dev/null | head -n 1)
         fi
         if [ -n "$PLUGIN_TAR" ] && [ -f "$PLUGIN_TAR" ]; then
             git add -f "$PLUGIN_TAR"  # -f um .gitignore zu überschreiben
@@ -412,8 +396,9 @@ else
     # Create annotated tag
     PLUGIN_INFO=""
     for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-        version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-        name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+        plugin_path=$(normalize_plugin_path "$plugin_dir")
+        version=$(get_plugin_version "$plugin_path")
+        name=$(get_plugin_name "$plugin_path")
         PLUGIN_INFO="${PLUGIN_INFO}${name} v${version}, "
     done
     PLUGIN_INFO="${PLUGIN_INFO%, }"
@@ -454,16 +439,18 @@ if command -v gh &> /dev/null; then
         if [ -z "$RELEASE_NOTES" ] || [ -z "$(echo "$RELEASE_NOTES" | tr -d '[:space:]')" ]; then
             RELEASE_NOTES="Version ${VERSION} - ${DATE}"$'\n\n'
             for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-                version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-                name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+                plugin_path=$(normalize_plugin_path "$plugin_dir")
+                version=$(get_plugin_version "$plugin_path")
+                name=$(get_plugin_name "$plugin_path")
                 RELEASE_NOTES="${RELEASE_NOTES}**${name}:** v${version}"$'\n'
             done
         fi
     else
         RELEASE_NOTES="Version ${VERSION} - ${DATE}"$'\n\n'
         for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-            version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-            name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+            plugin_path=$(normalize_plugin_path "$plugin_dir")
+            version=$(get_plugin_version "$plugin_path")
+            name=$(get_plugin_name "$plugin_path")
             RELEASE_NOTES="${RELEASE_NOTES}**${name}:** v${version}"$'\n'
         done
     fi
@@ -507,8 +494,9 @@ print_section "Git Push & Release abgeschlossen" "Hauptmenü" "Git"
 print_success "Git Push & Release abgeschlossen!"
 print_info "Version: ${VERSION}"
 for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
-    version=$(get_plugin_version "$MAIN_DIR/$plugin_dir")
-    name=$(get_plugin_name "$MAIN_DIR/$plugin_dir")
+    plugin_path=$(normalize_plugin_path "$plugin_dir")
+    version=$(get_plugin_version "$plugin_path")
+    name=$(get_plugin_name "$plugin_path")
     print_info "${name}: v${version}"
 done
 print_info "Tag: ${TAG_NAME}"

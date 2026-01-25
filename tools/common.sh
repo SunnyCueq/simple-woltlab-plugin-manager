@@ -1602,44 +1602,72 @@ find_plugin_directories() {
 get_plugin_version() {
     local plugin_dir="$1"
     local version=""
+    local package_xml=""
     
-    # Methode 1: Direkte package.xml
+    # package.xml MUSS existieren - das ist eine Grundvoraussetzung für WoltLab-Plugins
+    # Im basis-plugin (Arbeitsverzeichnis) ist package.xml IMMER vorhanden, da sie Teil des Quellcodes ist
+    # Beim Packen werden Dateien nur kopiert, nie gelöscht
     if [ -f "$plugin_dir/package.xml" ]; then
-        # Versuche verschiedene Patterns
-        version=$(grep -oP '<version>\K[^<]+' "$plugin_dir/package.xml" 2>/dev/null | head -1)
-        
-        # Fallback: Anderes Pattern
+        package_xml="$plugin_dir/package.xml"
+    elif [ -f "$plugin_dir/_extracted/package.xml" ]; then
+        package_xml="$plugin_dir/_extracted/package.xml"
+    else
+        # KRITISCHER FEHLER: package.xml fehlt - das darf NIE passieren!
+        # Wenn package.xml fehlt, ist das ein schwerwiegender Fehler im Workflow
+        echo "KRITISCHER FEHLER: package.xml nicht gefunden in $plugin_dir" >&2
+        echo "Jedes WoltLab-Plugin MUSS eine package.xml enthalten!" >&2
+        echo "Die package.xml ist Teil des Plugin-Quellcodes und wird niemals gelöscht." >&2
+        echo "Bitte überprüfe, ob das Plugin-Verzeichnis korrekt ist." >&2
+        echo "unknown"
+        return 1
+    fi
+    
+    # Wenn package.xml existiert, MUSS die Version gefunden werden
+    # Versuche verschiedene Methoden, um die Version zu extrahieren
+    
+    # Methode 1: xmllint (am zuverlässigsten, wenn verfügbar)
+    if command -v xmllint >/dev/null 2>&1; then
+        version=$(xmllint --xpath "//version/text()" "$package_xml" 2>/dev/null | tr -d '[:space:]')
+        # Fallback für Namespace-Problem
         if [ -z "$version" ] || [ "$version" = "" ]; then
-            version=$(grep -E '<version>' "$plugin_dir/package.xml" 2>/dev/null | sed 's/.*<version>\([^<]*\)<\/version>.*/\1/' | head -1)
-        fi
-        
-        # Fallback: sed-basiert
-        if [ -z "$version" ] || [ "$version" = "" ]; then
-            version=$(sed -n 's/.*<version>\([^<]*\)<\/version>.*/\1/p' "$plugin_dir/package.xml" 2>/dev/null | head -1)
+            version=$(xmllint --xpath "string(//*[local-name()='version'])" "$package_xml" 2>/dev/null | tr -d '[:space:]')
         fi
     fi
     
-    # Methode 2: _extracted/package.xml
+    # Methode 2: grep mit Perl-Regex (robust)
     if [ -z "$version" ] || [ "$version" = "" ]; then
-        if [ -f "$plugin_dir/_extracted/package.xml" ]; then
-            version=$(grep -oP '<version>\K[^<]+' "$plugin_dir/_extracted/package.xml" 2>/dev/null | head -1)
-            if [ -z "$version" ] || [ "$version" = "" ]; then
-                version=$(sed -n 's/.*<version>\([^<]*\)<\/version>.*/\1/p' "$plugin_dir/_extracted/package.xml" 2>/dev/null | head -1)
-            fi
+        version=$(grep -oP '<version>\K[^<]+' "$package_xml" 2>/dev/null | head -1 | tr -d '[:space:]')
+    fi
+    
+    # Methode 3: grep mit Extended-Regex
+    if [ -z "$version" ] || [ "$version" = "" ]; then
+        version=$(grep -E '<version>' "$package_xml" 2>/dev/null | sed 's/.*<version>\([^<]*\)<\/version>.*/\1/' | head -1 | tr -d '[:space:]')
+    fi
+    
+    # Methode 4: sed-basiert
+    if [ -z "$version" ] || [ "$version" = "" ]; then
+        version=$(sed -n 's/.*<version>\([^<]*\)<\/version>.*/\1/p' "$package_xml" 2>/dev/null | head -1 | tr -d '[:space:]')
+    fi
+    
+    # Methode 5: awk-basiert
+    if [ -z "$version" ] || [ "$version" = "" ]; then
+        version=$(awk -F'[<>]' '/<version>/{print $3; exit}' "$package_xml" 2>/dev/null | tr -d '[:space:]')
+    fi
+    
+    # Methode 6: Python (falls verfügbar)
+    if [ -z "$version" ] || [ "$version" = "" ]; then
+        if command -v python3 >/dev/null 2>&1; then
+            version=$(python3 -c "import xml.etree.ElementTree as ET; tree = ET.parse('$package_xml'); root = tree.getroot(); ns = {'w': root.tag.split('}')[0].strip('{') if '}' in root.tag else ''}; v = root.find('.//version', ns) or root.find('.//{*}version'); print(v.text.strip() if v is not None and v.text else '')" 2>/dev/null | tr -d '[:space:]')
         fi
     fi
     
-    # Fallback: Versuche aus Verzeichnisnamen zu extrahieren (z.B. plugin_v1.2.3)
+    # Wenn package.xml existiert, aber keine Version gefunden wurde: KRITISCHER FEHLER
     if [ -z "$version" ] || [ "$version" = "" ]; then
-        local dirname=$(basename "$plugin_dir")
-        if echo "$dirname" | grep -qE '_v?[0-9]+\.[0-9]+\.[0-9]+'; then
-            version=$(echo "$dirname" | grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+' | head -1 | sed 's/^v//')
-        fi
-    fi
-    
-    # Letzter Fallback
-    if [ -z "$version" ] || [ "$version" = "" ]; then
-        version="unknown"
+        echo "KRITISCHER FEHLER: Version konnte nicht aus $package_xml extrahiert werden" >&2
+        echo "Die package.xml existiert, aber enthält keine gültige <version>!" >&2
+        echo "Bitte überprüfe die package.xml-Datei manuell." >&2
+        echo "unknown"
+        return 1
     fi
     
     echo "$version"
