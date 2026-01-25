@@ -327,13 +327,13 @@ if ls CLAUDE*.md 1> /dev/null 2>&1; then
     git reset HEAD CLAUDE*.md 2>/dev/null || true
 fi
 
-# Finde und füge neuestes TAR-File hinzu
+# Finde und füge neuestes TAR-File hinzu (nur das aktuellste pro Plugin)
 LATEST_TAR=""
 if [ ${#TO_PUSH_PLUGINS[@]} -gt 0 ]; then
     for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
         # Finde neuestes TAR-File für dieses Plugin (plattformkompatibel)
         if command_exists stat; then
-            # GNU/Linux: Verwende find mit -printf
+            # GNU/Linux: Verwende find mit -printf (sortiert nach Modifikationszeit)
             PLUGIN_TAR=$(find "${plugin_dir}" -maxdepth 1 -name "*.tar.gz" -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -n 1 | cut -d' ' -f2-)
         else
             # Fallback: Verwende ls -t (sortiert nach Modifikationszeit)
@@ -341,10 +341,16 @@ if [ ${#TO_PUSH_PLUGINS[@]} -gt 0 ]; then
         fi
         if [ -n "$PLUGIN_TAR" ] && [ -f "$PLUGIN_TAR" ]; then
             git add -f "$PLUGIN_TAR"  # -f um .gitignore zu überschreiben
-            LATEST_TAR="$PLUGIN_TAR"
+            # Nur das neueste TAR-File behalten (basierend auf Modifikationszeit)
+            if [ -z "$LATEST_TAR" ] || [ "$PLUGIN_TAR" -nt "$LATEST_TAR" ]; then
+                LATEST_TAR="$PLUGIN_TAR"
+            fi
             print_success "TAR-File hinzugefügt: $(basename "$PLUGIN_TAR")"
         fi
     done
+    if [ -n "$LATEST_TAR" ]; then
+        print_info "Neuestes TAR-File für Release: $(basename "$LATEST_TAR")"
+    fi
 fi
 
 # Prüfe ob noch etwas zum Committen übrig ist
@@ -481,13 +487,13 @@ if command -v gh &> /dev/null; then
         fi
     fi
     
-    # Upload TAR-File to release
+    # Upload neuestes TAR-File to release (nur das aktuellste)
     if [ -n "$LATEST_TAR" ] && [ -f "$LATEST_TAR" ]; then
-        echo -e "${BLUE}  Lade TAR-File hoch...${NC}"
+        echo -e "${BLUE}  Lade neuestes TAR-File hoch...${NC}"
         if gh release upload "${TAG_NAME}" "$LATEST_TAR" --clobber 2>/dev/null; then
             echo -e "${GREEN}✓ TAR-File zum Release hochgeladen: $(basename "$LATEST_TAR")${NC}"
         else
-            echo -e "${YELLOW}⚠ TAR-File konnte nicht hochgeladen werden${NC}"
+            echo -e "${YELLOW}⚠ TAR-File konnte nicht hochgeladen werden: $(basename "$LATEST_TAR")${NC}"
         fi
     fi
 else
