@@ -116,14 +116,6 @@
 			<showorder>1</showorder>
 		</acpmenuitem>
 
-		<acpmenuitem name="shrinkr.acp.menu.link.statistics.list">
-			<controller>shrinkr\acp\page\ButtonClickListPage</controller>
-			<parent>shrinkr.acp.menu.link.menu</parent>
-			<options>shrinkr_active</options>
-			<permissions>admin.shrinkr.canManageButtonClicks</permissions>
-			<showorder>8</showorder>
-		</acpmenuitem>
-
 		<acpmenuitem name="shrinkr.acp.menu.link.settings">
 			<controller>shrinkr\acp\form\ShrinkrSettingsForm</controller>
 			<parent>shrinkr.acp.menu.link.menu</parent>

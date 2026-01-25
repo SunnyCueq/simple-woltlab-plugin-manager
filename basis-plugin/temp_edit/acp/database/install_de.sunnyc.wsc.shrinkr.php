@@ -52,6 +52,11 @@ return [
                 ->defaultValue(''),
             DefaultFalseBooleanDatabaseTableColumn::create('isDemo')
                 ->defaultValue(0),
+            VarcharDatabaseTableColumn::create('passwordHash')
+                ->length(255)
+                ->defaultValue(null),
+            DefaultFalseBooleanDatabaseTableColumn::create('sessionStorageEnabled')
+                ->defaultValue(0),
         ])
         ->indices([
             DatabaseTablePrimaryIndex::create()
@@ -216,85 +221,6 @@ return [
             DatabaseTableIndex::create('identifier')
                 ->columns(['identifier'])
                 ->type(DatabaseTableIndex::UNIQUE_TYPE),
-        ]),
-
-    // Button click tracking table
-    DatabaseTable::create('shrinkr1_button_click')
-        ->columns([
-            ObjectIdDatabaseTableColumn::create('clickID'),
-            IntDatabaseTableColumn::create('linkID')
-                ->length(10)
-                ->notNull(),
-            VarcharDatabaseTableColumn::create('buttonType')
-                ->length(50)
-                ->notNull(),
-            IntDatabaseTableColumn::create('featuredLinkID')
-                ->length(10),
-            IntDatabaseTableColumn::create('clickTime')
-                ->length(10)
-                ->notNull(),
-            IntDatabaseTableColumn::create('userID')
-                ->length(10),
-            VarcharDatabaseTableColumn::create('sessionID')
-                ->length(255),
-        ])
-        ->indices([
-            DatabaseTablePrimaryIndex::create()
-                ->columns(['clickID']),
-            DatabaseTableIndex::create('linkID')
-                ->columns(['linkID']),
-            DatabaseTableIndex::create('buttonType')
-                ->columns(['buttonType']),
-            DatabaseTableIndex::create('clickTime')
-                ->columns(['clickTime']),
-        ]),
-
-    // Visit tracking table
-    DatabaseTable::create('shrinkr1_visit')
-        ->columns([
-            ObjectIdDatabaseTableColumn::create('visitID'),
-            IntDatabaseTableColumn::create('linkID')
-                ->length(10)
-                ->notNull(),
-            IntDatabaseTableColumn::create('visitTime')
-                ->length(10)
-                ->notNull(),
-            VarcharDatabaseTableColumn::create('referrer')
-                ->length(512),
-            VarcharDatabaseTableColumn::create('country')
-                ->length(2),
-            VarcharDatabaseTableColumn::create('city')
-                ->length(100),
-            VarcharDatabaseTableColumn::create('deviceType')
-                ->length(20),
-            VarcharDatabaseTableColumn::create('browser')
-                ->length(50),
-            VarcharDatabaseTableColumn::create('browserVersion')
-                ->length(20),
-            VarcharDatabaseTableColumn::create('os')
-                ->length(50),
-            VarcharDatabaseTableColumn::create('ipAddress')
-                ->length(45),
-            IntDatabaseTableColumn::create('userID')
-                ->length(10),
-            VarcharDatabaseTableColumn::create('sessionID')
-                ->length(255),
-        ])
-        ->indices([
-            DatabaseTablePrimaryIndex::create()
-                ->columns(['visitID']),
-            DatabaseTableIndex::create('linkID')
-                ->columns(['linkID']),
-            DatabaseTableIndex::create('visitTime')
-                ->columns(['visitTime']),
-            DatabaseTableIndex::create('country')
-                ->columns(['country']),
-            DatabaseTableIndex::create('deviceType')
-                ->columns(['deviceType']),
-            DatabaseTableIndex::create('browser')
-                ->columns(['browser']),
-            DatabaseTableIndex::create('os')
-                ->columns(['os']),
         ]),
 
     // Guest reaction table

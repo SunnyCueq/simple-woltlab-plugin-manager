@@ -5,6 +5,8 @@ namespace shrinkr\acp\page;
 use shrinkr\data\special\SpecialList;
 use shrinkr\data\shrinkrlink\ShrinkrLinkList;
 use shrinkr\util\ShrinkrFeaturedLinksUtil;
+use shrinkr\util\ShrinkrUtil;
+use wcf\data\option\Option;
 use wcf\page\SortablePage;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
@@ -87,6 +89,13 @@ class ShrinkrLinkListPage extends SortablePage
     public $sortOrderCustom;
 
     /**
+     * Filter for password protected links.
+     *
+     * @var    bool
+     */
+    public $passwordProtected = false;
+
+    /**
      * @inheritDoc
      */
     public function readParameters()
@@ -101,6 +110,13 @@ class ShrinkrLinkListPage extends SortablePage
         // Read title search parameter
         if (isset($_REQUEST['qTitle']) && is_string($_REQUEST['qTitle'])) {
             $this->qTitle = StringUtil::trim($_REQUEST['qTitle']);
+        }
+
+        // Read password protected filter
+        if (isset($_REQUEST['passwordProtected']) && $_REQUEST['passwordProtected'] == '1') {
+            $this->passwordProtected = true;
+            // Set active menu item to password filter menu item
+            $this->activeMenuItem = 'shrinkr.acp.menu.link.link.password';
         }
 
         // Handle sorting for featuredLinks and special (these are not database fields)
@@ -138,6 +154,11 @@ class ShrinkrLinkListPage extends SortablePage
                 '%' . $this->qTitle . '%',
                 '%' . $this->qTitle . '%'
             ]);
+        }
+
+        // Add password protected filter
+        if ($this->passwordProtected) {
+            $this->objectList->getConditionBuilder()->add('passwordHash IS NOT NULL');
         }
     }
 
@@ -336,57 +357,6 @@ class ShrinkrLinkListPage extends SortablePage
                     $linksArray[$object->linkID]['plainLinks'] = $parsedLink;
                 }
             }
-
-            // Step 6: Load button click counts for all URLs
-            $buttonClicksArray = [];
-            foreach ($linkIDs as $linkID) {
-                $buttonClicksArray[$linkID] = [
-                    'total' => 0,
-                    'forward' => 0,
-                    'featured_link' => 0,
-                    'custom' => 0,
-                ];
-            }
-            
-            if (count($linkIDs) === 1) {
-                $sql = "SELECT linkID, buttonType, COUNT(*) as count 
-                        FROM shrinkr1_button_click 
-                        WHERE linkID = ? 
-                        GROUP BY linkID, buttonType";
-                $statement = WCF::getDB()->prepareStatement($sql);
-                $statement->execute([$linkIDs[0]]);
-            } else {
-                $placeholders = str_repeat('?,', count($linkIDs) - 1) . '?';
-                $sql = "SELECT linkID, buttonType, COUNT(*) as count 
-                        FROM shrinkr1_button_click 
-                        WHERE linkID IN ({$placeholders}) 
-                        GROUP BY linkID, buttonType";
-                $statement = WCF::getDB()->prepareStatement($sql);
-                $statement->execute($linkIDs);
-            }
-            
-            while ($row = $statement->fetchArray()) {
-                $linkID = $row['linkID'];
-                $buttonType = $row['buttonType'];
-                $count = (int) $row['count'];
-                
-                if (!isset($buttonClicksArray[$linkID])) {
-                    $buttonClicksArray[$linkID] = [
-                        'total' => 0,
-                        'forward' => 0,
-                        'featured_link' => 0,
-                        'custom' => 0,
-                    ];
-                }
-                
-                if (isset($buttonClicksArray[$linkID][$buttonType])) {
-                    $buttonClicksArray[$linkID][$buttonType] = $count;
-                }
-                
-                $buttonClicksArray[$linkID]['total'] += $count;
-            }
-        } else {
-            $buttonClicksArray = [];
         }
 
         // Step 7: Sort objects if needed (featuredLinks or special)
@@ -427,13 +397,17 @@ class ShrinkrLinkListPage extends SortablePage
             $sortedObjects = $objects;
         }
         
+        // Get menu badge text
+        $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
+
         // Assign template variables
         WCF::getTPL()->assign([
             'q' => $this->q,
             'qTitle' => $this->qTitle,
+            'passwordProtected' => $this->passwordProtected,
             'linksArray' => $linksArray,
-            'buttonClicksArray' => $buttonClicksArray,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.link.list',
+            'menuBadgeText' => $menuBadgeText,
         ]);
         
         // Override objects in template if sorted

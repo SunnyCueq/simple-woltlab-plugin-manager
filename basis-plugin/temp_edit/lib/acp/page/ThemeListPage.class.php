@@ -3,6 +3,7 @@
 namespace shrinkr\acp\page;
 
 use shrinkr\data\theme\ThemeList;
+use shrinkr\util\ShrinkrUtil;
 use wcf\page\MultipleLinkPage;
 use wcf\system\WCF;
 
@@ -161,6 +162,9 @@ class ThemeListPage extends MultipleLinkPage
     {
         parent::assignVariables();
 
+        // Get menu badge text
+        $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
+
         WCF::getTPL()->assign([
             'title' => $this->title,
             'identifier' => $this->identifier,
@@ -168,6 +172,7 @@ class ThemeListPage extends MultipleLinkPage
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.theme.list',
+            'menuBadgeText' => $menuBadgeText,
         ]);
     }
 }

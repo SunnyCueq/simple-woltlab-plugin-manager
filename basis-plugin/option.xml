@@ -71,20 +71,13 @@
 				<options>shrinkr_active</options>
 			</category>
 
-			<!-- Tab 7: Erweitert (nur wenn Expertenmodus aktiviert) -->
-			<category name="shrinkr.advanced">
-				<parent>shrinkr</parent>
-				<showorder>100</showorder>
-				<options>shrinkr_expertmode_active</options>
-			</category>
-
-			<!-- Tab 8: GeoLite2 (nur wenn Expertenmodus aktiviert) -->
-			<category name="shrinkr.geolite2">
-				<parent>shrinkr</parent>
-				<showorder>110</showorder>
-				<options>shrinkr_expertmode_active</options>
-			</category>
-		</categories>
+		<!-- Tab 7: Erweitert (nur wenn Expertenmodus aktiviert) -->
+		<category name="shrinkr.advanced">
+			<parent>shrinkr</parent>
+			<showorder>100</showorder>
+			<options>shrinkr_expertmode_active</options>
+		</category>
+	</categories>
 
 		<options>
 			<!-- Tab 1: Allgemein -->
@@ -259,57 +252,21 @@ default:Standard:rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 25
 				<hidden>1</hidden>
 			</option>
 
-			<!-- Tab 7: Erweitert -->
-			<option name="shrinkr_pattern">
-				<categoryname>shrinkr.advanced</categoryname>
-				<options>shrinkr_expertmode_active</options>
-				<showorder>1</showorder>
-				<optiontype>text</optiontype>
-				<defaultvalue>[0-9a-z\-]{1,64}</defaultvalue>
-			</option>
-			<option name="shrinkr_external_url">
-				<categoryname>shrinkr.advanced</categoryname>
-				<options>shrinkr_expertmode_active</options>
-				<showorder>2</showorder>
-				<optiontype>URL</optiontype>
-				<defaultvalue></defaultvalue>
-			</option>
-
-			<!-- Tab 8: GeoLite2 -->
-			<option name="shrinkr_geolite2_database_provider">
-				<categoryname>shrinkr.geolite2</categoryname>
-				<options>shrinkr_expertmode_active</options>
-				<showorder>1</showorder>
-				<optiontype>radioButton</optiontype>
-				<defaultvalue>default</defaultvalue>
-				<selectoptions>default:wcf.shrinkr.geolite2.database_provider.default
-maxmind:wcf.shrinkr.geolite2.database_provider.maxmind
-local:wcf.shrinkr.geolite2.database_provider.local</selectoptions>
-				<enableoptions>maxmind:shrinkr_geolite2_database_maxmind_account_id,shrinkr_geolite2_database_maxmind_license_key,!shrinkr_geolite2_custom_database_path
-default:!shrinkr_geolite2_database_maxmind_account_id,!shrinkr_geolite2_database_maxmind_license_key,!shrinkr_geolite2_custom_database_path
-local:!shrinkr_geolite2_database_maxmind_account_id,!shrinkr_geolite2_database_maxmind_license_key,shrinkr_geolite2_custom_database_path</enableoptions>
-			</option>
-			<option name="shrinkr_geolite2_database_maxmind_account_id">
-				<categoryname>shrinkr.geolite2</categoryname>
-				<options>shrinkr_expertmode_active</options>
-				<showorder>2</showorder>
-				<optiontype>text</optiontype>
-				<defaultvalue></defaultvalue>
-			</option>
-			<option name="shrinkr_geolite2_database_maxmind_license_key">
-				<categoryname>shrinkr.geolite2</categoryname>
-				<options>shrinkr_expertmode_active</options>
-				<showorder>3</showorder>
-				<optiontype>text</optiontype>
-				<defaultvalue></defaultvalue>
-			</option>
-			<option name="shrinkr_geolite2_custom_database_path">
-				<categoryname>shrinkr.geolite2</categoryname>
-				<options>shrinkr_expertmode_active</options>
-				<showorder>4</showorder>
-				<optiontype>text</optiontype>
-				<defaultvalue></defaultvalue>
-			</option>
-		</options>
+		<!-- Tab 7: Erweitert -->
+		<option name="shrinkr_pattern">
+			<categoryname>shrinkr.advanced</categoryname>
+			<options>shrinkr_expertmode_active</options>
+			<showorder>1</showorder>
+			<optiontype>text</optiontype>
+			<defaultvalue>[0-9a-z\-]{1,64}</defaultvalue>
+		</option>
+		<option name="shrinkr_external_url">
+			<categoryname>shrinkr.advanced</categoryname>
+			<options>shrinkr_expertmode_active</options>
+			<showorder>2</showorder>
+			<optiontype>URL</optiontype>
+			<defaultvalue></defaultvalue>
+		</option>
+	</options>
 	</import>
 </data>

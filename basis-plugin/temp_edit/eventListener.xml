@@ -48,5 +48,19 @@
 			<listenerclassname>shrinkr\system\event\listener\ShrinkrLinkListPageReactionListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
+		<!--
+		    Event Listener: AcpHeaderAssignVariablesListener
+		    - Event-Klasse: wcf\page\AbstractPage
+		    - Event-Name: assignVariables
+		    - Listener-Klasse: shrinkr\system\event\listener\AcpHeaderAssignVariablesListener
+		    - Environment: admin (nur im ACP aktiv)
+		    - Zweck: Setzt menuBadgeText Template-Variable global für MenuBadge.js
+		-->
+		<eventlistener name="acpHeaderAssignVariables">
+			<eventclassname>wcf\page\AbstractPage</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>shrinkr\system\event\listener\AcpHeaderAssignVariablesListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
 	</import>
 </data>

@@ -1680,3 +1680,15 @@
 [2026-01-25 11:56:12.899] [print_section] [common.sh:print_section] title=Build abgeschlossen
 [2026-01-25 11:56:12.970] [print_section] [common.sh:print_section] title=Build abgeschlossen
 [2026-01-25 11:58:41.851] [print_header] [common.sh:print_header] title=Git Push - Multi-Plugin
+[2026-01-25 11:58:42.072] [INFO] [common.sh:debug_info] gitpush | excluded content of directory: basis-plugin
+[2026-01-25 11:58:42.100] [INFO] [common.sh:debug_info] gitpush | excluded content of directory: mein-plugin
+[2026-01-25 11:58:42.129] [INFO] [common.sh:debug_info] gitpush | excluded content of directory: plugins-integrieren
+[2026-01-25 11:58:42.193] [INFO] [common.sh:debug_info] gitpush | excluded content of directory: tools/woltlab-dev/public
+[2026-01-25 11:58:42.221] [INFO] [common.sh:debug_info] gitpush | excluded content of directory: woltlab-docs
+[2026-01-25 11:58:42.252] [INFO] [common.sh:debug_info] gitpush | excluded content of directory: woltlab-github
+[2026-01-25 11:58:45.845] [print_section] [common.sh:print_section] title=Git Push & Release abgeschlossen
+[2026-01-25 12:06:21.407] [print_header] [common.sh:print_header] title=Git Push - Multi-Plugin
+[2026-01-25 12:06:21.658] [INFO] [common.sh:debug_info] gitpush | excluded content of directory: tools/woltlab-dev/public
+[2026-01-25 12:06:21.685] [INFO] [common.sh:debug_info] gitpush | excluded content of directory: woltlab-docs
+[2026-01-25 12:06:21.712] [INFO] [common.sh:debug_info] gitpush | excluded content of directory: woltlab-github
+[2026-01-25 12:06:37.597] [print_header] [common.sh:print_header] title=Git Push - Multi-Plugin

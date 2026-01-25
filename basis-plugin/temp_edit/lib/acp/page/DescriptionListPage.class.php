@@ -3,6 +3,7 @@
 namespace shrinkr\acp\page;
 
 use shrinkr\data\description\DescriptionList;
+use shrinkr\util\ShrinkrUtil;
 use wcf\page\MultipleLinkPage;
 use wcf\system\WCF;
 
@@ -162,6 +163,9 @@ class DescriptionListPage extends MultipleLinkPage
     {
         parent::assignVariables();
 
+        // Get menu badge text
+        $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
+
         WCF::getTPL()->assign([
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
@@ -169,6 +173,7 @@ class DescriptionListPage extends MultipleLinkPage
             'descriptionText' => $this->descriptionText,
             'isActiveFilter' => $this->isActive,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.description.list',
+            'menuBadgeText' => $menuBadgeText,
         ]);
     }
 }

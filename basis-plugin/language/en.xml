@@ -97,6 +97,9 @@
 	</category>
 
 	<category name="shrinkr.acp.menu">
+		<item name="shrinkr.acp.menu.badge.expert"><![CDATA[EXPERT]]></item>
+		<item name="shrinkr.acp.menu.badge.demo"><![CDATA[DEMO]]></item>
+		<item name="shrinkr.acp.menu.badge.expertDemo"><![CDATA[EXPERT, DEMO]]></item>
 		<item name="shrinkr.acp.menu.link.menu"><![CDATA[Shr1nkr]]></item>
 		<item name="shrinkr.acp.menu.link.link.list"><![CDATA[Links]]></item>
 		<item name="shrinkr.acp.menu.link.link.add"><![CDATA[Add Link]]></item>
@@ -114,10 +117,10 @@
 		<item name="shrinkr.acp.menu.link.special.add"><![CDATA[Add Special]]></item>
 		<item name="shrinkr.acp.menu.link.special.edit"><![CDATA[Edit Special]]></item>
 		<item name="shrinkr.acp.menu.link.link.password"><![CDATA[Password Protected Links]]></item>
+		<item name="shrinkr.acp.menu.link.link.password.filter"><![CDATA[Only password protected links]]></item>
 		<item name="shrinkr.acp.menu.link.theme.list"><![CDATA[Themes]]></item>
 		<item name="shrinkr.acp.menu.link.theme.add"><![CDATA[Add theme]]></item>
 		<item name="shrinkr.acp.menu.link.theme.edit"><![CDATA[Edit Theme]]></item>
-		<item name="shrinkr.acp.menu.link.statistics.list"><![CDATA[Statistics]]></item>
 	</category>
 
 	<category name="wcf.shrinkr">
@@ -133,6 +136,14 @@
 		<item name="wcf.shrinkr.url.hash"><![CDATA[Hash]]></item>
 		<item name="wcf.shrinkr.url.hash.description"><![CDATA[The hash is the unique short code for the URL. If left empty, a random hash will be automatically generated.]]></item>
 		<item name="wcf.shrinkr.url.counter"><![CDATA[Visit Counter]]></item>
+		<item name="wcf.shrinkr.link.password"><![CDATA[Password]]></item>
+		<item name="wcf.shrinkr.link.password.description"><![CDATA[This password is optional when creating the link, but is required to access protected links.]]></item>
+		<item name="wcf.shrinkr.link.passwordProtected"><![CDATA[Password Protected]]></item>
+		<item name="wcf.shrinkr.password.wrong"><![CDATA[Wrong password]]></item>
+		<item name="wcf.shrinkr.password.enter"><![CDATA[Enter password]]></item>
+		<item name="wcf.shrinkr.password.description"><![CDATA[Please enter the password to access this short URL.]]></item>
+		<item name="wcf.shrinkr.password.confirm"><![CDATA[Confirm]]></item>
+		<item name="wcf.shrinkr.password.unlock"><![CDATA[Unlock content]]></item>
 		<item name="wcf.shrinkr.qrCode"><![CDATA[QR Code]]></item>
 		<item name="wcf.shrinkr.qrCode.download"><![CDATA[Download]]></item>
 		<item name="wcf.shrinkr.qrCode.zoom"><![CDATA[Zoom in]]></item>
@@ -423,59 +434,6 @@ for /shrinkr/ are also present in your nginx.conf.]]></item>
 		<item name="shrinkr.acp.customButton.list.description"><![CDATA[Manage custom buttons displayed directly under the forward button.]]></item>
 	</category>
 
-	<category name="wcf.shrinkr.buttonClick">
-		<item name="wcf.shrinkr.buttonClick.total"><![CDATA[Button Clicks]]></item>
-		<item name="wcf.shrinkr.buttonClick.buttonType"><![CDATA[Button Type]]></item>
-		<item name="wcf.shrinkr.buttonClick.type.forward"><![CDATA[Forward Button]]></item>
-		<item name="wcf.shrinkr.buttonClick.type.featured_link"><![CDATA[Featured Link]]></item>
-		<item name="wcf.shrinkr.buttonClick.type.custom"><![CDATA[Custom]]></item>
-		<item name="wcf.shrinkr.buttonClick.clickTime"><![CDATA[Time]]></item>
-		<item name="wcf.shrinkr.buttonClick.user"><![CDATA[User]]></item>
-		<item name="wcf.shrinkr.buttonClick.user.loggedIn"><![CDATA[Logged In]]></item>
-		<item name="wcf.shrinkr.buttonClick.user.guest"><![CDATA[Guest]]></item>
-		<item name="wcf.shrinkr.buttonClick.buttonID"><![CDATA[Button ID]]></item>
-		<item name="wcf.shrinkr.buttonClick.buttonID.tooltip"><![CDATA[Button ID (relevant for Featured Links and Custom Buttons)]]></item>
-		<item name="wcf.shrinkr.buttonClick.clicks"><![CDATA[Clicks]]></item>
-		<item name="wcf.shrinkr.buttonClick.noItems"><![CDATA[No button clicks found.]]></item>
-		<item name="wcf.shrinkr.buttonClick.filter.urlID"><![CDATA[URL ID]]></item>
-		<item name="wcf.shrinkr.buttonClick.filter.dateFrom"><![CDATA[From]]></item>
-		<item name="wcf.shrinkr.buttonClick.filter.dateTo"><![CDATA[To]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics"><![CDATA[Statistics]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.overview"><![CDATA[Overview]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.total"><![CDATA[Total]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.today"><![CDATA[Today]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.yesterday"><![CDATA[Yesterday]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.last7"><![CDATA[Last 7 days]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.period"><![CDATA[Period]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.topUrls"><![CDATA[Top URLs]]></item>
-	</category>
-
-	<category name="wcf.shrinkr.statistics">
-		<item name="wcf.shrinkr.statistics.visits"><![CDATA[Visits]]></item>
-		<item name="wcf.shrinkr.statistics.visits.total"><![CDATA[Total]]></item>
-		<item name="wcf.shrinkr.statistics.visits.today"><![CDATA[Today]]></item>
-		<item name="wcf.shrinkr.statistics.visits.yesterday"><![CDATA[Yesterday]]></item>
-		<item name="wcf.shrinkr.statistics.visits.last7"><![CDATA[Last 7 days]]></item>
-		<item name="wcf.shrinkr.statistics.referrer"><![CDATA[Referrer]]></item>
-		<item name="wcf.shrinkr.statistics.referrer.top"><![CDATA[Top Referrers]]></item>
-		<item name="wcf.shrinkr.statistics.referrer.topDomains"><![CDATA[Top Domains]]></item>
-		<item name="wcf.shrinkr.statistics.combined"><![CDATA[Combined]]></item>
-		<item name="wcf.shrinkr.statistics.combined.total"><![CDATA[Total (Button Clicks + Visits)]]></item>
-		<item name="wcf.shrinkr.statistics.timeSeries"><![CDATA[Time Series]]></item>
-		<item name="wcf.shrinkr.statistics.analytics"><![CDATA[Analytics]]></item>
-		<item name="wcf.shrinkr.statistics.devices"><![CDATA[Devices]]></item>
-		<item name="wcf.shrinkr.statistics.device"><![CDATA[Device]]></item>
-		<item name="wcf.shrinkr.statistics.browsers"><![CDATA[Browsers]]></item>
-		<item name="wcf.shrinkr.statistics.browser"><![CDATA[Browser]]></item>
-		<item name="wcf.shrinkr.statistics.operatingSystems"><![CDATA[Operating Systems]]></item>
-		<item name="wcf.shrinkr.statistics.os"><![CDATA[Operating System]]></item>
-		<item name="wcf.shrinkr.statistics.countries"><![CDATA[Countries]]></item>
-		<item name="wcf.shrinkr.statistics.country"><![CDATA[Country]]></item>
-		<item name="wcf.shrinkr.statistics.timeGranularity"><![CDATA[Time Granularity]]></item>
-		<item name="wcf.shrinkr.statistics.timeGranularity.day"><![CDATA[Day]]></item>
-		<item name="wcf.shrinkr.statistics.timeGranularity.hour"><![CDATA[Hour]]></item>
-	</category>
-
 	<category name="wcf.shrinkr.url">
 		<item name="wcf.shrinkr.url.ogImage"><![CDATA[Open Graph Image]]></item>
 		<item name="wcf.shrinkr.url.ogImage.description"><![CDATA[Image displayed when sharing the link on social media (Facebook, X, etc.). Recommended: At least 1200x630 pixels.]]></item>
@@ -508,6 +466,15 @@ for /shrinkr/ are also present in your nginx.conf.]]></item>
 		<item name="wcf.shrinkr.geolite2.database_provider.default"><![CDATA[Default (Default)]]></item>
 		<item name="wcf.shrinkr.geolite2.database_provider.maxmind"><![CDATA[MaxMind (Own Account)]]></item>
 		<item name="wcf.shrinkr.geolite2.database_provider.local"><![CDATA[Local Database]]></item>
+	</category>
+
+	<category name="wcf.shrinkr">
+		<item name="wcf.shrinkr.global.all"><![CDATA[All]]></item>
+	</category>
+
+	<category name="wcf.shrinkr.reaction">
+		<item name="wcf.shrinkr.reaction.thankYou"><![CDATA[Thank you for your feedback!]]></item>
+		<item name="wcf.shrinkr.reaction.thankYou" variant="informal"><![CDATA[Thank you for your feedback!]]></item>
 	</category>
 
 </language>

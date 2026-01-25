@@ -61,14 +61,6 @@ return static function (): void {
             $linkHandler->getControllerLink(\shrinkr\acp\page\ThemeListPage::class, ['application' => 'wcf'])
         ));
         
-        // ButtonClickListPage
-        $event->register(new AcpMenuItem(
-            'shrinkr.acp.menu.link.statistics.list',
-            'shrinkr.acp.menu.link.statistics.list',
-            'shrinkr.acp.menu.link.menu',
-            $linkHandler->getControllerLink(\shrinkr\acp\page\ButtonClickListPage::class, ['application' => 'wcf'])
-        ));
-        
         // SpecialListPage
         $event->register(new AcpMenuItem(
             'shrinkr.acp.menu.link.special.list',

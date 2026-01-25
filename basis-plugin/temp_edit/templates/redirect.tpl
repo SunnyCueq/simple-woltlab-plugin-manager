@@ -40,58 +40,107 @@
  * @package de.sunnyc.wsc.shrinkr
  * @see https://sunnyc.de
  *}
-{include file='documentHeader'}
+{if $showPasswordForm}
+    {* Passwort-Formular im WoltLab Login-Stil mit authFlowHeader/Footer *}
+    {* Initialisiere __sidebarRightContent für authFlowHeader/Footer *}
+    {if !$__sidebarRightContent|isset}
+        {assign var='__sidebarRightContent' value=''}
+    {/if}
+    {* Setze contentDescription für authFlowHeader *}
+    {capture assign='contentDescription'}{lang}wcf.shrinkr.password.description{/lang}{/capture}
+    {include file='authFlowHeader'}
+    
+    {* Infotext: Dieser Link ist geschützt *}
+    <woltlab-core-notice type="info">
+        {lang}wcf.shrinkr.password.description{/lang}
+    </woltlab-core-notice>
+    
+    {if $passwordError}
+        <woltlab-core-notice type="error">{lang}wcf.shrinkr.password.wrong{/lang}</woltlab-core-notice>
+    {/if}
+    
+    {include file='shared_formError'}
+    
+    <form method="post" action="">
+        <dl{if $passwordError} class="formError"{/if}>
+            <dt>
+                <label for="password">{lang}wcf.shrinkr.link.password{/lang}</label>
+                <span class="formFieldRequired">*</span>
+            </dt>
+            <dd>
+                <input type="password" id="password" name="password" class="long" required autofocus autocomplete="current-password">
+                {if $passwordError}
+                    <small class="innerError">{lang}wcf.shrinkr.password.wrong{/lang}</small>
+                {/if}
+            </dd>
+        </dl>
+        
+        <div class="formSubmit">
+            <input type="submit" value="{lang}wcf.shrinkr.password.confirm{/lang}" accesskey="s">
+            {csrfToken}
+        </div>
+    </form>
+    
+    <p class="formFieldRequiredNotice">
+        <span class="formFieldRequired">*</span>
+        {lang}wcf.global.form.required{/lang}
+    </p>
+    
+    {include file='authFlowFooter'}
+{else}
+    {* Normaler Redirect-Inhalt mit documentHeader *}
+    {include file='documentHeader'}
 
-<head>
-	{if !$pageTitle|isset}
-		{assign var='pageTitle' value=''}
-		{if (!$__wcf->isLandingPage() || !USE_PAGE_TITLE_ON_LANDING_PAGE) && $__wcf->getActivePage() != null && $__wcf->getActivePage()->getTitle()}
-			{capture assign='pageTitle'}{$__wcf->getActivePage()->getTitle()}{/capture}
-		{/if}
-	{/if}
-	
-	<title>{if $pageTitle}{unsafe:$pageTitle} - {/if}{PAGE_TITLE|language}</title>
-	
-	{include file='headInclude'}
-	
-	{if !$canonicalURL|empty}
-		<link rel="canonical" href="{$canonicalURL}">
-	{/if}
-	
-	{if !$headContent|empty}
-		{unsafe:$headContent}
-	{/if}
-	
-	<style>
-		woltlab-core-dialog[data-dialog-id*="shrinkr"] button[aria-label*="Schließen" i],
-		woltlab-core-dialog[data-dialog-id*="shrinkr"] button[aria-label*="Abbrechen" i],
-		woltlab-core-dialog[data-dialog-id*="shrinkr"] .dialogClose,
-		woltlab-core-dialog[data-dialog-id*="shrinkr"] button:not([data-dialog-button="primary"]):not([type="submit"]) {
-			display: none !important;
-			visibility: hidden !important;
-			pointer-events: none !important;
-		}
-		
-		/* Passwort-Dialog Styling */
-		woltlab-core-dialog[data-dialog-id*="shrinkr"] {
-			z-index: 9999 !important;
-		}
-		
-		woltlab-core-dialog[data-dialog-id*="shrinkr"] .dialog__content {
-			min-width: 400px;
-		}
-	</style>
-</head>
+    <head>
+        {if !$pageTitle|isset}
+            {assign var='pageTitle' value=''}
+            {if (!$__wcf->isLandingPage() || !USE_PAGE_TITLE_ON_LANDING_PAGE) && $__wcf->getActivePage() != null && $__wcf->getActivePage()->getTitle()}
+                {capture assign='pageTitle'}{$__wcf->getActivePage()->getTitle()}{/capture}
+            {/if}
+        {/if}
+        
+        <title>{if $pageTitle}{unsafe:$pageTitle} - {/if}{PAGE_TITLE|language}</title>
+        
+        {include file='headInclude'}
+        
+        {if !$canonicalURL|empty}
+            <link rel="canonical" href="{$canonicalURL}">
+        {/if}
+        
+        {if !$headContent|empty}
+            {unsafe:$headContent}
+        {/if}
+        
+        <style>
+            woltlab-core-dialog[data-dialog-id*="shrinkr"] button[aria-label*="Schließen" i],
+            woltlab-core-dialog[data-dialog-id*="shrinkr"] button[aria-label*="Abbrechen" i],
+            woltlab-core-dialog[data-dialog-id*="shrinkr"] .dialogClose,
+            woltlab-core-dialog[data-dialog-id*="shrinkr"] button:not([data-dialog-button="primary"]):not([type="submit"]) {
+                display: none !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
+            }
+            
+            /* Passwort-Dialog Styling */
+            woltlab-core-dialog[data-dialog-id*="shrinkr"] {
+                z-index: 9999 !important;
+            }
+            
+            woltlab-core-dialog[data-dialog-id*="shrinkr"] .dialog__content {
+                min-width: 400px;
+            }
+        </style>
+    </head>
 
-<body id="tpl_{$templateNameApplication}_{$templateName}"
-	itemscope itemtype="http://schema.org/WebPage"{if !$canonicalURL|empty} itemid="{$canonicalURL}"{/if}
-	data-template="{$templateName}" data-application="{$templateNameApplication}"{if $__wcf->getActivePage() != null} data-page-id="{unsafe:$__wcf->getActivePage()->pageID}" data-page-identifier="{$__wcf->getActivePage()->identifier}"{/if}
-	{if !$__pageDataAttributes|empty}{unsafe:$__pageDataAttributes}{/if}
-	class="{if $__wcf->getActivePage() != null && $__wcf->getActivePage()->cssClassName}{$__wcf->getActivePage()->cssClassName}{/if}{if !$__pageCssClassName|empty} {$__pageCssClassName}{/if}">
+    <body id="tpl_{$templateNameApplication}_{$templateName}"
+        itemscope itemtype="http://schema.org/WebPage"{if !$canonicalURL|empty} itemid="{$canonicalURL}"{/if}
+        data-template="{$templateName}" data-application="{$templateNameApplication}"{if $__wcf->getActivePage() != null} data-page-id="{unsafe:$__wcf->getActivePage()->pageID}" data-page-identifier="{$__wcf->getActivePage()->identifier}"{/if}
+        {if !$__pageDataAttributes|empty}{unsafe:$__pageDataAttributes}{/if}
+        class="{if $__wcf->getActivePage() != null && $__wcf->getActivePage()->cssClassName}{$__wcf->getActivePage()->cssClassName}{/if}{if !$__pageCssClassName|empty} {$__pageCssClassName}{/if}">
 
-    <span id="top"></span>
+        <span id="top"></span>
 
-    <div id="pageContainer" class="pageContainer"{if $link && $link->linkID} data-link-id="{$link->linkID}"{/if}>
+        <div id="pageContainer" class="pageContainer"{if $link && $link->linkID} data-link-id="{$link->linkID}"{/if}>
         {if SHRINKR_NORMAL_PAGE_MODE}
             {* Fix Missing DOM Elements - Zuerst *}
             {* Vollständige Dummy-Struktur für WoltLab's JavaScript *}
@@ -296,6 +345,8 @@
 
                     {include file='contentInteraction'}
 
+                    {* Normaler Redirect-Inhalt *}
+
                     {if MODULE_WCF_AD && $__disableAds|empty}
                         {unsafe:$__wcf->getAdHandler()->getAds('de.sunnyc.wsc.shrinkr.beforeRedirectContainer')}
                     {/if}
@@ -467,6 +518,9 @@
                         {unsafe:$__wcf->getAdHandler()->getAds('de.sunnyc.wsc.shrinkr.afterRedirectContainer')}
                     {/if}
                     
+                    {/if}
+                    {* Ende: Passwort-Formular oder normaler Inhalt *}
+
                     {if SHRINKR_NORMAL_PAGE_MODE}
                         {include file='footer'}
                     {else}
@@ -476,6 +530,8 @@
         </section>
     </div>
 
-</body>
-</html>
+    {include application="shrinkr" file='__shrinkrCopyright'}
+
+    </body>
+    </html>
 {/if}

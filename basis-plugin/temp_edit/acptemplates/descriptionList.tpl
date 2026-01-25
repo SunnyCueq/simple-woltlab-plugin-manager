@@ -175,4 +175,14 @@
 	<p class="info">{lang}wcf.global.noItems{/lang}</p>
 {/if}
 
+{* Menu Badge JavaScript *}
+{if $menuBadgeText}
+<script>
+	window.SHRINKR_MENU_BADGE_TEXT = {$menuBadgeText|json};
+	require(['Shrinkr/Acp/Ui/MenuBadge'], function(MenuBadge) {
+		new MenuBadge();
+	});
+</script>
+{/if}
+
 {include file='footer'}

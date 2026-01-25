@@ -15,6 +15,9 @@ use wcf\system\form\builder\container\TabMenuFormContainer;
 use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\field\UploadFormField;
 use wcf\system\form\builder\field\UrlFormField;
+use wcf\system\option\OptionHandler;
+use wcf\system\exception\UserInputException;
+use wcf\system\user\authentication\password\PasswordAlgorithmManager;
 use wcf\system\WCF;
 
 /**
@@ -110,6 +113,11 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
                     ->label('wcf.shrinkr.url.ogImage')
                     ->description('wcf.shrinkr.url.ogImage.description')
                     ->imageOnly(true),
+
+                TextFormField::create('password')
+                    ->label('wcf.shrinkr.link.password')
+                    ->description('wcf.shrinkr.link.password.description')
+                    ->attribute('type', 'password'),
             ]);
 
         $basicTab->appendChild($basicContainer);
@@ -132,11 +140,51 @@ class ShrinkrLinkAddForm extends AbstractFormBuilderForm
     }
 
     /**
+     * Returns the minimum password length.
+     *
+     * @return  int     Minimum password length (hardcoded: 8)
+     */
+    protected function getPasswordMinLength(): int
+    {
+        return 8; // Hardcoded minimum password length
+    }
+
+    /**
      * @inheritDoc
      */
     public function save()
     {
         // Note: ogImage upload is handled automatically by UploadFormField
+        // Password hashing is handled before save
+
+        // Get form data
+        $formData = $this->form->getData();
+        
+        // Handle password hashing and validation
+        if (isset($formData['data']['password'])) {
+            $password = $formData['data']['password'];
+            
+            if (!empty($password)) {
+                // Validate password length (serverseitig, wie WoltLab es macht)
+                $minLength = $this->getPasswordMinLength();
+                if (\strlen($password) < $minLength) {
+                    throw new UserInputException('password', 'wcf.shrinkr.password.minLength', ['minLength' => $minLength]);
+                }
+                
+                // Hash password using WoltLab PasswordAlgorithmManager (WoltLab 6.1 API)
+                $passwordHash = PasswordAlgorithmManager::getInstance()->getDefaultAlgorithm()->hash($password);
+                $formData['data']['passwordHash'] = $passwordHash;
+            } else {
+                // Password field was cleared, remove password
+                $formData['data']['passwordHash'] = null;
+            }
+            
+            // Remove plain password from data
+            unset($formData['data']['password']);
+            
+            // Update form data
+            $this->form->data($formData);
+        }
 
         parent::save();
     }

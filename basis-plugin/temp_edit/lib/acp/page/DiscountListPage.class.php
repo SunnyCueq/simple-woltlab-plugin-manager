@@ -3,6 +3,7 @@
 namespace shrinkr\acp\page;
 
 use shrinkr\data\discount\DiscountList;
+use shrinkr\util\ShrinkrUtil;
 use wcf\page\MultipleLinkPage;
 use wcf\system\WCF;
 
@@ -155,6 +156,9 @@ class DiscountListPage extends MultipleLinkPage
     {
         parent::assignVariables();
 
+        // Get menu badge text
+        $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
+
         WCF::getTPL()->assign([
             'discountValue' => $this->discountValue,
             'codes' => $this->codes,
@@ -162,6 +166,7 @@ class DiscountListPage extends MultipleLinkPage
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.discount.list',
+            'menuBadgeText' => $menuBadgeText,
         ]);
     }
 }

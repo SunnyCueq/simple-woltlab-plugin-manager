@@ -4,6 +4,7 @@ namespace shrinkr\acp\page;
 
 use shrinkr\data\special\SpecialList;
 use shrinkr\system\special\SpecialThemeHelper;
+use shrinkr\util\ShrinkrUtil;
 use wcf\page\MultipleLinkPage;
 use wcf\system\WCF;
 
@@ -212,6 +213,9 @@ class SpecialListPage extends MultipleLinkPage
             $themes = [];
         }
 
+        // Get menu badge text
+        $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
+
         WCF::getTPL()->assign([
             'title' => $this->title ?? '',
             'theme' => $this->theme ?? '',
@@ -222,6 +226,7 @@ class SpecialListPage extends MultipleLinkPage
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.special.list',
+            'menuBadgeText' => $menuBadgeText,
         ]);
     }
 }

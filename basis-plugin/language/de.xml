@@ -23,12 +23,14 @@
 
 		<item name="wcf.acp.option.shrinkr_active"><![CDATA[Aktiviere den Shr1nkr]]></item>
 		<item name="wcf.acp.option.shrinkr_active.description"><![CDATA[Aktiviert den Shr1nkr. Nach der Aktivierung können Sie Kurz-URLs erstellen und verwalten.]]></item>
+		<item name="wcf.acp.option.shrinkr_active.description" variant="informal"><![CDATA[Aktiviert den Shr1nkr. Nach der Aktivierung kannst du Kurz-URLs erstellen und verwalten.]]></item>
 		<item name="wcf.acp.option.shrinkr_counter_active"><![CDATA[Aktiviere den Besuche-Zähler für Kurz-URLs]]></item>
 		<item name="wcf.acp.option.shrinkr_counter_active.description"><![CDATA[Zeigt an, wie oft eine Kurz-URL aufgerufen wurde. Der Zähler wird in der <a href="{link controller='ShrinkrLinkList'}{/link}">URL-Liste</a> angezeigt und kann bei Bedarf zurückgesetzt werden.]]></item>
 		<item name="wcf.acp.option.shrinkr_forwarding_must_confirmed"><![CDATA[Weiterleitung auf Knopfdruck]]></item>
 		<item name="wcf.acp.option.shrinkr_forwarding_must_confirmed.description"><![CDATA[Auf der Weiterleitungsseite muss zuerst ein Button geklickt werden, bevor man zur Ziel-URL weitergeleitet wird. Dies erhöht die Sicherheit und verhindert automatische Weiterleitungen. Falls die "Verzögerte Weiterleitung" aktiviert ist, kann der Button erst nach Ablauf der Wartezeit gedrückt werden.]]></item>
 		<item name="wcf.acp.option.shrinkr_time_until_forwarding"><![CDATA[Verzögerte Weiterleitung (in Sekunden)]]></item>
         <item name="wcf.acp.option.shrinkr_time_until_forwarding.description"><![CDATA[Zeigt für die angegebene Anzahl von Sekunden eine Weiterleitungsseite an, bevor automatisch zur Ziel-URL weitergeleitet wird. Beispiel: Bei "5" wird 5 Sekunden gewartet. Setzen Sie "0" für sofortige Weiterleitung.]]></item>
+		<item name="wcf.acp.option.shrinkr_time_until_forwarding.description" variant="informal"><![CDATA[Zeigt für die angegebene Anzahl von Sekunden eine Weiterleitungsseite an, bevor automatisch zur Ziel-URL weitergeleitet wird. Beispiel: Bei "5" wird 5 Sekunden gewartet. Setze "0" für sofortige Weiterleitung.]]></item>
 		<item name="wcf.acp.option.shrinkr_expertmode_active"><![CDATA[Aktiviere den Expertenmodus]]></item>
 		<item name="wcf.acp.option.shrinkr_expertmode_active.description"><![CDATA[<strong>Vorsicht:</strong> Diese Einstellung sollte nur von erfahrenen Administratoren aktiviert werden. Im Expertenmodus werden erweiterte Optionen freigeschaltet, die in den meisten Fällen nicht benötigt werden. Falsche Konfigurationen können dazu führen, dass der Shr1nkr nicht mehr funktioniert.]]></item>
 		<item name="wcf.acp.option.shrinkr_normal_page_mode"><![CDATA[Zeigt mehr Elemente auf der Weiterleitungsseite]]></item>
@@ -71,6 +73,7 @@
 		<item name="wcf.acp.option.shrinkr_enable_custom_forward_button.preview"><![CDATA[Vorschau:]]></item>
 		<item name="wcf.acp.option.shrinkr_title_icon"><![CDATA[Titel-Icon]]></item>
 		<item name="wcf.acp.option.shrinkr_title_icon.description"><![CDATA[Wählen Sie ein Font-Awesome-Icon aus, das vor dem h1-Titel auf der Weiterleitungsseite angezeigt wird.]]></item>
+		<item name="wcf.acp.option.shrinkr_title_icon.description" variant="informal"><![CDATA[Wähle ein Font-Awesome-Icon aus, das vor dem h1-Titel auf der Weiterleitungsseite angezeigt wird.]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_theme_effects"><![CDATA[Spezialeffekte aktivieren]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_theme_effects.description"><![CDATA[Schaltet alle themenbasierten Effekte wie Herbstblätter, Schnee oder Geister frei.]]></item>
 		<item name="wcf.acp.option.shrinkr_enable_qr_code"><![CDATA[QR-Code-Generierung aktivieren]]></item>
@@ -96,6 +99,9 @@
 	</category>
 
 	<category name="shrinkr.acp.menu">
+		<item name="shrinkr.acp.menu.badge.expert"><![CDATA[EXPERTE]]></item>
+		<item name="shrinkr.acp.menu.badge.demo"><![CDATA[DEMO]]></item>
+		<item name="shrinkr.acp.menu.badge.expertDemo"><![CDATA[EXPERTE, DEMO]]></item>
 		<item name="shrinkr.acp.menu.link.menu"><![CDATA[Shr1nkr]]></item>
 		<item name="shrinkr.acp.menu.link.link.list"><![CDATA[Links]]></item>
 		<item name="shrinkr.acp.menu.link.link.add"><![CDATA[Link hinzufügen]]></item>
@@ -113,10 +119,10 @@
 		<item name="shrinkr.acp.menu.link.special.add"><![CDATA[Special hinzufügen]]></item>
 		<item name="shrinkr.acp.menu.link.special.edit"><![CDATA[Special bearbeiten]]></item>
 		<item name="shrinkr.acp.menu.link.link.password"><![CDATA[Passwort-geschützte Links]]></item>
+		<item name="shrinkr.acp.menu.link.link.password.filter"><![CDATA[Nur passwortgeschützte Links]]></item>
 		<item name="shrinkr.acp.menu.link.theme.list"><![CDATA[Themes]]></item>
 		<item name="shrinkr.acp.menu.link.theme.add"><![CDATA[Theme hinzufügen]]></item>
 		<item name="shrinkr.acp.menu.link.theme.edit"><![CDATA[Theme bearbeiten]]></item>
-		<item name="shrinkr.acp.menu.link.statistics.list"><![CDATA[Statistiken]]></item>
 	</category>
 
 	<category name="wcf.shrinkr">
@@ -132,6 +138,15 @@
 		<item name="wcf.shrinkr.url.hash"><![CDATA[Hash]]></item>
 		<item name="wcf.shrinkr.url.hash.description"><![CDATA[Der Hash ist der eindeutige Kurzcode für die URL. Wenn leer gelassen, wird automatisch ein zufälliger Hash generiert.]]></item>
 		<item name="wcf.shrinkr.url.counter"><![CDATA[Besucher]]></item>
+		<item name="wcf.shrinkr.link.password"><![CDATA[Passwort]]></item>
+		<item name="wcf.shrinkr.link.password.description"><![CDATA[Dieses Passwort ist optional beim Erstellen des Links, wird aber für den Zugriff auf geschützte Links benötigt.]]></item>
+		<item name="wcf.shrinkr.link.passwordProtected"><![CDATA[Passwortgeschützt]]></item>
+		<item name="wcf.shrinkr.password.wrong"><![CDATA[Falsches Passwort]]></item>
+		<item name="wcf.shrinkr.password.enter"><![CDATA[Passwort eingeben]]></item>
+		<item name="wcf.shrinkr.password.description"><![CDATA[Bitte geben Sie das Passwort ein, um auf diese Kurz-URL zuzugreifen.]]></item>
+		<item name="wcf.shrinkr.password.description" variant="informal"><![CDATA[Bitte gib das Passwort ein, um auf diese Kurz-URL zuzugreifen.]]></item>
+		<item name="wcf.shrinkr.password.confirm"><![CDATA[Bestätigen]]></item>
+		<item name="wcf.shrinkr.password.unlock"><![CDATA[Inhalt freischalten]]></item>
 		<item name="wcf.shrinkr.qrCode"><![CDATA[QR-Code]]></item>
 		<item name="wcf.shrinkr.qrCode.download"><![CDATA[Download]]></item>
 		<item name="wcf.shrinkr.qrCode.zoom"><![CDATA[Vergrößern]]></item>
@@ -150,12 +165,15 @@
 	<category name="shrinkr.acp.url">
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.title"><![CDATA[/shrinkr/ Prefix entfernen]]></item>
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.description"><![CDATA[Sie haben die Option aktiviert, das /shrinkr/ Prefix aus URLs zu entfernen. Damit Links wie <strong>https://example.com/r/abc123</strong> funktionieren, müssen Rewrite-Regeln in Ihrer Webserver-Konfiguration eingetragen werden.]]></item>
+		<item name="shrinkr.acp.url.removeUrlsPrefix.info.description" variant="informal"><![CDATA[Du hast die Option aktiviert, das /shrinkr/ Prefix aus URLs zu entfernen. Damit Links wie <strong>https://example.com/r/abc123</strong> funktionieren, müssen Rewrite-Regeln in deiner Webserver-Konfiguration eingetragen werden.]]></item>
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate"><![CDATA[Rewrite-Regeln anzeigen]]></item>
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate.description"><![CDATA[Klicken Sie auf den Button, um die passenden Rewrite-Regeln für Ihren Webserver anzuzeigen.]]></item>
+		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate.description" variant="informal"><![CDATA[Klicke auf den Button, um die passenden Rewrite-Regeln für deinen Webserver anzuzeigen.]]></item>
 		<item name="shrinkr.acp.url.list"><![CDATA[Kurz-URLs verwalten]]></item>
 		<item name="shrinkr.acp.url.add"><![CDATA[URL kürzen]]></item>
 		<item name="shrinkr.acp.url.edit"><![CDATA[Kurz-URL bearbeiten]]></item>
 		<item name="shrinkr.acp.url.delete.confirmMessage"><![CDATA[Wollen Sie diese Kurz-URL wirklich löschen? Alle gesammelten Daten werden dadurch gelöscht.]]></item>
+		<item name="shrinkr.acp.url.delete.confirmMessage" variant="informal"><![CDATA[Willst du diese Kurz-URL wirklich löschen? Alle gesammelten Daten werden dadurch gelöscht.]]></item>
 		<item name="shrinkr.acp.url.success.theShortUrlIs"><![CDATA[Die gekürzte URL lautet:]]></item>
 		<item name="shrinkr.acp.url.hash.error.tooLong"><![CDATA[Der Hash darf nicht länger als 64 Zeichen sein.]]></item>
 		<item name="shrinkr.acp.url.hash.error.alreadyExists"><![CDATA[Der Hash wird schon verwendet.]]></item>
@@ -167,6 +185,7 @@
 		<item name="shrinkr.acp.url.url.error.forwardingChain"><![CDATA[Weiterleitungsketten sind nicht erlaubt.]]></item>
 		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.title"><![CDATA[Erweiterte URL-Generierung aktiviert]]></item>
 		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.description"><![CDATA[Die URLs werden ohne <kbd>/shrinkr/</kbd> Prefix generiert (z.B. <kbd>/r/test/</kbd> statt <kbd>/shrinkr/r/test/</kbd>). Damit dies funktioniert, muss die Webserver-Konfiguration (Apache <kbd>.htaccess</kbd> oder nginx <kbd>nginx.conf</kbd>) manuell angepasst werden. Klicken Sie auf den Button "Rewrite-Regeln generieren" oben rechts, um die benötigten Regeln anzuzeigen. Diese Info verschwindet automatisch, sobald die Regeln korrekt in der Webserver-Konfiguration eingefügt wurden.]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.description" variant="informal"><![CDATA[Die URLs werden ohne <kbd>/shrinkr/</kbd> Prefix generiert (z.B. <kbd>/r/test/</kbd> statt <kbd>/shrinkr/r/test/</kbd>). Damit dies funktioniert, muss die Webserver-Konfiguration (Apache <kbd>.htaccess</kbd> oder nginx <kbd>nginx.conf</kbd>) manuell angepasst werden. Klicke auf den Button "Rewrite-Regeln generieren" oben rechts, um die benötigten Regeln anzuzeigen. Diese Info verschwindet automatisch, sobald die Regeln korrekt in der Webserver-Konfiguration eingefügt wurden.]]></item>
 		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.title"><![CDATA[Anleitung: Webserver-Konfiguration anpassen]]></item>
 		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.step1"><![CDATA[Gehe zu: ACP → Allgemein → Suchmaschinenoptimierung (SEO) → Rewrite-Regeln generieren]]></item>
 		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.step2"><![CDATA[Kopiere die generierten Standard-Regeln von WoltLab]]></item>
@@ -176,15 +195,20 @@
 		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.nginx"><![CDATA[nginx (nginx.conf)]]></item>
 		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.generate"><![CDATA[Rewrite-Regeln generieren]]></item>
 		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.generate.description"><![CDATA[Klicken Sie auf den Button "Rewrite-Regeln generieren" oben rechts, um die benötigten Regeln für Apache (.htaccess) und nginx (nginx.conf) anzuzeigen und in Ihre Webserver-Konfiguration einzufügen.]]></item>
+		<item name="shrinkr.acp.url.removeShrinkrPrefix.info.htaccess.generate.description" variant="informal"><![CDATA[Klicke auf den Button "Rewrite-Regeln generieren" oben rechts, um die benötigten Regeln für Apache (.htaccess) und nginx (nginx.conf) anzuzeigen und in deine Webserver-Konfiguration einzufügen.]]></item>
 		<item name="shrinkr.acp.url.rewrite.nginx.instructions"><![CDATA[Diese Regeln müssen in den server-Block Ihrer nginx.conf eingefügt werden]]></item>
+		<item name="shrinkr.acp.url.rewrite.nginx.instructions" variant="informal"><![CDATA[Diese Regeln müssen in den server-Block deiner nginx.conf eingefügt werden]]></item>
 		<item name="shrinkr.acp.url.rewrite.nginx.important"><![CDATA[WICHTIG: Die /r/ Regel muss VOR den Standard-WoltLab-Regeln stehen!]]></item>
 		<item name="shrinkr.acp.url.rewrite.nginx.note"><![CDATA[Hinweis: Stellen Sie sicher, dass die Standard-WoltLab-Regeln
 für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
+		<item name="shrinkr.acp.url.rewrite.nginx.note" variant="informal"><![CDATA[Hinweis: Stelle sicher, dass die Standard-WoltLab-Regeln
+für /shrinkr/ ebenfalls in deiner nginx.conf vorhanden sind.]]></item>
 	</category>
 
 	<category name="shrinkr.redirect">
 		<item name="shrinkr.redirect.headline"><![CDATA[Weiterleitungsseite]]></item>
 		<item name="shrinkr.redirect.text.confirm"><![CDATA[Sie sollen zu folgender Zieladresse weitergeleitet werden: <kbd>{$redirectUrl}</kbd>]]></item>
+		<item name="shrinkr.redirect.text.confirm" variant="informal"><![CDATA[Du sollst zu folgender Zieladresse weitergeleitet werden: <kbd>{$redirectUrl}</kbd>]]></item>
 		<item name="shrinkr.redirect.text.timer"><![CDATA[Die Weiterleitung erfolgt automatisch nach Ablauf des Timers.]]></item>
 		<item name="shrinkr.redirect.forwardingIn"><![CDATA[Weiterleitung erfolgt in]]></item>
 		<item name="shrinkr.redirect.second"><![CDATA[Sekunde]]></item>
@@ -203,10 +227,13 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.featured"><![CDATA[Dazu empfohlen]]></item>
 		<item name="wcf.shrinkr.featuredLinks"><![CDATA[Empfohlene Links]]></item>
 		<item name="wcf.shrinkr.featuredLinks.manage.description"><![CDATA[Empfohlene Links werden auf der Weiterleitungsseite angezeigt. Sie können diese über die entsprechenden Menüpunkte verwalten.]]></item>
+		<item name="wcf.shrinkr.featuredLinks.manage.description" variant="informal"><![CDATA[Empfohlene Links werden auf der Weiterleitungsseite angezeigt. Du kannst diese über die entsprechenden Menüpunkte verwalten.]]></item>
 		<item name="wcf.shrinkr.customButtons"><![CDATA[Eigene Buttons]]></item>
 		<item name="wcf.shrinkr.customButtons.manage.description"><![CDATA[Eigene Buttons werden auf der Weiterleitungsseite angezeigt. Sie können diese über die entsprechenden Menüpunkte verwalten.]]></item>
+		<item name="wcf.shrinkr.customButtons.manage.description" variant="informal"><![CDATA[Eigene Buttons werden auf der Weiterleitungsseite angezeigt. Du kannst diese über die entsprechenden Menüpunkte verwalten.]]></item>
 		<item name="wcf.shrinkr.hosts"><![CDATA[Host-Namen]]></item>
 		<item name="wcf.shrinkr.hosts.description"><![CDATA[Geben Sie einen oder mehrere Host-Namen ein (z.B. amazon.de, ebay.de, mediamarkt.de)]]></item>
+		<item name="wcf.shrinkr.hosts.description" variant="informal"><![CDATA[Gib einen oder mehrere Host-Namen ein (z.B. amazon.de, ebay.de, mediamarkt.de)]]></item>
 		<item name="wcf.shrinkr.special"><![CDATA[Special]]></item>
 		<item name="wcf.shrinkr.special.identifier"><![CDATA[Special-Identifier]]></item>
 		<item name="wcf.shrinkr.special.identifier.description"><![CDATA[Über diesen Wert nach "&special=" ist das Special verfügbar]]></item>
@@ -214,6 +241,7 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.special.edit"><![CDATA[Special bearbeiten]]></item>
 		<item name="wcf.shrinkr.special.add"><![CDATA[Special hinzufügen]]></item>
 		<item name="wcf.shrinkr.special.manage.description"><![CDATA[Verwalten Sie temporäre Specials für diese URL]]></item>
+		<item name="wcf.shrinkr.special.manage.description" variant="informal"><![CDATA[Verwalte temporäre Specials für diese URL]]></item>
 		<item name="wcf.shrinkr.special.noItems"><![CDATA[Es wurden keine Specials gefunden.]]></item>
 		<item name="wcf.shrinkr.special.noItems.howToAdd.title"><![CDATA[Wie füge ich Specials hinzu?]]></item>
 		<item name="wcf.shrinkr.special.noItems.howToAdd.text"><![CDATA[Specials können auf zwei Arten erstellt werden:]]></item>
@@ -224,10 +252,13 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.special.noItems.impact.title"><![CDATA[Wovon hängen andere Funktionen ab?]]></item>
 		<item name="wcf.shrinkr.special.noItems.impact.text"><![CDATA[Specials werden auf der Redirect-Seite angezeigt und können mit Themes, Rabatt-Codes und Countdown-Timern kombiniert werden. Featured Links können optional mit Specials verknüpft werden.]]></item>
 		<item name="wcf.shrinkr.special.saveFirst"><![CDATA[Bitte speichern Sie die URL zuerst, bevor Sie Specials verwalten können.]]></item>
+		<item name="wcf.shrinkr.special.saveFirst" variant="informal"><![CDATA[Bitte speichere die URL zuerst, bevor du Specials verwalten kannst.]]></item>
 		<item name="wcf.shrinkr.special.deleteConfirm"><![CDATA[Möchten Sie dieses Special wirklich löschen?]]></item>
+		<item name="wcf.shrinkr.special.deleteConfirm" variant="informal"><![CDATA[Möchtest du dieses Special wirklich löschen?]]></item>
 		<item name="wcf.shrinkr.special.noSpecials"><![CDATA[Noch keine Specials vorhanden]]></item>
 		<item name="wcf.shrinkr.special.theme"><![CDATA[Thema]]></item>
 		<item name="wcf.shrinkr.special.theme.description"><![CDATA[Wählen Sie ein Thema aus, um vorgegebene Farben zu verwenden]]></item>
+		<item name="wcf.shrinkr.special.theme.description" variant="informal"><![CDATA[Wähle ein Thema aus, um vorgegebene Farben zu verwenden]]></item>
 		<item name="wcf.shrinkr.special.title"><![CDATA[Titel]]></item>
 		<item name="wcf.shrinkr.special.title.description"><![CDATA[Titel des Specials (nur für die Übersichtsseite)]]></item>
 		<item name="wcf.shrinkr.special.discount"><![CDATA[Rabatt]]></item>
@@ -270,8 +301,10 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.copySpecialData"><![CDATA[Special-Daten kopieren]]></item>
 		<item name="wcf.shrinkr.discount"><![CDATA[Rabatt]]></item>
 		<item name="wcf.shrinkr.discount.description"><![CDATA[Geben Sie den Rabatt an, der auf der Weiterleitungsseite angezeigt werden soll.]]></item>
+		<item name="wcf.shrinkr.discount.description" variant="informal"><![CDATA[Gib den Rabatt an, der auf der Weiterleitungsseite angezeigt werden soll.]]></item>
 		<item name="wcf.shrinkr.discount.placeholder"><![CDATA[z.B. 30%, 10€ oder Black Friday]]></item>
 		<item name="wcf.shrinkr.discount.favicon.description"><![CDATA[Das Favicon wird automatisch von der Ziel-URL geladen. Wenn Sie ein Favicon manuell hochladen, hat dieses Vorrang.]]></item>
+		<item name="wcf.shrinkr.discount.favicon.description" variant="informal"><![CDATA[Das Favicon wird automatisch von der Ziel-URL geladen. Wenn du ein Favicon manuell hochlädst, hat dieses Vorrang.]]></item>
 		<item name="wcf.shrinkr.discount.special"><![CDATA[Special-Vorlage]]></item>
 		<item name="wcf.shrinkr.discount.specialIdentifier"><![CDATA[Identifier]]></item>
 		<item name="wcf.shrinkr.discount.countdown.active"><![CDATA[Aktiv]]></item>
@@ -291,6 +324,7 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.theme.identifier"><![CDATA[Identifier]]></item>
 		<item name="wcf.shrinkr.theme.identifier.description"><![CDATA[Eindeutiger Schlüssel für das Theme (z.B. "halloween", "christmas"). Wird in der URL verwendet.]]></item>
 		<item name="wcf.shrinkr.theme.identifier.error.notUnique"><![CDATA[Dieser Identifier wird bereits verwendet. Bitte wählen Sie einen anderen.]]></item>
+		<item name="wcf.shrinkr.theme.identifier.error.notUnique" variant="informal"><![CDATA[Dieser Identifier wird bereits verwendet. Bitte wähle einen anderen.]]></item>
 		<item name="wcf.shrinkr.theme.title"><![CDATA[Titel]]></item>
 		<item name="wcf.shrinkr.theme.title.description"><![CDATA[Anzeigename des Themes (z.B. "Halloween", "Weihnachten")]]></item>
 		<item name="wcf.shrinkr.theme.effect"><![CDATA[Spezialeffekt]]></item>
@@ -317,7 +351,9 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.theme.sortOrder.description"><![CDATA[Reihenfolge in der Theme-Auswahl (niedrigere Werte zuerst)]]></item>
 		<item name="wcf.shrinkr.theme.css.edit"><![CDATA[CSS bearbeiten]]></item>
 		<item name="wcf.shrinkr.theme.css.edit.description"><![CDATA[Bearbeiten Sie die CSS-Datei dieses Themes direkt im ACP. Änderungen werden in die CSS-Datei und die Datenbank geschrieben.]]></item>
+		<item name="wcf.shrinkr.theme.css.edit.description" variant="informal"><![CDATA[Bearbeite die CSS-Datei dieses Themes direkt im ACP. Änderungen werden in die CSS-Datei und die Datenbank geschrieben.]]></item>
 		<item name="wcf.shrinkr.theme.css.edit.warning"><![CDATA[Achtung: Bearbeiten Sie diese CSS-Datei nur, wenn Sie wissen, was Sie tun. Änderungen an vorgefertigten Themes können das Design beeinträchtigen.]]></item>
+		<item name="wcf.shrinkr.theme.css.edit.warning" variant="informal"><![CDATA[Achtung: Bearbeite diese CSS-Datei nur, wenn du weißt, was du tust. Änderungen an vorgefertigten Themes können das Design beeinträchtigen.]]></item>
 		<item name="wcf.shrinkr.theme.css.content"><![CDATA[CSS-Inhalt]]></item>
 		<item name="wcf.shrinkr.theme.css.content.description"><![CDATA[Der vollständige CSS-Code für dieses Theme.]]></item>
 		<item name="wcf.shrinkr.form.tab.basic"><![CDATA[Grundeinstellungen]]></item>
@@ -369,13 +405,16 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.featuredLink.addAnother"><![CDATA[Weiteren Featured Link hinzufügen]]></item>
 		<item name="wcf.shrinkr.featuredLink.manage"><![CDATA[Featured Links verwalten]]></item>
 		<item name="wcf.shrinkr.featuredLink.manage.description"><![CDATA[Verwalten Sie empfohlene Links für diese URL]]></item>
+		<item name="wcf.shrinkr.featuredLink.manage.description" variant="informal"><![CDATA[Verwalte empfohlene Links für diese URL]]></item>
 		<item name="wcf.shrinkr.featuredLink.noItems"><![CDATA[Es wurden keine Featured Links gefunden. Featured Links können nur über die URL-Bearbeitung hinzugefügt werden.]]></item>
 		<item name="wcf.shrinkr.featuredLink.goToUrls"><![CDATA[Zu den Kurz-URLs]]></item>
 		<item name="wcf.shrinkr.featuredLink.section"><![CDATA[Featured Links]]></item>
 		<item name="wcf.shrinkr.featuredLink.section.description"><![CDATA[Empfohlene Links die auf der Weiterleitungsseite angezeigt werden]]></item>
 		<item name="wcf.shrinkr.featuredLink.noItemsInUrl"><![CDATA[Für diese URL wurden noch keine Featured Links hinzugefügt.]]></item>
 		<item name="wcf.shrinkr.featuredLink.saveFirst"><![CDATA[Bitte speichern Sie die URL zuerst, bevor Sie Featured Links verwalten können.]]></item>
+		<item name="wcf.shrinkr.featuredLink.saveFirst" variant="informal"><![CDATA[Bitte speichere die URL zuerst, bevor du Featured Links verwalten kannst.]]></item>
 		<item name="wcf.shrinkr.featuredLink.deleteConfirm"><![CDATA[Möchten Sie diesen Featured Link wirklich löschen?]]></item>
+		<item name="wcf.shrinkr.featuredLink.deleteConfirm" variant="informal"><![CDATA[Möchtest du diesen Featured Link wirklich löschen?]]></item>
 		<item name="wcf.shrinkr.featuredLink.noLinks"><![CDATA[Noch keine Featured Links vorhanden]]></item>
 		<item name="wcf.shrinkr.featuredLink.url"><![CDATA[URL]]></item>
 		<item name="wcf.shrinkr.featuredLink.url.description"><![CDATA[Die vollständige URL des empfohlenen Links (z.B. https://amazon.de/produkt)]]></item>
@@ -384,6 +423,7 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.featuredLink.sortOrder.description"><![CDATA[Reihenfolge der Anzeige (niedrigere Werte werden zuerst angezeigt)]]></item>
 		<item name="wcf.shrinkr.featuredLink.urlInfo"><![CDATA[Kurz-URL]]></item>
 		<item name="wcf.shrinkr.featuredLink.urlInfo.description"><![CDATA[Klicken Sie auf den Hash, um zur Kurz-URL zu gelangen]]></item>
+		<item name="wcf.shrinkr.featuredLink.urlInfo.description" variant="informal"><![CDATA[Klicke auf den Hash, um zur Kurz-URL zu gelangen]]></item>
 		<item name="wcf.shrinkr.featuredLink.backToUrl"><![CDATA[Zur Kurz-URL]]></item>
 		<item name="wcf.shrinkr.featuredLink.forHash"><![CDATA[Ziel]]></item>
 		<item name="wcf.shrinkr.featuredLink.editUrl"><![CDATA[Kurz-URL bearbeiten]]></item>
@@ -391,10 +431,12 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 
 	<category name="shrinkr.acp.featuredLink">
 		<item name="shrinkr.acp.featuredLink.list.description"><![CDATA[Verwalten Sie empfohlene Links, die auf der Weiterleitungsseite angezeigt werden.]]></item>
+		<item name="shrinkr.acp.featuredLink.list.description" variant="informal"><![CDATA[Verwalte empfohlene Links, die auf der Weiterleitungsseite angezeigt werden.]]></item>
 	</category>
 
 	<category name="shrinkr.acp.theme">
 		<item name="shrinkr.acp.theme.list.description"><![CDATA[Verwalten Sie Themes für Specials. Themes definieren Farbschemata, die in Specials verwendet werden können.]]></item>
+		<item name="shrinkr.acp.theme.list.description" variant="informal"><![CDATA[Verwalte Themes für Specials. Themes definieren Farbschemata, die in Specials verwendet werden können.]]></item>
 	</category>
 
 	<category name="wcf.shrinkr.customButton">
@@ -406,6 +448,7 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.customButton.sortOrder.description"><![CDATA[Reihenfolge der Anzeige (niedrigere Werte werden zuerst angezeigt)]]></item>
 		<item name="wcf.shrinkr.customButton.urlInfo"><![CDATA[Kurz-URL]]></item>
 		<item name="wcf.shrinkr.customButton.urlInfo.description"><![CDATA[Klicken Sie auf den Hash, um zur Kurz-URL zu gelangen]]></item>
+		<item name="wcf.shrinkr.customButton.urlInfo.description" variant="informal"><![CDATA[Klicke auf den Hash, um zur Kurz-URL zu gelangen]]></item>
 		<item name="wcf.shrinkr.customButton.backToUrl"><![CDATA[Zur Kurz-URL]]></item>
 		<item name="wcf.shrinkr.customButton.forHash"><![CDATA[Ziel]]></item>
 		<item name="wcf.shrinkr.customButton.editUrl"><![CDATA[Kurz-URL bearbeiten]]></item>
@@ -414,72 +457,14 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.customButton.goToUrls"><![CDATA[Zur URL-Liste]]></item>
 		<item name="wcf.shrinkr.customButton.section"><![CDATA[Custom Buttons]]></item>
 		<item name="wcf.shrinkr.customButton.section.description"><![CDATA[Verwalten Sie Custom Buttons, die direkt unter dem Forward-Button angezeigt werden.]]></item>
+		<item name="wcf.shrinkr.customButton.section.description" variant="informal"><![CDATA[Verwalte Custom Buttons, die direkt unter dem Forward-Button angezeigt werden.]]></item>
 		<item name="wcf.shrinkr.customButton.add"><![CDATA[Custom Button hinzufügen]]></item>
 		<item name="wcf.shrinkr.customButton.addAnother"><![CDATA[Weiteren Custom Button hinzufügen]]></item>
 	</category>
 
 	<category name="shrinkr.acp.customButton">
 		<item name="shrinkr.acp.customButton.list.description"><![CDATA[Verwalten Sie Custom Buttons, die direkt unter dem Forward-Button angezeigt werden.]]></item>
-	</category>
-
-	<category name="wcf.shrinkr.buttonClick">
-		<item name="wcf.shrinkr.buttonClick.total"><![CDATA[Button-Klicks]]></item>
-		<item name="wcf.shrinkr.buttonClick.buttonType"><![CDATA[Button-Typ]]></item>
-		<item name="wcf.shrinkr.buttonClick.type.forward"><![CDATA[Weiter-Button]]></item>
-		<item name="wcf.shrinkr.buttonClick.type.featured_link"><![CDATA[Empfohlener Link]]></item>
-		<item name="wcf.shrinkr.buttonClick.type.custom"><![CDATA[Benutzerdefiniert]]></item>
-		<item name="wcf.shrinkr.buttonClick.clickTime"><![CDATA[Zeitpunkt]]></item>
-		<item name="wcf.shrinkr.buttonClick.user"><![CDATA[Benutzer]]></item>
-		<item name="wcf.shrinkr.buttonClick.user.loggedIn"><![CDATA[Eingeloggt]]></item>
-		<item name="wcf.shrinkr.buttonClick.user.guest"><![CDATA[Gast]]></item>
-		<item name="wcf.shrinkr.buttonClick.buttonID"><![CDATA[Button-ID]]></item>
-		<item name="wcf.shrinkr.buttonClick.buttonID.tooltip"><![CDATA[Button-ID (bei Featured Links und Custom Buttons relevant)]]></item>
-		<item name="wcf.shrinkr.buttonClick.clicks"><![CDATA[Klicks]]></item>
-		<item name="wcf.shrinkr.buttonClick.noItems"><![CDATA[Es wurden keine Button-Klicks gefunden.]]></item>
-		<item name="wcf.shrinkr.buttonClick.filter.urlID"><![CDATA[URL-ID]]></item>
-		<item name="wcf.shrinkr.buttonClick.filter.dateFrom"><![CDATA[Von]]></item>
-		<item name="wcf.shrinkr.buttonClick.filter.dateTo"><![CDATA[Bis]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics"><![CDATA[Statistiken]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.overview"><![CDATA[Übersicht]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.total"><![CDATA[Gesamt]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.today"><![CDATA[Heute]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.yesterday"><![CDATA[Gestern]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.last7"><![CDATA[Letzte 7 Tage]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.period"><![CDATA[Zeitraum]]></item>
-		<item name="wcf.shrinkr.buttonClick.statistics.topUrls"><![CDATA[Top URLs]]></item>
-	</category>
-
-	<category name="wcf.shrinkr.statistics">
-		<item name="wcf.shrinkr.statistics.visits"><![CDATA[Besuche]]></item>
-		<item name="wcf.shrinkr.statistics.visits.total"><![CDATA[Gesamt]]></item>
-		<item name="wcf.shrinkr.statistics.visits.today"><![CDATA[Heute]]></item>
-		<item name="wcf.shrinkr.statistics.visits.yesterday"><![CDATA[Gestern]]></item>
-		<item name="wcf.shrinkr.statistics.visits.last7"><![CDATA[Letzte 7 Tage]]></item>
-		<item name="wcf.shrinkr.statistics.referrer"><![CDATA[Referrer]]></item>
-		<item name="wcf.shrinkr.statistics.referrer.top"><![CDATA[Top Referrer]]></item>
-		<item name="wcf.shrinkr.statistics.referrer.topDomains"><![CDATA[Top Domains]]></item>
-		<item name="wcf.shrinkr.statistics.combined"><![CDATA[Kombiniert]]></item>
-		<item name="wcf.shrinkr.statistics.combined.total"><![CDATA[Gesamt (Button-Klicks + Besuche)]]></item>
-		<item name="wcf.shrinkr.statistics.timeSeries"><![CDATA[Zeitverlauf]]></item>
-		<item name="wcf.shrinkr.statistics.analytics"><![CDATA[Analytics]]></item>
-		<item name="wcf.shrinkr.statistics.devices"><![CDATA[Geräte]]></item>
-		<item name="wcf.shrinkr.statistics.device"><![CDATA[Gerät]]></item>
-		<item name="wcf.shrinkr.statistics.browsers"><![CDATA[Browser]]></item>
-		<item name="wcf.shrinkr.statistics.browser"><![CDATA[Browser]]></item>
-		<item name="wcf.shrinkr.statistics.operatingSystems"><![CDATA[Betriebssysteme]]></item>
-		<item name="wcf.shrinkr.statistics.os"><![CDATA[Betriebssystem]]></item>
-		<item name="wcf.shrinkr.statistics.countries"><![CDATA[Länder]]></item>
-		<item name="wcf.shrinkr.statistics.country"><![CDATA[Land]]></item>
-		<item name="wcf.shrinkr.statistics.timeGranularity"><![CDATA[Zeitgranularität]]></item>
-		<item name="wcf.shrinkr.statistics.timeGranularity.day"><![CDATA[Tag]]></item>
-		<item name="wcf.shrinkr.statistics.timeGranularity.hour"><![CDATA[Stunde]]></item>
-		<item name="wcf.shrinkr.statistics.noData.timeSeries"><![CDATA[Für diesen Zeitraum gibt es keine Zeitreihen-Daten.]]></item>
-		<item name="wcf.shrinkr.statistics.noData.devices"><![CDATA[Es gibt noch keine Geräte-Daten.]]></item>
-		<item name="wcf.shrinkr.statistics.noData.browsers"><![CDATA[Es gibt noch keine Browser-Daten.]]></item>
-		<item name="wcf.shrinkr.statistics.noData.os"><![CDATA[Es gibt noch keine Betriebssystem-Daten.]]></item>
-		<item name="wcf.shrinkr.statistics.noData.analytics"><![CDATA[Es gibt noch keine Analytics-Daten.]]></item>
-		<item name="wcf.shrinkr.statistics.noData.countries"><![CDATA[Es gibt noch keine Länder-Daten.]]></item>
-		<item name="wcf.shrinkr.statistics.noData.referrers"><![CDATA[Es gibt noch keine Referrer-Daten.]]></item>
+		<item name="shrinkr.acp.customButton.list.description" variant="informal"><![CDATA[Verwalte Custom Buttons, die direkt unter dem Forward-Button angezeigt werden.]]></item>
 	</category>
 
 	<category name="wcf.shrinkr.url">
@@ -494,26 +479,41 @@ für /shrinkr/ ebenfalls in Ihrer nginx.conf vorhanden sind.]]></item>
 		<item name="wcf.shrinkr.password.dialog.title"><![CDATA[Passwort erforderlich]]></item>
 		<item name="wcf.shrinkr.password.label"><![CDATA[Passwort]]></item>
 		<item name="wcf.shrinkr.password.description"><![CDATA[Bitte geben Sie das Passwort ein, um auf den Link zuzugreifen.]]></item>
+		<item name="wcf.shrinkr.password.description" variant="informal"><![CDATA[Bitte gib das Passwort ein, um auf den Link zuzugreifen.]]></item>
 		<item name="wcf.shrinkr.password.error.empty"><![CDATA[Bitte geben Sie ein Passwort ein.]]></item>
+		<item name="wcf.shrinkr.password.error.empty" variant="informal"><![CDATA[Bitte gib ein Passwort ein.]]></item>
 		<item name="wcf.shrinkr.password.error.wrong"><![CDATA[Das eingegebene Passwort ist falsch.]]></item>
 		<item name="wcf.shrinkr.password.error.invalidLink"><![CDATA[Ungültiger Link.]]></item>
 		<item name="wcf.shrinkr.password.error.notRequired"><![CDATA[Für diesen Link ist kein Passwort erforderlich.]]></item>
 		<item name="wcf.shrinkr.password.success"><![CDATA[Passwort korrekt. Sie werden weitergeleitet...]]></item>
+		<item name="wcf.shrinkr.password.success" variant="informal"><![CDATA[Passwort korrekt. Du wirst weitergeleitet...]]></item>
 	</category>
 
 	<category name="shrinkr.redirect.password">
 		<item name="shrinkr.redirect.password.title"><![CDATA[Passwort erforderlich]]></item>
 		<item name="shrinkr.redirect.password.label"><![CDATA[Passwort]]></item>
 		<item name="shrinkr.redirect.password.description"><![CDATA[Bitte geben Sie das Passwort ein, um auf den Link zuzugreifen.]]></item>
+		<item name="shrinkr.redirect.password.description" variant="informal"><![CDATA[Bitte gib das Passwort ein, um auf den Link zuzugreifen.]]></item>
 		<item name="shrinkr.redirect.password.error.empty"><![CDATA[Bitte geben Sie ein Passwort ein.]]></item>
+		<item name="shrinkr.redirect.password.error.empty" variant="informal"><![CDATA[Bitte gib ein Passwort ein.]]></item>
 		<item name="shrinkr.redirect.password.error.invalid"><![CDATA[Das eingegebene Passwort ist ungültig.]]></item>
 		<item name="shrinkr.redirect.password.error.general"><![CDATA[Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.]]></item>
+		<item name="shrinkr.redirect.password.error.general" variant="informal"><![CDATA[Ein Fehler ist aufgetreten. Bitte versuche es erneut.]]></item>
 	</category>
 
 	<category name="wcf.shrinkr.geolite2">
 		<item name="wcf.shrinkr.geolite2.database_provider.default"><![CDATA[Standard (Standard)]]></item>
 		<item name="wcf.shrinkr.geolite2.database_provider.maxmind"><![CDATA[MaxMind (Eigener Account)]]></item>
 		<item name="wcf.shrinkr.geolite2.database_provider.local"><![CDATA[Lokale Datenbank]]></item>
+	</category>
+
+	<category name="wcf.shrinkr">
+		<item name="wcf.shrinkr.global.all"><![CDATA[Alle]]></item>
+	</category>
+
+	<category name="wcf.shrinkr.reaction">
+		<item name="wcf.shrinkr.reaction.thankYou"><![CDATA[Vielen Dank für Ihr Feedback!]]></item>
+		<item name="wcf.shrinkr.reaction.thankYou" variant="informal"><![CDATA[Vielen Dank für dein Feedback!]]></item>
 	</category>
 
 </language>

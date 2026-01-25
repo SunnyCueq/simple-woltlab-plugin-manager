@@ -3,6 +3,8 @@
 namespace shrinkr\acp\page;
 
 use shrinkr\data\custombutton\CustomButtonList;
+use shrinkr\util\ShrinkrUtil;
+use wcf\data\option\Option;
 use wcf\page\MultipleLinkPage;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\WCF;
@@ -172,6 +174,9 @@ class CustomButtonListPage extends MultipleLinkPage
     {
         parent::assignVariables();
 
+        // Get menu badge text
+        $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
+
         WCF::getTPL()->assign([
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
@@ -180,6 +185,7 @@ class CustomButtonListPage extends MultipleLinkPage
             'urlHash' => $this->urlHash,
             'urlTarget' => $this->urlTarget,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.menu',
+            'menuBadgeText' => $menuBadgeText,
         ]);
     }
 }

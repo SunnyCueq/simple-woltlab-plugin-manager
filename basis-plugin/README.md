@@ -102,13 +102,6 @@
 - **3D-Button-Effekte** – Moderne UI-Elemente
 - **Responsive Design** – Perfekt auf allen Geräten
 
-### 📊 Statistiken & Tracking
-
-- **Klick-Counter** – Für jede Kurz-URL
-- **Button-Tracking** – Welcher Button wurde geklickt?
-- **Visit-Tracking** – Referrer, User, Session
-- **Zeitbasierte Auswertung** – Detaillierte Statistiken
-
 ---
 
 ## 🛠️ Konfiguration

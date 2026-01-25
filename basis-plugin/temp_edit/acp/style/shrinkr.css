@@ -1,5 +1,15 @@
 /* ACP Styles für Shr1nkr */
 
+/* HINWEIS: Menü-Icon-Farben (fire/key) wurden komplett entfernt - Icons verwenden jetzt Standard-Farben */
+
+/* Filter-Formular: Input-Felder sollen volle Breite ausfüllen */
+#tplButtonClickList form .row .col-md-6 input[type="date"],
+#tplButtonClickList form .row .col-md-6 input[type="number"],
+#tplButtonClickList form .row .col-md-6 select {
+	width: 100%;
+	box-sizing: border-box;
+}
+
 #tplShrinkrLinkList .columnQR {
     text-align: center;
 }
@@ -195,13 +205,13 @@
     transform: translateX(3px); /* 75% of 4px */
 }
 
-/* Special List - Better readability */
-.specialList td,
-.specialList th {
+/* Special List - Better readability (nur für Shr1nkr) */
+#tplSpecialList .specialList td,
+#tplSpecialList .specialList th {
     padding: 0.75rem 1rem; /* More padding for better readability */
 }
 
-.specialList td {
+#tplSpecialList .specialList td {
     line-height: 1.6; /* Slightly increased line height */
 }
 
@@ -242,122 +252,27 @@
     gap: 5px;
 }
 
-/* Statistics Page Layout Styles */
-.statisticsHeaderContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+/* Password Icon - Orange Farbe (höhere Spezifität als .table td.columnIcon fa-icon) */
+.table td.columnIcon .shrinkrPasswordIcon fa-icon,
+.shrinkrPasswordIcon fa-icon {
+    color: var(--preset-orange) !important;
 }
 
-.statisticsHeaderContainer .sectionTitle {
-    margin: 0;
-}
-
-.statisticsDropdownContainer {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-.statisticsDropdownContainer label {
-    margin-right: 0.5rem;
-}
-
-.statisticsChartContainer {
-    height: 400px;
-    margin-bottom: 1.5rem;
-}
-
-.statisticsFlexContainer {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-}
-
-.statisticsFlexContainer > div {
-    flex: 1;
-    min-width: 300px;
-}
-
-.statisticsFlexContainer > div.statisticsFlexContainerLarge {
-    min-width: 400px;
-}
-
-.statisticsTableContainer {
-    margin-top: 1.5rem;
-}
-
-.statisticsChartContainerSmall {
-    height: 300px;
-}
-
-.statisticsMapContainer {
-    height: 500px;
-    width: 100%;
-}
-
-.countryMapLegend {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 0.875rem;
-    color: #6c757d;
-}
-
-/* Grünes Passwort-Icon - überschreibt die columnIcon-Regel */
-.htmlContent table td.columnIcon .green fa-icon,
-.ck.ck-content.ck-editor__editable table td.columnIcon .green fa-icon,
-.messageBody > .messageText table td.columnIcon .green fa-icon,
-.messageSignature > div table td.columnIcon .green fa-icon,
-.table td.columnIcon .green fa-icon,
-table td.columnIcon span.green fa-icon {
-    color: var(--preset-green) !important;
-}
-
-/* Statistik-Übersichtskarten */
-.statisticsOverviewGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-@media (min-width: 545px) {
-    .statisticsOverviewGrid {
-        grid-template-columns: repeat(2, 1fr);
+/* Shr1nkr Menu mit DEMO/EXPERTE Badge */
+@media screen and (min-width: 1025px), print {
+    /* Badge Styling - wird zwischen Text und Linie eingefügt */
+    .shrinkr-demo-badge {
+        font-size: 10px;
+        font-weight: 500;
+        padding: 2px 6px;
+        background-color: var(--wcfStatusWarningBackground);
+        border-color: var(--wcfStatusWarningBorder);
+        color: var(--wcfStatusWarningText);
+        border-radius: 3px;
+        border: 1px solid;
+        white-space: nowrap;
+        flex-shrink: 0;      /* Badge darf nicht schrumpfen */
+        min-width: fit-content;  /* Badge passt sich dem Text-Inhalt an */
+        box-sizing: border-box;  /* Padding wird korrekt berechnet */
     }
-}
-
-@media (min-width: 768px) {
-    .statisticsOverviewGrid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-.statisticsCard {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    background-color: var(--wcfContentBackground);
-    border: 1px solid var(--wcfContentBorder);
-    border-radius: 4px;
-}
-
-.statisticsCard dt {
-    font-size: 0.875rem;
-    color: var(--wcfContentDimmedText);
-    margin-bottom: 0.5rem;
-    text-align: center;
-}
-
-.statisticsCard dd {
-    font-size: 2rem;
-    font-weight: 600;
-    text-align: center;
-    margin: 0;
-    color: var(--wcfContentText);
-}
-
-.statisticsCard .number {
-    display: block;
 }

@@ -75,6 +75,7 @@
                     </dd>
                 </dl>
 
+
                 {if $sortField|isset}<input type="hidden" name="sortField" value="{$sortField}">{/if}
                 {if $sortOrder|isset}<input type="hidden" name="sortOrder" value="{$sortOrder}">{/if}
 			
@@ -129,6 +130,11 @@
                     {foreach from=$objects item=url}
                         <tr class="jsUrlRow jsObjectActionObject" data-object-id="{unsafe:$url->getObjectID()}">
                             <td class="columnIcon">
+                                {if $url->passwordHash}
+                                    <a href="{link controller='ShrinkrLinkList' application='shrinkr'}passwordProtected=1{/link}" title="{lang}wcf.shrinkr.link.passwordProtected{/lang}" class="acpPageSubMenuIcon{if $passwordProtected} active{/if}" data-tooltip="{lang}wcf.shrinkr.link.passwordProtected{/lang}" aria-label="{lang}wcf.shrinkr.link.passwordProtected{/lang}">
+                                        <span class="shrinkrPasswordIcon">{icon name='key' size=16}</span>
+                                    </a>
+                                {/if}
                                 <a href="{link controller='ShrinkrLinkEdit' application='shrinkr' id=$url->linkID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon name='pencil'}</a>
                                 {objectAction action="delete" objectTitle=$url->hash}
                                 
@@ -268,6 +274,16 @@
     {/if}
 {else}
     <p class="error">{lang}wcf.shrinkr.notActive{/lang}</p>
+{/if}
+
+{* Menu Badge JavaScript *}
+{if $menuBadgeText}
+<script>
+	window.SHRINKR_MENU_BADGE_TEXT = {$menuBadgeText|json};
+	require(['Shrinkr/Acp/Ui/MenuBadge'], function(MenuBadge) {
+		new MenuBadge();
+	});
+</script>
 {/if}
 
 {include file='footer'}

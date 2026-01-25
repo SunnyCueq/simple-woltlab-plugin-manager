@@ -429,7 +429,7 @@ class OptionFormDemoDataHandler
                 $this->log('OptionFormDemoDataHandler: Error deleting discounts: ' . $e->getMessage());
             }
             
-            // Step 6: Delete demo URLs themselves (ONLY verified demo URLs)
+            // Step 7: Delete demo URLs themselves (ONLY verified demo URLs)
             try {
                 if (!empty($demoUrlIDs)) {
                     // SECURITY: Only delete by verified linkID list (already verified to have DEMO- hash)

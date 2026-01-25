@@ -6,9 +6,11 @@ use shrinkr\data\shrinkrlink\ShrinkrLink;
 use shrinkr\data\shrinkrlink\ShrinkrLinkEditor;
 use shrinkr\system\exception\HashException;
 use shrinkr\system\exception\UrlException;
+use wcf\data\option\Option;
 use wcf\data\page\Page;
 use wcf\system\exception\UserInputException;
 use wcf\system\request\LinkHandler;
+use wcf\system\WCF;
 use wcf\util\ArrayUtil;
 use wcf\util\StringUtil;
 
@@ -209,6 +211,29 @@ final class ShrinkrUtil
         }
 
         return $prefix . $hash;
+    }
+
+    /**
+     * Returns the menu badge text based on demo data and expert mode options.
+     * 
+     * @return  string  Badge text: translated 'EXPERT, DEMO', 'EXPERT', 'DEMO', or ''
+     */
+    public static function getMenuBadgeText(): string
+    {
+        $demoDataOption = Option::getOptionByName('shrinkr_install_demo_data');
+        $expertModeOption = Option::getOptionByName('shrinkr_expertmode_active');
+        $isDemoData = $demoDataOption ? ($demoDataOption->optionValue == '1' || $demoDataOption->optionValue == 1) : false;
+        $isExpertMode = $expertModeOption ? ($expertModeOption->optionValue == '1' || $expertModeOption->optionValue == 1) : false;
+        
+        if ($isExpertMode && $isDemoData) {
+            return WCF::getLanguage()->get('shrinkr.acp.menu.badge.expertDemo');
+        } elseif ($isExpertMode) {
+            return WCF::getLanguage()->get('shrinkr.acp.menu.badge.expert');
+        } elseif ($isDemoData) {
+            return WCF::getLanguage()->get('shrinkr.acp.menu.badge.demo');
+        }
+        
+        return '';
     }
 
     /**

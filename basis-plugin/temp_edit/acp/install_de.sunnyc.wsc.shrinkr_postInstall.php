@@ -433,7 +433,7 @@ if ($urlTableExists && ($installDemoData || $fromEvent)) {
         }
         
         // Also check by hash pattern (for backwards compatibility and to mark existing URLs)
-        $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE hash IN ('DEMO-1', 'DEMO-2', 'DEMO-3', 'DEMO-4', 'DEMO-5', 'DEMO-6', 'DEMO-7', 'DEMO-8')";
+        $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE hash IN ('DEMO-1', 'DEMO-2', 'DEMO-3', 'DEMO-4', 'DEMO-5', 'DEMO-6', 'DEMO-7', 'DEMO-8', 'DEMO-PW')";
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute();
         while ($row = $statement->fetchArray()) {
@@ -496,6 +496,11 @@ if ($urlTableExists && ($installDemoData || $fromEvent)) {
                 'hash' => 'DEMO-8',
                 'url' => 'https://www.example.com/demo-reactions',
                 'discountValue' => 'Demo: Reaktionen für Benutzer & Gäste',
+            ],
+            [
+                'hash' => 'DEMO-PW',
+                'url' => 'https://example.com',
+                'discountValue' => 'Demo: Passwortgeschützter Link',
             ],
         ];
         
@@ -692,6 +697,23 @@ if ($urlTableExists && ($installDemoData || $fromEvent)) {
                 }
             }
             
+            // Set password for DEMO-PW link
+            if (isset($insertedUrlIDs['DEMO-PW'])) {
+                try {
+                    // Use PHP's password_hash() directly for compatibility in postInstall context
+                    $passwordHash = \password_hash('demo', \PASSWORD_DEFAULT);
+                    
+                    $sql = "UPDATE shrinkr1_link SET passwordHash = ? WHERE linkID = ?";
+                    $statement = WCF::getDB()->prepareStatement($sql);
+                    $statement->execute([$passwordHash, $insertedUrlIDs['DEMO-PW']]);
+                    logPostInstall('Post-install: ✓ Set password for DEMO-PW link (password: demo)');
+                } catch (\Exception $e) {
+                    logPostInstall('Post-install: ✗ Failed to set password for DEMO-PW: ' . $e->getMessage());
+                }
+            } else {
+                logPostInstall('Post-install: ⚠ DEMO-PW link ID not found, cannot set password');
+            }
+            
             logPostInstall('Post-install: URL creation completed. Total URLs in array: ' . count($insertedUrlIDs));
             logPostInstall('Post-install: URL IDs after creation: ' . print_r($insertedUrlIDs, true));
             
@@ -702,7 +724,7 @@ if ($urlTableExists && ($installDemoData || $fromEvent)) {
             }
             
             // Final check: Get IDs for any missing DEMO URLs and mark them as demo
-            $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE hash IN ('DEMO-1', 'DEMO-2', 'DEMO-3', 'DEMO-4', 'DEMO-5', 'DEMO-6', 'DEMO-7')";
+            $sql = "SELECT linkID, hash FROM shrinkr1_link WHERE hash IN ('DEMO-1', 'DEMO-2', 'DEMO-3', 'DEMO-4', 'DEMO-5', 'DEMO-6', 'DEMO-7', 'DEMO-8', 'DEMO-PW')";
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute();
             while ($row = $statement->fetchArray()) {

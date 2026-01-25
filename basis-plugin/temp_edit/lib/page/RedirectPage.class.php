@@ -11,11 +11,8 @@ use shrinkr\data\theme\Theme;
 use shrinkr\data\shrinkrlink\ShrinkrLink;
 use shrinkr\data\shrinkrlink\ShrinkrLinkAction;
 use shrinkr\data\shrinkrlink\ShrinkrLinkEditor;
-use shrinkr\data\visit\VisitEditor;
 use shrinkr\system\favicon\FaviconHandler;
-use shrinkr\util\AnalyticsUtil;
 use shrinkr\util\GeoLite2Util;
-use shrinkr\util\UserAgentUtil;
 use wcf\data\option\Option;
 use wcf\page\AbstractPage;
 use wcf\system\exception\IllegalLinkException;
@@ -24,6 +21,8 @@ use wcf\system\reaction\ReactionHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\request\RequestHandler;
 use wcf\system\WCF;
+use wcf\system\user\storage\UserStorageHandler;
+use wcf\system\user\authentication\password\PasswordAlgorithmManager;
 use wcf\util\FileUtil;
 use wcf\util\StringUtil;
 
@@ -32,8 +31,8 @@ use wcf\util\StringUtil;
  * 
  * This page class manages the display of shortened link redirect pages, including
  * countdown timers, discount codes, special events, featured links, reactions,
- * and seasonal visual effects. It also handles click tracking, analytics, and
- * meta tag generation for social media sharing.
+ * and seasonal visual effects. It also handles meta tag generation for social 
+ * media sharing.
  *
  * @author      Sunny C
  * @copyright   2026 Sunny C
@@ -96,6 +95,34 @@ class RedirectPage extends AbstractPage
      * @var    string|null
      */
     public ?string $specialThemeShortName = null;
+
+    /**
+     * Whether the link is password protected.
+     *
+     * @var    bool
+     */
+    public bool $passwordProtected = false;
+
+    /**
+     * Whether the password has been unlocked.
+     *
+     * @var    bool
+     */
+    public bool $passwordUnlocked = false;
+
+    /**
+     * Whether to show the password form instead of content.
+     *
+     * @var    bool
+     */
+    public bool $showPasswordForm = false;
+
+    /**
+     * Whether there was a password error.
+     *
+     * @var    bool
+     */
+    public bool $passwordError = false;
 
     /**
      * Random description text to display on the page.
@@ -171,6 +198,75 @@ class RedirectPage extends AbstractPage
             // No hash provided - link will be null, will throw IllegalLinkException in readData()
             $this->link = null;
         }
+
+        // Handle POST request for password entry
+        if ($this->link && $this->link->linkID && isset($_POST['password']) && !empty($_POST['password'])) {
+            $password = $_POST['password'];
+            
+            // Check password
+            if ($this->link->isPasswordProtected()) {
+                $algorithm = PasswordAlgorithmManager::getInstance()->getDefaultAlgorithm();
+                if ($algorithm->verify($password, $this->link->passwordHash)) {
+                    // Password correct
+                    if ($this->isSessionStorageEnabled()) {
+                        // Session storage enabled - save and redirect
+                        $userID = WCF::getUser()->userID ?: 0;
+                        $storageKey = 'shrinkr_link_' . $this->link->linkID . '_unlocked';
+                        UserStorageHandler::getInstance()->update($storageKey, TIME_NOW, $userID);
+                        
+                        // Redirect to same URL (GET, without POST parameters)
+                        $redirectUrl = $this->getCurrentUrl();
+                        \header('Location: ' . $redirectUrl, true, 303);
+                        exit();
+                    } else {
+                        // Session storage disabled - unlock for this request only (no redirect)
+                        $this->passwordUnlocked = true;
+                        // No redirect - page will show content in same request
+                    }
+                } else {
+                    // Password incorrect
+                    $this->passwordError = true;
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if session storage is enabled (globally or per-link).
+     *
+     * @return  bool    True if session storage is enabled
+     */
+    protected function isSessionStorageEnabled(): bool
+    {
+        // Check global option
+        $globalOption = \wcf\data\option\Option::getOptionByName('shrinkr_password_session_storage');
+        if ($globalOption && ($globalOption->optionValue == '1' || $globalOption->optionValue == 1)) {
+            return true;
+        }
+        
+        // Check per-link setting
+        if ($this->link && $this->link->hasSessionStorage()) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Gets the current URL without query parameters.
+     *
+     * @return  string  Current URL
+     */
+    protected function getCurrentUrl(): string
+    {
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        $uri = $_SERVER['REQUEST_URI'] ?? '';
+        
+        // Keep query string (contains r/{hash}/)
+        // REQUEST_URI already contains the full path with query string
+        
+        return $protocol . $host . $uri;
     }
 
     /**
@@ -180,12 +276,6 @@ class RedirectPage extends AbstractPage
     public function readData(): void
     {
         parent::readData();
-
-        // Track visit only if link exists (before assignVariables, so base plugin counter is not yet increased)
-        // Note: assignVariables() will always be called, even if link doesn't exist (WoltLab pattern)
-        if (isset($this->link?->linkID) && $this->link->linkID) {
-            $this->trackVisit();
-        }
 
         // Extract page title (must be done before getRandomDescription)
         $url = $this->link->url ?? '';
@@ -223,6 +313,57 @@ class RedirectPage extends AbstractPage
 
         // Get random description
         $this->randomDescription = $this->getRandomDescription();
+
+        // Check password protection
+        if ($this->link && $this->link->isPasswordProtected()) {
+            $this->passwordProtected = true;
+            
+            // If already unlocked in this request (from POST), don't override
+            if ($this->passwordUnlocked) {
+                // Already unlocked in readParameters() - keep it true
+                // Don't show password form
+                $this->showPasswordForm = false;
+            } else {
+                // Check if already unlocked via session storage
+                if ($this->isSessionStorageEnabled()) {
+                    $userID = WCF::getUser()->userID ?: 0;
+                    $storageKey = 'shrinkr_link_' . $this->link->linkID . '_unlocked';
+                    $unlockedTimestamp = UserStorageHandler::getInstance()->getField($storageKey, $userID);
+                    
+                    if ($unlockedTimestamp) {
+                        // Check if session is still valid (24h default)
+                        $sessionDuration = $this->getSessionDuration();
+                        if ($sessionDuration > 0 && (TIME_NOW - $unlockedTimestamp) > $sessionDuration) {
+                            // Session expired
+                            $this->passwordUnlocked = false;
+                        } else {
+                            // Session still valid
+                            $this->passwordUnlocked = true;
+                        }
+                    } else {
+                        $this->passwordUnlocked = false;
+                    }
+                } else {
+                    // Session storage disabled - always require password (unless already unlocked in this request)
+                    $this->passwordUnlocked = false;
+                }
+                
+                // Show password form if not unlocked
+                if (!$this->passwordUnlocked) {
+                    $this->showPasswordForm = true;
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets the session duration in seconds.
+     *
+     * @return  int     Session duration in seconds (hardcoded: 86400 = 24 hours)
+     */
+    protected function getSessionDuration(): int
+    {
+        return 86400; // Hardcoded session duration (24 hours)
     }
 
     /**
@@ -242,8 +383,10 @@ class RedirectPage extends AbstractPage
         // Increase URL counter
         ShrinkrLinkAction::increaseCounter($this->link);
 
-        // Check for direct forwarding
-        if (!SHRINKR_FORWARDING_MUST_CONFIRMED && SHRINKR_TIME_UNTIL_FORWARDING == 0) {
+        // Block forwarding if password protected and not unlocked
+        if ($this->passwordProtected && !$this->passwordUnlocked) {
+            // Do not redirect - show password form instead
+        } elseif (!SHRINKR_FORWARDING_MUST_CONFIRMED && SHRINKR_TIME_UNTIL_FORWARDING == 0) {
             // Redirect
             \header('Location: ' . $this->link->url, true, 303);
 
@@ -487,6 +630,10 @@ class RedirectPage extends AbstractPage
             // Set Open Graph Meta-Tags
             $this->setOpenGraphMetaTags();
 
+            // Get copyright option
+            $copyrightOption = Option::getOptionByName('shrinkr_copyright_enabled');
+            $copyrightEnabled = $copyrightOption ? ($copyrightOption->optionValue == '1' || $copyrightOption->optionValue == 1) : true;
+
             WCF::getTPL()->assign([
                 'link' => $this->link,
                 'featuredLinks' => $this->featuredLinks,
@@ -514,6 +661,11 @@ class RedirectPage extends AbstractPage
                 'enableGuestReactions' => $enableGuestReactions, // Whether guest reactions are enabled
                 'guestReactionTypeID' => $guestReactionTypeID, // Guest reaction type ID (if guest has reacted)
                 'enableShareButton' => $enableShareButton, // Whether share button is enabled
+                'passwordProtected' => $this->passwordProtected, // Whether link is password protected
+                'passwordUnlocked' => $this->passwordUnlocked, // Whether password has been unlocked
+                'showPasswordForm' => $this->showPasswordForm, // Whether to show password form
+                'passwordError' => $this->passwordError, // Whether there was a password error
+                'copyrightEnabled' => $copyrightEnabled, // Whether copyright is enabled
             ]);
     }
 
@@ -1010,113 +1162,6 @@ class RedirectPage extends AbstractPage
             'fadeScroll' => true,
             'enableInteraction' => true,
         ];
-    }
-
-    /**
-     * Tracks a visit to the redirect page.
-     * Stores visit details including referrer and synchronizes the counter.
-     * Prevents duplicate visits from the same session/user within 30 minutes.
-     *
-     * @return void
-     */
-    private function trackVisit(): void
-    {
-        if (!isset($this->link->linkID) || !$this->link->linkID) {
-            return;
-        }
-
-        $linkID = $this->link->linkID;
-        $userID = null;
-        $sessionID = null;
-
-        if (WCF::getUser()->userID) {
-            $userID = WCF::getUser()->userID;
-        } else {
-            $sessionID = WCF::getSession()->sessionID;
-        }
-
-        $timeThreshold = TIME_NOW - 1800;
-        $conditions = "linkID = ? AND visitTime >= ?";
-        $parameters = [$linkID, $timeThreshold];
-
-        if ($userID) {
-            $conditions .= " AND userID = ?";
-            $parameters[] = $userID;
-        } else {
-            $conditions .= " AND sessionID = ?";
-            $parameters[] = $sessionID;
-        }
-
-        $sql = "SELECT COUNT(*) FROM shrinkr1_visit WHERE " . $conditions;
-        $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute($parameters);
-        $existingVisitCount = $statement->fetchSingleColumn();
-
-        // If a visit already exists within the time window, ignore it
-        if ($existingVisitCount > 0) {
-            return;
-        }
-
-        // Get referrer (vollständige URL)
-        $referrer = null;
-        if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
-            $referrer = $_SERVER['HTTP_REFERER'];
-            // Limit length to 512 characters
-            if (strlen($referrer) > 512) {
-                $referrer = substr($referrer, 0, 512);
-            }
-        }
-
-        // Get IP address
-        $ipAddress = null;
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            $ipAddress = $_SERVER['REMOTE_ADDR'];
-        }
-
-        // Anonymize IP address (DSGVO compliance)
-        $anonymizedIP = null;
-        if ($ipAddress) {
-            $anonymizedIP = AnalyticsUtil::getInstance()->anonymizeIP($ipAddress);
-        }
-
-        // Parse User-Agent
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-        $userAgentData = UserAgentUtil::getInstance()->parse($userAgent);
-
-        // GeoIP Lookup
-        $geoData = [
-            'country' => null,
-            'city' => null,
-        ];
-        if ($ipAddress && GeoLite2Util::getInstance()->isAvailable()) {
-            $geoData = GeoLite2Util::getInstance()->lookup($ipAddress);
-        }
-
-        // Store visit in database with all analytics data
-        VisitEditor::create([
-            'linkID' => $linkID,
-            'visitTime' => TIME_NOW,
-            'referrer' => $referrer,
-            'userID' => $userID,
-            'sessionID' => $sessionID,
-            'country' => $geoData['country'],
-            'city' => $geoData['city'],
-            'deviceType' => $userAgentData['deviceType'],
-            'browser' => $userAgentData['browser'],
-            'browserVersion' => $userAgentData['browserVersion'],
-            'os' => $userAgentData['os'],
-            'ipAddress' => $anonymizedIP,
-        ]);
-
-        // Synchronize counter: Update shrinkr1_link.counter from visit count
-        $sql = "SELECT COUNT(*) FROM shrinkr1_visit WHERE linkID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$linkID]);
-        $visitCount = $statement->fetchSingleColumn();
-
-        // Update counter in shrinkr1_link
-        $urlEditor = new ShrinkrLinkEditor($this->link);
-        $urlEditor->update(['counter' => $visitCount]);
     }
 
     /**

@@ -38,6 +38,8 @@ use wcf\util\FileUtil;
  * @property-read   string      $faviconUrl         Cached favicon URL
  * @property-read   string      $ogImage            Open Graph image path
  * @property-read   int         $isDemo             Demo data flag (0 or 1)
+ * @property-read   string|null $passwordHash       Password hash (NULL if not protected)
+ * @property-read   int         $sessionStorageEnabled Session storage enabled flag (0 or 1)
  */
 class ShrinkrLink extends DatabaseObject implements IRouteController
 {
@@ -216,5 +218,25 @@ class ShrinkrLink extends DatabaseObject implements IRouteController
         }
         
         return [$this->ogImage];
+    }
+
+    /**
+     * Checks if this link is password protected.
+     *
+     * @return  bool    True if password hash is set
+     */
+    public function isPasswordProtected(): bool
+    {
+        return !empty($this->passwordHash);
+    }
+
+    /**
+     * Checks if session storage is enabled for this link.
+     *
+     * @return  bool    True if session storage is enabled
+     */
+    public function hasSessionStorage(): bool
+    {
+        return !empty($this->sessionStorageEnabled);
     }
 }

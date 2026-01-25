@@ -44,7 +44,17 @@
 				<dd>
 					<textarea rows="10" readonly>{$content|trim}</textarea>
 				</dd>
-			</dl>
-		{/foreach}
-	</section>
+		</dl>
+	{/foreach}
+</section>
 {/foreach}
+
+{* Menu Badge JavaScript *}
+{if $menuBadgeText}
+<script>
+	window.SHRINKR_MENU_BADGE_TEXT = {$menuBadgeText|json};
+	require(['Shrinkr/Acp/Ui/MenuBadge'], function(MenuBadge) {
+		new MenuBadge();
+	});
+</script>
+{/if}

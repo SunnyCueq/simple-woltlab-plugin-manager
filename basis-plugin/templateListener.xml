@@ -75,12 +75,45 @@
 			<templatecode><![CDATA[<link rel="stylesheet" type="text/css" href="{unsafe:$__wcf->getPath('shrinkr')}acp/style/shrinkr.css" />]]></templatecode>
 		</templatelistener>
 
-		<templatelistener name="shrinkrRequirePaths">
+		<!-- Menu Text Erweiterung: Zeige DEMO/EXPERTE/DEMO, EXPERTE nach dem Menu-Item -->
+		<templatelistener name="shrinkrMenuText">
 			<environment>admin</environment>
 			<templatename>header</templatename>
-			<eventname>requirePaths</eventname>
-			<templatecode><![CDATA["d3": "{unsafe:$__wcf->getPath('shrinkr')}js/3rdParty/d3/d3.min",
-				"topojson-client": "{unsafe:$__wcf->getPath('shrinkr')}js/3rdParty/topojson-client/topojson-client",]]></templatecode>
+			<eventname>javascriptInclude</eventname>
+			<templatecode><![CDATA[<script data-relocate="true">
+// Nutze WoltLab's automatisch generierte Optionen-Konstanten
+// (analog zu ENABLE_DEBUG_MODE in header.tpl Zeile 59)
+document.addEventListener('DOMContentLoaded', function() {
+	// Prüfe Optionen - exakt wie WoltLab es mit ENABLE_DEBUG_MODE macht
+	var demoDataActive = {if SHRINKR_INSTALL_DEMO_DATA}true{else}false{/if};
+	var expertModeActive = {if SHRINKR_EXPERTMODE_ACTIVE}true{else}false{/if};
+	
+	var suffix = '';
+	if (demoDataActive && expertModeActive) {
+		suffix = 'DEMO, EXPERTE';
+	} else if (demoDataActive) {
+		suffix = 'DEMO';
+	} else if (expertModeActive) {
+		suffix = 'EXPERTE';
+	}
+	
+	if (suffix === '') return;
+	
+	var menuItems = document.querySelectorAll('.acpPageSubMenuCategory > span');
+	menuItems.forEach(function(span) {
+		if (span.textContent.trim() === 'Shr1nkr') {
+			// Text extrahieren und Badge einfügen (VOR dem ::after)
+			var originalText = span.childNodes[0];
+			if (originalText && originalText.nodeType === 3) {
+				var badge = document.createElement('span');
+				badge.className = 'shrinkr-demo-badge';
+				badge.textContent = ' ' + suffix;
+				span.insertBefore(badge, originalText.nextSibling);
+			}
+		}
+	});
+});
+</script>]]></templatecode>
 		</templatelistener>
 
 		<!-- Copyright-Erweiterung -->

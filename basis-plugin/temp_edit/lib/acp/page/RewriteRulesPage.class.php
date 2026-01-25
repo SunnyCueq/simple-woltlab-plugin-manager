@@ -2,6 +2,7 @@
 
 namespace shrinkr\acp\page;
 
+use shrinkr\util\ShrinkrUtil;
 use wcf\page\AbstractPage;
 use wcf\system\application\ApplicationHandler;
 use wcf\system\WCF;
@@ -72,6 +73,9 @@ class RewriteRulesPage extends AbstractPage
         
         $rewriteRules = $this->fetchRewriteRules();
         
+        // Get menu badge text
+        $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
+        
         WCF::getTPL()->assign([
             'rewriteRules' => [
                 'apache' => [
@@ -81,6 +85,7 @@ class RewriteRulesPage extends AbstractPage
                     'nginx.conf' => $rewriteRules['nginx'],
                 ],
             ],
+            'menuBadgeText' => $menuBadgeText,
         ]);
     }
     
