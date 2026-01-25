@@ -380,8 +380,7 @@ class RedirectPage extends AbstractPage
         }
         
         // Link exists - process it
-        // Increase URL counter
-        ShrinkrLinkAction::increaseCounter($this->link);
+        // Note: Visit tracking is now handled by RedirectPageVisitTrackerListener
 
         // Block forwarding if password protected and not unlocked
         if ($this->passwordProtected && !$this->passwordUnlocked) {

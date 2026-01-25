@@ -34,6 +34,18 @@ class OptionFormDemoDataHandler
     {
         $this->log('OptionFormDemoDataHandler: Handler called for OptionForm::saved');
         
+        // Handle main demo data (Links, Rabatte, Specials, etc.)
+        $this->handleMainDemoData();
+        
+        // Handle statistic demo data
+        $this->handleStatisticDemoData();
+    }
+    
+    /**
+     * Handles main demo data (Links, Discounts, Specials, Featured Links, Custom Buttons)
+     */
+    private function handleMainDemoData(): void
+    {
         try {
             $option = \wcf\data\option\Option::getOptionByName('shrinkr_install_demo_data');
             if (!$option) {
@@ -183,6 +195,210 @@ class OptionFormDemoDataHandler
             } else {
                 $this->log('OptionFormDemoDataHandler: Post-install script not found!');
             }
+        }
+    }
+    
+    /**
+     * Handles statistic demo data installation/deletion
+     */
+    private function handleStatisticDemoData(): void
+    {
+        try {
+            $option = \wcf\data\option\Option::getOptionByName('shrinkr_install_demo_data');
+            if (!$option) {
+                $this->log('OptionFormDemoDataHandler: Option shrinkr_install_demo_data not found for statistics');
+                return;
+            }
+            
+            $installDemoData = (bool) $option->optionValue;
+            $this->log('OptionFormDemoDataHandler: Statistics - Option value: ' . ($installDemoData ? '1' : '0'));
+            
+            if ($installDemoData) {
+                $this->installStatisticDemoData();
+            } else {
+                $this->deleteStatisticDemoData();
+            }
+        } catch (\Exception $e) {
+            $this->log('OptionFormDemoDataHandler: Error handling statistic demo data: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Installs demo statistic data (30 days of visits and interactions)
+     */
+    private function installStatisticDemoData(): void
+    {
+        try {
+            // Check if statistic data already exists
+            $sql = "SELECT COUNT(*) FROM shrinkr1_statistic_visit";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute();
+            $existingVisits = $statement->fetchSingleColumn();
+            
+            if ($existingVisits > 0) {
+                $this->log('OptionFormDemoDataHandler: Statistic demo data already exists (' . $existingVisits . ' visits), skipping');
+                return;
+            }
+            
+            $this->log('OptionFormDemoDataHandler: Generating statistic demo data...');
+            
+            // Get demo link IDs
+            $sql = "SELECT linkID FROM shrinkr1_link WHERE isDemo = 1 ORDER BY linkID LIMIT 5";
+            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement->execute();
+            $demoLinkIDs = [];
+            while ($row = $statement->fetchArray()) {
+                $demoLinkIDs[] = $row['linkID'];
+            }
+            
+            if (empty($demoLinkIDs)) {
+                $this->log('OptionFormDemoDataHandler: No demo links found, cannot generate statistic data');
+                return;
+            }
+            
+            $this->log('OptionFormDemoDataHandler: Found ' . count($demoLinkIDs) . ' demo links for statistic generation');
+            
+            // Generate 30 days of demo data
+            $baseTime = TIME_NOW - 2592000; // 30 days ago
+            
+            // Realistic demo data
+            $refererDomains = ['google.com', 'facebook.com', 'twitter.com', 'reddit.com', 'youtube.com', 'instagram.com', ''];
+            $browsers = [
+                ['name' => 'Chrome', 'version' => '120.0'],
+                ['name' => 'Firefox', 'version' => '121.0'],
+                ['name' => 'Safari', 'version' => '17.2'],
+                ['name' => 'Edge', 'version' => '120.0']
+            ];
+            $operatingSystems = [
+                ['name' => 'Windows', 'version' => '10.0'],
+                ['name' => 'macOS', 'version' => '14.2'],
+                ['name' => 'Linux', 'version' => '6.0'],
+                ['name' => 'Android', 'version' => '14'],
+                ['name' => 'iOS', 'version' => '17.2']
+            ];
+            $countryCodes = ['DE', 'US', 'GB', 'FR', 'CH', 'AT', ''];
+            
+            for ($day = 0; $day < 30; $day++) {
+                $dayTime = $baseTime + ($day * 86400);
+                $date = date('Y-m-d', $dayTime);
+                
+                // Random visits per day (50-200)
+                $visitsCount = rand(50, 200);
+                $uniqueVisits = (int)($visitsCount * 0.7);
+                
+                // Generate visit records with ALL columns
+                for ($i = 0; $i < $visitsCount; $i++) {
+                    $time = $dayTime + rand(0, 86399);
+                    $linkID = $demoLinkIDs[array_rand($demoLinkIDs)];
+                    $browser = $browsers[array_rand($browsers)];
+                    $os = $operatingSystems[array_rand($operatingSystems)];
+                    $refererDomain = $refererDomains[array_rand($refererDomains)];
+                    $countryCode = $countryCodes[array_rand($countryCodes)];
+                    
+                    $userAgent = sprintf(
+                        'Mozilla/5.0 (%s %s) AppleWebKit/537.36 (KHTML, like Gecko) %s/%s',
+                        $os['name'],
+                        $os['version'],
+                        $browser['name'],
+                        $browser['version']
+                    );
+                    
+                    $sql = "INSERT INTO shrinkr1_statistic_visit 
+                            (linkID, ipHash, userID, time, userAgent, browserName, browserVersion, 
+                             osName, osVersion, countryCode, refererHash, refererDomain, languageID) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $statement = WCF::getDB()->prepareStatement($sql);
+                    $statement->execute([
+                        $linkID,
+                        hash('sha256', 'demo_' . ($i < $uniqueVisits ? $i : rand(0, $uniqueVisits))),
+                        null,
+                        $time,
+                        $userAgent,
+                        $browser['name'],
+                        $browser['version'],
+                        $os['name'],
+                        $os['version'],
+                        $countryCode,
+                        hash('sha256', $refererDomain ? 'ref_' . $refererDomain : 'direct'),
+                        $refererDomain,
+                        1 // languageID
+                    ]);
+                }
+                
+                // Random interactions per day (20-80)
+                $interactionsCount = rand(20, 80);
+                $interactionTypes = ['button.forward', 'button.custom', 'button.featured_link', 'reaction.1'];
+                
+                for ($i = 0; $i < $interactionsCount; $i++) {
+                    $time = $dayTime + rand(0, 86399);
+                    $linkID = $demoLinkIDs[array_rand($demoLinkIDs)];
+                    
+                    $sql = "INSERT INTO shrinkr1_statistic_interaction 
+                            (linkID, objectID, interactionType, ipHash, userID, time) 
+                            VALUES (?, ?, ?, ?, ?, ?)";
+                    $statement = WCF::getDB()->prepareStatement($sql);
+                    $statement->execute([
+                        $linkID,
+                        rand(1, 3),
+                        $interactionTypes[array_rand($interactionTypes)],
+                        hash('sha256', 'demo_' . rand(1, 100)),
+                        null,
+                        $time
+                    ]);
+                }
+                
+                // Create daily aggregated data
+                $sql = "INSERT INTO shrinkr1_statistic_daily 
+                        (statisticType, date, counter, total) 
+                        VALUES (?, ?, ?, ?)";
+                $statement = WCF::getDB()->prepareStatement($sql);
+                
+                // Visit aggregation
+                $statement->execute([1, $date, $uniqueVisits, $visitsCount]);
+                
+                // Interaction aggregation
+                $statement->execute([2, $date, (int)($interactionsCount * 0.6), $interactionsCount]);
+            }
+            
+            $this->log('OptionFormDemoDataHandler: Generated 30 days of statistic demo data');
+            
+            // Clear statistic cache
+            \shrinkr\system\cache\builder\StatisticCacheBuilder::getInstance()->reset();
+            $this->log('OptionFormDemoDataHandler: Statistic cache cleared');
+            
+        } catch (\Exception $e) {
+            $this->log('OptionFormDemoDataHandler: Error installing statistic demo data: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Deletes all statistic demo data
+     */
+    private function deleteStatisticDemoData(): void
+    {
+        try {
+            $this->log('OptionFormDemoDataHandler: Deleting statistic demo data...');
+            
+            // Simple approach: Delete ALL statistic data (since it's demo environment)
+            $tables = ['shrinkr1_statistic_visit', 'shrinkr1_statistic_interaction', 'shrinkr1_statistic_daily'];
+            
+            foreach ($tables as $table) {
+                try {
+                    $sql = "TRUNCATE TABLE " . $table;
+                    $statement = WCF::getDB()->prepareStatement($sql);
+                    $statement->execute();
+                    $this->log('OptionFormDemoDataHandler: Truncated table ' . $table);
+                } catch (\Exception $e) {
+                    $this->log('OptionFormDemoDataHandler: Error truncating ' . $table . ': ' . $e->getMessage());
+                }
+            }
+            
+            // Clear statistic cache
+            \shrinkr\system\cache\builder\StatisticCacheBuilder::getInstance()->reset();
+            $this->log('OptionFormDemoDataHandler: Statistic cache cleared after deletion');
+            
+        } catch (\Exception $e) {
+            $this->log('OptionFormDemoDataHandler: Error deleting statistic demo data: ' . $e->getMessage());
         }
     }
     

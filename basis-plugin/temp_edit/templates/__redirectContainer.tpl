@@ -134,19 +134,19 @@
             <script data-relocate="true">
             (function() {
                 // Track button click function
-                function trackButtonClick(linkID, buttonType, linkID) {
+                function trackButtonClick(linkID, buttonType, objectID) {
                     if (!linkID) return;
                     
                     if (typeof require !== 'undefined') {
                         require(['WoltLabSuite/Core/Ajax'], function(Ajax) {
                             Ajax.apiOnce({
                                 data: {
-                                    actionName: 'trackClick',
-                                    className: 'shrinkr\\data\\buttonclick\\ButtonClickAction',
+                                    actionName: 'trackInteraction',
+                                    className: 'shrinkr\\data\\statistic\\interaction\\StatisticInteractionAction',
                                     parameters: {
                                         linkID: linkID,
-                                        buttonType: buttonType,
-                                        linkID: linkID || null
+                                        interactionType: buttonType,
+                                        objectID: objectID || 0
                                     }
                                 },
                                 silent: true,
@@ -166,9 +166,9 @@
                             }
                             e.preventDefault();
                             const linkID = parseInt(this.getAttribute('data-url-id')) || 0;
-                            const buttonID = parseInt(this.getAttribute('data-button-id')) || null;
+                            const buttonID = parseInt(this.getAttribute('data-button-id')) || 0;
                             if (linkID > 0) {
-                                trackButtonClick(linkID, 'custom', buttonID);
+                                trackButtonClick(linkID, 'button.custom', buttonID);
                             }
                             const targetUrl = this.getAttribute('href') || '#';
                             setTimeout(() => {
@@ -228,19 +228,19 @@
         <script data-relocate="true">
         (function() {
             // Track button click function (shared with __forwardButton.tpl)
-            function trackButtonClick(linkID, buttonType, linkID) {
+            function trackButtonClick(linkID, buttonType, objectID) {
                 if (!linkID) return;
                 
                 if (typeof require !== 'undefined') {
                     require(['WoltLabSuite/Core/Ajax'], function(Ajax) {
                         Ajax.apiOnce({
                             data: {
-                                actionName: 'trackClick',
-                                className: 'shrinkr\\data\\buttonclick\\ButtonClickAction',
+                                actionName: 'trackInteraction',
+                                className: 'shrinkr\\data\\statistic\\interaction\\StatisticInteractionAction',
                                 parameters: {
                                     linkID: linkID,
-                                    buttonType: buttonType,
-                                    linkID: linkID || null
+                                    interactionType: buttonType,
+                                    objectID: objectID || 0
                                 }
                             },
                             silent: true,
@@ -278,7 +278,7 @@
                     
                     {if $link|isset && $link->linkID|isset}
                     event.preventDefault();
-                    trackButtonClick({$link->linkID}, 'forward');
+                    trackButtonClick({$link->linkID}, 'button.forward', 0);
                     setTimeout(function() {
                         window.location.href = buttonUrl;
                     }, 120);
@@ -398,7 +398,7 @@
                         return;
                     }
                     event.preventDefault();
-                    trackButtonClick({$link->linkID}, 'forward');
+                    trackButtonClick({$link->linkID}, 'button.forward', 0);
                     setTimeout(function() {
                         window.location.href = buttonUrl;
                     }, 120);
@@ -409,19 +409,19 @@
             }
             
             // Track button click function
-            function trackButtonClick(linkID, buttonType, linkID) {
+            function trackButtonClick(linkID, buttonType, objectID) {
                 if (!linkID) return;
                 
                 if (typeof require !== 'undefined') {
                     require(['WoltLabSuite/Core/Ajax'], function(Ajax) {
                         Ajax.apiOnce({
                             data: {
-                                actionName: 'trackClick',
-                                className: 'shrinkr\\data\\buttonclick\\ButtonClickAction',
+                                actionName: 'trackInteraction',
+                                className: 'shrinkr\\data\\statistic\\interaction\\StatisticInteractionAction',
                                 parameters: {
                                     linkID: linkID,
-                                    buttonType: buttonType,
-                                    linkID: linkID || null
+                                    interactionType: buttonType,
+                                    objectID: objectID || 0
                                 }
                             },
                             silent: true,

@@ -31,7 +31,6 @@ use wcf\util\FileUtil;
  * @property-read   int         $linkID             Unique link identifier
  * @property-read   string      $url                Target URL
  * @property-read   string      $hash               Short link hash/identifier
- * @property-read   int         $counter            Click counter
  * @property-read   string      $featuredLinks      Serialized featured links data
  * @property-read   string      $linkTitle          Custom link title
  * @property-read   string      $autoExtractedTitle Auto-extracted page title

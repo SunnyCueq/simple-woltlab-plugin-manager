@@ -44,20 +44,19 @@ class ShrinkrLinkAction extends AbstractDatabaseObjectAction
     protected $permissionsDelete = ['admin.shrinkr.canManageLinks'];
     
     /**
+     * @deprecated No longer used - visit tracking is now handled via statistics system
      * Increases the click counter for the given link.
      * 
-     * Increments the counter field by 1 if click tracking is enabled
-     * (SHRINKR_COUNTER_ACTIVE constant). This method is called when a user
-     * clicks on a shortened link.
+     * This method is deprecated and no longer functional. Visit tracking is now
+     * handled by the RedirectPageVisitTrackerListener and stored in the
+     * shrinkr1_statistic_visit table.
      *
      * @param   ShrinkrLink  $link  The link whose counter should be increased
      * @return  void
      */
     public static function increaseCounter(ShrinkrLink $link): void
     {
-        if (SHRINKR_COUNTER_ACTIVE) {
-            $editor = new ShrinkrLinkEditor($link);
-            $editor->update(['counter' => ($link->counter + 1)]);
-        }
+        // Deprecated: Counter field removed from database
+        // Visit tracking is now handled by RedirectPageVisitTrackerListener
     }
 }

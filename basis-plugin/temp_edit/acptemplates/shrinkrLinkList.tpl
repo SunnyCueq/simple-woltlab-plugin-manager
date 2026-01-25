@@ -38,7 +38,21 @@
 
 <header class="contentHeader">
 	<div class="contentHeaderTitle">
-		<h1 class="contentTitle">{lang}shrinkr.acp.url.list{/lang}</h1>
+		<h1 class="contentTitle">
+			{if $passwordProtected}
+				{lang}shrinkr.acp.url.list.password{/lang}
+			{else}
+				{lang}shrinkr.acp.url.list{/lang}
+			{/if}
+			{if $objectCount|isset} <span class="badge badgeInverse">{#$objectCount}</span>{/if}
+		</h1>
+		<p class="contentHeaderDescription">
+			{if $passwordProtected}
+				{lang}shrinkr.acp.url.list.password.description{/lang}
+			{else}
+				{lang}shrinkr.acp.url.list.description{/lang}
+			{/if}
+		</p>
 	</div>
 	
     {if SHRINKR_ACTIVE}
@@ -54,7 +68,7 @@
 
 {include file='formError'}
 
-{if SHRINKR_ACTIVE && $objects|count}
+{if SHRINKR_ACTIVE && $objects|count && !$passwordProtected}
 	<form action="{link controller='ShrinkrLinkList'}{/link}" method="POST">
 		<section class="section">
             <h2 class="sectionTitle">{lang}wcf.global.filter{/lang}</h2>
@@ -108,9 +122,6 @@
                         <th class="columnTitle columnHash{if $sortField == 'hash'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=hash&sortOrder={if $sortField == 'hash' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url.hash{/lang}</a></th>
                         <th class="columnTitle columnUrl{if $sortField == 'url'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=url&sortOrder={if $sortField == 'url' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url{/lang}</a></th>
                         <th class="columnTitle columnUrlGoal{if $sortField == 'urlGoal'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=urlGoal&sortOrder={if $sortField == 'urlGoal' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.urlGoal{/lang}</a></th>
-                        {if SHRINKR_COUNTER_ACTIVE}
-                            <th class="columnTitle columnCounter text-center{if $sortField == 'counter'} active {unsafe:$sortOrder}{/if}"><a href="{link controller='ShrinkrLinkList'}pageNo={unsafe:$pageNo}&sortField=counter&sortOrder={if $sortField == 'counter' && $sortOrder == 'ASC'}DESC{else}ASC{/if}&q={$q}{/link}">{lang}wcf.shrinkr.url.counter{/lang}</a></th>
-                        {/if}
                         <th class="columnTitle columnQR text-center"><span class="qrIconHeader">{icon size=24 name='qrcode'}</span></th>
                         
                         {* URL List Column Heads (from template listeners) *}
@@ -147,9 +158,6 @@
                             <kbd>{$url->getShortedUrl(true)}</kbd>
                             </td>
                             <td class="columnTitle columnUrlGoal"><kbd>{$url->url}</kbd></td>
-                            {if SHRINKR_COUNTER_ACTIVE}
-                                <td class="columnTitle columnCounter text-center">{$url->counter}</td>
-                            {/if}
                             <td class="columnTitle columnQR text-center" data-url="{$url->getShortedUrl(true)}">
                                 <button type="button" class="button qrDownloadLink">{icon name='download'}</button>
                             </td>

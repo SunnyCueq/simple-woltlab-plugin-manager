@@ -56,7 +56,7 @@ class ShrinkrLinkListPage extends SortablePage
      *
      * @var    string[]
      */
-    public $validSortFields = ['linkID', 'hash', 'url', 'counter', 'linkTitle', 'featuredLinks', 'special'];
+    public $validSortFields = ['linkID', 'hash', 'url', 'linkTitle', 'featuredLinks', 'special'];
 
     /**
      * Search query string for URL filtering.
@@ -400,6 +400,9 @@ class ShrinkrLinkListPage extends SortablePage
         // Get menu badge text
         $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
 
+        // Calculate object count
+        $objectCount = $this->objectList->countObjects();
+
         // Assign template variables
         WCF::getTPL()->assign([
             'q' => $this->q,
@@ -408,6 +411,7 @@ class ShrinkrLinkListPage extends SortablePage
             'linksArray' => $linksArray,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.link.list',
             'menuBadgeText' => $menuBadgeText,
+            'objectCount' => $objectCount,
         ]);
         
         // Override objects in template if sorted

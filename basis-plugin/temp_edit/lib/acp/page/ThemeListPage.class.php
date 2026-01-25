@@ -165,6 +165,9 @@ class ThemeListPage extends MultipleLinkPage
         // Get menu badge text
         $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
 
+        // Calculate object count
+        $objectCount = $this->objectList->countObjects();
+
         WCF::getTPL()->assign([
             'title' => $this->title,
             'identifier' => $this->identifier,
@@ -173,6 +176,7 @@ class ThemeListPage extends MultipleLinkPage
             'sortOrder' => $this->sortOrder,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.theme.list',
             'menuBadgeText' => $menuBadgeText,
+            'objectCount' => $objectCount,
         ]);
     }
 }

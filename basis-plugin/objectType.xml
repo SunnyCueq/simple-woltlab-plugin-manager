@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/objectType.xsd">
 	<import>
+		<!-- Existing: Ad Locations -->
 		<type>
 			<name>de.sunnyc.wsc.shrinkr.beforeRedirectContainer</name>
 			<definitionname>com.woltlab.wcf.adLocation</definitionname>
@@ -13,6 +14,8 @@
 			<categoryname>de.sunnyc.wsc.shrinkr</categoryname>
 			<cssclassname>shrinkrAdLocationAfterRedirectContainer</cssclassname>
 		</type>
+		
+		<!-- Existing: Message Types -->
 		<type>
 			<name>de.sunnyc.wsc.shrinkr.discount.additionalText</name>
 			<definitionname>com.woltlab.wcf.message</definitionname>
@@ -23,6 +26,8 @@
 			<definitionname>com.woltlab.wcf.message</definitionname>
 			<categoryname>de.sunnyc.wsc.shrinkr</categoryname>
 		</type>
+		
+		<!-- Existing: Likeable Object -->
 		<type>
 			<name>de.sunnyc.wsc.shrinkr.likeableShrinkrLink</name>
 			<definitionname>com.woltlab.wcf.like.likeableObject</definitionname>
@@ -30,27 +35,4 @@
 			<classname>shrinkr\system\like\LikeableShrinkrLinkProvider</classname>
 		</type>
 	</import>
-
-	<delete>
-		<type>
-			<name>de.sunnyc.wsc.shrinkr.beforeRedirectContainer</name>
-			<definitionname>com.woltlab.wcf.adLocation</definitionname>
-		</type>
-		<type>
-			<name>de.sunnyc.wsc.shrinkr.afterRedirectContainer</name>
-			<definitionname>com.woltlab.wcf.adLocation</definitionname>
-		</type>
-		<type>
-			<name>de.sunnyc.wsc.shrinkr.discount.additionalText</name>
-			<definitionname>com.woltlab.wcf.message</definitionname>
-		</type>
-		<type>
-			<name>de.sunnyc.wsc.shrinkr.special.additionalText</name>
-			<definitionname>com.woltlab.wcf.message</definitionname>
-		</type>
-		<type>
-			<name>de.sunnyc.wsc.shrinkr.likeableUrl</name>
-			<definitionname>com.woltlab.wcf.like.likeableObject</definitionname>
-		</type>
-	</delete>
 </data>

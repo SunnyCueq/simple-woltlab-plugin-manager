@@ -251,6 +251,25 @@ default:Standard:rgba(255, 255, 255, 1):rgba(255, 255, 255, 1):rgba(255, 255, 25
 				<defaultvalue>1</defaultvalue>
 				<hidden>1</hidden>
 			</option>
+			
+	<!-- Tracking & Statistics -->
+	<option name="shrinkr_tracking_enabled">
+		<categoryname>shrinkr.general</categoryname>
+		<options>shrinkr_active</options>
+		<showorder>10</showorder>
+		<optiontype>boolean</optiontype>
+		<defaultvalue>1</defaultvalue>
+	</option>
+	<option name="shrinkr_statistic_retention_days">
+		<categoryname>shrinkr.general</categoryname>
+		<options>shrinkr_active</options>
+		<optionsrequired>shrinkr_tracking_enabled</optionsrequired>
+		<showorder>11</showorder>
+		<optiontype>integer</optiontype>
+		<defaultvalue>90</defaultvalue>
+		<minvalue>30</minvalue>
+		<maxvalue>365</maxvalue>
+	</option>
 
 		<!-- Tab 7: Erweitert -->
 		<option name="shrinkr_pattern">

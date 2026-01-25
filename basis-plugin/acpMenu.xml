@@ -124,6 +124,23 @@
 			<icon>gear</icon>
 			<showorder>100</showorder>
 		</acpmenuitem>
+		
+	<acpmenuitem name="shrinkr.acp.menu.link.statistic">
+		<controller>shrinkr\acp\page\StatisticPage</controller>
+		<parent>shrinkr.acp.menu.link.menu</parent>
+		<options>shrinkr_active,shrinkr_tracking_enabled</options>
+		<permissions>admin.shrinkr.canViewStatistics</permissions>
+		<icon>chart-line</icon>
+		<showorder>90</showorder>
+	</acpmenuitem>
+	
+	<acpmenuitem name="shrinkr.acp.menu.link.statistic.info">
+		<controller>shrinkr\acp\page\StatisticInfoPage</controller>
+		<parent>shrinkr.acp.menu.link.statistic</parent>
+		<options>shrinkr_active</options>
+		<permissions>admin.shrinkr.canViewStatistics</permissions>
+		<icon>circle-info</icon>
+		<showorder>1</showorder>
+	</acpmenuitem>
 	</import>
-
 </data>

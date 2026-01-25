@@ -166,6 +166,9 @@ class DescriptionListPage extends MultipleLinkPage
         // Get menu badge text
         $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
 
+        // Calculate object count
+        $objectCount = $this->objectList->countObjects();
+
         WCF::getTPL()->assign([
             'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
@@ -174,6 +177,7 @@ class DescriptionListPage extends MultipleLinkPage
             'isActiveFilter' => $this->isActive,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.description.list',
             'menuBadgeText' => $menuBadgeText,
+            'objectCount' => $objectCount,
         ]);
     }
 }

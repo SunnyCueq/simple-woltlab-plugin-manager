@@ -159,6 +159,9 @@ class DiscountListPage extends MultipleLinkPage
         // Get menu badge text
         $menuBadgeText = ShrinkrUtil::getMenuBadgeText();
 
+        // Calculate object count
+        $objectCount = $this->objectList->countObjects();
+
         WCF::getTPL()->assign([
             'discountValue' => $this->discountValue,
             'codes' => $this->codes,
@@ -167,6 +170,7 @@ class DiscountListPage extends MultipleLinkPage
             'sortOrder' => $this->sortOrder,
             'acpPageSubMenuCategoryList' => 'shrinkr.acp.menu.link.discount.list',
             'menuBadgeText' => $menuBadgeText,
+            'objectCount' => $objectCount,
         ]);
     }
 }

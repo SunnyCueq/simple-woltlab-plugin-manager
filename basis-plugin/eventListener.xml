@@ -66,6 +66,12 @@
 			<listenerclassname>shrinkr\system\event\listener\OptionFormDemoDataListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
+		<eventlistener name="redirectPageVisitTracker">
+			<eventclassname>wcf\page\RedirectPage</eventclassname>
+			<eventname>beforeShow</eventname>
+			<listenerclassname>wcf\system\event\listener\RedirectPageVisitTrackerListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
 	</import>
 
 	<delete>

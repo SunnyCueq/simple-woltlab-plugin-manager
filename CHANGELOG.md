@@ -1,7 +1,35 @@
 # Changelog - Shr1nkr Plugin
 
-**Aktuelle Version:** 2.0.23
-**Status:** 🚀 Major Release - Komplette Entfernung aller Statistik-Features
+**Aktuelle Version:** 2.1.42
+**Status:** ✨ Feature Release - Tab-Struktur & Info-Seite für Statistiken
+
+## Version 2.1.42 (2026-01-25)
+### Added
+- **Tab-Struktur für Statistiken**: Statistiken sind jetzt in übersichtliche Tabs unterteilt
+  - Tab 1: Übersicht (KPIs, Timeline, Filter)
+  - Tab 2: Besucher (Zeitanalyse, Browser/OS, Länder, Geräte, Traffic-Quellen)
+  - Tab 3: Interaktionen (Button-Klicks, Reaktionen, Custom Buttons, Featured Links)
+  - Tab 4: Marketing (Link Performance, Specials/Themes)
+- **Statistik-Info-Seite**: Neue Info-Seite mit Erklärungen zu allen Metriken
+  - Icon: `circle-info` im ACP-Menü als Untermenü von "Statistiken"
+  - Ausführliche Beschreibung aller KPIs (Conversion Rate, Avg. Session Duration, etc.)
+  - Erklärungen zu Besucherstatistiken (Browser, OS, Geräte, Visitor Types, Traffic Sources)
+  - Details zu Interaktionstypen (Forward Button, Custom Buttons, Featured Links, Reaktionen)
+  - Datenschutz-Hinweise (DSGVO, IP-Hashing, Datenaufbewahrung, Aggregierung)
+  - Controller: `StatisticInfoPage.class.php`
+  - Template: `statisticInfo.tpl`
+
+### Changed
+- **Button-Klicks pro Link**: Liste auf Top 20 begrenzt um übermäßige Länge zu verhindern
+- **Traffic-Quellen**: Doppelte Sektion entfernt, nur noch im "Besucher"-Tab
+- **Template-Größe**: statistic.tpl deutlich verkleinert durch Tab-Struktur (weniger Scrollen nötig)
+
+### Fixed
+- **Sprachvariable**: `shrinkr.acp.statistic.url` war nicht definiert (im neuen Template behoben)
+
+## Version 2.1.41 (2026-01-25)
+### Fixed
+- **Version Bump**: Version korrekt hochgezählt für Tab-Struktur Implementierung
 
 ## Version 2.0.23 (2026-01-25)
 ### Fixed

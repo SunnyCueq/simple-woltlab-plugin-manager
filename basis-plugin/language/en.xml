@@ -121,6 +121,8 @@
 		<item name="shrinkr.acp.menu.link.theme.list"><![CDATA[Themes]]></item>
 		<item name="shrinkr.acp.menu.link.theme.add"><![CDATA[Add theme]]></item>
 		<item name="shrinkr.acp.menu.link.theme.edit"><![CDATA[Edit Theme]]></item>
+		<item name="shrinkr.acp.menu.link.statistic"><![CDATA[Statistics]]></item>
+		<item name="shrinkr.acp.menu.link.statistic.info"><![CDATA[Info]]></item>
 	</category>
 
 	<category name="wcf.shrinkr">
@@ -165,6 +167,9 @@
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate"><![CDATA[Show Rewrite Rules]]></item>
 		<item name="shrinkr.acp.url.removeUrlsPrefix.info.htaccess.generate.description"><![CDATA[Click the button to display the appropriate rewrite rules for your webserver.]]></item>
 		<item name="shrinkr.acp.url.list"><![CDATA[Manage short URLs]]></item>
+		<item name="shrinkr.acp.url.list.description"><![CDATA[Here you can view all your short URLs. You can search by hash, URL or title, sort and manage them.]]></item>
+		<item name="shrinkr.acp.url.list.password"><![CDATA[Manage Password Protected Short URLs]]></item>
+		<item name="shrinkr.acp.url.list.password.description"><![CDATA[Here you can view all short URLs that are protected with a password.]]></item>
 		<item name="shrinkr.acp.url.add"><![CDATA[Shorten URL]]></item>
 		<item name="shrinkr.acp.url.edit"><![CDATA[Edit short URL]]></item>
 		<item name="shrinkr.acp.url.delete.confirmMessage"><![CDATA[Do you really want to delete this short URL? All collected data will be deleted.]]></item>
@@ -405,8 +410,20 @@ for /shrinkr/ are also present in your nginx.conf.]]></item>
 		<item name="shrinkr.acp.featuredLink.list.description"><![CDATA[Manage recommended links displayed on the redirect page.]]></item>
 	</category>
 
+	<category name="shrinkr.acp.special">
+		<item name="shrinkr.acp.special.list.description"><![CDATA[Here you can manage special events and promotions for your short URLs. Specials can be time-limited actions, discounts or seasonal events.]]></item>
+	</category>
+
+	<category name="shrinkr.acp.discount">
+		<item name="shrinkr.acp.discount.list.description"><![CDATA[Here you can manage discount codes and discount configurations. These are used to automatically display discount badges on redirect pages.]]></item>
+	</category>
+
+	<category name="shrinkr.acp.description">
+		<item name="shrinkr.acp.description.list.description"><![CDATA[Here you can manage description texts that are displayed on redirect pages. These texts help users learn more about the target URL.]]></item>
+	</category>
+
 	<category name="shrinkr.acp.theme">
-		<item name="shrinkr.acp.theme.list.description"><![CDATA[Manage themes for specials. Themes define color schemes that can be used in specials.]]></item>
+		<item name="shrinkr.acp.theme.list.description"><![CDATA[Here you can manage themes and special effects for your short URLs. Themes define color schemes and visual effects that can be used in specials.]]></item>
 	</category>
 
 	<category name="wcf.shrinkr.customButton">
@@ -475,6 +492,239 @@ for /shrinkr/ are also present in your nginx.conf.]]></item>
 	<category name="wcf.shrinkr.reaction">
 		<item name="wcf.shrinkr.reaction.thankYou"><![CDATA[Thank you for your feedback!]]></item>
 		<item name="wcf.shrinkr.reaction.thankYou" variant="informal"><![CDATA[Thank you for your feedback!]]></item>
+	</category>
+
+	<!-- Statistic System -->
+	<category name="wcf.acp.menu">
+		<item name="wcf.acp.menu.link.shrinkr.statistic"><![CDATA[Statistics]]></item>
+	</category>
+
+	<category name="shrinkr.acp.statistic">
+		<item name="shrinkr.acp.statistic.title"><![CDATA[Statistics]]></item>
+		<item name="shrinkr.acp.statistic.description"><![CDATA[View detailed statistics about your short URLs, visitors, and interactions.]]></item>
+		
+		<!-- Overview -->
+		<item name="shrinkr.acp.statistic.overview"><![CDATA[Overview]]></item>
+		<item name="shrinkr.acp.statistic.today"><![CDATA[Today]]></item>
+		<item name="shrinkr.acp.statistic.yesterday"><![CDATA[Yesterday]]></item>
+		<item name="shrinkr.acp.statistic.thisWeek"><![CDATA[This Week]]></item>
+		<item name="shrinkr.acp.statistic.thisMonth"><![CDATA[This Month]]></item>
+		<item name="shrinkr.acp.statistic.total"><![CDATA[Total]]></item>
+		<item name="shrinkr.acp.statistic.interactionsToday"><![CDATA[Interactions Today]]></item>
+		
+		<!-- Charts -->
+		<item name="shrinkr.acp.statistic.visitTrend"><![CDATA[Visit Trend]]></item>
+		<item name="shrinkr.acp.statistic.topLinks"><![CDATA[Top Links]]></item>
+		<item name="shrinkr.acp.statistic.visits"><![CDATA[Visits]]></item>
+		<item name="shrinkr.acp.statistic.hourlyDistribution"><![CDATA[Hourly Distribution]]></item>
+		<item name="shrinkr.acp.statistic.hourlyDistribution.description"><![CDATA[Shows visitor distribution across 24 hours for the last 7 days.]]></item>
+		<item name="shrinkr.acp.statistic.interactionTypes"><![CDATA[Interaction Types]]></item>
+		
+	<!-- Filter -->
+	<item name="shrinkr.acp.statistic.filter"><![CDATA[Filter]]></item>
+	<item name="shrinkr.acp.statistic.period"><![CDATA[Period]]></item>
+	
+	<!-- Extended Overview -->
+	<item name="shrinkr.acp.statistic.uniqueVisitors"><![CDATA[Unique Visitors]]></item>
+	<item name="shrinkr.acp.statistic.uniqueVisitorsToday"><![CDATA[Unique Visitors (Today)]]></item>
+	<item name="shrinkr.acp.statistic.uniqueVisitorsTotal"><![CDATA[Unique Visitors (Total)]]></item>
+	<item name="shrinkr.acp.statistic.avgClicksPerLink"><![CDATA[Avg Clicks per Link]]></item>
+	<item name="shrinkr.acp.statistic.conversionRate"><![CDATA[Conversion Rate]]></item>
+	<item name="shrinkr.acp.statistic.mostActiveHour"><![CDATA[Most Active Hour]]></item>
+	<item name="shrinkr.acp.statistic.mostActiveWeekday"><![CDATA[Most Active Weekday]]></item>
+	
+	<!-- Link Performance -->
+	<item name="shrinkr.acp.statistic.linkPerformance"><![CDATA[Link Performance]]></item>
+	<item name="shrinkr.acp.statistic.linkPerformance.description"><![CDATA[Detailed statistics for all your short URLs]]></item>
+	<item name="shrinkr.acp.statistic.linkName"><![CDATA[Link Name]]></item>
+	<item name="shrinkr.acp.statistic.lastActivity"><![CDATA[Last Activity]]></item>
+	<item name="shrinkr.acp.statistic.noLinks"><![CDATA[No links available]]></item>
+	
+	<!-- Interaction Details -->
+	<item name="shrinkr.acp.statistic.interactionDetails"><![CDATA[Interaction Details]]></item>
+	<item name="shrinkr.acp.statistic.interactionDetails.description"><![CDATA[Detailed breakdown of all interaction types]]></item>
+	<item name="shrinkr.acp.statistic.interactionType"><![CDATA[Interaction Type]]></item>
+	<item name="shrinkr.acp.statistic.total"><![CDATA[Total]]></item>
+	<item name="shrinkr.acp.statistic.unique"><![CDATA[Unique]]></item>
+	<item name="shrinkr.acp.statistic.avgPerDay"><![CDATA[Avg per Day]]></item>
+	<item name="shrinkr.acp.statistic.trend"><![CDATA[Trend]]></item>
+	<item name="shrinkr.acp.statistic.noInteractions"><![CDATA[No interactions available]]></item>
+	
+	<!-- Time Analysis -->
+	<item name="shrinkr.acp.statistic.timeAnalysis"><![CDATA[Time Analysis]]></item>
+	<item name="shrinkr.acp.statistic.weekdayDistribution"><![CDATA[Weekday Distribution]]></item>
+	<item name="shrinkr.acp.statistic.weekdayDistribution.description"><![CDATA[Visitor distribution across weekdays for the last 30 days]]></item>
+	<item name="shrinkr.acp.statistic.monthlyOverview"><![CDATA[Monthly Overview]]></item>
+	<item name="shrinkr.acp.statistic.monthlyOverview.description"><![CDATA[Visitor development over the last 12 months]]></item>
+	<item name="shrinkr.acp.statistic.peakTimes"><![CDATA[Peak Times]]></item>
+	<item name="shrinkr.acp.statistic.peakTimes.description"><![CDATA[The 5 hours with the most visits]]></item>
+	<item name="shrinkr.acp.statistic.hour"><![CDATA[Hour]]></item>
+	
+	<!-- Traffic Sources -->
+	<item name="shrinkr.acp.statistic.trafficSources"><![CDATA[Traffic Sources]]></item>
+	<item name="shrinkr.acp.statistic.trafficSources.description"><![CDATA[Where do your visitors come from?]]></item>
+	<item name="shrinkr.acp.statistic.referer"><![CDATA[Referrer]]></item>
+	<item name="shrinkr.acp.statistic.directTraffic"><![CDATA[Direct Traffic]]></item>
+	<item name="shrinkr.acp.statistic.noReferers"><![CDATA[No referrer data available]]></item>
+	
+	<!-- Browser & OS -->
+	<item name="shrinkr.acp.statistic.browserOS"><![CDATA[Browser & Devices]]></item>
+	<item name="shrinkr.acp.statistic.browserOS.description"><![CDATA[Which browsers and operating systems do your visitors use?]]></item>
+	<item name="shrinkr.acp.statistic.browser"><![CDATA[Browser]]></item>
+	<item name="shrinkr.acp.statistic.os"><![CDATA[Operating System]]></item>
+	<item name="shrinkr.acp.statistic.version"><![CDATA[Version]]></item>
+	<item name="shrinkr.acp.statistic.percentage"><![CDATA[Share]]></item>
+	<item name="shrinkr.acp.statistic.noBrowserData"><![CDATA[No browser data available]]></item>
+	<item name="shrinkr.acp.statistic.noOSData"><![CDATA[No operating system data available]]></item>
+	
+	<!-- Countries -->
+	<item name="shrinkr.acp.statistic.countries"><![CDATA[Country Distribution]]></item>
+	<item name="shrinkr.acp.statistic.countries.description"><![CDATA[From which countries do your visitors come?]]></item>
+	<item name="shrinkr.acp.statistic.country"><![CDATA[Country]]></item>
+	<item name="shrinkr.acp.statistic.noCountryData"><![CDATA[No country data available]]></item>
+	
+	<!-- Custom Buttons -->
+	<item name="shrinkr.acp.statistic.customButtons"><![CDATA[Custom Button Performance]]></item>
+	<item name="shrinkr.acp.statistic.customButtons.description"><![CDATA[Which custom buttons are clicked most often?]]></item>
+	<item name="shrinkr.acp.statistic.buttonText"><![CDATA[Button Text]]></item>
+	<item name="shrinkr.acp.statistic.clicks"><![CDATA[Clicks]]></item>
+	<item name="shrinkr.acp.statistic.uniqueClicks"><![CDATA[Unique Clicks]]></item>
+	<item name="shrinkr.acp.statistic.noCustomButtons"><![CDATA[No custom buttons available]]></item>
+	
+	<!-- Featured Links -->
+	<item name="shrinkr.acp.statistic.featuredLinks"><![CDATA[Featured Link Performance]]></item>
+	<item name="shrinkr.acp.statistic.featuredLinks.description"><![CDATA[Which featured links are clicked most often?]]></item>
+	<item name="shrinkr.acp.statistic.noFeaturedLinks"><![CDATA[No featured links available]]></item>
+	
+	<!-- Specials/Themes -->
+	<item name="shrinkr.acp.statistic.specials"><![CDATA[Special Effects / Themes]]></item>
+	<item name="shrinkr.acp.statistic.specials.description"><![CDATA[Which seasonal effects and themes were displayed and how often?]]></item>
+	<item name="shrinkr.acp.statistic.theme"><![CDATA[Theme/Effect]]></item>
+	<item name="shrinkr.acp.statistic.views"><![CDATA[Views]]></item>
+	<item name="shrinkr.acp.statistic.uniqueVisitors"><![CDATA[Unique Visitors]]></item>
+	<item name="shrinkr.acp.statistic.lastSeen"><![CDATA[Last Seen]]></item>
+	<item name="shrinkr.acp.statistic.noSpecials"><![CDATA[No specials available]]></item>
+	
+	<!-- Reactions -->
+	<item name="shrinkr.acp.statistic.reactions"><![CDATA[Reaction Performance]]></item>
+	<item name="shrinkr.acp.statistic.reactions.description"><![CDATA[Which reactions are used most frequently?]]></item>
+	<item name="shrinkr.acp.statistic.reactionType"><![CDATA[Reaction Type]]></item>
+	<item name="shrinkr.acp.statistic.usages"><![CDATA[Usages]]></item>
+	<item name="shrinkr.acp.statistic.uniqueUsers"><![CDATA[Unique Users]]></item>
+	<item name="shrinkr.acp.statistic.noReactions"><![CDATA[No reactions available]]></item>
+	
+	<!-- Link Button Interactions -->
+	<item name="shrinkr.acp.statistic.linkButtonInteractions"><![CDATA[Button Clicks per Link]]></item>
+	<item name="shrinkr.acp.statistic.linkButtonInteractions.description"><![CDATA[Detailed overview: Which buttons were clicked on which links?]]></item>
+	<item name="shrinkr.acp.statistic.noLinkButtonInteractions"><![CDATA[No button interactions available]]></item>
+	<item name="shrinkr.acp.statistic.buttonType"><![CDATA[Button Type]]></item>
+	
+	<!-- Device Types -->
+	<item name="shrinkr.acp.statistic.devices"><![CDATA[Device Types]]></item>
+	<item name="shrinkr.acp.statistic.devices.description"><![CDATA[Which device types do your visitors use?]]></item>
+	<item name="shrinkr.acp.statistic.mobile"><![CDATA[Mobile]]></item>
+	<item name="shrinkr.acp.statistic.desktop"><![CDATA[Desktop]]></item>
+	<item name="shrinkr.acp.statistic.tablet"><![CDATA[Tablet]]></item>
+	<item name="shrinkr.acp.statistic.deviceType"><![CDATA[Device Type]]></item>
+	
+	<!-- Visitor Types -->
+	<item name="shrinkr.acp.statistic.visitorTypes"><![CDATA[Visitor Types]]></item>
+	<item name="shrinkr.acp.statistic.visitorTypes.description"><![CDATA[New vs. returning visitors]]></item>
+	<item name="shrinkr.acp.statistic.newVisitors"><![CDATA[New Visitors]]></item>
+	<item name="shrinkr.acp.statistic.returningVisitors"><![CDATA[Returning Visitors]]></item>
+	
+	<!-- Session Duration -->
+	<item name="shrinkr.acp.statistic.avgSessionDuration"><![CDATA[Avg. Session Duration]]></item>
+	<item name="shrinkr.acp.statistic.sessionDuration"><![CDATA[Session Duration]]></item>
+	<item name="shrinkr.acp.statistic.minutes"><![CDATA[Minutes]]></item>
+	<item name="shrinkr.acp.statistic.seconds"><![CDATA[Seconds]]></item>
+	
+	<!-- Limits & Pagination -->
+	<item name="shrinkr.acp.statistic.showingTop"><![CDATA[Showing Top]]></item>
+	
+	<!-- Export -->
+	<item name="shrinkr.acp.statistic.export"><![CDATA[Export]]></item>
+	<item name="shrinkr.acp.statistic.exportCSV"><![CDATA[Export as CSV]]></item>
+	
+	<!-- Info Page -->
+	<item name="shrinkr.acp.statistic.info.title"><![CDATA[Statistics Information]]></item>
+	<item name="shrinkr.acp.statistic.info.description"><![CDATA[Explanations of statistics, metrics and their calculation]]></item>
+	<item name="shrinkr.acp.statistic.info.general"><![CDATA[General Information]]></item>
+	<item name="shrinkr.acp.statistic.info.general.text"><![CDATA[The Shr1nkr statistics provide you with a comprehensive overview of the usage of your short URLs. All data is collected in compliance with GDPR: IP addresses are hashed with a daily salt, raw data is automatically deleted after the configured retention period. Aggregated statistics are retained permanently.]]></item>
+	<item name="shrinkr.acp.statistic.info.kpis"><![CDATA[Key Performance Indicators (KPIs)]]></item>
+	<item name="shrinkr.acp.statistic.info.today"><![CDATA[Number of visits today (since midnight). Each short URL access is counted.]]></item>
+	<item name="shrinkr.acp.statistic.info.uniqueVisitorsToday"><![CDATA[Number of unique visitors today. Calculated based on hashed IP/User-Agent fingerprint.]]></item>
+	<item name="shrinkr.acp.statistic.info.interactionsToday"><![CDATA[Number of all interactions today (button clicks and reactions).]]></item>
+	<item name="shrinkr.acp.statistic.info.conversionRate"><![CDATA[Conversion Rate: (Interactions / Visits) × 100. Shows what percentage of visitors click buttons or give reactions.]]></item>
+	<item name="shrinkr.acp.statistic.info.avgClicksPerLink"><![CDATA[Average number of clicks/interactions per link.]]></item>
+	<item name="shrinkr.acp.statistic.info.mostActiveHour"><![CDATA[The hour of the day (0-23) with the most visits.]]></item>
+	<item name="shrinkr.acp.statistic.info.avgSessionDuration"><![CDATA[Average time visitors spend on the redirect pages.]]></item>
+	<item name="shrinkr.acp.statistic.info.browserOS"><![CDATA[Shows which browsers and operating systems your visitors use. Detection is done via User-Agent.]]></item>
+	<item name="shrinkr.acp.statistic.info.devices"><![CDATA[Distribution of visits by device type (Mobile, Desktop, Tablet). Detection based on User-Agent patterns.]]></item>
+	<item name="shrinkr.acp.statistic.info.visitorTypes"><![CDATA[New visitors (first interaction) vs. Returning visitors (previously recorded). Based on hashed user fingerprint.]]></item>
+	<item name="shrinkr.acp.statistic.info.trafficSources"><![CDATA[Shows which websites (referrers) visitors came from. "Direct Traffic" means no referrer is present (e.g., direct URL entry, bookmarks).]]></item>
+	<item name="shrinkr.acp.statistic.info.button.forward"><![CDATA[Clicks on the "Forward" button that leads to the actual target URL.]]></item>
+	<item name="shrinkr.acp.statistic.info.button.custom"><![CDATA[Clicks on custom buttons that you configured in the ACP settings.]]></item>
+	<item name="shrinkr.acp.statistic.info.button.featured_link"><![CDATA[Clicks on featured links (highlighted links), which can also be configured in the ACP.]]></item>
+	<item name="shrinkr.acp.statistic.info.reactions"><![CDATA[Number of reactions (e.g., likes, emojis) given by visitors.]]></item>
+	<item name="shrinkr.acp.statistic.info.privacy"><![CDATA[Privacy & GDPR]]></item>
+	<item name="shrinkr.acp.statistic.info.privacy.text"><![CDATA[The Shr1nkr statistics collect personal data (IP addresses, user agents) only in anonymized form:]]></item>
+	<item name="shrinkr.acp.statistic.info.privacy.hashing"><![CDATA[IP addresses are hashed using SHA-256 with a daily salt. Tracing back to the original IP is not possible.]]></item>
+	<item name="shrinkr.acp.statistic.info.privacy.retention"><![CDATA[Raw data (individual visits/interactions) is automatically deleted after the configured retention period.]]></item>
+	<item name="shrinkr.acp.statistic.info.privacy.aggregation"><![CDATA[Only aggregated statistics (daily/monthly summaries) are retained permanently.]]></item>
+	
+	<!-- Weekdays -->
+	<item name="shrinkr.acp.statistic.weekday.monday"><![CDATA[Monday]]></item>
+	<item name="shrinkr.acp.statistic.weekday.tuesday"><![CDATA[Tuesday]]></item>
+	<item name="shrinkr.acp.statistic.weekday.wednesday"><![CDATA[Wednesday]]></item>
+	<item name="shrinkr.acp.statistic.weekday.thursday"><![CDATA[Thursday]]></item>
+	<item name="shrinkr.acp.statistic.weekday.friday"><![CDATA[Friday]]></item>
+	<item name="shrinkr.acp.statistic.weekday.saturday"><![CDATA[Saturday]]></item>
+	<item name="shrinkr.acp.statistic.weekday.sunday"><![CDATA[Sunday]]></item>
+	
+	<!-- Months -->
+	<item name="shrinkr.acp.statistic.month.january"><![CDATA[January]]></item>
+	<item name="shrinkr.acp.statistic.month.february"><![CDATA[February]]></item>
+	<item name="shrinkr.acp.statistic.month.march"><![CDATA[March]]></item>
+	<item name="shrinkr.acp.statistic.month.april"><![CDATA[April]]></item>
+	<item name="shrinkr.acp.statistic.month.may"><![CDATA[May]]></item>
+	<item name="shrinkr.acp.statistic.month.june"><![CDATA[June]]></item>
+	<item name="shrinkr.acp.statistic.month.july"><![CDATA[July]]></item>
+	<item name="shrinkr.acp.statistic.month.august"><![CDATA[August]]></item>
+	<item name="shrinkr.acp.statistic.month.september"><![CDATA[September]]></item>
+	<item name="shrinkr.acp.statistic.month.october"><![CDATA[October]]></item>
+	<item name="shrinkr.acp.statistic.month.november"><![CDATA[November]]></item>
+	<item name="shrinkr.acp.statistic.month.december"><![CDATA[December]]></item>
+</category>
+
+<!-- JavaScript Language Variables -->
+<category name="shrinkr.acp.stat">
+	<item name="shrinkr.acp.stat.noData"><![CDATA[No data available]]></item>
+	<item name="shrinkr.acp.stat.visits"><![CDATA[Visits]]></item>
+	<item name="shrinkr.acp.stat.interactions"><![CDATA[Interactions]]></item>
+	
+	<!-- Interaction Types for Pie-Chart -->
+	<item name="shrinkr.acp.stat.interactionType.button.forward"><![CDATA[Forward]]></item>
+	<item name="shrinkr.acp.stat.interactionType.button.custom"><![CDATA[Custom Button]]></item>
+	<item name="shrinkr.acp.stat.interactionType.button.featured_link"><![CDATA[Featured Link]]></item>
+	<item name="shrinkr.acp.stat.interactionType.reaction"><![CDATA[Reaction]]></item>
+</category>
+
+	<!-- Tracking & Statistics Options -->
+	<category name="wcf.acp.option">
+		<item name="wcf.acp.option.shrinkr_tracking_enabled"><![CDATA[Enable Tracking]]></item>
+		<item name="wcf.acp.option.shrinkr_tracking_enabled.description"><![CDATA[Enables tracking of visits and interactions for your short URLs. Disable this option to completely deactivate tracking.]]></item>
+		
+		<item name="wcf.acp.option.shrinkr_statistic_retention_days"><![CDATA[Retention Period (Days)]]></item>
+		<item name="wcf.acp.option.shrinkr_statistic_retention_days.description"><![CDATA[Raw data (individual visits and interactions) will be automatically deleted after this number of days. Aggregated statistics remain permanently. GDPR compliant: IP addresses are hashed with daily salt.]]></item>
+	</category>
+
+	<!-- Permissions -->
+	<category name="wcf.acp.group">
+		<item name="wcf.acp.group.option.admin.shrinkr.canViewStatistics"><![CDATA[Can view statistics]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canViewStatistics.description"><![CDATA[Allows viewing statistics in the ACP.]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageStatistics"><![CDATA[Can manage statistics]]></item>
+		<item name="wcf.acp.group.option.admin.shrinkr.canManageStatistics.description"><![CDATA[Allows deleting and managing statistic data (generate demo data, trigger cleanup, etc.).]]></item>
 	</category>
 
 </language>

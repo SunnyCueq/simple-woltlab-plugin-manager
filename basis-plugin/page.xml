@@ -16,6 +16,36 @@
 				<title>Weiterleitung</title>
 			</content>
 		</page>
+		
+	<page identifier="de.sunnyc.wsc.shrinkr.acp.statistic">
+		<pageType>system</pageType>
+		<controller>shrinkr\acp\page\StatisticPage</controller>
+		<name language="de">Shr1nkr: Statistiken</name>
+		<name language="en">Shr1nkr: Statistics</name>
+		<options>shrinkr_active,shrinkr_tracking_enabled</options>
+		<permissions>admin.shrinkr.canViewStatistics</permissions>
+		<content language="en">
+			<title>Statistics</title>
+		</content>
+		<content language="de">
+			<title>Statistiken</title>
+		</content>
+	</page>
+	
+	<page identifier="de.sunnyc.wsc.shrinkr.acp.statistic.info">
+		<pageType>system</pageType>
+		<controller>shrinkr\acp\page\StatisticInfoPage</controller>
+		<name language="de">Shr1nkr: Statistik-Informationen</name>
+		<name language="en">Shr1nkr: Statistics Information</name>
+		<options>shrinkr_active</options>
+		<permissions>admin.shrinkr.canViewStatistics</permissions>
+		<content language="en">
+			<title>Statistics Information</title>
+		</content>
+		<content language="de">
+			<title>Statistik-Informationen</title>
+		</content>
+	</page>
 	</import>
 
 	<delete>

@@ -23,10 +23,16 @@ use wcf\system\database\table\column\VarcharDatabaseTableColumn;
 use wcf\system\database\table\column\DefaultFalseBooleanDatabaseTableColumn;
 use wcf\system\database\table\column\IntDatabaseTableColumn;
 use wcf\system\database\table\column\EnumDatabaseTableColumn;
+use wcf\system\database\table\column\CharDatabaseTableColumn;
+use wcf\system\database\table\column\SmallintDatabaseTableColumn;
+use wcf\system\database\table\column\TinyintDatabaseTableColumn;
+use wcf\system\database\table\column\DateDatabaseTableColumn;
+use wcf\system\database\table\column\BigintDatabaseTableColumn;
 use wcf\system\database\table\PartialDatabaseTable;
 use wcf\system\database\table\DatabaseTable;
 use wcf\system\database\table\index\DatabaseTablePrimaryIndex;
 use wcf\system\database\table\index\DatabaseTableIndex;
+use wcf\system\database\table\index\DatabaseTableForeignKey;
 
 return [
     // Main link table
@@ -36,8 +42,6 @@ return [
             NotNullVarchar255DatabaseTableColumn::create('url'),
             NotNullVarchar255DatabaseTableColumn::create('hash')
                 ->length(64),
-            NotNullInt10DatabaseTableColumn::create('counter')
-                ->defaultValue(0),
             MediumtextDatabaseTableColumn::create('featuredLinks'),
             VarcharDatabaseTableColumn::create('linkTitle')
                 ->length(255),
@@ -246,5 +250,127 @@ return [
                 ->columns(['sessionID']),
             DatabaseTableIndex::create('objectTypeObjectID')
                 ->columns(['objectType', 'objectID']),
+        ]),
+
+    // Statistic visit table
+    DatabaseTable::create('shrinkr1_statistic_visit')
+        ->columns([
+            ObjectIdDatabaseTableColumn::create('visitID'),
+            IntDatabaseTableColumn::create('linkID')
+                ->length(10)
+                ->notNull(),
+            CharDatabaseTableColumn::create('ipHash')
+                ->length(64)
+                ->notNull(),
+            IntDatabaseTableColumn::create('userID')
+                ->length(10),
+            IntDatabaseTableColumn::create('time')
+                ->length(10)
+                ->notNull(),
+            VarcharDatabaseTableColumn::create('userAgent')
+                ->length(255),
+            VarcharDatabaseTableColumn::create('browserName')
+                ->length(100),
+            VarcharDatabaseTableColumn::create('browserVersion')
+                ->length(20),
+            VarcharDatabaseTableColumn::create('osName')
+                ->length(100),
+            VarcharDatabaseTableColumn::create('osVersion')
+                ->length(20),
+            CharDatabaseTableColumn::create('countryCode')
+                ->length(2),
+            VarcharDatabaseTableColumn::create('refererHash')
+                ->length(64),
+            VarcharDatabaseTableColumn::create('refererDomain')
+                ->length(255),
+            IntDatabaseTableColumn::create('languageID')
+                ->length(10),
+        ])
+        ->indices([
+            DatabaseTablePrimaryIndex::create()
+                ->columns(['visitID']),
+            DatabaseTableIndex::create('linkID')
+                ->columns(['linkID']),
+            DatabaseTableIndex::create('time')
+                ->columns(['time']),
+            DatabaseTableIndex::create('ipHash')
+                ->columns(['ipHash']),
+            DatabaseTableIndex::create('userID')
+                ->columns(['userID']),
+        ])
+        ->foreignKeys([
+            DatabaseTableForeignKey::create()
+                ->columns(['linkID'])
+                ->referencedTable('shrinkr1_link')
+                ->referencedColumns(['linkID'])
+                ->onDelete('CASCADE'),
+        ]),
+
+    // Statistic interaction table
+    DatabaseTable::create('shrinkr1_statistic_interaction')
+        ->columns([
+            ObjectIdDatabaseTableColumn::create('interactionID'),
+            IntDatabaseTableColumn::create('linkID')
+                ->length(10)
+                ->notNull(),
+            IntDatabaseTableColumn::create('objectID')
+                ->length(10)
+                ->defaultValue(0),
+            VarcharDatabaseTableColumn::create('interactionType')
+                ->length(50)
+                ->notNull(),
+            CharDatabaseTableColumn::create('ipHash')
+                ->length(64)
+                ->notNull(),
+            IntDatabaseTableColumn::create('userID')
+                ->length(10),
+            IntDatabaseTableColumn::create('time')
+                ->length(10)
+                ->notNull(),
+        ])
+        ->indices([
+            DatabaseTablePrimaryIndex::create()
+                ->columns(['interactionID']),
+            DatabaseTableIndex::create('linkID')
+                ->columns(['linkID']),
+            DatabaseTableIndex::create('interactionType')
+                ->columns(['interactionType']),
+            DatabaseTableIndex::create('time')
+                ->columns(['time']),
+        ])
+        ->foreignKeys([
+            DatabaseTableForeignKey::create()
+                ->columns(['linkID'])
+                ->referencedTable('shrinkr1_link')
+                ->referencedColumns(['linkID'])
+                ->onDelete('CASCADE'),
+        ]),
+
+    // Statistic daily aggregation table
+    DatabaseTable::create('shrinkr1_statistic_daily')
+        ->columns([
+            ObjectIdDatabaseTableColumn::create('statID'),
+            TinyintDatabaseTableColumn::create('statisticType')
+                ->length(1)
+                ->notNull(),
+            DateDatabaseTableColumn::create('date')
+                ->notNull(),
+            IntDatabaseTableColumn::create('counter')
+                ->length(10)
+                ->notNull()
+                ->defaultValue(0),
+            BigintDatabaseTableColumn::create('total')
+                ->length(20)
+                ->notNull()
+                ->defaultValue(0),
+        ])
+        ->indices([
+            DatabaseTablePrimaryIndex::create()
+                ->columns(['statID']),
+            DatabaseTableIndex::create('statisticTypeDate')
+                ->type(DatabaseTableIndex::UNIQUE_TYPE)
+                ->columns(['statisticType', 'date']),
+            DatabaseTableIndex::create('date')
+                ->columns(['date']),
         ]),
 ];

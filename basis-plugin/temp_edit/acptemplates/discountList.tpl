@@ -29,7 +29,13 @@
 
 <header class="contentHeader">
 	<div class="contentHeaderTitle">
-		<h1 class="contentTitle">{lang}shrinkr.acp.menu.link.discount.list{/lang}</h1>
+		<h1 class="contentTitle">
+			{lang}shrinkr.acp.menu.link.discount.list{/lang}
+			{if $objectCount|isset} <span class="badge badgeInverse">{#$objectCount}</span>{/if}
+		</h1>
+		<p class="contentHeaderDescription">
+			{lang}shrinkr.acp.discount.list.description{/lang}
+		</p>
 	</div>
 
 	<nav class="contentHeaderNavigation">

@@ -123,6 +123,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			<eventname>copyright</eventname>
 			<templatecode><![CDATA[{include file='__shrinkrCopyright' application='shrinkr'}]]></templatecode>
 		</templatelistener>
+		
+		<!-- ACP Copyright-Erweiterung -->
+		<templatelistener name="shrinkrCopyrightACP">
+			<environment>admin</environment>
+			<templatename>footer</templatename>
+			<eventname>copyright</eventname>
+			<templatecode><![CDATA[{include file='__shrinkrCopyright' application='shrinkr'}]]></templatecode>
+		</templatelistener>
 
 		<!-- Reaction Button für Redirect-Seite -->
 		<templatelistener name="reactionButtonShrinkr">

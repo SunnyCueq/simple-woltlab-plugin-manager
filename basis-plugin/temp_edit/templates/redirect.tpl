@@ -440,19 +440,19 @@
                         <script data-relocate="true">
                         (function() {
                             // Track button click function
-                            function trackButtonClick(linkID, buttonType, linkID) {
+                            function trackButtonClick(linkID, buttonType, objectID) {
                                 if (!linkID) return;
                                 
                                 if (typeof require !== 'undefined') {
                                     require(['WoltLabSuite/Core/Ajax'], function(Ajax) {
                                         Ajax.apiOnce({
                                             data: {
-                                                actionName: 'trackClick',
-                                                className: 'shrinkr\\data\\buttonclick\\ButtonClickAction',
+                                                actionName: 'trackInteraction',
+                                                className: 'shrinkr\\data\\statistic\\interaction\\StatisticInteractionAction',
                                                 parameters: {
                                                     linkID: linkID,
-                                                    buttonType: buttonType,
-                                                    linkID: linkID || null
+                                                    interactionType: buttonType,
+                                                    objectID: objectID || 0
                                                 }
                                             },
                                             silent: true,
@@ -471,9 +471,10 @@
                                             return;
                                         }
                                         e.preventDefault();
-                                        const linkID = parseInt(this.getAttribute('data-link-id')) || 0;
-                                        if (linkID > 0) {
-                                            trackButtonClick(linkID, 'featured_link', linkID);
+                                        const urlLinkID = parseInt(this.getAttribute('data-url-id')) || 0;
+                                        const featuredLinkID = parseInt(this.getAttribute('data-link-id')) || 0;
+                                        if (urlLinkID > 0) {
+                                            trackButtonClick(urlLinkID, 'button.featured_link', featuredLinkID);
                                         }
                                         const targetUrl = this.getAttribute('href') || '#';
                                         setTimeout(() => {
