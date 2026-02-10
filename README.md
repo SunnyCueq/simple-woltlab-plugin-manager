@@ -1,58 +1,41 @@
 # Simple WoltLab Plugin Manager
 
-A lightweight toolkit for developing, building, and publishing **WoltLab Suite** plugins. It provides a central menu, build scripts, Git-based release workflow, and optional setup for WoltLab Core, documentation, TypeScript typings, and local installation paths.
+**[Deutsche Version](README.de.md)**
 
 ---
 
-## Requirements
+## What is this?
 
-- **Git** — for cloning, building, and pushing plugins
-- **Node.js / npm** (optional) — for TypeScript compilation and build tooling
+The **Simple WoltLab Plugin Manager** is a lightweight toolkit for developing, building, and publishing **WoltLab Suite** plugins. You get a central text menu to run everything: build plugins, bump versions, push to Git, create releases, compile TypeScript, unpack packages, and validate your code. An optional setup step can download WoltLab Core, clone the official docs and source, install TypeScript typings, and set paths to your local WoltLab installation so you can start coding with minimal manual setup.
+
+---
+
+## What do I need?
+
+- **Git** — required for cloning, building, and pushing your plugins.
+- **Node.js and npm** (optional) — needed if you use TypeScript or the build scripts that compile JavaScript.
+- **VS Code or Cursor** (optional but recommended) — you can open the included workspace file for a tidy project layout; the tools also work from any terminal.
+
+No prior knowledge of WoltLab plugin structure is required. The menu and [tools documentation](tools/README.md) guide you step by step.
 
 ---
 
 ## Quick Start
 
 1. **Open the workspace**  
-   Open `woltlab-development.code-workspace` in **VS Code** or **Cursor**.
+   Open the file `woltlab-development.code-workspace` in **VS Code** or **Cursor**. This loads the correct folders (e.g. your plugins and the tools).
 
 2. **Run the tools**  
-   From the repo root, run:
+   Open a terminal and, from the **repo root** (the folder that contains `tools.sh`), run:
    ```bash
    ./tools.sh
    ```
-   or `./tools/tools.sh`. On first run you’ll be prompted to run **Setup** (WoltLab Core, Docs, GitHub clone, d.ts typings, optional local install path). After that you get the main menu: Build, Git Push, TypeScript, Unpack, Help, Validation.
+   You can also run `./tools/tools.sh` from the same place. The first time you run it, you will be asked whether to run **Setup**. Say yes if you want to download WoltLab Core, docs, GitHub clone, TypeScript typings, and set an optional path to your local WoltLab install. After that you see the main menu with options for Build, Git Push, TypeScript, Unpack, Help, Validation, and Setup.
 
-3. **Run setup later**  
-   Use menu option **“Setup / Vorbereitung”** or run:
-   ```bash
-   ./tools/setup-minimal.sh
-   ```
-   If you set a path to a local WoltLab installation, the workspace file and Intelephense paths are updated automatically.
+3. **Use the menu**  
+   Type the number of the option you want (e.g. `1` for Build, `2` for Git Push) and follow the prompts. Type `0` to exit. Details and a description of each tool are in [tools/README.md](tools/README.md).
 
----
-
-## Optional: Build Button extension
-
-In `tools/woltlab-build-button` you’ll find a **VS Code / Cursor** extension that adds a **“WoltLab”** sidebar with one-click actions: Build, Git Push, TypeScript, Unpack, Help, Validation, and the full tools menu. Load it as a **Development** extension from that folder.
-
----
-
-## TypeScript & WoltLab typings
-
-During setup, confirm **“d.ts klonen”** (default: yes) to clone the [WoltLab d.ts](https://github.com/WoltLab/d.ts) typings. In your plugin’s `temp_edit/tsconfig.json` add for example:
-
-```json
-"typeRoots": ["../../woltlab-d-ts"]
-```
-
-See [tools/README.md](tools/README.md) for details.
-
----
-
-## Cursor / MCP
-
-MCP configuration (e.g. DeepWiki) lives per project under `.cursor/` (e.g. `basis-plugin/.cursor/mcp.json`). Setup can optionally copy a template into `basis-plugin/.cursor/`.
+> **Tip:** You can run setup later anytime via menu option **"Setup / Vorbereitung"** or by running `./tools/setup-minimal.sh`. If you set a path to a local WoltLab installation, the workspace file and editor paths are updated automatically.
 
 ---
 
@@ -60,33 +43,63 @@ MCP configuration (e.g. DeepWiki) lives per project under `.cursor/` (e.g. `basi
 
 | Folder | Purpose |
 |--------|---------|
-| `basis-plugin` | Main / base plugin |
-| `mein-plugin` | Additional plugins (e.g. depending on the base plugin) |
-| `plugins-integrieren` | External plugins as reference |
-| `woltlab-core` | Setup artifacts (e.g. WCFSetup); target of the Core download |
-| `woltlab-docs` | WoltLab documentation (Git clone, optional in setup) |
-| `woltlab-github` | WoltLab WCF source (Git clone, optional in setup) |
-| `woltlab-d-ts` | WoltLab TypeScript typings (d.ts) for plugin development |
-| `tools` | Scripts, setup, and the Build Button extension |
+| `basis-plugin` | Your main or base plugin project. |
+| `mein-plugin` | Additional plugin projects (e.g. that depend on the base plugin). |
+| `plugins-integrieren` | External or reference plugins you want to keep in the workspace. |
+| `woltlab-core` | Where setup stores WoltLab Core files (e.g. WCFSetup) after download. |
+| `woltlab-docs` | WoltLab documentation (Git clone, optional during setup). |
+| `woltlab-github` | WoltLab WCF source code (Git clone, optional during setup). |
+| `woltlab-d-ts` | WoltLab TypeScript typings (d.ts) for use in your plugin’s TypeScript code. |
+| `tools` | All scripts, setup, and the Build Button extension live here. |
 
-More detail: [docs/STRUKTUR.md](docs/STRUKTUR.md) (if present).
+For more detail see [docs/STRUKTUR.md](docs/STRUKTUR.md) if that file exists in your clone.
 
 ---
 
-## Commands
+## Tools at a glance
 
-| Action | Command |
-|--------|---------|
-| **Main menu** | `./tools.sh` or `./tools/tools.sh` |
-| **Setup** | `./tools/setup-minimal.sh` |
-| **Build plugin** | `./tools/build.sh patch` (or `minor` / `major`) |
-| **Git Push (plugins)** | `./tools/gitpush.sh` |
-| **TypeScript** | `./tools/typescript.sh` |
-| **Unpack package** | `./tools/unpack.sh` |
-| **Validation** | `./tools/validate-plugin.sh` |
-| **Help** | `./tools/help.sh` |
+| Tool | What it does | Command |
+|------|----------------|--------|
+| **Main menu** | Starts the interactive menu. | `./tools.sh` or `./tools/tools.sh` |
+| **Setup** | Downloads Core, docs, typings; sets paths and optional MCP template. | `./tools/setup-minimal.sh` |
+| **Build** | Builds your plugin and can bump version (patch/minor/major). | `./tools/build.sh patch` |
+| **Git Push** | Commits, pushes, and creates a GitHub release for your plugin. | `./tools/gitpush.sh` |
+| **TypeScript** | Compiles TypeScript to JavaScript (and optional watch mode). | `./tools/typescript.sh` |
+| **Unpack** | Unpacks a plugin package into `temp_edit/`. | `./tools/unpack.sh` |
+| **Validation** | Checks your plugin for security issues and store compliance. | `./tools/validate-plugin.sh` |
+| **Help** | Opens the tools documentation. | `./tools/help.sh` |
 
-Configuration (e.g. local WoltLab path, GitHub repo) is stored in `tools/.env`; see `tools/.env.example` for options.
+Full description of each tool, including options and when to use them: **[tools/README.md](tools/README.md)**.
+
+---
+
+## Optional: Build Button extension
+
+In the folder `tools/woltlab-build-button` you’ll find a **VS Code / Cursor** extension. It adds a **"WoltLab"** entry in the sidebar with buttons for Build, Git Push, TypeScript, Unpack, Help, Validation, and the full tools menu so you don’t have to type commands. Load it as a **Development** extension from that folder. See [tools/README.md](tools/README.md) for how to install and use it.
+
+---
+
+## Optional: TypeScript and WoltLab typings
+
+If you use TypeScript in your plugin, run setup and accept **"d.ts klonen"** (default: yes). That clones the [WoltLab d.ts](https://github.com/WoltLab/d.ts) typings into `woltlab-d-ts`. In your plugin’s `temp_edit/tsconfig.json` you can then point to them, for example:
+
+```json
+"typeRoots": ["../../woltlab-d-ts"]
+```
+
+Details and other options are in [tools/README.md](tools/README.md).
+
+---
+
+## Optional: Cursor / MCP
+
+If you use Cursor with MCP (e.g. DeepWiki), configuration goes in `.cursor/` per project (e.g. `basis-plugin/.cursor/mcp.json`). The setup script can optionally copy a template into `basis-plugin/.cursor/` so you don’t have to create it by hand.
+
+---
+
+## Configuration
+
+Settings like the path to your local WoltLab installation or your GitHub repo URL are stored in **`tools/.env`**. That file is not committed to Git (it may contain secrets). Use **`tools/.env.example`** as a template: copy it to `tools/.env` and fill in the values. The setup script can create or update `tools/.env` for you.
 
 ---
 

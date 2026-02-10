@@ -1,51 +1,224 @@
-# WoltLab Plugin Manager – Tools
+# Tools – WoltLab Plugin Manager
 
-Kurzreferenz für die Skripte im tools/-Ordner. Diese Tools dienen ausschließlich der Plugin-Entwicklung (Build, Git Push, TypeScript, Unpack, Validierung, Hilfe).
+**[Deutsche Version](README.de.md)**
 
+---
 
-## Menü
+## Overview
 
-Hauptmenü: ./tools.sh (im Repo-Root) bzw. ./tools/tools.sh
+The `tools/` folder contains all scripts used for **WoltLab plugin development**: building plugins, pushing to Git, creating releases, compiling TypeScript, unpacking packages, validating code, and running a one-time setup. Everything is driven from the main menu (`tools.sh`) or by calling the scripts directly. This page describes each tool so you know when and how to use it.
 
-  Option 1   Build                 Plugin bauen & Version erhöhen
-  Option 2   Git Push              Committen, pushen & Release erstellen
-  Option 3   TypeScript            TypeScript kompilieren & .min.js
-  Option 4   Unpack                Plugin-Paket in temp_edit/ entpacken
-  Option 5   Hilfe & Dokumentation README & Anleitungen
-  Option 6   Plugin Validierung    Code-Qualität & Store-Compliance
-  Option 7   Setup / Vorbereitung  WoltLab-Core, Docs, GitHub, d.ts, lokaler Pfad, optional MCP-Vorlage
-  Option 0   Beenden
+---
 
+## Main menu (tools.sh)
 
-## Wichtige Befehle
+**What it does:** Starts the interactive menu. From the repo root you can run `./tools.sh` or `./tools/tools.sh`. The menu shows the current state (e.g. detected plugins) and numbered options.
 
-  Menü:        ./tools/tools.sh
-  Setup:       ./tools/setup-minimal.sh
-  Build:       ./tools/build.sh patch   (oder minor / major)
-  Git Push:    ./tools/gitpush.sh
-  TypeScript:  ./tools/typescript.sh     (optional: watch für Watch-Mode)
-  Unpack:      ./tools/unpack.sh        (oder mit Plugin/Paket)
-  Validierung: ./tools/validate-plugin.sh  (optional mit Plugin-Pfad)
-  Hilfe:       ./tools/help.sh
+**Options:**
 
+| Option | Name | Short description |
+|--------|------|-------------------|
+| 1 | Build | Build plugin(s) and bump version (patch/minor/major). |
+| 2 | Git Push | Commit, push, and create a GitHub release for your plugin(s). |
+| 3 | TypeScript | Compile TypeScript to JavaScript (normal or watch mode). |
+| 4 | Unpack | Unpack a plugin package into `temp_edit/`. |
+| 5 | Help & Documentation | Open this documentation. |
+| 6 | Plugin Validation | Run security and store-compliance checks. |
+| 7 | Setup / Preparation | Run the one-time setup (Core, docs, typings, paths, MCP). |
+| 8 | Repo | Show or change the Git repository (origin) used for push. |
+| 0 | Exit | Quit the menu. |
 
-## TypeScript-Typings (d.ts)
+If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the Plugin Manager itself.
 
-Wenn beim Setup **woltlab-d-ts** geklont wurde (Standard: ja), können Plugin-Projekte die [WoltLab TypeScript-Typings](https://github.com/WoltLab/d.ts) nutzen. Im Plugin z. B. in `temp_edit/tsconfig.json`:
+---
+
+## Each tool in detail
+
+### build.sh – Build plugins
+
+**What it does:** Finds your plugin(s) (folders with `package.xml`), compiles TypeScript if present, and builds an installable plugin archive (e.g. `.tar.gz`). It can also bump the version in `package.xml` (patch, minor, or major).
+
+**When to use it:** Whenever you have changed plugin code and want an installable package to test in WoltLab or to ship.
+
+**Command:**
+
+```bash
+./tools/build.sh [target] [version_type]
+```
+
+- `target`: leave empty for “first plugin”, or give a plugin directory name (e.g. `basis-plugin`), or `all` for all plugins.
+- `version_type`: `patch` (default), `minor`, or `major`.
+
+**Examples:**
+
+```bash
+./tools/build.sh              # First plugin, patch version
+./tools/build.sh patch        # Same
+./tools/build.sh basis-plugin minor
+./tools/build.sh all patch
+```
+
+---
+
+### gitpush.sh – Commit, push, and release (plugins)
+
+**What it does:** Detects which plugin(s) have changes, commits them, pushes to the configured Git remote (origin), creates a version tag, and optionally a GitHub release with notes. This is for **plugin** releases, not for the Plugin Manager repo itself.
+
+**When to use it:** When you are happy with your plugin changes and want to publish them to GitHub (commit + push + tag + release).
+
+**Command:**
+
+```bash
+./tools/gitpush.sh [target] [commit_message]
+```
+
+- `target`: leave empty for auto-detect, or a plugin name, or `all`.
+- `commit_message`: optional; otherwise one is generated from the plugin version.
+
+**Requirements:** Git remote `origin` must point to your plugin (or workspace) repo. Use SSH or a Personal Access Token for GitHub. You can set `GIT_REPO_URL` in `tools/.env` or use menu option 8 to set the repo.
+
+> **Tip:** Run this from the repo root. The script uses the same exclude list as the rest of the tools (e.g. it does not commit the contents of `woltlab-docs`, `woltlab-github`, or `tools/woltlab-dev/public`).
+
+---
+
+### typescript.sh – Compile TypeScript
+
+**What it does:** Compiles TypeScript (`.ts`) in your plugin directories to JavaScript (`.js`) and can generate minified (`.min.js`) files. Optional watch mode recompiles when files change.
+
+**When to use it:** When your plugin uses TypeScript; run after editing `.ts` files or use watch mode while developing.
+
+**Command:**
+
+```bash
+./tools/typescript.sh [watch]
+```
+
+- No argument: one-time compile.
+- `watch`: keep running and recompile on file changes (stop with Ctrl+C).
+
+---
+
+### unpack.sh – Unpack a plugin package
+
+**What it does:** Unpacks a built plugin package (e.g. `.tar.gz`) into the plugin’s `temp_edit/` folder so you can inspect or modify the packed contents.
+
+**When to use it:** When you have a package file and want to see or edit what’s inside without installing it in WoltLab.
+
+**Command:**
+
+```bash
+./tools/unpack.sh [plugin] [package_file]
+```
+
+- `plugin`: plugin directory name (e.g. `basis-plugin`); can be left empty to use the first detected plugin.
+- `package_file`: optional path to a specific `.tar.gz`; if omitted, the latest package in the plugin folder is used.
+
+---
+
+### validate-plugin.sh – Security and store compliance
+
+**What it does:** Checks your plugin for common issues: PHP/XML syntax, security (e.g. SQL injection, XSS), debug code, and Plugin Store compliance (e.g. translations, package rules).
+
+**When to use it:** Before releasing or submitting to the store, to catch problems early.
+
+**Command:**
+
+```bash
+./tools/validate-plugin.sh [plugin_path]
+```
+
+- `plugin_path`: optional; plugin directory or path. If omitted, the current directory or the first detected plugin is used.
+
+Results and details are shown in the terminal; logs may be written under `/tmp/` (see script output).
+
+---
+
+### setup-minimal.sh – One-time setup
+
+**What it does:** Guides you through a minimal setup: download WoltLab Core (or set path), clone WoltLab docs and/or WCF from GitHub, clone the WoltLab d.ts typings for TypeScript, set an optional path to a local WoltLab installation, and optionally copy an MCP template into `basis-plugin/.cursor/`. It writes settings into `tools/.env` and can update the workspace file and Intelephense paths.
+
+**When to use it:** Once after cloning the repo, or when you want to add/change Core, docs, typings, or the local install path.
+
+**Command:**
+
+```bash
+./tools/setup-minimal.sh
+```
+
+Run from the repo root. You will be prompted for each step; you can skip any you don’t need.
+
+---
+
+### help.sh – Open documentation
+
+**What it does:** Opens or displays the tools documentation (this README and related docs) so you can read them in the terminal or in your editor.
+
+**When to use it:** When you want a quick reminder of commands or to read the full tool descriptions.
+
+**Command:**
+
+```bash
+./tools/help.sh
+```
+
+---
+
+### download-woltlab-core.sh – Download WoltLab Core
+
+**What it does:** Downloads the WoltLab Suite installation package from the official site and places it (or the extracted Core files) where the rest of the setup expects them (e.g. for use with a local server or DDEV).
+
+**When to use it:** If you need Core separately from the full setup (e.g. you already ran setup but skipped the download). Otherwise the main setup (`setup-minimal.sh`) can do this for you.
+
+**Command:** Run from the repo root; the script or the main README will state the exact command (e.g. `./tools/download-woltlab-core.sh`). You must be logged in to the WoltLab customer area for the download.
+
+---
+
+### Build Button extension (woltlab-build-button/)
+
+**What it does:** A small VS Code / Cursor extension that adds a **WoltLab** section in the sidebar with buttons for Build, Git Push, TypeScript, Unpack, Help, Validation, and the full tools menu. You run the same tools with one click instead of typing commands.
+
+**When to use it:** If you prefer a graphical shortcut to the scripts.
+
+**How to use it:** Open the folder `tools/woltlab-build-button` in VS Code/Cursor and load it as a **Development Extension** (e.g. “Load” or “Run” from the extension’s context). The extension uses the workspace root to find `tools.sh` and the scripts; you can set `woltlabDevelopment.toolsRoot` in settings if your workspace layout is different.
+
+---
+
+## TypeScript typings (d.ts)
+
+If you ran setup and chose to clone the **WoltLab d.ts** typings, they live in the `woltlab-d-ts` folder at the workspace root. To use them in a plugin:
+
+1. In your plugin’s `temp_edit/tsconfig.json` (or the folder where your `.ts` files are), add a path to the typings. For example, from a plugin at `basis-plugin/temp_edit/`:
 
 ```json
 "typeRoots": ["../../woltlab-d-ts"]
 ```
 
-oder relativer Pfad vom Plugin-Root zum Workspace-Ordner `woltlab-d-ts`. So stehen WoltLab-API-Typen für TypeScript zur Verfügung.
+2. Adjust the path if your plugin lives in a different depth (e.g. `mein-plugin/extracted_plugin/xyz/temp_edit/` might use `../../../../woltlab-d-ts`).
 
+After that, your editor and the TypeScript compiler can use WoltLab API types. See [WoltLab d.ts](https://github.com/WoltLab/d.ts) for the upstream project.
 
-## Dokumentation
+---
 
-  Shell-Skript-Struktur:  docs/SHELL-STRUCTURE.md
-  Plugin-Store-Checkliste: docs/PLUGIN-STORE-CHECKLIST.md
+## Configuration
 
+- **`tools/.env`** — Main config file. It is not committed to Git. Here you can set:
+  - Path to your local WoltLab installation
+  - GitHub repo URL for push (`GIT_REPO_URL`)
+  - WoltLab d.ts clone URL or path (if needed)
+  - Other options used by the scripts
 
-## Sonstiges
+- **`tools/.env.example`** — Template listing available variables. Copy it to `tools/.env` and fill in values. The setup script can create or update `tools/.env` for you.
 
-  **Dockge:** In der Systemübersicht (common.sh) wird optional der Status eines Docker-Containers namens „dockge“ angezeigt, falls vorhanden. Für den Plugin-Manager nicht erforderlich.
+---
+
+## Further documentation
+
+- **Shell script structure:** [docs/SHELL-STRUCTURE.md](docs/SHELL-STRUCTURE.md) — How the scripts are organized and call each other.
+- **Plugin Store checklist:** [docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md) — What to check before submitting a plugin to the WoltLab store.
+
+---
+
+## Other notes
+
+- **Dockge:** If you use Dockge (Docker management), the main menu may show its status in the system overview. This is optional and not required for the Plugin Manager.
+- **Repo root:** All commands assume you are in the repository root (the folder that contains `tools/`) unless stated otherwise.
