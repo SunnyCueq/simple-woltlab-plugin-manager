@@ -29,7 +29,7 @@ This document describes each main folder in the Simple WoltLab Plugin Manager wo
 
 | Folder | Purpose |
 |--------|---------|
-| **tools** | All scripts and the Build Button extension. Contains `tools.sh` (main menu), `build.sh`, `gitpush.sh`, `typescript.sh`, `unpack.sh`, `validate-plugin.sh`, `setup-minimal.sh`, `help.sh`, `download-woltlab-core.sh`, and the `woltlab-build-button` extension. Configuration is in `tools/.env` (see `tools/.env.example`). Documentation: `tools/README.md` and `tools/docs/` (e.g. PLUGIN-STORE-CHECKLIST.md, SHELL-STRUCTURE.md). |
+| **tools** | All scripts and the Build Button extension. Contains `tools.sh` (main menu), `build.sh`, `gitpush.sh`, `typescript.sh`, `unpack.sh`, `validate-plugin.sh`, `setup-minimal.sh`, `help.sh`, `download-woltlab-core.sh`, and the `woltlab-build-button` extension. Configuration is in `tools/.env` (see `tools/.env.example`). Documentation: `tools/README.md` and `tools/docs/` (e.g. PLUGIN-STORE-CHECKLIST.md, PLUGIN-STORE-CHECKLIST.en.md). |
 
 ---
 

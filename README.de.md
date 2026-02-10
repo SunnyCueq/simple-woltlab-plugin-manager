@@ -77,7 +77,7 @@ Vollständige Beschreibung jedes Tools inkl. Optionen und wann du es nutzt: **[t
 
 ## Optional: Build-Button-Extension
 
-Im Ordner `tools/woltlab-build-button` findest du eine **VS Code-/Cursor-**Extension. Sie fügt einen **„WoltLab“-**Eintrag in der Seitenleiste hinzu mit Buttons für Build, Git Push, TypeScript, Unpack, Hilfe, Validierung und das komplette Tools-Menü, sodass du keine Befehle tippen musst. Lade sie als **Development-**Extension aus diesem Ordner. Installation und Nutzung in [tools/README.de.md](tools/README.de.md).
+Im Ordner `tools/woltlab-build-button` findest du eine **VS Code-/Cursor**-Extension. Sie fügt einen **„WoltLab“**-Eintrag in der Seitenleiste hinzu mit Buttons für Build, Git Push, TypeScript, Unpack, Hilfe, Validierung und das komplette Tools-Menü, sodass du keine Befehle tippen musst. Lade sie als **Development**-Extension aus diesem Ordner. Installation und Nutzung in [tools/README.de.md](tools/README.de.md).
 
 ---
 

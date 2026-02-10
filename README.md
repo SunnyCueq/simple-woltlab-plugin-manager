@@ -54,7 +54,7 @@ No prior knowledge of WoltLab plugin structure is required. The menu and [tools 
 | `woltlab-d-ts` | WoltLab TypeScript typings (d.ts) for use in your plugin’s TypeScript code. |
 | `tools` | All scripts, setup, and the Build Button extension live here. |
 
-For more detail see [docs/STRUKTUR.md](docs/STRUKTUR.md) if that file exists in your clone.
+For more detail see [docs/STRUKTUR.md](docs/STRUKTUR.md) (English) or [docs/STRUKTUR.de.md](docs/STRUKTUR.de.md) (German), if present in your clone.
 
 ---
 

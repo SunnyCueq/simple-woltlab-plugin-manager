@@ -99,6 +99,7 @@ print_menu() {
     if [ -f "$TOOLS_DIR/manager-push.sh" ]; then
         print_list_item "9)" "${CYAN}Manager Push${NC} (Maintainer)  ${ARROW} Plugin-Manager ins Manager-Repo pushen"
     fi
+    print_list_item "L)" "${CYAN}Sprache wechseln${NC}           ${ARROW} Menü-Sprache DE/EN (aktuell: ${WOLTLAB_LANG:-en})"
     echo ""
     if [ "$plugin_count" -gt 0 ]; then
         # Gruppiere Plugins nach Verzeichnissen
@@ -251,9 +252,9 @@ while true; do
     print_menu
     
     if [ -f "$TOOLS_DIR/manager-push.sh" ]; then
-        read -p "Wähle eine Option (0-9): " choice
+        read -p "Wähle eine Option (0-9 oder L): " choice
     else
-        read -p "Wähle eine Option (0-8): " choice
+        read -p "Wähle eine Option (0-8 oder L): " choice
     fi
     echo ""
     
@@ -513,6 +514,27 @@ while true; do
             fp_choice=$(ask_choice_yn "Manager ins Repo pushen?" 1)
             [ "$fp_choice" = "n" ] || [ "$fp_choice" = "abort" ] && continue
             run_manager_push
+            ;;
+        l|L)
+            print_header
+            print_section "Sprache wechseln" "Hauptmenü" "Sprache"
+            echo -e "Aktuelle Einstellung: ${CYAN}${WOLTLAB_LANG:-en}${NC}"
+            echo ""
+            read -p "Sprache (de/en)? [${WOLTLAB_LANG:-en}]: " lang_choice
+            lang_choice="${lang_choice:-${WOLTLAB_LANG:-en}}"
+            if [[ "${lang_choice,,}" == de ]]; then
+                env_set "WOLTLAB_LANG" "de"
+                export WOLTLAB_LANG="de"
+                print_success "Sprache auf DE gesetzt (in .env gespeichert)."
+            elif [[ "${lang_choice,,}" == en ]]; then
+                env_set "WOLTLAB_LANG" "en"
+                export WOLTLAB_LANG="en"
+                print_success "Sprache auf EN gesetzt (in .env gespeichert)."
+            else
+                print_warning "Ungültige Eingabe. Nur 'de' oder 'en' möglich."
+            fi
+            echo ""
+            press_zero_to_back || true
             ;;
         0)
             echo -e "${GREEN}Auf Wiedersehen!${NC}"

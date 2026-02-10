@@ -8,6 +8,8 @@
 
 Der Ordner `tools/` enthält alle Skripte für die **WoltLab-Plugin-Entwicklung**: Plugins bauen, zu Git pushen, Releases erstellen, TypeScript kompilieren, Pakete entpacken, Code prüfen und ein einmaliges Setup. Die Tools unterstützen den Weg von der Entwicklung bis zum **WoltLab Plugin-Store** und beachten dabei WoltLab- und Store-Anforderungen. Alles wird über das Hauptmenü (`tools.sh`) oder durch direkten Aufruf der Skripte gesteuert. Diese Seite beschreibt jedes Tool, damit du weißt, wann und wie du es nutzt.
 
+**Plattformen:** Unter Windows **WSL2** oder **Git Bash** verwenden; reines cmd oder PowerShell wird nicht unterstützt.
+
 ---
 
 ## Hauptmenü (tools.sh)
@@ -179,7 +181,7 @@ Vom Repo-Root aus ausführen. Du wirst für jeden Schritt gefragt; einzelne Schr
 
 **Wann nutzen:** Wenn du lieber eine grafische Schnellstart-Oberfläche zu den Skripten nutzt.
 
-**So nutzen:** Ordner `tools/woltlab-build-button` in VS Code/Cursor öffnen und als **Development Extension** laden (z. B. „Load“ oder „Run“ im Kontext der Extension). Die Extension nutzt den Workspace-Root, um `tools.sh` und die Skripte zu finden; bei abweichendem Workspace-Aufbau kannst du `woltlabDevelopment.toolsRoot` in den Einstellungen setzen.
+**So nutzen:** Ordner `tools/woltlab-build-button` in **VS Code** oder **Cursor** öffnen und als **Development Extension** laden (z. B. „Load“ oder „Run“ im Kontext der Extension). Die Extension nutzt den Workspace-Root, um `tools.sh` und die Skripte zu finden; bei abweichendem Workspace-Aufbau kannst du `woltlabDevelopment.toolsRoot` in den Einstellungen setzen.
 
 ---
 
@@ -217,12 +219,12 @@ Danach können Editor und TypeScript-Compiler die WoltLab-API-Typen nutzen. Sieh
 
 Dokumente in `tools/docs/`:
 
-- **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checkliste vor der Einreichung eines Plugins im WoltLab-Store: Was `validate-plugin.sh` abdeckt und was du zusätzlich manuell prüfen solltest.
-- **[docs/SHELL-STRUCTURE.md](docs/SHELL-STRUCTURE.md)** — Aufbau der Shell-Skripte in `tools/` und wie sie sich gegenseitig aufrufen (für Entwickler).
+- **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checkliste vor der Einreichung eines Plugins im WoltLab-Store: Was `validate-plugin.sh` abdeckt und was du zusätzlich manuell prüfen solltest. Englische Version: [docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
 
 ---
 
 ## Sonstiges
 
-- **Dockge:** Wenn du Dockge (Docker-Verwaltung) nutzt, kann das Hauptmenü dessen Status in der Systemübersicht anzeigen. Das ist optional und für den Plugin-Manager nicht erforderlich.
+- **Logging:** Es wird eine zentrale Debug-Log-Datei verwendet (`tools/docs/logs/woltlab-dev-debug.log`). Level und Pfade sind über `DEBUG_LEVEL`, `DEBUG_LOG_FILE` konfigurierbar. Konvention und Level stehen in [tools/docs/LOGGING.md](docs/LOGGING.md).
+- **Sprache:** Die Menüsprache lässt sich über `WOLTLAB_LANG` in `tools/.env` oder die Menüoption „Sprache wechseln“ (L) auf DE oder EN stellen. Übersetzungen liegen in `tools/language/de.txt` und `tools/language/en.txt` (Schlüssel=Wert). Die Funktion `tr "key"` in `common.sh` liefert den Text für die aktuelle Sprache; Skripte können schrittweise darauf umgestellt werden.
 - **Repo-Root:** Alle Befehle setzen voraus, dass du dich im Repository-Root (der Ordner, der `tools/` enthält) befindest, sofern nicht anders angegeben.

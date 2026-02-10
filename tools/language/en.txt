@@ -1,0 +1,18 @@
+# WoltLab Plugin Manager – English
+# Format: key=value (one line per key, # = comment)
+
+menu.build=Build
+menu.gitpush=Git Push
+menu.typescript=TypeScript
+menu.unpack=Unpack
+menu.help=Help & Documentation
+menu.validate=Plugin Validation
+menu.setup=Setup / Preparation
+menu.repo=Show or change repo
+menu.manager_push=Manager Push
+menu.language=Switch language
+menu.exit=Exit
+
+msg.goodbye=Goodbye!
+msg.choose_option=Choose an option
+msg.invalid_option=Invalid option!

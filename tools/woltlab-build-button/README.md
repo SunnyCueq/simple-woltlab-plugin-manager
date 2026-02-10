@@ -1,25 +1,27 @@
 # WoltLab Build Button
 
-Minimale Extension: **Build-Button** und **Tools-Menü** in der Seitenleiste.
+**[Deutsche Version](README.de.md)**
 
-## Wartung: TOOL_ENTRIES ↔ tools.sh
+Minimal extension: **Build** button and **Tools** menu in the sidebar.
 
-Die Einträge in `extension.js` (TOOL_ENTRIES) entsprechen der Reihenfolge des Hauptmenüs in `tools/tools.sh` (Optionen 1–14 + Tools-Menü). Bei Änderungen an den Tools (z. B. neue Menüpunkte in tools.sh) die TOOL_ENTRIES und die `commands` in `package.json` hier anpassen.
+## Maintenance: TOOL_ENTRIES ↔ tools.sh
 
-## Wo ist der Button?
+The entries in `extension.js` (TOOL_ENTRIES) match the main menu order in `tools/tools.sh` (options 1–14 + Tools menu). When you add or change menu items in tools.sh, update TOOL_ENTRIES and the `commands` in `package.json` here.
 
-- **Linke Leiste (Activity Bar):** Neues Icon **„WoltLab“** (▶-Symbol).
-- **Klick darauf** → Seitenleiste öffnet sich mit dem Eintrag **„▶ WoltLab Build (Patch)“**.
-- **Einen Klick auf diesen Eintrag** → Build startet.
+## Where is the button?
 
-(Dasselbe Icon wie Explorer/Suche – nur für WoltLab Build.)
+- **Left bar (Activity Bar):** New **„WoltLab“** icon (▶ symbol).
+- **Click it** → Sidebar opens with **„▶ WoltLab Build (Patch)“**.
+- **Click that entry** → Build runs.
+
+(Same icon style as Explorer/Search – only for WoltLab Build.)
 
 ## Installation in Cursor / VS Code
 
-1. **Strg+Shift+P** → **„Developer: Install Extension from Location…“**
-2. Ordner auswählen: **`tools/woltlab-build-button`** (im WoltLab-Entwicklungs-Root)
-3. **Fenster neu laden** (Reload), damit die neue Version aktiv wird.
+1. **Ctrl+Shift+P** → **„Developer: Install Extension from Location…“**
+2. Select folder: **`tools/woltlab-build-button`** (inside your WoltLab development root)
+3. **Reload** the window so the extension is active.
 
-## Deinstallieren
+## Uninstall
 
-Extensions → „WoltLab Build Button“ → Deinstallieren.
+Extensions → „WoltLab Build Button“ → Uninstall.

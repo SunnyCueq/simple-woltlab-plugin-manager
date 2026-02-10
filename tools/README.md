@@ -8,6 +8,8 @@
 
 The `tools/` folder contains all scripts used for **WoltLab plugin development**: building plugins, pushing to Git, creating releases, compiling TypeScript, unpacking packages, validating code, and running a one-time setup. The tools support the path from development to the **WoltLab Plugin Store** and take WoltLab and Store requirements into account. Everything is driven from the main menu (`tools.sh`) or by calling the scripts directly. This page describes each tool so you know when and how to use it.
 
+**Platforms:** On Windows, use **WSL2** or **Git Bash** to run the scripts. Plain cmd or PowerShell is not supported.
+
 ---
 
 ## Main menu (tools.sh)
@@ -217,12 +219,12 @@ After that, your editor and the TypeScript compiler can use WoltLab API types. S
 
 Documents in `tools/docs/`:
 
-- **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checklist before submitting a plugin to the WoltLab store: what `validate-plugin.sh` covers and what you should still check manually.
-- **[docs/SHELL-STRUCTURE.md](docs/SHELL-STRUCTURE.md)** — How the shell scripts in `tools/` are structured and how they call each other (for developers).
+- **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checklist before submitting a plugin to the WoltLab store: what `validate-plugin.sh` covers and what you should still check manually. English version: [docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
 
 ---
 
 ## Other notes
 
-- **Dockge:** If you use Dockge (Docker management), the main menu may show its status in the system overview. This is optional and not required for the Plugin Manager.
+- **Logging:** A single central debug log is used (`tools/docs/logs/woltlab-dev-debug.log`). Level and paths are configurable via `DEBUG_LEVEL`, `DEBUG_LOG_FILE`. See [tools/docs/LOGGING.md](docs/LOGGING.md) for the convention and levels.
+- **Language:** Menu language can be set to DE or EN via `WOLTLAB_LANG` in `tools/.env` or the menu option “Switch language” (L). Translations live in `tools/language/de.txt` and `tools/language/en.txt` (key=value). The `tr "key"` function in `common.sh` returns the string for the current language; scripts can be migrated to use it step by step.
 - **Repo root:** All commands assume you are in the repository root (the folder that contains `tools/`) unless stated otherwise.
