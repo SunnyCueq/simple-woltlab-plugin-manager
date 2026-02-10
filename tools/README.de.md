@@ -6,7 +6,7 @@
 
 ## Überblick
 
-Der Ordner `tools/` enthält alle Skripte für die **WoltLab-Plugin-Entwicklung**: Plugins bauen, zu Git pushen, Releases erstellen, TypeScript kompilieren, Pakete entpacken, Code prüfen und ein einmaliges Setup. Alles wird über das Hauptmenü (`tools.sh`) oder durch direkten Aufruf der Skripte gesteuert. Diese Seite beschreibt jedes Tool, damit du weißt, wann und wie du es nutzt.
+Der Ordner `tools/` enthält alle Skripte für die **WoltLab-Plugin-Entwicklung**: Plugins bauen, zu Git pushen, Releases erstellen, TypeScript kompilieren, Pakete entpacken, Code prüfen und ein einmaliges Setup. Die Tools unterstützen den Weg von der Entwicklung bis zum **WoltLab Plugin-Store** und beachten dabei WoltLab- und Store-Anforderungen. Alles wird über das Hauptmenü (`tools.sh`) oder durch direkten Aufruf der Skripte gesteuert. Diese Seite beschreibt jedes Tool, damit du weißt, wann und wie du es nutzt.
 
 ---
 
@@ -117,7 +117,7 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 
 ### validate-plugin.sh – Sicherheit und Store-Compliance
 
-**Was es macht:** Prüft dein Plugin auf typische Probleme: PHP/XML-Syntax, Sicherheit (z. B. SQL-Injection, XSS), Debug-Code und Plugin-Store-Compliance (z. B. Übersetzungen, Paket-Regeln).
+**Was es macht:** Prüft dein Plugin vor Release oder Store-Einreichung auf typische Probleme. Geprüft werden: **PHP- und XML-Syntax**; **Übersetzungen** (DE und EN vorhanden und konsistent); **Mindestversion WoltLab**; dass keine externen Paket-Server genutzt werden; **Sicherheit** (z. B. SQL-Injection, XSS); **Debug- und Entwicklungs-Code**, der nicht ausgeliefert werden darf; sowie **Cloud-/Kompatibilitäts-** und weitere Store-Regeln. Die Prüfungen sind an die [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.md) angelehnt, die auch manuelle Schritte aufführt, die das Skript nicht abdeckt.
 
 **Wann nutzen:** Vor dem Release oder der Einreichung im Store, um Probleme früh zu finden.
 
@@ -185,7 +185,9 @@ Vom Repo-Root aus ausführen. Du wirst für jeden Schritt gefragt; einzelne Schr
 
 ## TypeScript-Typings (d.ts)
 
-Wenn du das Setup ausgeführt und das Klonen der **WoltLab-d.ts**-Typings gewählt hast, liegen sie im Ordner `woltlab-d-ts` im Workspace-Root. So nutzt du sie in einem Plugin:
+Die Typings stammen vom **offiziellen WoltLab-d.ts-Repository** auf GitHub. Beim Setup kannst du es nach `woltlab-d-ts` klonen, damit deine API-Nutzung mit WoltLab abgestimmt bleibt. Zum Aktualisieren später: `git pull` im Ordner `woltlab-d-ts` ausführen.
+
+Wenn du das Setup ausgeführt und das Klonen der Typings gewählt hast, liegen sie im Ordner `woltlab-d-ts` im Workspace-Root. So nutzt du sie in einem Plugin:
 
 1. In der `temp_edit/tsconfig.json` deines Plugins (oder dem Ordner mit deinen `.ts`-Dateien) einen Pfad zu den Typings eintragen. Z. B. bei einem Plugin unter `basis-plugin/temp_edit/`:
 
@@ -213,8 +215,10 @@ Danach können Editor und TypeScript-Compiler die WoltLab-API-Typen nutzen. Sieh
 
 ## Weitere Dokumentation
 
-- **Shell-Skript-Struktur:** [docs/SHELL-STRUCTURE.md](docs/SHELL-STRUCTURE.md) — Wie die Skripte aufgebaut sind und sich gegenseitig aufrufen.
-- **Plugin-Store-Checkliste:** [docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md) — Was du vor der Einreichung eines Plugins im WoltLab-Store prüfen solltest.
+Dokumente in `tools/docs/`:
+
+- **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checkliste vor der Einreichung eines Plugins im WoltLab-Store: Was `validate-plugin.sh` abdeckt und was du zusätzlich manuell prüfen solltest.
+- **[docs/SHELL-STRUCTURE.md](docs/SHELL-STRUCTURE.md)** — Aufbau der Shell-Skripte in `tools/` und wie sie sich gegenseitig aufrufen (für Entwickler).
 
 ---
 

@@ -6,7 +6,7 @@
 
 ## Overview
 
-The `tools/` folder contains all scripts used for **WoltLab plugin development**: building plugins, pushing to Git, creating releases, compiling TypeScript, unpacking packages, validating code, and running a one-time setup. Everything is driven from the main menu (`tools.sh`) or by calling the scripts directly. This page describes each tool so you know when and how to use it.
+The `tools/` folder contains all scripts used for **WoltLab plugin development**: building plugins, pushing to Git, creating releases, compiling TypeScript, unpacking packages, validating code, and running a one-time setup. The tools support the path from development to the **WoltLab Plugin Store** and take WoltLab and Store requirements into account. Everything is driven from the main menu (`tools.sh`) or by calling the scripts directly. This page describes each tool so you know when and how to use it.
 
 ---
 
@@ -117,7 +117,7 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 
 ### validate-plugin.sh – Security and store compliance
 
-**What it does:** Checks your plugin for common issues: PHP/XML syntax, security (e.g. SQL injection, XSS), debug code, and Plugin Store compliance (e.g. translations, package rules).
+**What it does:** Checks your plugin for common issues before release or store submission. It validates: **PHP and XML syntax**; **translations** (DE and EN present and consistent); **minimum WoltLab version**; that no external package servers are used; **security** (e.g. SQL injection, XSS); **debug and development code** that should not ship; and **cloud/compatibility** and other store-related rules. The checks align with the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.md), which also lists manual steps the script does not cover.
 
 **When to use it:** Before releasing or submitting to the store, to catch problems early.
 
@@ -185,7 +185,9 @@ Run from the repo root. You will be prompted for each step; you can skip any you
 
 ## TypeScript typings (d.ts)
 
-If you ran setup and chose to clone the **WoltLab d.ts** typings, they live in the `woltlab-d-ts` folder at the workspace root. To use them in a plugin:
+The typings come from the **official WoltLab d.ts repository** on GitHub. During setup you can clone it into `woltlab-d-ts` so your API usage stays in sync with WoltLab. To update them later, run `git pull` in the `woltlab-d-ts` folder.
+
+If you ran setup and chose to clone the typings, they live in the `woltlab-d-ts` folder at the workspace root. To use them in a plugin:
 
 1. In your plugin’s `temp_edit/tsconfig.json` (or the folder where your `.ts` files are), add a path to the typings. For example, from a plugin at `basis-plugin/temp_edit/`:
 
@@ -213,8 +215,10 @@ After that, your editor and the TypeScript compiler can use WoltLab API types. S
 
 ## Further documentation
 
-- **Shell script structure:** [docs/SHELL-STRUCTURE.md](docs/SHELL-STRUCTURE.md) — How the scripts are organized and call each other.
-- **Plugin Store checklist:** [docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md) — What to check before submitting a plugin to the WoltLab store.
+Documents in `tools/docs/`:
+
+- **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checklist before submitting a plugin to the WoltLab store: what `validate-plugin.sh` covers and what you should still check manually.
+- **[docs/SHELL-STRUCTURE.md](docs/SHELL-STRUCTURE.md)** — How the shell scripts in `tools/` are structured and how they call each other (for developers).
 
 ---
 

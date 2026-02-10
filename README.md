@@ -8,6 +8,8 @@
 
 The **Simple WoltLab Plugin Manager** is a lightweight toolkit for developing, building, and publishing **WoltLab Suite** plugins. You get a central text menu to run everything: build plugins, bump versions, push to Git, create releases, compile TypeScript, unpack packages, and validate your code. An optional setup step can download WoltLab Core, clone the official docs and source, install TypeScript typings, and set paths to your local WoltLab installation so you can start coding with minimal manual setup.
 
+**WoltLab and Plugin Store.** The toolkit is aligned with the official [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/) and common best practices. Built-in validation checks security (SQL, XSS), translations (DE/EN), minimum version, and store requirements so you can work toward a store-ready plugin. The TypeScript typings come from the official **WoltLab d.ts** repository on GitHub and are cloned during setup so your API usage stays in sync with WoltLab.
+
 ---
 
 ## What do I need?

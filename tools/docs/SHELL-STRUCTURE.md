@@ -2,6 +2,8 @@
 
 Alle Tools und Skripte in `tools/` folgen einem einheitlichen Aufbau. Referenzen: [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html), [Bash Hackers Wiki](https://wiki.bash-hackers.org/).
 
+**Skripte in `tools/`:** `common.sh` (gemeinsame Funktionen, wird von den anderen gesourct), `tools.sh` (Hauptmenü), `build.sh`, `gitpush.sh`, `typescript.sh`, `unpack.sh`, `validate-plugin.sh`, `setup-minimal.sh`, `help.sh`, `download-woltlab-core.sh`. Optional kann `manager-push.sh` (Maintainer) vorhanden sein.
+
 ## Sektions-Schema (Template)
 
 Jedes Skript gliedert sich in diese Blöcke (in dieser Reihenfolge):

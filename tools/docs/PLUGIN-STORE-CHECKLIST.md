@@ -3,6 +3,8 @@
 **Letzte Aktualisierung:** 2025-01-18  
 **Version:** 1.0.0
 
+Diese Checkliste ist mit dem Tool **validate-plugin.sh** und den [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/) abgestimmt.
+
 ---
 
 ## Vor der Submission: Automatische Validierung
@@ -13,7 +15,7 @@ Führe zuerst die automatische Validierung durch:
 ./tools/validate-plugin.sh [PLUGIN_DIR]
 ```
 
-Oder über das Hauptmenü: Option **12) Plugin Validierung**
+Oder im Hauptmenü: **Option 6) Plugin Validierung**
 
 ### ✅ Automatisch geprüfte Kriterien
 

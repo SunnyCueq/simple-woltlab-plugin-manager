@@ -43,12 +43,12 @@ function runScript(toolsRoot, scriptPath, args = []) {
 
 const TOOL_ENTRIES = [
   { id: 1, label: "Build", command: "woltlabBuild.runTool1", script: "./tools/build.sh", args: ["patch"], icon: "run-all" },
-  { id: 2, label: "Git Push", command: "woltlabBuild.runTool2", script: "./tools/gitpush.sh", args: [], icon: "git-push" },
+  { id: 2, label: "Git Push", command: "woltlabBuild.runTool2", script: "./tools/gitpush.sh", args: [], icon: "repo-push" },
   { id: 3, label: "TypeScript", command: "woltlabBuild.runTool3", script: "./tools/typescript.sh", args: [], icon: "file-code" },
   { id: 4, label: "Unpack", command: "woltlabBuild.runTool4", script: "./tools/unpack.sh", args: [], icon: "package" },
   { id: 5, label: "Hilfe & Dokumentation", command: "woltlabBuild.runTool5", script: "./tools/help.sh", args: [], icon: "book" },
   { id: 6, label: "Plugin Validierung", command: "woltlabBuild.runTool6", script: "./tools/validate-plugin.sh", args: [], icon: "check-all" },
-  { id: "managerPush", label: "Manager Push (Maintainer)", command: "woltlabBuild.runToolManagerPush", script: "./tools/manager-push.sh", args: [], icon: "git-push" },
+  { id: "managerPush", label: "Manager Push (Maintainer)", command: "woltlabBuild.runToolManagerPush", script: "./tools/manager-push.sh", args: [], icon: "cloud-upload" },
   { id: "menu", label: "Tools-Menü", command: "woltlabBuild.runToolsMenu", script: "./tools.sh", args: [], icon: "list-flat" },
 ];
 
