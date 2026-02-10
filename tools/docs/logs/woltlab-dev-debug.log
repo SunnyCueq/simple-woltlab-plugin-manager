@@ -3531,3 +3531,13 @@
 [2026-02-10 13:43:19.784] [print_section] [common.sh:print_section] title=Manager Push (Maintainer)
 [2026-02-10 13:43:20.893] [print_header] [common.sh:print_header] title=Git Push – Plugin-Manager (Maintainer)
 [2026-02-10 13:44:08.470] [print_header] [common.sh:print_header] title=Git Push – Plugin-Manager (Maintainer)
+[2026-02-10 13:45:24.667] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-02-10 13:45:24.671] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-02-10 13:45:24.673] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-02-10 13:45:27.708] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-02-10 13:45:27.717] [print_section] [common.sh:print_section] title=Setup / Vorbereitung
+[2026-02-10 13:45:27.727] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-02-10 13:46:20.089] [print_header] [common.sh:print_header] title=WoltLab Development Tools
+[2026-02-10 13:46:20.093] [INFO] [common.sh:debug_info] show_system_overview | displaying system overview
+[2026-02-10 13:46:20.098] [print_section] [common.sh:print_section] title=System-Übersicht
+[2026-02-10 13:49:26.499] [print_header] [common.sh:print_header] title=Git Push – Plugin-Manager (Maintainer)
