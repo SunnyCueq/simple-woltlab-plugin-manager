@@ -9,7 +9,6 @@ dev.tkirch.wsc.urlshort_v*.tar.gz
 
 # Old/unused files
 *.md
-!README.md
 
 # IDE
 .vscode/

@@ -3,9 +3,8 @@
 #################################################################
 # WoltLab Git Push - Multi-Plugin Support
 # Erkennt automatisch, welches Plugin geändert wurde
-# Pusht den gesamten Workspace zum Haupt-Repository
-#
-# Haupt-Repository: https://github.com/benjarogit/urlshort-featured-links
+# Pusht den gesamten Workspace zum konfigurierten origin-Repository
+# (origin wird im Setup oder per „git remote add origin <URL>“ gesetzt)
 #
 # Usage:
 #   ./tools/gitpush.sh                    → auto-detect + push
@@ -20,10 +19,15 @@
 
 set -e
 
-TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MAIN_DIR="$(dirname "$TOOLS_DIR")"
+#=====================================
+# KONFIGURATION
+#=====================================
+readonly TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly MAIN_DIR="$(dirname "$TOOLS_DIR")"
 
-# Lade gemeinsame Funktionen (erforderlich)
+#=====================================
+# QUELLEN
+#=====================================
 if [ ! -f "$TOOLS_DIR/common.sh" ]; then
     echo "Fehler: common.sh nicht gefunden in $TOOLS_DIR" >&2
     exit 1
@@ -32,7 +36,9 @@ source "$TOOLS_DIR/common.sh"
 
 cd "${MAIN_DIR}"
 
-# Hilfsfunktion: Normalisiere Plugin-Pfad (prüft ob bereits vollständig)
+#=====================================
+# HILFSFUNKTIONEN
+#=====================================
 normalize_plugin_path() {
     local plugin_path="$1"
     if [[ "$plugin_path" =~ ^/ ]]; then
@@ -44,7 +50,9 @@ normalize_plugin_path() {
     fi
 }
 
-# Finde alle Plugin-Verzeichnisse
+#=====================================
+# HAUPTLOGIK
+#=====================================
 PLUGIN_DIRS=($(find_plugin_directories "$MAIN_DIR"))
 PLUGIN_COUNT=${#PLUGIN_DIRS[@]}
 
@@ -68,6 +76,21 @@ else
     GIT_REPO_SSH=""
     GIT_REPO_HTTPS=""
     GIT_REPO_DISPLAY="<nicht konfiguriert>"
+fi
+
+# Fallback: GIT_REPO_URL aus tools/.env lesen, wenn noch kein origin gesetzt
+if [ -z "$GIT_REPO_SSH" ] && [ -f "$TOOLS_DIR/.env" ]; then
+    GIT_REPO_URL=$(grep -E "^GIT_REPO_URL=" "$TOOLS_DIR/.env" 2>/dev/null | cut -d= -f2- | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    if [ -n "$GIT_REPO_URL" ]; then
+        GIT_REPO_DISPLAY=$(echo "$GIT_REPO_URL" | sed 's/\.git$//' | sed 's|^git@github.com:|https://github.com/|')
+        if [[ "$GIT_REPO_URL" =~ ^git@ ]]; then
+            GIT_REPO_SSH="$GIT_REPO_URL"
+            GIT_REPO_HTTPS=$(echo "$GIT_REPO_URL" | sed 's/^git@github.com:/https:\/\/github.com\//')
+        else
+            GIT_REPO_HTTPS="$GIT_REPO_URL"
+            GIT_REPO_SSH=$(echo "$GIT_REPO_URL" | sed 's|^https://github.com/|git@github.com:|')
+        fi
+    fi
 fi
 
 # Zeige Header

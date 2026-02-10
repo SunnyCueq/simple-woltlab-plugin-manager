@@ -1,5 +1,0 @@
-@mixin requireApiVersion($requiredVersion) {
-	@if $apiVersion >= $requiredVersion {
-		@content;
-	}
-}

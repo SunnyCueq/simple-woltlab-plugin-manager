@@ -30,6 +30,8 @@ Die folgenden Kriterien werden vom `validate-plugin.sh` Script automatisch gepr�
 - [ ] **Debug-Code:** Keine var_dump(), print_r(), console.log()
 - [ ] **Test-Credentials:** Keine hardcoded Passwörter
 - [ ] **API-Nutzung:** HTTPRequest/Guzzle statt file_get_contents/curl
+- [ ] **WoltLab Cloud:** Keine exec(), shell_exec(), system(), passthru()
+- [ ] **Archiv:** Keine Müll-Dateien (.DS_Store, Thumbs.db) im Paket
 
 ---
 

@@ -3,6 +3,10 @@
 *.local.json
 .env.local
 .env
+tools/.woltlab-setup-state
+tools/.woltlab-setup-state.json
+tools/manager-push.sh
+tools/docs/logs/
 
 # IDE
 .vscode/
@@ -20,6 +24,13 @@ Thumbs.db
 *.bak
 *.backup
 *.old
+
+# Portable Runtimes (PHP, MariaDB, Node – werden von download-runtimes.sh befüllt)
+tools/runtime/php/
+tools/runtime/mariadb/
+tools/runtime/node/
+tools/runtime/.pid.*
+tools/runtime/.pids
 
 # DDEV (nur generierte Dateien ignorieren)
 woltlab-dev/.ddev/.ddev-docker-compose-*

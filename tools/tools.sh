@@ -8,11 +8,16 @@
 
 set -e
 
-# Verzeichnisse
-TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MAIN_DIR="$(dirname "$TOOLS_DIR")"
+#=====================================
+# KONFIGURATION
+#=====================================
+readonly TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly MAIN_DIR="$(dirname "$TOOLS_DIR")"
+STATE_FILE="$TOOLS_DIR/.woltlab-setup-state"
 
-# Lade gemeinsame Funktionen
+#=====================================
+# QUELLEN
+#=====================================
 if [ -f "$TOOLS_DIR/common.sh" ]; then
     source "$TOOLS_DIR/common.sh"
 else
@@ -39,6 +44,28 @@ else
     }
 fi
 
+#=====================================
+# EINSTIEG: Setup anbieten wenn noch nicht ausgeführt
+#=====================================
+readonly SETUP_DONE_FILE="$TOOLS_DIR/.woltlab-setup-done"
+if [ ! -f "$SETUP_DONE_FILE" ]; then
+    echo ""
+    print_info "Setup wurde noch nicht ausgeführt (WoltLab-Core, Docs, GitHub, lokaler Pfad)."
+    read -p "Jetzt Setup ausführen? (j/n) [j]: " do_setup
+    do_setup=${do_setup:-j}
+    if [[ "$do_setup" =~ ^[jJyY] ]]; then
+        if [ -x "$TOOLS_DIR/setup-minimal.sh" ]; then
+            "$TOOLS_DIR/setup-minimal.sh"
+        else
+            chmod +x "$TOOLS_DIR/setup-minimal.sh" 2>/dev/null && "$TOOLS_DIR/setup-minimal.sh" || true
+        fi
+        echo ""
+    fi
+fi
+
+#=====================================
+# HILFSFUNKTIONEN (Menü & Wrapper)
+#=====================================
 run_tool_script() {
     local script_path="$1"
     shift
@@ -60,20 +87,18 @@ print_menu() {
     local plugins=($(find_plugin_directories "$MAIN_DIR"))
     local plugin_count=${#plugins[@]}
     
-    print_list "Verfügbare Tools"
-    print_list_item "1)" "${CYAN}Build${NC}                 ${ARROW} Plugin bauen & Version automatisch erhöhen"
-    print_list_item "2)" "${CYAN}Git Push${NC}              ${ARROW} Änderungen committen, pushen & Release erstellen"
-    print_list_item "3)" "${CYAN}TypeScript${NC}            ${ARROW} TypeScript kompilieren & .min.js Dateien erstellen"
-    print_list_item "4)" "${CYAN}DDEV${NC}                  ${ARROW} Entwicklungsumgebung starten, stoppen & verwalten"
-    print_list_item "5)" "${CYAN}Restore Snapshot${NC}     ${ARROW} WoltLab-Installation aus Snapshot wiederherstellen"
-    print_list_item "6)" "${CYAN}Setup${NC}                 ${ARROW} Vollständige Entwicklungsumgebung einrichten"
-    print_list_item "7)" "${CYAN}WoltLab Download${NC}      ${ARROW} WoltLab Suite Core herunterladen & installieren"
-    print_list_item "8)" "${CYAN}Snapshot Manager${NC}     ${ARROW} Snapshots erstellen, löschen & verwalten"
-    print_list_item "9)" "${CYAN}Credentials${NC}           ${ARROW} Zugangsdaten sicher speichern & verwalten"
-    print_list_item "10)" "${CYAN}Dockge${NC}               ${ARROW} Docker-Container visuell verwalten (Portainer-Alternative)"
-    print_list_item "11)" "${CYAN}Hilfe & Dokumentation${NC} ${ARROW} README & Anleitungen anzeigen"
-    print_list_item "12)" "${CYAN}Plugin Validierung${NC}    ${ARROW} Code-Qualität, Security & Store-Compliance prüfen"
-    print_list_item "13)" "${CYAN}Updates prüfen${NC}        ${ARROW} Verfügbare Updates für Tools & Dependencies anzeigen"
+    print_list "Plugin-Entwicklung (Kern)"
+    print_list_item "1)" "${CYAN}Build${NC}                 ${ARROW} Plugin bauen & Version erhöhen"
+    print_list_item "2)" "${CYAN}Git Push${NC}              ${ARROW} Committen, pushen & Release erstellen"
+    print_list_item "3)" "${CYAN}TypeScript${NC}            ${ARROW} TypeScript kompilieren & .min.js"
+    print_list_item "4)" "${CYAN}Unpack${NC}               ${ARROW} Plugin-Paket in temp_edit/ entpacken"
+    print_list_item "5)" "${CYAN}Hilfe & Dokumentation${NC} ${ARROW} README & Anleitungen"
+    print_list_item "6)" "${CYAN}Plugin Validierung${NC}   ${ARROW} Code-Qualität & Store-Compliance"
+    print_list_item "7)" "${CYAN}Setup / Vorbereitung${NC}  ${ARROW} WoltLab-Core, Docs, GitHub, lokaler Pfad"
+    print_list_item "8)" "${CYAN}Repo anzeigen / ändern${NC} ${ARROW} Git-Repository (origin) für Push"
+    if [ -f "$TOOLS_DIR/manager-push.sh" ]; then
+        print_list_item "9)" "${CYAN}Manager Push${NC} (Maintainer)  ${ARROW} Plugin-Manager ins Manager-Repo pushen"
+    fi
     echo ""
     if [ "$plugin_count" -gt 0 ]; then
         # Gruppiere Plugins nach Verzeichnissen
@@ -155,7 +180,7 @@ run_build() {
     echo ""
     run_tool_script "$TOOLS_DIR/build.sh" "$@"
     echo ""
-    read -p "Drücke ENTER um fortzufahren..."
+    press_zero_to_back || true
 }
 
 run_gitpush() {
@@ -163,15 +188,19 @@ run_gitpush() {
     echo ""
     run_tool_script "$TOOLS_DIR/gitpush.sh" "$@"
     echo ""
-    read -p "Drücke ENTER um fortzufahren..."
+    press_zero_to_back || true
 }
 
-run_start_ddev() {
-    echo -e "${YELLOW}${ARROW} Starte DDEV...${NC}"
+run_manager_push() {
+    if [ ! -f "$TOOLS_DIR/manager-push.sh" ]; then
+        print_error "manager-push.sh nicht gefunden (nur für Maintainer vorhanden)"
+        return 1
+    fi
+    echo -e "${YELLOW}${ARROW} Starte manager-push.sh...${NC}"
     echo ""
-    run_tool_script "$TOOLS_DIR/start-ddev.sh" "$@"
+    run_tool_script "$TOOLS_DIR/manager-push.sh" "$@"
     echo ""
-    read -p "Drücke ENTER um fortzufahren..."
+    press_zero_to_back || true
 }
 
 run_typescript() {
@@ -179,55 +208,15 @@ run_typescript() {
     echo ""
     run_tool_script "$TOOLS_DIR/typescript.sh" "$@"
     echo ""
-    read -p "Drücke ENTER um fortzufahren..."
+    press_zero_to_back || true
 }
 
-run_restore_snapshot() {
-    echo -e "${YELLOW}${ARROW} Stelle Snapshot wieder her...${NC}"
+run_unpack() {
+    echo -e "${YELLOW}${ARROW} Starte Unpack...${NC}"
     echo ""
-    run_tool_script "$TOOLS_DIR/restore-snapshot.sh"
+    run_tool_script "$TOOLS_DIR/unpack.sh" "$@"
     echo ""
-    read -p "Drücke ENTER um fortzufahren..."
-}
-
-run_setup() {
-    echo -e "${YELLOW}${ARROW} Starte Setup...${NC}"
-    echo ""
-    run_tool_script "$TOOLS_DIR/setup.sh"
-    echo ""
-    read -p "Drücke ENTER um fortzufahren..."
-}
-
-run_download_woltlab() {
-    echo -e "${YELLOW}${ARROW} Lade WoltLab Core herunter...${NC}"
-    echo ""
-    run_tool_script "$TOOLS_DIR/download-woltlab.sh"
-    echo ""
-    read -p "Drücke ENTER um fortzufahren..."
-}
-
-run_snapshot_manager() {
-    echo -e "${YELLOW}${ARROW} Öffne Snapshot Manager...${NC}"
-    echo ""
-    run_tool_script "$TOOLS_DIR/snapshot-manager.sh"
-    echo ""
-    read -p "Drücke ENTER um fortzufahren..."
-}
-
-run_credentials() {
-    echo -e "${YELLOW}${ARROW} Öffne Credentials Manager...${NC}"
-    echo ""
-    run_tool_script "$TOOLS_DIR/credentials.sh"
-    echo ""
-    read -p "Drücke ENTER um fortzufahren..."
-}
-
-run_dockge() {
-    echo -e "${YELLOW}${ARROW} Öffne Dockge...${NC}"
-    echo ""
-    run_tool_script "$TOOLS_DIR/dockge.sh" "$@"
-    echo ""
-    read -p "Drücke ENTER um fortzufahren..."
+    press_zero_to_back || true
 }
 
 run_help() {
@@ -235,7 +224,15 @@ run_help() {
     echo ""
     run_tool_script "$TOOLS_DIR/help.sh"
     echo ""
-    read -p "Drücke ENTER um fortzufahren..."
+    press_zero_to_back || true
+}
+
+run_setup_minimal() {
+    echo -e "${YELLOW}${ARROW} Starte Setup / Vorbereitung...${NC}"
+    echo ""
+    run_tool_script "$TOOLS_DIR/setup-minimal.sh"
+    echo ""
+    press_zero_to_back || true
 }
 
 run_validate() {
@@ -243,15 +240,21 @@ run_validate() {
     echo ""
     run_tool_script "$TOOLS_DIR/validate-plugin.sh" "$@"
     echo ""
-    read -p "Drücke ENTER um fortzufahren..."
+    press_zero_to_back || true
 }
 
-# Hauptmenü
+#=====================================
+# HAUPTLOGIK (Menü-Schleife)
+#=====================================
 while true; do
     print_header
     print_menu
     
-    read -p "Wähle eine Option (0-13): " choice
+    if [ -f "$TOOLS_DIR/manager-push.sh" ]; then
+        read -p "Wähle eine Option (0-9): " choice
+    else
+        read -p "Wähle eine Option (0-8): " choice
+    fi
     echo ""
     
     case "$choice" in
@@ -260,14 +263,14 @@ while true; do
             print_section "Build - Plugin bauen" "Hauptmenü" "Build"
             
             # Zeige verfügbare Plugins
-            local plugins=($(find_plugin_directories "$MAIN_DIR"))
+            plugins=($(find_plugin_directories "$MAIN_DIR"))
             if [ ${#plugins[@]} -gt 0 ]; then
                 echo -e "${YELLOW}Verfügbare Plugins:${NC}"
-                local i=1
+                i=1
                 for plugin_path in "${plugins[@]}"; do
-                    local version=$(get_plugin_version "$plugin_path")
-                    local name=$(get_plugin_name "$plugin_path")
-                    local relative_path="${plugin_path#$MAIN_DIR/}"
+                    version=$(get_plugin_version "$plugin_path")
+                    name=$(get_plugin_name "$plugin_path")
+                    relative_path="${plugin_path#$MAIN_DIR/}"
                     echo -e "   ${CYAN}${i})${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
                     i=$((i + 1))
                 done
@@ -292,9 +295,8 @@ while true; do
             version_type=${version_type:-patch}
             
             echo ""
-            if ! ask_yes_no "Fortfahren?" "J"; then
-                continue
-            fi
+            fp_choice=$(ask_choice_yn "Fortfahren?" 1)
+            [ "$fp_choice" = "n" ] || [ "$fp_choice" = "abort" ] && continue
             
             run_build "$build_target" "$version_type"
             ;;
@@ -303,14 +305,14 @@ while true; do
             print_section "Git Push - Commit & Push" "Hauptmenü" "Git Push"
             
             # Zeige verfügbare Plugins
-            local plugins=($(find_plugin_directories "$MAIN_DIR"))
+            plugins=($(find_plugin_directories "$MAIN_DIR"))
             if [ ${#plugins[@]} -gt 0 ]; then
                 echo -e "${YELLOW}Verfügbare Plugins:${NC}"
-                local i=1
+                i=1
                 for plugin_path in "${plugins[@]}"; do
-                    local version=$(get_plugin_version "$plugin_path")
-                    local name=$(get_plugin_name "$plugin_path")
-                    local relative_path="${plugin_path#$MAIN_DIR/}"
+                    version=$(get_plugin_version "$plugin_path")
+                    name=$(get_plugin_name "$plugin_path")
+                    relative_path="${plugin_path#$MAIN_DIR/}"
                     echo -e "   ${CYAN}${i})${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
                     i=$((i + 1))
                 done
@@ -334,9 +336,8 @@ while true; do
             commit_msg=${commit_msg:-}
             
             echo ""
-            if ! ask_yes_no "Fortfahren?" "J"; then
-                continue
-            fi
+            fp_choice=$(ask_choice_yn "Fortfahren?" 1)
+            [ "$fp_choice" = "n" ] || [ "$fp_choice" = "abort" ] && continue
             
             if [ -n "$commit_msg" ]; then
                 run_gitpush "$push_target" "$commit_msg"
@@ -385,169 +386,59 @@ while true; do
             ;;
         4)
             print_header
-            print_section "DDEV - Verwalten" "Hauptmenü" "DDEV"
-            
-            echo -e "${GREEN}Verfügbare Optionen:${NC}"
-            echo ""
-            echo -e "   ${YELLOW}1)${NC} ${CYAN}Start${NC}      ${ARROW} DDEV starten/Status anzeigen"
-            echo -e "   ${YELLOW}2)${NC} ${CYAN}Logs${NC}      ${ARROW} DDEV starten und Logs anzeigen"
-            echo -e "   ${YELLOW}3)${NC} ${CYAN}Stop${NC}      ${ARROW} DDEV stoppen"
-            echo -e "   ${YELLOW}4)${NC} ${CYAN}Restart${NC}   ${ARROW} DDEV neu starten"
-            echo -e "   ${YELLOW}5)${NC} ${CYAN}Status${NC}    ${ARROW} DDEV Status anzeigen"
-            echo ""
-            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
-            echo ""
-            read -p "Wähle eine Option (0-5): " ddev_choice
-            echo ""
-            
-            case "$ddev_choice" in
-                1) 
-                    ddev_cmd="start"
-                    print_header
-                    print_section "DDEV - Start" "Hauptmenü" "DDEV" "Start"
-                    ;;
-                2) 
-                    ddev_cmd="logs"
-                    print_header
-                    print_section "DDEV - Logs" "Hauptmenü" "DDEV" "Logs"
-                    ;;
-                3) 
-                    ddev_cmd="stop"
-                    print_header
-                    print_section "DDEV - Stop" "Hauptmenü" "DDEV" "Stop"
-                    ;;
-                4) 
-                    ddev_cmd="restart"
-                    print_header
-                    print_section "DDEV - Restart" "Hauptmenü" "DDEV" "Restart"
-                    ;;
-                5) 
-                    ddev_cmd="status"
-                    print_header
-                    print_section "DDEV - Status" "Hauptmenü" "DDEV" "Status"
-                    ;;
-                0) continue ;;
-                *) 
-                    echo -e "${RED}Ungültige Option!${NC}"
-                    sleep 1
-                    continue
-                    ;;
-            esac
-            
-            run_start_ddev "$ddev_cmd"
-            ;;
-        5)
-            print_header
-            print_section "Restore Snapshot - WoltLab wiederherstellen" "Hauptmenü" "Restore Snapshot"
-            
-            echo -e "${YELLOW}${WARNING} Warnung:${NC} Dies wird die komplette WoltLab-Installation"
-            echo -e "         aus dem Snapshot wiederherstellen!"
-            echo ""
-            echo ""
-            if ask_yes_no "Snapshot wiederherstellen?" "N"; then
-                run_restore_snapshot
-            else
-                echo -e "${YELLOW}Abgebrochen.${NC}"
-                sleep 1
-            fi
-            ;;
-        6)
-            print_header
-            print_section "Setup - Vollständige Installation" "Hauptmenü" "Setup"
-            run_setup
-            ;;
-        7)
-            print_header
-            print_section "WoltLab Download - Core herunterladen" "Hauptmenü" "WoltLab Download"
-            run_download_woltlab
-            ;;
-        8)
-            print_header
-            print_section "Snapshot Manager - Snapshot-Verwaltung" "Hauptmenü" "Snapshot Manager"
-            run_snapshot_manager
-            ;;
-        9)
-            print_header
-            print_section "Credentials - Zugangsdaten-Verwaltung" "Hauptmenü" "Credentials"
-            run_credentials
-            ;;
-        10)
-            print_header
-            print_section "Dockge - Container-Management" "Hauptmenü" "Dockge"
-            
-            echo -e "${GREEN}Verfügbare Optionen:${NC}"
-            echo ""
-            echo -e "   ${YELLOW}1)${NC} ${CYAN}Start${NC}      ${ARROW} Dockge starten/Status anzeigen"
-            echo -e "   ${YELLOW}2)${NC} ${CYAN}Stop${NC}       ${ARROW} Dockge stoppen"
-            echo -e "   ${YELLOW}3)${NC} ${CYAN}Restart${NC}    ${ARROW} Dockge neu starten"
-            echo -e "   ${YELLOW}4)${NC} ${CYAN}Status${NC}     ${ARROW} Dockge Status anzeigen"
-            echo -e "   ${YELLOW}5)${NC} ${CYAN}Open${NC}       ${ARROW} Dockge im Browser öffnen"
-            echo ""
-            echo -e "   ${YELLOW}0)${NC} Zurück zum Hauptmenü"
-            echo ""
-            read -p "Wähle eine Option (0-5): " dockge_choice
-            echo ""
-            
-            case "$dockge_choice" in
-                1) 
-                    dockge_cmd="start"
-                    print_header
-                    print_section "Dockge - Start" "Hauptmenü" "Dockge" "Start"
-                    ;;
-                2) 
-                    dockge_cmd="stop"
-                    print_header
-                    print_section "Dockge - Stop" "Hauptmenü" "Dockge" "Stop"
-                    ;;
-                3) 
-                    dockge_cmd="restart"
-                    print_header
-                    print_section "Dockge - Restart" "Hauptmenü" "Dockge" "Restart"
-                    ;;
-                4) 
-                    dockge_cmd="status"
-                    print_header
-                    print_section "Dockge - Status" "Hauptmenü" "Dockge" "Status"
-                    ;;
-                5) 
-                    dockge_cmd="open"
-                    print_header
-                    print_section "Dockge - Öffnen" "Hauptmenü" "Dockge" "Öffnen"
-                    ;;
-                0) continue ;;
-                *) 
-                    echo -e "${RED}Ungültige Option!${NC}"
-                    sleep 1
-                    continue
-                    ;;
-            esac
-            
-            run_dockge "$dockge_cmd"
-            ;;
-        11)
-            print_header
-            print_section "Hilfe & Dokumentation" "Hauptmenü" "Hilfe"
-            run_help
-            ;;
-        12)
-            print_header
-            print_section "Plugin Validierung" "Hauptmenü" "Plugin Validierung"
-            
-            # Zeige verfügbare Plugins
-            local plugins=($(find_plugin_directories "$MAIN_DIR"))
+            print_section "Unpack - Plugin-Paket entpacken" "Hauptmenü" "Unpack"
+            plugins=($(find_plugin_directories "$MAIN_DIR"))
             if [ ${#plugins[@]} -gt 0 ]; then
                 echo -e "${YELLOW}Verfügbare Plugins:${NC}"
-                local i=1
+                i=1
                 for plugin_path in "${plugins[@]}"; do
-                    local version=$(get_plugin_version "$plugin_path")
-                    local name=$(get_plugin_name "$plugin_path")
-                    local relative_path="${plugin_path#$MAIN_DIR/}"
+                    version=$(get_plugin_version "$plugin_path")
+                    name=$(get_plugin_name "$plugin_path")
+                    relative_path="${plugin_path#$MAIN_DIR/}"
                     echo -e "   ${CYAN}${i})${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
                     i=$((i + 1))
                 done
                 echo ""
             fi
-            
+            echo -e "${YELLOW}Optionen:${NC}"
+            echo -e "  ${CYAN}•${NC} Leer lassen → Erstes Plugin + neuestes Paket"
+            echo -e "  ${CYAN}•${NC} <plugin>   → Plugin-Verzeichnis (z.B. basis-plugin)"
+            echo -e "  ${CYAN}•${NC} <plugin> <datei.tar.gz> → Spezifisches Paket"
+            echo ""
+            read -p "Plugin [auto]: " unpack_plugin
+            read -p "Paket (optional): " unpack_pkg
+            echo ""
+            fp_choice=$(ask_choice_yn "Fortfahren?" 1)
+            [ "$fp_choice" = "n" ] || [ "$fp_choice" = "abort" ] && continue
+            if [ -n "$unpack_pkg" ]; then
+                run_unpack "$unpack_plugin" "$unpack_pkg"
+            elif [ -n "$unpack_plugin" ]; then
+                run_unpack "$unpack_plugin"
+            else
+                run_unpack
+            fi
+            ;;
+        5)
+            print_header
+            print_section "Hilfe & Dokumentation" "Hauptmenü" "Hilfe"
+            run_help
+            ;;
+        6)
+            print_header
+            print_section "Plugin Validierung" "Hauptmenü" "Plugin Validierung"
+            plugins=($(find_plugin_directories "$MAIN_DIR"))
+            if [ ${#plugins[@]} -gt 0 ]; then
+                echo -e "${YELLOW}Verfügbare Plugins:${NC}"
+                i=1
+                for plugin_path in "${plugins[@]}"; do
+                    version=$(get_plugin_version "$plugin_path")
+                    name=$(get_plugin_name "$plugin_path")
+                    relative_path="${plugin_path#$MAIN_DIR/}"
+                    echo -e "   ${CYAN}${i})${NC} ${name} ${YELLOW}(v${version})${NC} ${BLUE}[${relative_path}]${NC}"
+                    i=$((i + 1))
+                done
+                echo ""
+            fi
             echo -e "${YELLOW}Was wird geprüft:${NC}"
             echo -e "  ${CYAN}•${NC} PHP & XML Syntax"
             echo -e "  ${CYAN}•${NC} Security (SQL-Injection, XSS)"
@@ -560,14 +451,10 @@ while true; do
             echo -e "  ${CYAN}•${NC} <name>      → Spezifisches Plugin-Verzeichnis prüfen"
             echo ""
             read -p "Welches Plugin soll validiert werden? [aktuelles Verzeichnis]: " validate_target
-            
             echo ""
-            if ! ask_yes_no "Fortfahren?" "J"; then
-                continue
-            fi
-            
+            fp_choice=$(ask_choice_yn "Fortfahren?" 1)
+            [ "$fp_choice" = "n" ] || [ "$fp_choice" = "abort" ] && continue
             if [ -n "$validate_target" ]; then
-                # Prüfe ob validate_target bereits absoluter Pfad ist
                 if [[ "$validate_target" =~ ^/ ]]; then
                     run_validate "$validate_target"
                 else
@@ -577,14 +464,55 @@ while true; do
                 run_validate
             fi
             ;;
-        13)
+        7)
             print_header
-            print_section "Updates prüfen" "Hauptmenü" "Updates"
-            # set -e temporär deaktivieren, damit Menü immer angezeigt wird
-            set +e
-            show_update_check
-            set -e
-            # show_update_check ist bereits interaktiv und kehrt zurück, wenn "0" gewählt wird
+            print_section "Setup / Vorbereitung" "Hauptmenü" "Setup"
+            run_setup_minimal
+            ;;
+        8)
+            print_header
+            print_section "Repo anzeigen / ändern" "Hauptmenü" "Repo"
+            current_repo=$(get_git_repo_display)
+            echo -e "${CYAN}Aktuelles Repository (für Push):${NC}"
+            echo -e "   ${YELLOW}${current_repo}${NC}"
+            echo ""
+            read -p "Repo ändern? (j/n) [n]: " repo_change
+            repo_change=${repo_change:-n}
+            if [[ "$repo_change" =~ ^[jJyY] ]]; then
+                read -p "Neue URL (z. B. https://github.com/user/repo oder git@github.com:user/repo.git): " new_repo_url
+                new_repo_url=$(echo "$new_repo_url" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                if [ -n "$new_repo_url" ]; then
+                    env_set "GIT_REPO_URL" "$new_repo_url"
+                    print_success "GIT_REPO_URL in Konfiguration gespeichert."
+                    if [ -d "$MAIN_DIR/.git" ]; then
+                        if git -C "$MAIN_DIR" remote get-url origin >/dev/null 2>&1; then
+                            git -C "$MAIN_DIR" remote set-url origin "$new_repo_url"
+                            print_success "Git origin aktualisiert."
+                        else
+                            git -C "$MAIN_DIR" remote add origin "$new_repo_url"
+                            print_success "Git origin hinzugefügt."
+                        fi
+                    fi
+                else
+                    print_warning "Keine URL eingegeben."
+                fi
+            fi
+            echo ""
+            press_zero_to_back || true
+            ;;
+        9)
+            if [ ! -f "$TOOLS_DIR/manager-push.sh" ]; then
+                print_error "manager-push.sh nicht gefunden"
+                sleep 1
+                continue
+            fi
+            print_header
+            print_section "Manager Push (Maintainer)" "Hauptmenü" "Manager Push"
+            echo -e "${YELLOW}Plugin-Manager-Stand ins Manager-Repo pushen.${NC}"
+            echo ""
+            fp_choice=$(ask_choice_yn "Manager ins Repo pushen?" 1)
+            [ "$fp_choice" = "n" ] || [ "$fp_choice" = "abort" ] && continue
+            run_manager_push
             ;;
         0)
             echo -e "${GREEN}Auf Wiedersehen!${NC}"

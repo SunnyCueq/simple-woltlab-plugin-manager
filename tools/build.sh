@@ -9,6 +9,7 @@
 #   ./tools/build.sh patch              → Patch-Version erhoehen (Standard)
 #   ./tools/build.sh minor              → Minor-Version erhoehen
 #   ./tools/build.sh major              → Major-Version erhoehen
+#   ./tools/build.sh unpack [plugin] [package.tar.gz] → Plugin entpacken
 #
 # Das Script sucht automatisch nach Plugin-Verzeichnissen
 # im Projekt-Root (Verzeichnisse mit package.xml)
@@ -16,10 +17,15 @@
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MAIN_DIR="$(dirname "$SCRIPT_DIR")"
+#=====================================
+# KONFIGURATION
+#=====================================
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly MAIN_DIR="$(dirname "$SCRIPT_DIR")"
 
-# Lade gemeinsame Funktionen
+#=====================================
+# QUELLEN
+#=====================================
 if [ -f "$SCRIPT_DIR/common.sh" ]; then
     source "$SCRIPT_DIR/common.sh"
 else
@@ -51,37 +57,70 @@ else
     print_info() { echo -e "${CYAN}ℹ $1${NC}"; }
 fi
 
-# Parameter parsen
-PLUGIN_TARGET="${1:-}"
-VERSION_TYPE="${2:-patch}"
+#=====================================
+# HAUPTLOGIK (Parameter & Dispatch)
+#=====================================
+COMMAND="${1:-}"
+PLUGIN_TARGET="${2:-}"
+VERSION_TYPE="${3:-patch}"
+
+# Wenn erster Parameter "unpack" ist, dann unpack.sh aufrufen
+if [ "$COMMAND" = "unpack" ]; then
+    TOOLS_DIR="$(cd "${SCRIPT_DIR}" && pwd)"
+    UNPACK_SCRIPT="${TOOLS_DIR}/unpack.sh"
+    
+    if [ ! -f "$UNPACK_SCRIPT" ]; then
+        print_error "unpack.sh nicht gefunden in ${UNPACK_SCRIPT}"
+        exit 1
+    fi
+    
+    # Rufe unpack.sh auf mit verbleibenden Parametern
+    bash "$UNPACK_SCRIPT" "$PLUGIN_TARGET" "$VERSION_TYPE"
+    exit $?
+fi
 
 # Wenn erster Parameter ein Version-Typ ist, dann kein Plugin angegeben
-if [[ "$PLUGIN_TARGET" =~ ^(patch|minor|major)$ ]]; then
-    VERSION_TYPE="$PLUGIN_TARGET"
+if [[ "$COMMAND" =~ ^(patch|minor|major)$ ]]; then
+    VERSION_TYPE="$COMMAND"
     PLUGIN_TARGET=""
+    COMMAND=""
+elif [ -n "$COMMAND" ] && [[ ! "$COMMAND" =~ ^(patch|minor|major)$ ]]; then
+    # COMMAND ist wahrscheinlich PLUGIN_TARGET
+    PLUGIN_TARGET="$COMMAND"
+    COMMAND=""
+    # Prüfe ob zweiter Parameter ein Version-Typ ist
+    if [[ "$VERSION_TYPE" =~ ^(patch|minor|major)$ ]]; then
+        # VERSION_TYPE ist bereits korrekt gesetzt
+        :
+    else
+        VERSION_TYPE="patch"
+    fi
 fi
 
 # Suche nach Plugin-Verzeichnissen
+# Prüfe zuerst auf temp_edit/package.xml, dann auf Root-package.xml (optional)
 if [ -n "$PLUGIN_TARGET" ]; then
     # Spezifisches Plugin-Verzeichnis
     PROJECT_ROOT="$(cd "${MAIN_DIR}/${PLUGIN_TARGET}" && pwd)"
-    if [ ! -f "$PROJECT_ROOT/package.xml" ]; then
-        print_error "${PLUGIN_TARGET} ist kein gueltiges Plugin-Verzeichnis"
+    if [ ! -f "$PROJECT_ROOT/temp_edit/package.xml" ] && [ ! -f "$PROJECT_ROOT/package.xml" ]; then
+        print_error "${PLUGIN_TARGET} ist kein gueltiges Plugin-Verzeichnis (weder temp_edit/package.xml noch package.xml gefunden)"
         exit 1
     fi
 else
-    # Erstes Plugin-Verzeichnis mit package.xml finden
+    # Erstes Plugin-Verzeichnis mit temp_edit/package.xml oder package.xml finden
     PROJECT_ROOT=""
     for plugin_dir in "${MAIN_DIR}"/*; do
-        if [ -d "$plugin_dir" ] && [ -f "$plugin_dir/package.xml" ]; then
-            PROJECT_ROOT="$(cd "$plugin_dir" && pwd)"
-            break
+        if [ -d "$plugin_dir" ]; then
+            if [ -f "$plugin_dir/temp_edit/package.xml" ] || [ -f "$plugin_dir/package.xml" ]; then
+                PROJECT_ROOT="$(cd "$plugin_dir" && pwd)"
+                break
+            fi
         fi
     done
     
     if [ -z "$PROJECT_ROOT" ]; then
-        print_error "Kein Plugin-Verzeichnis mit package.xml gefunden"
-        print_warning "Suche in: ${MAIN_DIR}/*/package.xml"
+        print_error "Kein Plugin-Verzeichnis mit temp_edit/package.xml oder package.xml gefunden"
+        print_warning "Suche in: ${MAIN_DIR}/*/temp_edit/package.xml oder ${MAIN_DIR}/*/package.xml"
         exit 1
     fi
 fi
@@ -210,15 +249,22 @@ if [ ! -d "temp_edit" ]; then
     exit 1
 fi
 
-# Version aus package.xml lesen
-if [ ! -f "package.xml" ]; then
-    print_error "package.xml nicht gefunden"
-    exit 1
+# Version aus temp_edit/package.xml lesen (Quelle der Wahrheit)
+PACKAGE_XML="temp_edit/package.xml"
+if [ ! -f "$PACKAGE_XML" ]; then
+    # Fallback auf Root-package.xml (für Kompatibilität)
+    if [ -f "package.xml" ]; then
+        PACKAGE_XML="package.xml"
+        print_warning "temp_edit/package.xml nicht gefunden, verwende Root-package.xml"
+    else
+        print_error "package.xml nicht gefunden (weder temp_edit/package.xml noch package.xml)"
+        exit 1
+    fi
 fi
 
-CURRENT_VERSION=$(grep -oP '<version>\K[^<]+' "package.xml" 2>/dev/null || echo "")
+CURRENT_VERSION=$(grep -oP '<version>\K[^<]+' "$PACKAGE_XML" 2>/dev/null || echo "")
 if [ -z "$CURRENT_VERSION" ]; then
-    print_error "Version nicht in package.xml gefunden"
+    print_error "Version nicht in $PACKAGE_XML gefunden"
     exit 1
 fi
 
@@ -251,11 +297,11 @@ TODAY=$(date +%Y-%m-%d)
 print_info "Neue Version: $NEW_VERSION"
 echo ""
 
-# Version und Datum in package.xml aktualisieren
-sed -i "s/<version>${CURRENT_VERSION}<\/version>/<version>${NEW_VERSION}<\/version>/" package.xml
-sed -i "s/<date>[^<]*<\/date>/<date>${TODAY}<\/date>/" package.xml
+# Version und Datum in temp_edit/package.xml aktualisieren (Quelle der Wahrheit)
+sed -i "s/<version>${CURRENT_VERSION}<\/version>/<version>${NEW_VERSION}<\/version>/" "$PACKAGE_XML"
+sed -i "s/<date>[^<]*<\/date>/<date>${TODAY}<\/date>/" "$PACKAGE_XML"
 
-print_success "package.xml aktualisiert"
+print_success "$PACKAGE_XML aktualisiert"
 
 # TARs aus temp_edit neu erstellen
 print_info "[1/5] Packe TARs aus temp_edit..."
@@ -264,7 +310,7 @@ cd temp_edit
 
 # files.tar erstellen (lib/, acp/, style/, PHP-Dateien, aber keine Templates)
 # WICHTIG: app.config.inc.php NICHT packen - wird von WoltLab automatisch erstellt!
-# Vor jeder Installation muss die Datenbank bereinigt werden (alte shrinkr-Eintraege loeschen)
+# Vor jeder Installation muss die Datenbank bereinigt werden (alte Plugin-Eintraege loeschen)
 FILES_TO_PACK=""
 [ -d "lib" ] && FILES_TO_PACK="${FILES_TO_PACK} lib/"
 [ -d "acp" ] && FILES_TO_PACK="${FILES_TO_PACK} acp/"
@@ -274,9 +320,10 @@ FILES_TO_PACK=""
 # app.config.inc.php wird NICHT mitgeliefert (WoltLab erstellt sie automatisch)
 
 if [ -n "$FILES_TO_PACK" ]; then
-    # Erstelle files.tar und schließe app.config.inc.php explizit aus
-    # (wird von WoltLab automatisch erstellt und darf nicht im Paket sein)
-    tar -cf ../files.tar --exclude="app.config.inc.php" $FILES_TO_PACK
+    # Erstelle files.tar und schließe app.config.inc.php und lib/bootstrap/ explizit aus
+    # app.config.inc.php wird von WoltLab automatisch erstellt und darf nicht im Paket sein
+    # lib/bootstrap/ muss ins WCF-Verzeichnis (wird in files_wcf.tar gepackt)
+    tar -cf ../files.tar --exclude="app.config.inc.php" --exclude="lib/bootstrap" $FILES_TO_PACK
     print_success "files.tar erstellt"
     
     # Pruefe ob app.config.inc.php versehentlich enthalten ist
@@ -284,6 +331,20 @@ if [ -n "$FILES_TO_PACK" ]; then
         log_error_with_context "app.config.inc.php ist in files.tar enthalten!" "Diese Datei wird von WoltLab automatisch erstellt und darf nicht im Paket sein!"
         exit 1
     fi
+    
+    # Pruefe ob lib/bootstrap/ versehentlich enthalten ist (muss in files_wcf.tar sein)
+    if tar -tf ../files.tar 2>/dev/null | grep -q "^lib/bootstrap/"; then
+        log_error_with_context "lib/bootstrap/ ist in files.tar enthalten!" "Bootstrap-Dateien müssen in files_wcf.tar sein, damit sie ins WCF-Verzeichnis kopiert werden!"
+        exit 1
+    fi
+    
+    # Pruefe ob TAR-Datei nicht leer ist
+    FILE_COUNT=$(tar -tf ../files.tar 2>/dev/null | wc -l)
+    if [ "$FILE_COUNT" -eq 0 ]; then
+        log_error_with_context "files.tar ist leer!" "TAR-Datei enthält keine Dateien"
+        exit 1
+    fi
+    print_success "files.tar enthaelt ${FILE_COUNT} Datei(en)"
 else
     print_warning "Keine Dateien fuer files.tar gefunden"
 fi
@@ -293,7 +354,8 @@ if [ -d "templates" ]; then
     cd templates
     if ls *.tpl 1> /dev/null 2>&1; then
         tar -cf ../../templates.tar *.tpl
-        print_success "templates.tar erstellt [aus templates/*.tpl]"
+        TEMPLATE_COUNT=$(tar -tf ../../templates.tar 2>/dev/null | wc -l)
+        print_success "templates.tar erstellt [aus templates/*.tpl] (${TEMPLATE_COUNT} Datei(en))"
     else
         print_warning "Keine .tpl Dateien in templates/ gefunden"
     fi
@@ -301,7 +363,8 @@ if [ -d "templates" ]; then
 elif ls *.tpl 1> /dev/null 2>&1; then
     # Templates liegen direkt im temp_edit
     tar -cf ../templates.tar *.tpl
-    print_success "templates.tar erstellt (aus *.tpl)"
+    TEMPLATE_COUNT=$(tar -tf ../templates.tar 2>/dev/null | wc -l)
+    print_success "templates.tar erstellt (aus *.tpl) (${TEMPLATE_COUNT} Datei(en))"
 else
     print_warning "Keine Templates gefunden"
 fi
@@ -311,7 +374,8 @@ if [ -d "acptemplates" ]; then
     cd acptemplates
     if ls *.tpl 1> /dev/null 2>&1; then
         tar -cf ../../acptemplates.tar *.tpl
-        print_success "acptemplates.tar erstellt"
+        ACP_TEMPLATE_COUNT=$(tar -tf ../../acptemplates.tar 2>/dev/null | wc -l)
+        print_success "acptemplates.tar erstellt (${ACP_TEMPLATE_COUNT} Datei(en))"
     else
         print_warning "Keine .tpl Dateien in acptemplates/ gefunden"
     fi
@@ -320,12 +384,32 @@ else
     print_warning "Kein acptemplates/ Ordner gefunden"
 fi
 
-# files_wcf.tar erstellen
+# files_wcf.tar erstellen (JavaScript-Dateien und Bootstrap-Dateien für WCF-Verzeichnis)
+WCF_FILES_TO_PACK=""
 if [ -d "js" ]; then
-    tar -cf ../files_wcf.tar js/
-    print_success "files_wcf.tar erstellt"
+    WCF_FILES_TO_PACK="${WCF_FILES_TO_PACK} js/"
+fi
+if [ -d "lib/bootstrap" ]; then
+    WCF_FILES_TO_PACK="${WCF_FILES_TO_PACK} lib/bootstrap/"
+fi
+
+if [ -n "$WCF_FILES_TO_PACK" ]; then
+    tar -cf ../files_wcf.tar $WCF_FILES_TO_PACK
+    WCF_FILE_COUNT=$(tar -tf ../files_wcf.tar 2>/dev/null | wc -l)
+    if [ "$WCF_FILE_COUNT" -eq 0 ]; then
+        log_error_with_context "files_wcf.tar ist leer!" "WCF-Dateien (js/ oder lib/bootstrap/) fehlen"
+        exit 1
+    fi
+    
+    # Pruefe ob lib/bootstrap/ enthalten ist
+    if tar -tf ../files_wcf.tar 2>/dev/null | grep -q "^lib/bootstrap/"; then
+        BOOTSTRAP_COUNT=$(tar -tf ../files_wcf.tar 2>/dev/null | grep -c "^lib/bootstrap/" || echo "0")
+        print_success "files_wcf.tar erstellt (${WCF_FILE_COUNT} Datei(en), davon ${BOOTSTRAP_COUNT} Bootstrap-Datei(en))"
+    else
+        print_success "files_wcf.tar erstellt (${WCF_FILE_COUNT} Datei(en))"
+    fi
 else
-    log_error_with_context "Kein js/ Ordner gefunden fuer files_wcf.tar!" "Verzeichnis fehlt"
+    log_error_with_context "Keine WCF-Dateien gefunden fuer files_wcf.tar!" "js/ oder lib/bootstrap/ Verzeichnis fehlt"
     exit 1
 fi
 
@@ -344,8 +428,8 @@ VALIDATION_ERRORS=0
 
 # 1. KRITISCH: Pruefe package.xml: files_wcf.tar MUSS application="wcf" haben
 #    JavaScript-Dateien muessen ins WCF-Verzeichnis installiert werden
-if ! grep -qE '<instruction[^>]*type="file"[^>]*application\s*=\s*"wcf"[^>]*>files_wcf\.tar</instruction>' package.xml; then
-    log_error_with_context "files_wcf.tar fehlt application=\"wcf\" in package.xml!" "Validierung fehlgeschlagen"
+if ! grep -qE '<instruction[^>]*type="file"[^>]*application\s*=\s*"wcf"[^>]*>files_wcf\.tar</instruction>' "$PACKAGE_XML"; then
+    log_error_with_context "files_wcf.tar fehlt application=\"wcf\" in $PACKAGE_XML!" "Validierung fehlgeschlagen"
     VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
 fi
 
@@ -403,44 +487,74 @@ fi
 # Validierung entfernt, da d3.js nicht mehr benötigt wird
 
 
-# 6. Pruefe Template-Referenzen: Finde alle {js application='shrinkr' file='...'} Referenzen
+# 6. Pruefe Template-Referenzen: Finde alle {js application='...' file='...'} Referenzen
 print_info "Pruefe Template-Referenzen..."
-TEMPLATE_JS_REFS=$(grep -rh "{js application='shrinkr' file=" temp_edit/templates/ temp_edit/acptemplates/ 2>/dev/null | \
-    grep -oP "file='\K[^']+" | sort -u || true)
+# Lese applicationdirectory aus package.xml (dynamisch)
+APPLICATION_DIR_FOR_JS=$(grep -oP '<applicationdirectory>\K[^<]+' "$PACKAGE_XML" | head -1)
+if [ -z "$APPLICATION_DIR_FOR_JS" ]; then
+    print_warning "applicationdirectory nicht in $PACKAGE_XML gefunden, ueberspringe Template-Referenz-Pruefung"
+else
+    TEMPLATE_JS_REFS=$(grep -rh "{js application='${APPLICATION_DIR_FOR_JS}' file=" temp_edit/templates/ temp_edit/acptemplates/ 2>/dev/null | \
+        grep -oP "file='\K[^']+" | sort -u || true)
 
-if [ -n "$TEMPLATE_JS_REFS" ]; then
-    while IFS= read -r js_ref; do
-        js_path="js/${js_ref}.js"
-        if [ -f "files_wcf.tar" ] && tar -tf files_wcf.tar 2>/dev/null | grep -q "^${js_path}$"; then
-            print_success "Template-Referenz gefunden: ${js_ref} → ${js_path}"
-        else
-            log_error_with_context "Template referenziert JavaScript-Datei, die nicht in files_wcf.tar vorhanden ist!" "Template: {js application='shrinkr' file='${js_ref}'} | Erwartet: ${js_path}"
-            VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
-        fi
-    done <<< "$TEMPLATE_JS_REFS"
+    if [ -n "$TEMPLATE_JS_REFS" ]; then
+        while IFS= read -r js_ref; do
+            js_path="js/${js_ref}.js"
+            if [ -f "files_wcf.tar" ] && tar -tf files_wcf.tar 2>/dev/null | grep -q "^${js_path}$"; then
+                print_success "Template-Referenz gefunden: ${js_ref} → ${js_path}"
+            else
+                log_error_with_context "Template referenziert JavaScript-Datei, die nicht in files_wcf.tar vorhanden ist!" "Template: {js application='${APPLICATION_DIR_FOR_JS}' file='${js_ref}'} | Erwartet: ${js_path}"
+                VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+            fi
+        done <<< "$TEMPLATE_JS_REFS"
+    fi
 fi
 
 # 7. Pruefe ob alle referenzierten TARs existieren
-REQUIRED_TARS=("files.tar" "templates.tar" "acptemplates.tar" "files_wcf.tar")
+# KRITISCH: files_wcf.tar MUSS vorhanden sein (JavaScript-Dateien)
+REQUIRED_TARS=("files_wcf.tar")
+OPTIONAL_TARS=("files.tar" "templates.tar" "acptemplates.tar")
 for tar_file in "${REQUIRED_TARS[@]}"; do
     if [ ! -f "$tar_file" ]; then
-        print_warning "${tar_file} nicht gefunden [kann optional sein]"
+        log_error_with_context "${tar_file} fehlt! Diese Datei ist erforderlich." "TAR-Datei fehlt"
+        VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+    else
+        print_success "${tar_file} vorhanden"
+    fi
+done
+for tar_file in "${OPTIONAL_TARS[@]}"; do
+    if [ ! -f "$tar_file" ]; then
+        print_warning "${tar_file} nicht gefunden [optional]"
+    else
+        print_success "${tar_file} vorhanden"
     fi
 done
 
 # 8. Pruefe package.xml: Alle referenzierten Dateien muessen existieren
 print_info "Pruefe package.xml Referenzen..."
-PACKAGE_XML_FILES=$(grep -oP '<instruction[^>]*>\K[^<]+' package.xml | grep -v "^$" | sort -u || true)
+PACKAGE_XML_FILES=$(grep -oP '<instruction[^>]*>\K[^<]+' "$PACKAGE_XML" | grep -v "^$" | sort -u || true)
+MISSING_XML_FILES=()
 if [ -n "$PACKAGE_XML_FILES" ]; then
     while IFS= read -r xml_file; do
-        # Überspringe leere Instructions und bekannte Standard-Dateien
-        if [[ "$xml_file" =~ ^(files\.tar|templates\.tar|acptemplates\.tar|files_wcf\.tar)$ ]] || \
-           [[ "$xml_file" =~ \.(xml|php)$ ]] && [ -f "$xml_file" ] || [ -f "temp_edit/$xml_file" ]; then
-            print_success "package.xml Referenz gefunden: ${xml_file}"
-        elif [[ "$xml_file" =~ \.(xml|php)$ ]]; then
-            print_warning "package.xml referenziert ${xml_file}, aber Datei nicht gefunden"
+        # Überspringe TAR-Dateien (werden separat geprüft)
+        if [[ "$xml_file" =~ ^(files\.tar|templates\.tar|acptemplates\.tar|files_wcf\.tar)$ ]]; then
+            continue
+        fi
+        # Prüfe XML- und PHP-Dateien
+        if [[ "$xml_file" =~ \.(xml|php)$ ]]; then
+            if [ -f "$xml_file" ] || [ -f "temp_edit/$xml_file" ]; then
+                print_success "package.xml Referenz gefunden: ${xml_file}"
+            else
+                MISSING_XML_FILES+=("$xml_file")
+                print_warning "package.xml referenziert ${xml_file}, aber Datei nicht gefunden"
+            fi
         fi
     done <<< "$PACKAGE_XML_FILES"
+    
+    if [ ${#MISSING_XML_FILES[@]} -gt 0 ]; then
+        print_warning "${#MISSING_XML_FILES[@]} referenzierte Datei(en) fehlen in package.xml"
+        # Nicht als kritischen Fehler behandeln, da einige Dateien optional sein können
+    fi
 fi
 
 # 9. KRITISCH: Pruefe dass keine alten build.sh oder typescript.sh im Root oder temp_edit existieren
@@ -476,25 +590,64 @@ else
     print_success "tools/typescript.sh vorhanden"
 fi
 
-# 11. Pruefe package.xml Struktur: applicationdirectory muss "shrinkr" sein
-APPLICATION_DIR=$(grep -oP '<applicationdirectory>\K[^<]+' package.xml | head -1)
-if [ "$APPLICATION_DIR" != "shrinkr" ]; then
-    log_error_with_context "applicationdirectory ist nicht 'shrinkr'! Gefunden: '${APPLICATION_DIR}'" "package.xml Struktur-Fehler"
+# 11. Pruefe package.xml Struktur: Erforderliche Felder
+print_info "Pruefe package.xml Struktur..."
+APPLICATION_DIR=$(grep -oP '<applicationdirectory>\K[^<]+' "$PACKAGE_XML" | head -1)
+if [ -z "$APPLICATION_DIR" ]; then
+    log_error_with_context "applicationdirectory fehlt in $PACKAGE_XML!" "package.xml Struktur-Fehler"
     VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
 else
-    print_success "applicationdirectory korrekt: ${APPLICATION_DIR}"
+    print_success "applicationdirectory gefunden: ${APPLICATION_DIR}"
 fi
 
-# 12. Pruefe dass files.tar keine JavaScript-Dateien enthaelt (sollten in files_wcf.tar sein)
+# Prüfe ob package name vorhanden ist
+PACKAGE_NAME_CHECK=$(grep -oP '<package name="\K[^"]+' "$PACKAGE_XML" | head -1)
+if [ -z "$PACKAGE_NAME_CHECK" ]; then
+    log_error_with_context "package name fehlt in $PACKAGE_XML!" "package.xml Struktur-Fehler"
+    VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+else
+    print_success "package name gefunden: ${PACKAGE_NAME_CHECK}"
+fi
+
+# Prüfe ob version vorhanden ist
+VERSION_CHECK=$(grep -oP '<version>\K[^<]+' "$PACKAGE_XML" | head -1)
+if [ -z "$VERSION_CHECK" ]; then
+    log_error_with_context "version fehlt in $PACKAGE_XML!" "package.xml Struktur-Fehler"
+    VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+else
+    print_success "version gefunden: ${VERSION_CHECK}"
+fi
+
+# Prüfe ob date vorhanden ist
+DATE_CHECK=$(grep -oP '<date>\K[^<]+' "$PACKAGE_XML" | head -1)
+if [ -z "$DATE_CHECK" ]; then
+    log_error_with_context "date fehlt in $PACKAGE_XML!" "package.xml Struktur-Fehler"
+    VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+else
+    print_success "date gefunden: ${DATE_CHECK}"
+fi
+
+# 12. Pruefe dass files.tar keine JavaScript-Dateien oder Bootstrap-Dateien enthaelt (sollten in files_wcf.tar sein)
+# Hinweis: Laut WoltLab-Docs (package/pip/file) geht files.tar ins App-Verzeichnis; acp/js/ gehoert dorthin.
+# Die Warnung ist projektkonventionell – ACP-App-JS in acp/js/ (z. B. Chart.js) ist sachlich korrekt.
 if [ -f "files.tar" ]; then
     JS_IN_FILES_TAR=$(tar -tf files.tar 2>/dev/null | grep -c "\.js$" 2>/dev/null || echo "0")
-    # Stelle sicher, dass JS_IN_FILES_TAR eine Zahl ist
     if ! [[ "$JS_IN_FILES_TAR" =~ ^[0-9]+$ ]]; then
         JS_IN_FILES_TAR=0
     fi
     if [ "$JS_IN_FILES_TAR" -gt 0 ]; then
         print_warning "files.tar enthaelt ${JS_IN_FILES_TAR} JavaScript-Dateien"
         print_warning "JavaScript-Dateien sollten in files_wcf.tar sein, nicht in files.tar"
+    fi
+    
+    # Pruefe ob Bootstrap-Dateien in files.tar enthalten sind (sollten in files_wcf.tar sein)
+    BOOTSTRAP_IN_FILES_TAR=$(tar -tf files.tar 2>/dev/null | grep -c "^lib/bootstrap/" 2>/dev/null || echo "0")
+    if ! [[ "$BOOTSTRAP_IN_FILES_TAR" =~ ^[0-9]+$ ]]; then
+        BOOTSTRAP_IN_FILES_TAR=0
+    fi
+    if [ "$BOOTSTRAP_IN_FILES_TAR" -gt 0 ]; then
+        log_error_with_context "files.tar enthaelt ${BOOTSTRAP_IN_FILES_TAR} Bootstrap-Dateien!" "Bootstrap-Dateien müssen in files_wcf.tar sein, damit sie ins WCF-Verzeichnis kopiert werden!"
+        VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
     fi
 fi
 
@@ -513,9 +666,9 @@ else
 fi
 
 # Package-Name aus package.xml lesen
-PACKAGE_NAME=$(grep -oP '<package name="\K[^"]+' "package.xml" | head -1)
+PACKAGE_NAME=$(grep -oP '<package name="\K[^"]+' "$PACKAGE_XML" | head -1)
 if [ -z "$PACKAGE_NAME" ]; then
-    log_error_with_context "Package-Name nicht in package.xml gefunden" "package.xml Struktur-Fehler"
+    log_error_with_context "Package-Name nicht in $PACKAGE_XML gefunden" "package.xml Struktur-Fehler"
     exit 1
 fi
 
@@ -529,12 +682,55 @@ TEMP_PACKAGE_DIR=$(mktemp -d)
 trap "rm -rf ${TEMP_PACKAGE_DIR}" EXIT
 
 # Alle Dateien ins temporaere Verzeichnis kopieren
-cp package.xml "${TEMP_PACKAGE_DIR}/"
+# WICHTIG: package.xml aus temp_edit/ kopieren (Quelle der Wahrheit)
+cp "$PACKAGE_XML" "${TEMP_PACKAGE_DIR}/package.xml"
 cp *.tar "${TEMP_PACKAGE_DIR}/" 2>/dev/null || true
-cp *.xml "${TEMP_PACKAGE_DIR}/" 2>/dev/null || true
-# eventListener.xml aus temp_edit/ kopieren, falls vorhanden
-[ -f "temp_edit/eventListener.xml" ] && cp temp_edit/eventListener.xml "${TEMP_PACKAGE_DIR}/" 2>/dev/null || true
-cp -r language "${TEMP_PACKAGE_DIR}/" 2>/dev/null || true
+
+# WICHTIG: XML-Dateien aus temp_edit/ kopieren (nicht aus Root!)
+# package.xml wurde bereits aus temp_edit/ kopiert (wurde dort aktualisiert)
+# Alle anderen XML-Dateien kommen aus temp_edit/ (Original-Paket)
+if [ -d "temp_edit" ]; then
+    # Kopiere alle XML-Dateien aus temp_edit/ (außer package.xml, das kommt aus Root)
+    XML_COUNT=0
+    for xml_file in temp_edit/*.xml; do
+        if [ -f "$xml_file" ] && [ "$(basename "$xml_file")" != "package.xml" ]; then
+            cp "$xml_file" "${TEMP_PACKAGE_DIR}/"
+            XML_COUNT=$((XML_COUNT + 1))
+        fi
+    done
+    if [ "$XML_COUNT" -gt 0 ]; then
+        print_success "${XML_COUNT} XML-Datei(en) kopiert"
+    else
+        print_warning "Keine XML-Dateien in temp_edit/ gefunden"
+    fi
+else
+    # Fallback: Falls temp_edit nicht existiert, aus Root kopieren
+    print_warning "temp_edit/ nicht gefunden, kopiere XML-Dateien aus Root (könnte veraltet sein!)"
+    cp *.xml "${TEMP_PACKAGE_DIR}/" 2>/dev/null || true
+fi
+
+# Language-Dateien kopieren und validieren (aus temp_edit/language/)
+if [ -d "temp_edit/language" ]; then
+    cp -r temp_edit/language "${TEMP_PACKAGE_DIR}/"
+    LANGUAGE_COUNT=$(find temp_edit/language -name "*.xml" 2>/dev/null | wc -l)
+    if [ "$LANGUAGE_COUNT" -gt 0 ]; then
+        print_success "language/ kopiert (${LANGUAGE_COUNT} Datei(en))"
+    else
+        print_warning "temp_edit/language/ Verzeichnis vorhanden, aber keine XML-Dateien gefunden"
+    fi
+elif [ -d "language" ]; then
+    # Fallback: Falls temp_edit/language nicht existiert, aus Root kopieren
+    print_warning "temp_edit/language/ nicht gefunden, kopiere aus Root (könnte veraltet sein!)"
+    cp -r language "${TEMP_PACKAGE_DIR}/"
+    LANGUAGE_COUNT=$(find language -name "*.xml" 2>/dev/null | wc -l)
+    if [ "$LANGUAGE_COUNT" -gt 0 ]; then
+        print_success "language/ kopiert (${LANGUAGE_COUNT} Datei(en))"
+    else
+        print_warning "language/ Verzeichnis vorhanden, aber keine XML-Dateien gefunden"
+    fi
+else
+    print_warning "language/ Verzeichnis nicht gefunden [kann optional sein]"
+fi
 
 # .tar.gz erstellen (Dateien direkt ohne ./ Prefix)
 cd "${TEMP_PACKAGE_DIR}"
@@ -550,9 +746,31 @@ if [ ! -f "${TAR_GZ_NAME}" ]; then
     exit 1
 fi
 
-# Pruefe ob files_wcf.tar im finalen Paket vorhanden ist
-if ! tar -tzf "${TAR_GZ_NAME}" 2>/dev/null | grep -q "^files_wcf.tar$"; then
-    log_error_with_context "files_wcf.tar fehlt im finalen Paket!" "Paket-Validierung fehlgeschlagen"
+# Pruefe ob alle kritischen Dateien im finalen Paket vorhanden sind
+print_info "Pruefe Paket-Inhalt..."
+PACKAGE_CONTENT=$(tar -tzf "${TAR_GZ_NAME}" 2>/dev/null || echo "")
+if [ -z "$PACKAGE_CONTENT" ]; then
+    log_error_with_context "Paket ist leer oder beschädigt!" "Paket-Validierung fehlgeschlagen"
+    exit 1
+fi
+
+# Prüfe kritische Dateien
+CRITICAL_FILES=("package.xml" "files_wcf.tar")
+MISSING_CRITICAL=()
+for critical_file in "${CRITICAL_FILES[@]}"; do
+    if ! echo "$PACKAGE_CONTENT" | grep -q "^${critical_file}$"; then
+        MISSING_CRITICAL+=("$critical_file")
+    fi
+done
+
+if [ ${#MISSING_CRITICAL[@]} -gt 0 ]; then
+    log_error_with_context "Kritische Datei(en) fehlen im Paket: ${MISSING_CRITICAL[*]}" "Paket-Validierung fehlgeschlagen"
+    exit 1
+fi
+
+# Prüfe ob package.xml im Paket vorhanden ist
+if ! echo "$PACKAGE_CONTENT" | grep -q "^package\.xml$"; then
+    log_error_with_context "package.xml fehlt im finalen Paket!" "Paket-Validierung fehlgeschlagen"
     exit 1
 fi
 
@@ -587,6 +805,9 @@ print_section "Build abgeschlossen" "Hauptmenue" "Build"
 print_success "Build abgeschlossen!"
 print_info "Version: ${NEW_VERSION}"
 print_info "Paket: ${TAR_GZ_NAME}"
+echo ""
+VALIDATE_DIR="${PROJECT_ROOT#$MAIN_DIR/}"
+print_info "Vor Store-Release: ./tools/validate-plugin.sh ${VALIDATE_DIR} ausführen (Plugin-Store & WoltLab-Cloud Kriterien)."
 echo ""
 
 

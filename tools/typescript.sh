@@ -15,10 +15,15 @@
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MAIN_DIR="$(dirname "$SCRIPT_DIR")"
+#=====================================
+# KONFIGURATION
+#=====================================
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly MAIN_DIR="$(dirname "$SCRIPT_DIR")"
 
-# Lade gemeinsame Funktionen
+#=====================================
+# QUELLEN
+#=====================================
 if [ -f "$SCRIPT_DIR/common.sh" ]; then
     source "$SCRIPT_DIR/common.sh"
 else
@@ -44,7 +49,9 @@ else
     print_info() { echo -e "${CYAN}ℹ $1${NC}"; }
 fi
 
-# Suche nach temp_edit Verzeichnis in Plugin-Verzeichnissen
+#=====================================
+# HAUPTLOGIK
+#=====================================
 TEMP_EDIT_DIR=""
 for plugin_dir in "${MAIN_DIR}"/*; do
     if [ -d "$plugin_dir" ] && [ -d "$plugin_dir/temp_edit" ] && [ -f "$plugin_dir/temp_edit/package.json" ]; then
@@ -72,6 +79,16 @@ else
 fi
 
 print_info "Verzeichnis: ${TEMP_EDIT_DIR}"
+# Optional: Hinweis, wenn WoltLab d.ts fehlt (für typeRoots in tsconfig.json)
+ENV_FILE="$SCRIPT_DIR/.env"
+DTS_DIR=""
+if [ -f "$ENV_FILE" ]; then
+    DTS_DIR=$(grep -E "^WOLTLAB_DTS_DIR=" "$ENV_FILE" 2>/dev/null | cut -d= -f2- | tr -d '\r\n' || true)
+fi
+[ -z "$DTS_DIR" ] && DTS_DIR="woltlab-d-ts"
+if [ ! -d "$MAIN_DIR/$DTS_DIR" ] || [ ! -f "$MAIN_DIR/$DTS_DIR/.git/HEAD" ]; then
+    print_warning "WoltLab d.ts nicht gefunden (${DTS_DIR}). Für Typings: Setup ausführen (d.ts klonen). Siehe tools/README.md."
+fi
 echo ""
 
 # Prüfe ob package.json existiert

@@ -2,30 +2,40 @@
 	"folders": [
 		{
 			"name": "📦 Basis App",
-			"path": "/home/benny/Dokumente/woltlab-development/basis-plugin"
+			"path": "basis-plugin"
 		},
 		{
 			"name": "🎨 Mein Plugin",
-			"path": "/home/benny/Dokumente/woltlab-development/mein-plugin"
+			"path": "mein-plugin"
 		},
 		{
 			"name": "🔌 Plugins Integrieren",
-			"path": "/home/benny/Dokumente/woltlab-development/plugins-integrieren",
+			"path": "plugins-integrieren",
 			"readonly": true
 		},
 		{
-			"name": "⚙️ WoltLab Core (DDEV)",
-			"path": "/home/benny/Dokumente/woltlab-development/tools/woltlab-dev/public",
+			"name": "📥 WoltLab Core (Setup-Dateien)",
+			"path": "woltlab-core",
+			"readonly": true
+		},
+		{
+			"name": "🌐 WoltLab (lokal)",
+			"path": "/home/benny/Dokumente/woltlab-webserver/woltlab",
 			"readonly": true
 		},
 		{
 			"name": "📚 WoltLab Docs",
-			"path": "/home/benny/Dokumente/woltlab-development/woltlab-docs",
+			"path": "woltlab-docs",
 			"readonly": true
 		},
 		{
 			"name": "🐙 WoltLab GitHub",
-			"path": "/home/benny/Dokumente/woltlab-development/woltlab-github",
+			"path": "woltlab-github",
+			"readonly": true
+		},
+		{
+			"name": "📘 WoltLab d.ts",
+			"path": "woltlab-d-ts",
 			"readonly": true
 		}
 	],
@@ -71,7 +81,7 @@
 		"php.validate.enable": false,
 		"intelephense.environment.phpVersion": "8.3.23",
 		"intelephense.environment.includePaths": [
-			"/home/benny/Dokumente/woltlab-development/tools/woltlab-dev/public"
+			"/home/benny/Dokumente/woltlab-webserver/woltlab"
 		],
 		"intelephense.files.maxSize": 5000000,
 		"intelephense.diagnostics.enable": true,
@@ -90,7 +100,7 @@
 		"intelephense.diagnostics.typeErrors": true,
 		"intelephense.diagnostics.languageConstraints": true,
 		"intelephense.diagnostics.embeddedLanguages": true,
-		"intelephense.trace.server": "off",
+		"intelephense.trace.server": "off"
 	},
 	"extensions": {
 		"recommendations": [

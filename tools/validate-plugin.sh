@@ -14,10 +14,15 @@
 
 set -euo pipefail
 
-TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MAIN_DIR="$(dirname "$TOOLS_DIR")"
+#=====================================
+# KONFIGURATION
+#=====================================
+readonly TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly MAIN_DIR="$(dirname "$TOOLS_DIR")"
 
-# Lade gemeinsame Funktionen
+#=====================================
+# QUELLEN
+#=====================================
 if [ -f "$TOOLS_DIR/common.sh" ]; then
     source "$TOOLS_DIR/common.sh"
 else
@@ -50,7 +55,9 @@ else
     print_info() { echo -e "${CYAN}${ARROW:-→} $1${NC}"; }
 fi
 
-# Logging-Variablen
+#=====================================
+# HAUPTLOGIK
+#=====================================
 LOG_FILE="/tmp/validate-plugin-$(date +%Y%m%d-%H%M%S).log"
 VERBOSE=false
 
@@ -474,6 +481,15 @@ if [ -n "$EXTRACTED_DIR" ]; then
             ((WARNINGS++))
             ((API_ISSUES++))
         fi
+
+        # Check 4: WoltLab Cloud – keine System-Befehle (exec, shell_exec, system, passthru)
+        if grep -qE '\b(exec|shell_exec|system|passthru)\s*\(' "$php_file"; then
+            print_warning "System-Befehl (exec/shell_exec/system/passthru) in $(basename "$php_file")"
+            echo -e "   ${YELLOW}→${NC} WoltLab Cloud erlaubt keine direkten System-Aufrufe"
+            log "WARNING" "System-Befehl in $(basename "$php_file") – Cloud inkompatibel"
+            ((WARNINGS++))
+            ((API_ISSUES++))
+        fi
     done < <(find "$EXTRACTED_DIR" -name "*.php" -type f -print0 2>/dev/null)
 
     if [ $API_ISSUES -eq 0 ]; then
@@ -482,6 +498,27 @@ if [ -n "$EXTRACTED_DIR" ]; then
     else
         print_warning "$API_ISSUES API-Nutzung Empfehlungen"
         log "WARNING" "$API_ISSUES API Best Practice Warnungen"
+    fi
+
+    echo ""
+
+    # Prüfe auf Müll-Dateien (Plugin Store: nur in package.xml referenzierte Dateien)
+    echo -e "${YELLOW}📦 Prüfe auf unerwünschte Dateien (Store/Archiv)...${NC}"
+    log "INFO" "Prüfe auf Müll-Dateien"
+    JUNK_FOUND=0
+    for pattern in ".DS_Store" "Thumbs.db"; do
+        while IFS= read -r -d '' f; do
+            ((JUNK_FOUND++))
+            print_warning "Unerwünschte Datei: $f"
+            echo -e "   ${YELLOW}→${NC} Nicht in package.xml referenzieren; vor Release entfernen"
+            log "WARNING" "Junk-Datei: $f"
+        done < <(find "$EXTRACTED_DIR" -name "$pattern" -type f -print0 2>/dev/null)
+    done
+    if [ $JUNK_FOUND -eq 0 ]; then
+        print_success "Keine typischen Müll-Dateien (.DS_Store, Thumbs.db) gefunden"
+        log "INFO" "Junk-Check: Keine gefunden"
+    else
+        ((WARNINGS+=JUNK_FOUND))
     fi
 
     echo ""
