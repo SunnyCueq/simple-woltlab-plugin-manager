@@ -90,6 +90,7 @@ echo ""
 # 2) WoltLab-Docs klonen?
 DOCS_URL=$(env_get "WOLTLAB_DOCS_URL")
 [ -z "$DOCS_URL" ] && DOCS_URL="https://github.com/WoltLab/docs.woltlab.com"
+[[ "$DOCS_URL" =~ ^- ]] && DOCS_URL="https://github.com/WoltLab/docs.woltlab.com"
 read -p "WoltLab-Docs (Repo) klonen? (j/n) [n]: " docs_choice
 docs_choice=${docs_choice:-n}
 if [[ "$docs_choice" =~ ^[jJyY] ]]; then
@@ -113,6 +114,7 @@ echo ""
 # 3) WoltLab-GitHub (WCF) klonen?
 GITHUB_URL=$(env_get "WOLTLAB_GITHUB_URL")
 [ -z "$GITHUB_URL" ] && GITHUB_URL="https://github.com/WoltLab/WCF"
+[[ "$GITHUB_URL" =~ ^- ]] && GITHUB_URL="https://github.com/WoltLab/WCF"
 read -p "WoltLab-GitHub (WCF-Repo) klonen? (j/n) [n]: " gh_choice
 gh_choice=${gh_choice:-n}
 if [[ "$gh_choice" =~ ^[jJyY] ]]; then
@@ -136,6 +138,7 @@ echo ""
 # 4) WoltLab TypeScript-Typings (d.ts) klonen?
 DTS_URL=$(env_get "WOLTLAB_DTS_URL")
 [ -z "$DTS_URL" ] && DTS_URL="https://github.com/WoltLab/d.ts"
+[[ "$DTS_URL" =~ ^- ]] && DTS_URL="https://github.com/WoltLab/d.ts"
 read -p "WoltLab TypeScript-Typings (d.ts) klonen? (j/n) [j]: " dts_choice
 dts_choice=${dts_choice:-j}
 if [[ "$dts_choice" =~ ^[jJyY] ]]; then

@@ -244,7 +244,7 @@ _WOLTLAB_MAIN_DIR="${MAIN_DIR:-$(dirname "${TOOLS_DIR:-$_TOOLS_DIR_FOR_LOG}")}"
 
 env_get() {
     local key="$1"
-    grep -E "^${key}=" "$_WOLTLAB_ENV_FILE" 2>/dev/null | cut -d= -f2- | tr -d '\r\n' || true
+    grep -E "^${key}=" "$_WOLTLAB_ENV_FILE" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '\r\n' || true
 }
 
 env_set() {
