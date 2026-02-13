@@ -43,21 +43,25 @@ tools/woltlab-dev/public/*
 !tools/woltlab-dev/public/.gitignore
 !tools/woltlab-dev/public/README*.md
 
-# WICHTIG: Diese Verzeichnisse NIEMALS committen oder ändern!
-# Verzeichnisse bleiben als Platzhalter (nur .gitkeep), INHALT wird ignoriert.
+# Archiv: nicht ins Repo, nur lokal möglich
+.alt-repo/
 
-# WoltLab Core (Setup-Dateien von download-woltlab-core.sh)
+# WICHTIG: Diese Ordner nur als leere Platzhalter (nur .gitkeep). Inhalt wird nicht hochgeladen.
+# WoltLab Core (download-woltlab-core.sh)
 woltlab-core/*
 !woltlab-core/.gitkeep
 
-woltlab-github/*
-!woltlab-github/.gitignore
-!woltlab-github/README*.md
-!woltlab-github/LICENSE
-
-# WoltLab Docs (Clone von setup-minimal.sh) – nur .gitkeep tracken
+# WoltLab Docs (setup-minimal.sh klont hier rein)
 woltlab-docs/*
 !woltlab-docs/.gitkeep
+
+# WoltLab GitHub/WCF (setup-minimal.sh klont hier rein)
+woltlab-github/*
+!woltlab-github/.gitkeep
+
+# WoltLab TypeScript d.ts (setup-minimal.sh klont hier rein)
+woltlab-d-ts/*
+!woltlab-d-ts/.gitkeep
 
 # Plugin-Verzeichnisse (werden separat verwaltet, NICHT committen!)
 # WICHTIG: Verzeichnisse bleiben erhalten, aber INHALT wird ignoriert
