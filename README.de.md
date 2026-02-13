@@ -6,9 +6,16 @@
 
 ## Was ist das?
 
-Der **Simple WoltLab Plugin Manager** ist ein schlankes Toolkit zum Entwickeln, Bauen und Veröffentlichen von **WoltLab Suite**-Plugins. Über ein zentrales Textmenü startest du alles: Plugins bauen, Versionen erhöhen, zu Git pushen, Releases erstellen, TypeScript kompilieren, Pakete entpacken und Code prüfen. Ein optionaler Setup-Schritt kann WoltLab Core herunterladen, die offizielle Doku und den Quellcode klonen, TypeScript-Typings einrichten und Pfade zu deiner lokalen WoltLab-Installation setzen – damit du mit minimaler manueller Konfiguration loslegen kannst.
+Der **Simple WoltLab Plugin Manager** ist ein Kommandozeilen-Toolkit für den kompletten **WoltLab Suite**-Plugin-Lebenszyklus: Setup, Entwicklung, Build, Validierung und Release. Ein zentrales Textmenü startet alles; optional ergänzt eine VS Code/Cursor-Integration Buttons in der Seitenleiste.
 
-**WoltLab und Plugin-Store.** Das Toolkit ist an die offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/) und bewährte Praktiken ausgerichtet. Die integrierte Validierung prüft u. a. Sicherheit (SQL, XSS), Übersetzungen (DE/EN), Minversion und Store-Vorgaben – so hilft es dir, ein store-taugliches Plugin zu erstellen. Die TypeScript-Typings stammen vom offiziellen **WoltLab-d.ts**-Repository auf GitHub und werden beim Setup geklont, damit deine API-Nutzung mit WoltLab aktuell bleibt.
+- **Umgebungs-Setup** — Lädt WoltLab Core, klont offizielle Doku und WCF-Quellcode, richtet TypeScript-Typings (d.ts) ein, setzt Pfade zu deiner lokalen WoltLab-Installation.
+- **Entwicklung** — TypeScript-Kompilierung (inkl. Watch), Pakete entpacken zur Inspektion, zentrale Debug-Logs.
+- **Build** — Erstellt verteilbare `.tar.gz`-Pakete mit semantischer Versionserhöhung (patch/minor/major).
+- **Qualitätssicherung** — Validiert Plugins mit 13+ Prüfungen: Sicherheit (SQL, XSS), Übersetzungen (DE/EN), Minversion, WoltLab-Cloud-Kompatibilität, Store-Vorgaben.
+- **Release** — Git-Commit, Push, Version-Tags, GitHub-Release inkl. Asset-Upload.
+- **Optional** — DDEV-Anbindung für lokalen WoltLab-Server; Build-Button-Extension für VS Code/Cursor.
+
+Ausgerichtet an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/). Die TypeScript-Typings stammen vom offiziellen [WoltLab-d.ts](https://github.com/WoltLab/d.ts)-Repo und werden beim Setup geklont.
 
 ---
 
@@ -53,8 +60,6 @@ Du musst kein Vorwissen zur WoltLab-Plugin-Struktur mitbringen. Das Menü und di
 | `woltlab-github` | WoltLab-WCF-Quellcode (Git-Klon, optional im Setup). |
 | `woltlab-d-ts` | WoltLab-TypeScript-Typings (d.ts) für die Nutzung in deinem Plugin-TypeScript. |
 | `tools` | Alle Skripte, Setup und die Build-Button-Extension liegen hier. |
-
-Mehr Details in [docs/STRUKTUR.md](docs/STRUKTUR.md), falls diese Datei in deinem Klon vorhanden ist.
 
 ---
 
