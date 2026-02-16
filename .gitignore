@@ -20,6 +20,10 @@ tools/docs/logs/
 .DS_Store
 Thumbs.db
 
+# Vale (Linter-Konfiguration/Cache – nur lokal)
+.vale/
+.vale.ini
+
 # Temporary files
 *.tmp
 *.bak
@@ -42,9 +46,6 @@ woltlab-dev/.ddev/.gitignore
 tools/woltlab-dev/public/*
 !tools/woltlab-dev/public/.gitignore
 !tools/woltlab-dev/public/README*.md
-
-# Archiv: nicht ins Repo, nur lokal möglich
-.alt-repo/
 
 # WICHTIG: Diese Ordner nur als leere Platzhalter (nur .gitkeep). Inhalt wird nicht hochgeladen.
 # WoltLab Core (download-woltlab-core.sh)

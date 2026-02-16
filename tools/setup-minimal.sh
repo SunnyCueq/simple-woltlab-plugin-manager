@@ -36,7 +36,7 @@ fi
 update_workspace_local_path() {
     local local_path="$1"
     [ -z "$local_path" ] && return 0
-    local workspace_file="$MAIN_DIR/woltlab-development.code-workspace"
+    local workspace_file="$MAIN_DIR/simple-woltlab-plugin-manager.code-workspace"
     [ ! -f "$workspace_file" ] && return 0
     # Absoluten Pfad normalisieren (ohne trailing slash)
     local abs_path

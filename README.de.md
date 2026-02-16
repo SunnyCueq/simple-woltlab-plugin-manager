@@ -32,7 +32,7 @@ Du musst kein Vorwissen zur WoltLab-Plugin-Struktur mitbringen. Das Menü und di
 ## Schnellstart
 
 1. **Workspace öffnen**  
-   Öffne die Datei `woltlab-development.code-workspace` in **VS Code** oder **Cursor**. Damit werden die richtigen Ordner (z. B. deine Plugins und die Tools) geladen.
+   Öffne die Datei `simple-woltlab-plugin-manager.code-workspace` in **VS Code** oder **Cursor**. Damit werden die richtigen Ordner (z. B. deine Plugins und die Tools) geladen.
 
 2. **Tools starten**  
    Öffne ein Terminal und führe im **Repo-Root** (der Ordner, in dem `tools.sh` liegt) aus:

@@ -2,7 +2,7 @@
 
 #################################################################
 # WoltLab Development Tools - Quick Access
-# Pfad: /home/benny/Dokumente/woltlab-development/tools.sh
+# Pfad: /home/benny/Dokumente/simple-woltlab-plugin-manager/tools.sh
 # 
 # Schnellzugriff auf das zentrale Tools-Menü
 #################################################################
