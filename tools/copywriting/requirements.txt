@@ -1,0 +1,8 @@
+# Minimal (Python 3.10+)
+pyyaml>=6.0
+
+# Optional – LLM-Review (--mode llm|full), OpenAI-kompatibel:
+# openai>=1.40.0
+
+# Optional – natives CrewAI (nur Python >=3.10,<3.14):
+# crewai>=0.86.0

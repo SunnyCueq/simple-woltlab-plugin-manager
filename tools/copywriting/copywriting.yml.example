@@ -1,0 +1,49 @@
+# Projekt-Konfiguration: als .copywriting.yml ins Projektroot kopieren.
+project_name: My Application
+
+# Ausgabe (relativ zum Projektroot)
+output_dir: copywriting-output
+
+# Sprachdateien (beliebig viele Locales)
+languages:
+  - path: lang/de.xml
+    locale: de
+    format: woltlab-xml
+  - path: lang/en.xml
+    locale: en
+    format: woltlab-xml
+  # Weitere Formate:
+  # - path: locales/de.json
+  #   locale: de
+  #   format: json-flat
+  # - path: messages.de.properties
+  #   locale: de
+  #   format: java-properties
+
+# Regeln (Markdown), zuerst global, dann projektspezifisch
+rules_files:
+  - ../../tools/copywriting/rules/default.md
+project_rules: []
+
+# Optional: Kontext für LLM (Code, Schema, keine Secrets)
+context_files: []
+
+# Nur diese Key-Präfixe (leer = alle)
+key_prefixes: []
+
+# Keys ausschließen
+exclude_keys: []
+
+# Begriffe vermeiden → bevorzugte Alternative (case-insensitive Treffer)
+glossary:
+  z.B.: "z. B."
+  z.B.: "z. B."
+  e.g.: "e.g."
+
+# Von der Regelprüfung ausnehmen (Marken, Abkürzungen)
+glossary_allow: []
+
+# LLM nur für Einträge mit mindestens einer Regel-Meldung
+llm_only_flagged: true
+llm_batch_size: 12
+llm_max_items: 250
