@@ -30,8 +30,9 @@ Thumbs.db
 *.backup
 *.old
 
-# Copywriting tool (Python venv)
+# Copywriting tool (Python venv + cache)
 tools/copywriting/.venv/
+tools/copywriting/**/__pycache__/
 
 # Portable Runtimes (PHP, MariaDB, Node – werden von download-runtimes.sh befüllt)
 tools/runtime/php/
