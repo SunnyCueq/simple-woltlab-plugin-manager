@@ -119,7 +119,7 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 
 ### validate-plugin.sh – Security and store compliance
 
-**What it does:** Checks your plugin for common issues before release or store submission. It validates: **PHP and XML syntax**; **translations** (DE and EN present and consistent); **minimum WoltLab version**; that no external package servers are used; **security** (e.g. SQL injection, XSS); **debug and development code** that should not ship; and **cloud/compatibility** and other store-related rules. The checks align with the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.md), which also lists manual steps the script does not cover.
+**What it does:** Checks your plugin for common issues before release or store submission. It validates: **PHP and XML syntax**; **translations** (DE and EN present and consistent); **PIP sources** (DevTools parity: syncable vs package-only instructions); **plugin language keys** used in code vs `language/*.xml` with **file:line** locations; **minimum WoltLab version**; that no external package servers are used; **security** (e.g. SQL injection, XSS); **debug and development code** that should not ship; and **cloud/compatibility** and other store-related rules. The checks align with the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.md), which also lists manual steps the script does not cover.
 
 **When to use it:** Before releasing or submitting to the store, to catch problems early.
 
@@ -132,6 +132,22 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 - `plugin_path`: optional; plugin directory or path. If omitted, the current directory or the first detected plugin is used.
 
 Results and details are shown in the terminal; logs may be written under `/tmp/` (see script output).
+
+**Individual checks (without full validation):**
+
+```bash
+python3 tools/check-pip-sources.py --strict /path/to/plugin
+python3 tools/check-language-keys.py /path/to/plugin
+python3 tools/check-template-xss.py /path/to/plugin
+python3 tools/check-like-escaping.py /path/to/plugin
+python3 tools/check-language-categories.py /path/to/plugin
+python3 tools/fix-template-xss-escaping.py /path/to/plugin --dry-run
+```
+
+`check-pip-sources.py` mirrors WoltLab DevTools PIP targets offline (no ACP sync). `check-language-keys.py` reports missing **app** keys (`shrinkr.*` etc.) with locations; core `wcf.*` phrases are ignored.
+
+See [docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md) for heuristics and false positives.  
+Language XML category rules: [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md).
 
 ---
 
@@ -220,6 +236,7 @@ After that, your editor and the TypeScript compiler can use WoltLab API types. S
 Documents in `tools/docs/`:
 
 - **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checklist before submitting a plugin to the WoltLab store: what `validate-plugin.sh` covers and what you should still check manually. English version: [docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
+- **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL validation heuristics (Shr1nkr / WoltLab 6.2.5 learnings).
 
 ---
 

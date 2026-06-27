@@ -11,7 +11,7 @@ The **Simple WoltLab Plugin Manager** is a command-line toolkit for the full **W
 - **Environment setup** — Downloads WoltLab Core, clones official docs and WCF source, installs TypeScript typings (d.ts), sets paths to your local WoltLab install.
 - **Development** — TypeScript compile (with watch), unpack packages for inspection, centralized debug logging.
 - **Build** — Creates distributable `.tar.gz` packages with semantic version bumping (patch/minor/major).
-- **Quality assurance** — Validates plugins with 13+ checks: security (SQL, XSS), translations (DE/EN), minimum version, WoltLab Cloud compatibility, store requirements.
+- **Quality assurance** — Validates plugins with security (SQL, XSS), translations (DE/EN), **offline DevTools-parity checks** (PIP sources, missing language keys with file:line), minimum version, WoltLab Cloud compatibility, store requirements.
 - **Release** — Git commit, push, version tagging, GitHub release creation and asset upload.
 - **Optional** — DDEV integration for a local WoltLab dev server; Build Button extension for VS Code/Cursor.
 
@@ -39,12 +39,12 @@ No prior knowledge of WoltLab plugin structure is required. The menu and [tools 
    ```bash
    ./tools.sh
    ```
-   You can also run `./tools/tools.sh` from the same place. The first time you run it, you will be asked whether to run **Setup**. Say yes if you want to download WoltLab Core, docs, GitHub clone, TypeScript typings, and set an optional path to your local WoltLab install. After that you see the main menu with options for Build, Git Push, TypeScript, Unpack, Help, Validation, and Setup.
+   You can also run `./tools/tools.sh` from the same place. Without arguments you get the **interactive menu** (Build, TypeScript, Git, validation, etc.). For a list of all CLI commands use `./tools.sh help`. To download WoltLab Core, docs, typings, and set paths, run **`./tools.sh setup`** (or `./tools/setup-minimal.sh`) when you are ready—not on first launch.
 
 3. **Use the menu**  
    Type the number of the option you want (e.g. `1` for Build, `2` for Git Push) and follow the prompts. Type `0` to exit. Details and a description of each tool are in [tools/README.md](tools/README.md).
 
-> **Tip:** You can run setup later anytime via menu option **"Setup / Vorbereitung"** or by running `./tools/setup-minimal.sh`. If you set a path to a local WoltLab installation, the workspace file and editor paths are updated automatically.
+> **Tip:** Run setup anytime via **`./tools.sh setup`**, the menu’s setup entry, or `./tools/setup-minimal.sh`. If you set a path to a local WoltLab installation, the workspace file and editor paths are updated automatically.
 
 ---
 
@@ -67,7 +67,7 @@ No prior knowledge of WoltLab plugin structure is required. The menu and [tools 
 
 | Tool | What it does | Command |
 |------|----------------|--------|
-| **Main menu** | Starts the interactive menu. | `./tools.sh` or `./tools/tools.sh` |
+| **Main menu** | Starts the interactive menu; `./tools.sh help` lists CLI commands. | `./tools.sh` or `./tools/tools.sh` |
 | **Setup** | Downloads Core, docs, typings; sets paths and optional MCP template. | `./tools/setup-minimal.sh` |
 | **Build** | Builds your plugin and can bump version (patch/minor/major). | `./tools/build.sh patch` |
 | **Git Push** | Commits, pushes, and creates a GitHub release for your plugin. | `./tools/gitpush.sh` |

@@ -131,12 +131,23 @@ else
     print_info "${TS_COUNT} TypeScript-Dateien gefunden"
     
     # TypeScript kompilieren
-    if command -v npx &> /dev/null; then
+    run_tsc() {
+        if command -v npx &> /dev/null; then
+            npx tsc "$@"
+        elif [ -f "node_modules/typescript/bin/tsc" ]; then
+            node node_modules/typescript/bin/tsc "$@"
+        else
+            print_error "weder npx noch node_modules/typescript/bin/tsc gefunden"
+            exit 1
+        fi
+    }
+
+    if command -v npx &> /dev/null || [ -f "node_modules/typescript/bin/tsc" ]; then
         if [ "$WATCH_MODE" = "watch" ]; then
             print_info "Watch-Mode: TypeScript kompiliert automatisch bei Änderungen"
             print_info "Drücke Ctrl+C zum Beenden"
             echo ""
-            npx tsc -w
+            run_tsc -w
         else
             # WICHTIG: Lösche alle .js und .min.js Dateien, die aus .ts Dateien kompiliert werden
             # Dies stellt sicher, dass TypeScript IMMER neu kompiliert, auch wenn .js Dateien neuer sind
@@ -180,7 +191,7 @@ else
             if [ -d ".tsbuildinfo" ]; then
                 rm -rf .tsbuildinfo
             fi
-            npx tsc
+            run_tsc
             TSC_EXIT=$?
             if [ $TSC_EXIT -eq 0 ]; then
                 print_success "TypeScript kompiliert"

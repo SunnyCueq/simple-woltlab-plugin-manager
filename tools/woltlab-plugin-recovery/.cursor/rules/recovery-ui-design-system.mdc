@@ -1,0 +1,40 @@
+---
+description: Recovery UI — ACP-native vs Legacy (Custom)
+globs: recovery-src/**/*.php,recovery-src/**/*.css,stub/**/*.php
+alwaysApply: false
+---
+
+# Recovery Tool — UI: ACP nachahmen
+
+## Wenn `acp/style/style.css` geladen ist (`recoveryUsesNativeAcpUi()`)
+
+**Nur WoltLab-ACP-Markup + `recovery-acp-native.css` (~150 Zeilen). Kein `recovery-acp-extensions.css`.**
+
+| Element | ACP-Markup |
+|---------|------------|
+| Seitentitel | `contentHeader` + `contentTitle` (Layout) |
+| Navigation | `nav.tabMenu` + `breadcrumb` |
+| Abschnitt | `section.section` + `sectionHeader` + `sectionTitle` + `sectionDescription` |
+| Tabelle | `table.table.tableList` — `recoveryAcpTableClass()` |
+| Hinweis | `div.info` / `div.warning` / `div.error` / `div.success` mit `<p>` innen — **kein** Block in `<p>` |
+| Listen in Hinweisen | `<ol>` / `<ul>` **außerhalb** von `<p>` |
+| Dashboard-Kacheln | `div.acpDashboard` + `a.acpDashboardBox` |
+| Formular (Auth) | `form` + `dl`/`dt`/`dd` + `div.formSubmit` |
+| Auth-Login-Shell | `body.acpAuthFlow` + `pageHeaderContainerIsLogin` |
+
+**PHP-Helfer:** `recovery-src/lib/Recovery/Ui/RecoveryAcpMarkup.php`, `recoveryRenderAlert()`, `recoveryRenderAcpSectionStart()`.
+
+## Legacy (nur WCFSetup / ohne kompiliertes ACP-CSS)
+
+Custom-Primitives: `recovery-chip`, `recovery-panel`, `recovery-status-feed`, `recovery-acp-extensions.css`.
+
+## Verboten im ACP-Modus
+
+- `recovery-panel`, `recovery-chip-bar`, `recovery-intake-hero`, `recovery-content-banner`
+- `<ol>` innerhalb von `<p class="error">`
+- Inline `style=` in PHP
+- Neues Custom-CSS statt ACP-Klassen
+
+## Release
+
+`./dev/validate-php-syntax.sh` → `./dev/build-release.sh X.Y.Z` → `./dev/publish-github-release.sh X.Y.Z`

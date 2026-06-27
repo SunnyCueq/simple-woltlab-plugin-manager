@@ -11,7 +11,7 @@ Der **Simple WoltLab Plugin Manager** ist ein Kommandozeilen-Toolkit für den ko
 - **Umgebungs-Setup** — Lädt WoltLab Core, klont offizielle Doku und WCF-Quellcode, richtet TypeScript-Typings (d.ts) ein, setzt Pfade zu deiner lokalen WoltLab-Installation.
 - **Entwicklung** — TypeScript-Kompilierung (inkl. Watch), Pakete entpacken zur Inspektion, zentrale Debug-Logs.
 - **Build** — Erstellt verteilbare `.tar.gz`-Pakete mit semantischer Versionserhöhung (patch/minor/major).
-- **Qualitätssicherung** — Validiert Plugins mit 13+ Prüfungen: Sicherheit (SQL, XSS), Übersetzungen (DE/EN), Minversion, WoltLab-Cloud-Kompatibilität, Store-Vorgaben.
+- **Qualitätssicherung** — Validiert Plugins: Sicherheit (SQL, XSS), Übersetzungen (DE/EN), **offline DevTools-Parität** (PIP-Quellen, fehlende Sprach-Keys mit Datei:Zeile), Minversion, WoltLab-Cloud-Kompatibilität, Store-Vorgaben.
 - **Release** — Git-Commit, Push, Version-Tags, GitHub-Release inkl. Asset-Upload.
 - **Optional** — DDEV-Anbindung für lokalen WoltLab-Server; Build-Button-Extension für VS Code/Cursor.
 
@@ -39,12 +39,12 @@ Du musst kein Vorwissen zur WoltLab-Plugin-Struktur mitbringen. Das Menü und di
    ```bash
    ./tools.sh
    ```
-   Du kannst auch `./tools/tools.sh` von dort aus starten. Beim ersten Start wirst du gefragt, ob du **Setup** ausführen möchtest. Sag ja, wenn du WoltLab Core, Doku, GitHub-Klon, TypeScript-Typings herunterladen und optional einen Pfad zu deiner lokalen WoltLab-Installation setzen willst. Danach erscheint das Hauptmenü mit Build, Git Push, TypeScript, Unpack, Hilfe, Validierung und Setup.
+   Du kannst auch `./tools/tools.sh` von dort aus starten. Ohne Argumente startet das **interaktive Menü** (Build, TypeScript, Git, Validierung usw.). Alle CLI-Befehle siehst du mit **`./tools.sh help`**. Core, Doku, Typings und Pfade richtest du mit **`./tools.sh setup`** (oder `./tools/setup-minimal.sh`) ein – wann du willst, nicht automatisch beim ersten Start.
 
 3. **Menü nutzen**  
    Gib die Nummer der gewünschten Option ein (z. B. `1` für Build, `2` für Git Push) und folge den Hinweisen. Mit `0` beendest du. Details und eine Beschreibung jedes Tools stehen in [tools/README.de.md](tools/README.de.md).
 
-> **Tipp:** Setup kannst du später jederzeit über die Menüoption **„Setup / Vorbereitung“** oder mit `./tools/setup-minimal.sh` ausführen. Wenn du einen Pfad zu einer lokalen WoltLab-Installation angibst, werden Workspace-Datei und Editor-Pfade automatisch angepasst.
+> **Tipp:** Setup startest du jederzeit mit **`./tools.sh setup`**, über die entsprechende Menüoption oder `./tools/setup-minimal.sh`. Wenn du einen Pfad zu einer lokalen WoltLab-Installation angibst, werden Workspace-Datei und Editor-Pfade automatisch angepasst.
 
 ---
 
@@ -67,7 +67,7 @@ Du musst kein Vorwissen zur WoltLab-Plugin-Struktur mitbringen. Das Menü und di
 
 | Tool | Was es macht | Befehl |
 |------|----------------|--------|
-| **Hauptmenü** | Startet das interaktive Menü. | `./tools.sh` oder `./tools/tools.sh` |
+| **Hauptmenü** | Startet das interaktive Menü; `./tools.sh help` listet CLI-Befehle. | `./tools.sh` oder `./tools/tools.sh` |
 | **Setup** | Lädt Core, Doku, Typings; setzt Pfade und optionale MCP-Vorlage. | `./tools/setup-minimal.sh` |
 | **Build** | Baut dein Plugin und kann die Version erhöhen (patch/minor/major). | `./tools/build.sh patch` |
 | **Git Push** | Committet, pusht und erstellt ein GitHub-Release für dein Plugin. | `./tools/gitpush.sh` |

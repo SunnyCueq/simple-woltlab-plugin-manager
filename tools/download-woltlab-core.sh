@@ -2,9 +2,10 @@
 
 #################################################################
 # WoltLab Core (Setup-Dateien) herunterladen
-# Pfad: tools/download-woltlab-core.sh
-# Lädt die offizielle WoltLab-Suite-ZIP, extrahiert WCFSetup.tar.gz,
-# install.php und test.php nach MAIN_DIR/woltlab-core/
+# Pfad: tools/download-woltlab-core.sh [VERSION]
+# Lädt die offizielle WoltLab-Suite-ZIP für VERSION (z. B. 6.2),
+# extrahiert WCFSetup.tar.gz, install.php, test.php nach MAIN_DIR/woltlab-core/
+# Ohne VERSION: neueste verfügbare Version von der Download-Seite.
 #################################################################
 
 set -e
@@ -12,6 +13,7 @@ set -e
 readonly TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly MAIN_DIR="$(dirname "$TOOLS_DIR")"
 readonly CORE_DIR="$MAIN_DIR/woltlab-core"
+WOLTLAB_VERSION="${1:-}"
 
 if [ -f "$TOOLS_DIR/common.sh" ]; then
     source "$TOOLS_DIR/common.sh"
@@ -20,13 +22,24 @@ else
     exit 1
 fi
 
-# Download-Seite abrufen und ZIP-URL finden
+# Download-URL: bei VERSION z. B. 6.2 -> 6.2.0, https://assets.woltlab.com/release/woltlab-suite-6.2.0.zip
 DOWNLOAD_URL=""
-if command -v curl &>/dev/null; then
-    DOWNLOAD_URL=$(curl -sS "https://www.woltlab.com/de/woltlab-suite-download/" 2>/dev/null | grep -oE 'https://assets\.woltlab\.com/release/woltlab-suite-[0-9.]+\.zip' | head -1)
+if [ -n "$WOLTLAB_VERSION" ]; then
+    # Version normalisieren: 6.2 -> 6.2.0 für Asset-URL
+    VER_ASSET="$WOLTLAB_VERSION"
+    if [[ "$WOLTLAB_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
+        VER_ASSET="${WOLTLAB_VERSION}.0"
+    fi
+    DOWNLOAD_URL="https://assets.woltlab.com/release/woltlab-suite-${VER_ASSET}.zip"
+    print_info "Zielversion: $WOLTLAB_VERSION (Asset: $VER_ASSET)"
+fi
+if [ -z "$DOWNLOAD_URL" ] || [ "$WOLTLAB_VERSION" = "" ]; then
+    if command -v curl &>/dev/null; then
+        DOWNLOAD_URL=$(curl -sS "https://www.woltlab.com/de/woltlab-suite-download/" 2>/dev/null | grep -oE 'https://assets\.woltlab\.com/release/woltlab-suite-[0-9.]+\.zip' | head -1)
+    fi
 fi
 if [ -z "$DOWNLOAD_URL" ]; then
-    print_error "Download-URL konnte nicht ermittelt werden."
+    print_error "Download-URL konnte nicht ermittelt werden. Optional Version angeben: $0 6.2"
     exit 1
 fi
 

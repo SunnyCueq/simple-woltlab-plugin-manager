@@ -1,11 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# WoltLab Plugin Manager – Developer Tools (Einstieg)
+#
+#   ./tools.sh              → interaktives Menü
+#   ./tools.sh help         → alle Befehle
+#   ./tools.sh build        → Paket bauen (Patch)
+#   ./tools.sh update-paket → Update-Paket (= Patch)
+#   ./tools.sh typescript   → TS → JS
+#
+# Implementierung: tools/tools.sh
 
-#################################################################
-# WoltLab Development Tools - Quick Access
-# Pfad: /home/benny/Dokumente/simple-woltlab-plugin-manager/tools.sh
-# 
-# Schnellzugriff auf das zentrale Tools-Menü
-#################################################################
-
+set -e
 MAIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 exec "$MAIN_DIR/tools/tools.sh" "$@"

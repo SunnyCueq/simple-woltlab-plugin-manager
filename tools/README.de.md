@@ -119,7 +119,7 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 
 ### validate-plugin.sh – Sicherheit und Store-Compliance
 
-**Was es macht:** Prüft dein Plugin vor Release oder Store-Einreichung auf typische Probleme. Geprüft werden: **PHP- und XML-Syntax**; **Übersetzungen** (DE und EN vorhanden und konsistent); **Mindestversion WoltLab**; dass keine externen Paket-Server genutzt werden; **Sicherheit** (z. B. SQL-Injection, XSS); **Debug- und Entwicklungs-Code**, der nicht ausgeliefert werden darf; sowie **Cloud-/Kompatibilitäts-** und weitere Store-Regeln. Die Prüfungen sind an die [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.md) angelehnt, die auch manuelle Schritte aufführt, die das Skript nicht abdeckt.
+**Was es macht:** Prüft dein Plugin vor Release oder Store-Einreichung auf typische Probleme. Geprüft werden: **PHP- und XML-Syntax**; **Übersetzungen** (DE und EN vorhanden und konsistent); **PIP-Quellen** (DevTools-Parität: sync-fähig vs. nur Paket-Update); **Plugin-Sprach-Keys** im Code vs. `language/*.xml` mit **Datei:Zeile**; **Mindestversion WoltLab**; dass keine externen Paket-Server genutzt werden; **Sicherheit** (z. B. SQL-Injection, XSS); **Debug- und Entwicklungs-Code**, der nicht ausgeliefert werden darf; sowie **Cloud-/Kompatibilitäts-** und weitere Store-Regeln. Die Prüfungen sind an die [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.md) angelehnt, die auch manuelle Schritte aufführt, die das Skript nicht abdeckt.
 
 **Wann nutzen:** Vor dem Release oder der Einreichung im Store, um Probleme früh zu finden.
 
@@ -132,6 +132,38 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 - `Plugin-Pfad`: optional; Plugin-Ordner oder Pfad. Ohne Angabe wird das aktuelle Verzeichnis oder das erste erkannte Plugin verwendet.
 
 Ergebnisse und Details erscheinen im Terminal; Logs können unter `/tmp/` geschrieben werden (siehe Skript-Ausgabe).
+
+**Einzelchecks (ohne vollständige Validierung):**
+
+```bash
+python3 tools/check-pip-sources.py --strict /pfad/zum/plugin
+python3 tools/check-language-keys.py /pfad/zum/plugin
+python3 tools/check-template-xss.py /pfad/zum/plugin
+python3 tools/check-like-escaping.py /pfad/zum/plugin
+python3 tools/check-language-categories.py /pfad/zum/plugin
+python3 tools/fix-template-xss-escaping.py /pfad/zum/plugin --dry-run
+```
+
+`check-pip-sources.py` spiegelt WoltLab-DevTools-PIP-Ziele offline (ohne ACP-Abgleich). `check-language-keys.py` meldet fehlende **App-Keys** (`shrinkr.*` usw.) mit Fundstelle; Core-`wcf.*`-Texte werden ignoriert.
+
+Details zu Heuristiken und False Positives: [docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)  
+Sprach-XML (Kategorie/Item): [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md)
+
+---
+
+### prepare-acp-install.sh – Paket für ACP-Upload vorbereiten
+
+**Was es macht:** Findet das neueste `.tar.gz` im Plugin-Ordner, kopiert es in den lokalen Docker-Webserver (`woltlab-web`) und gibt die exakten Schritte für den manuellen ACP-Upload aus.
+
+**Wann nutzen:** Nach `./tools/build.sh`, bevor du das Paket in WoltLab testest. Der Cursor-Agent kann den Datei-Dialog im ACP nicht bedienen – du wählst die Datei, der Agent macht danach weiter.
+
+**Befehl:**
+
+```bash
+./tools/prepare-acp-install.sh [Plugin]
+```
+
+Details: [docs/ACP-PACKAGE-INSTALL.de.md](docs/ACP-PACKAGE-INSTALL.de.md)
 
 ---
 
@@ -215,11 +247,27 @@ Danach können Editor und TypeScript-Compiler die WoltLab-API-Typen nutzen. Sieh
 
 ---
 
+## Maintainer: Shr1nkr (separates Plugin-Repo)
+
+Shr1nkr-E2E, Playwright und Release-Gate liegen im **Plugin-Repo** [wsc-shr1nkr](https://github.com/benjarogit/wsc-shr1nkr), nicht im Plugin-Manager.
+
+```bash
+cd ../wsc-shr1nkr
+./tools/run-all-shrinkr-tests.sh
+./tools/build.sh same
+```
+
+Der Plugin-Manager liefert nur generische Tools: `build.sh`, `validate-plugin.sh`, `typescript.sh`.
+
+---
+
 ## Weitere Dokumentation
 
 Dokumente in `tools/docs/`:
 
 - **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checkliste vor der Einreichung eines Plugins im WoltLab-Store: Was `validate-plugin.sh` abdeckt und was du zusätzlich manuell prüfen solltest. Englische Version: [docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
+- **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL-Heuristiken der Validierung (Shr1nkr-/6.2.5-Erkenntnisse).
+- **[docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md)** — Sprach-PIP: Item/Kategorie-Zuordnung (verhindert ACP-Update-Fehler).
 
 ---
 

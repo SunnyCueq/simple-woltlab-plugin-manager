@@ -7,6 +7,8 @@
 # Prüft Plugin-Struktur, Security (SQL-Injection, XSS), 
 # Code-Qualität und Plugin-Store-Compliance
 #
+# Store-Mapping: tools/docs/PLUGIN-STORE-CHECKLIST.md (Stand 2026-06-26)
+#
 # Usage:
 #   ./tools/validate-plugin.sh [PLUGIN_DIR]
 #   Falls PLUGIN_DIR nicht angegeben, wird das aktuelle Verzeichnis verwendet
@@ -111,7 +113,7 @@ log "INFO" "Prüfe package.xml"
 if [ ! -f "package.xml" ]; then
     print_error "package.xml nicht gefunden!"
     log "ERROR" "package.xml nicht gefunden"
-    ((ERRORS++))
+    ERRORS=$((ERRORS + 1))
 else
     print_success "package.xml gefunden"
     log "INFO" "package.xml gefunden"
@@ -124,12 +126,12 @@ else
         else
             print_error "XML-Syntax-Fehler in package.xml!"
             log "ERROR" "XML-Syntax-Fehler in package.xml"
-            ((ERRORS++))
+            ERRORS=$((ERRORS + 1))
         fi
     else
         print_warning "xmllint nicht installiert, überspringe XML-Validierung"
         log "WARNING" "xmllint nicht gefunden, überspringe XML-Validierung"
-        ((WARNINGS++))
+        WARNINGS=$((WARNINGS + 1))
     fi
 
     # Package-Name prüfen
@@ -137,7 +139,7 @@ else
     if [ -z "$PACKAGE_NAME" ]; then
         print_error "Konnte Package-Name nicht aus package.xml extrahieren!"
         log "ERROR" "Konnte Package-Name nicht extrahieren"
-        ((ERRORS++))
+        ERRORS=$((ERRORS + 1))
     else
         echo -e "   ${CYAN}Package-Name:${NC} $PACKAGE_NAME"
         log "INFO" "Package-Name: $PACKAGE_NAME"
@@ -148,7 +150,7 @@ else
             echo -e "   ${YELLOW}Erwartetes Format:${NC} com.domain.pluginname"
             echo -e "   ${YELLOW}Gefundener Name:${NC} $PACKAGE_NAME"
             log "WARNING" "Package-Name-Format möglicherweise nicht standardkonform: $PACKAGE_NAME"
-            ((WARNINGS++))
+            WARNINGS=$((WARNINGS + 1))
         else
             print_success "Package-Name-Format ist korrekt"
             log "INFO" "Package-Name-Format ist korrekt"
@@ -160,14 +162,14 @@ else
     if [ -z "$VERSION" ]; then
         print_warning "Konnte Version nicht aus package.xml extrahieren"
         log "WARNING" "Konnte Version nicht extrahieren"
-        ((WARNINGS++))
+        WARNINGS=$((WARNINGS + 1))
     else
         echo -e "   ${CYAN}Version:${NC} $VERSION"
         log "INFO" "Version: $VERSION"
     fi
 
     # Minversion-Validierung (Plugin Store Requirement)
-    MINVERSION=$(grep -A 1 '<requiredpackages>' package.xml | grep -oP 'minversion="\K[^"]+' | head -1)
+    MINVERSION=$(grep -oP '<requiredpackage minversion="\K[^"]+' package.xml 2>/dev/null | head -1) || MINVERSION=""
 
     if [ -n "$MINVERSION" ]; then
         echo -e "   ${CYAN}Minversion:${NC} $MINVERSION"
@@ -180,21 +182,21 @@ else
             print_warning "Minversion 7.x - WoltLab 7 ist noch nicht released"
             echo -e "   ${YELLOW}Plugin Store akzeptiert nur unterstützte Versionen!${NC}"
             log "WARNING" "Minversion 7.x - noch nicht released"
-            ((WARNINGS++))
+            WARNINGS=$((WARNINGS + 1))
         elif [[ "$MINVERSION" =~ ^5\. ]]; then
             print_warning "Minversion 5.x - veraltete Core-Version"
             echo -e "   ${YELLOW}Empfehlung:${NC} Upgrade auf 6.0.0 für Plugin Store"
             log "WARNING" "Minversion 5.x - veraltete Core-Version"
-            ((WARNINGS++))
+            WARNINGS=$((WARNINGS + 1))
         else
             print_warning "Unbekannte Minversion: $MINVERSION"
             log "WARNING" "Unbekannte Minversion: $MINVERSION"
-            ((WARNINGS++))
+            WARNINGS=$((WARNINGS + 1))
         fi
     else
         print_warning "Keine Minversion in package.xml gefunden"
         log "WARNING" "Keine Minversion gefunden"
-        ((WARNINGS++))
+        WARNINGS=$((WARNINGS + 1))
     fi
 
     # Package-Server Verbot (Plugin Store Regel)
@@ -202,7 +204,7 @@ else
         print_error "Package-Server Installation ist im Plugin Store VERBOTEN!"
         echo -e "   ${YELLOW}Entferne${NC} <instruction type=\"packageUpdateServer\"> aus package.xml"
         log "ERROR" "packageUpdateServer instruction gefunden (Plugin Store verboten)"
-        ((ERRORS++))
+        ERRORS=$((ERRORS + 1))
     fi
 
     # Excludedpackages Empfehlung
@@ -214,7 +216,7 @@ else
         echo -e "     <excludedpackage version=\"7.0.0 Alpha 1\">com.woltlab.wcf</excludedpackage>"
         echo -e "   </excludedpackages>"
         log "WARNING" "excludedpackages fehlt (empfohlen für 6.x Plugins)"
-        ((WARNINGS++))
+        WARNINGS=$((WARNINGS + 1))
     fi
 fi
 
@@ -229,7 +231,7 @@ TAR_FOUND=0
 TAR_ERRORS=0
 
 while IFS= read -r -d '' tar_file; do
-    ((TAR_FOUND++))
+    TAR_FOUND=$((TAR_FOUND + 1))
     echo -e "   ${CYAN}Gefunden:${NC} $(basename "$tar_file")"
     log "INFO" "$(basename "$tar_file") gefunden"
 
@@ -240,15 +242,15 @@ while IFS= read -r -d '' tar_file; do
     else
         print_error "$(basename "$tar_file") ist beschädigt oder ungültig!"
         log "ERROR" "$(basename "$tar_file") ist beschädigt"
-        ((ERRORS++))
-        ((TAR_ERRORS++))
+        ERRORS=$((ERRORS + 1))
+        TAR_ERRORS=$((TAR_ERRORS + 1))
     fi
-done < <(find . -maxdepth 1 -name "*.tar" -type f -print0 2>/dev/null)
+done < <(find . -maxdepth 2 \( -name "*.tar" -o -name "*.tar.gz" \) -type f ! -path './maintainer/*' -print0 2>/dev/null)
 
 if [ $TAR_FOUND -eq 0 ]; then
     print_warning "Keine TAR-Dateien gefunden"
     log "WARNING" "Keine TAR-Dateien gefunden"
-    ((WARNINGS++))
+    WARNINGS=$((WARNINGS + 1))
 else
     echo -e "   ${GREEN}✓${NC} $TAR_FOUND TAR-Datei(en) gefunden"
     log "INFO" "$TAR_FOUND TAR-Datei(en) gefunden"
@@ -260,9 +262,21 @@ echo ""
 EXTRACTED_DIR=""
 if [ -d "_extracted" ]; then
     EXTRACTED_DIR="_extracted"
+elif [ -d "temp_edit" ] && { [ -d "temp_edit/lib" ] || [ -d "temp_edit/templates" ]; }; then
+    EXTRACTED_DIR="temp_edit"
 elif [ -d "lib" ] || [ -d "templates" ] || [ -d "acptemplates" ]; then
     # Plugin-Struktur direkt im Verzeichnis
     EXTRACTED_DIR="."
+fi
+
+# Quellbaum für PIP-/Sprach-Checks (DevTools-Parität)
+VALIDATE_SOURCE_DIR=""
+if [ -d "temp_edit" ] && [ -f "temp_edit/package.xml" ]; then
+    VALIDATE_SOURCE_DIR="temp_edit"
+elif [ -n "$EXTRACTED_DIR" ] && [ -f "${EXTRACTED_DIR}/package.xml" ]; then
+    VALIDATE_SOURCE_DIR="$EXTRACTED_DIR"
+elif [ -f "package.xml" ]; then
+    VALIDATE_SOURCE_DIR="."
 fi
 
 if [ -n "$EXTRACTED_DIR" ]; then
@@ -278,12 +292,12 @@ if [ -n "$EXTRACTED_DIR" ]; then
         PHP_ERRORS=0
 
         while IFS= read -r -d '' php_file; do
-            ((PHP_FILES_CHECKED++))
+            PHP_FILES_CHECKED=$((PHP_FILES_CHECKED + 1))
             if ! php -l "$php_file" &>/dev/null; then
                 print_error "PHP-Syntax-Fehler in $php_file"
                 log "ERROR" "PHP-Syntax-Fehler in $php_file"
-                ((ERRORS++))
-                ((PHP_ERRORS++))
+                ERRORS=$((ERRORS + 1))
+                PHP_ERRORS=$((PHP_ERRORS + 1))
             fi
         done < <(find "$EXTRACTED_DIR" -name "*.php" -type f -print0 2>/dev/null)
 
@@ -302,7 +316,7 @@ if [ -n "$EXTRACTED_DIR" ]; then
     else
         print_warning "PHP CLI nicht installiert, überspringe PHP-Syntax-Prüfung"
         log "WARNING" "PHP CLI nicht gefunden, überspringe PHP-Syntax-Prüfung"
-        ((WARNINGS++))
+        WARNINGS=$((WARNINGS + 1))
     fi
 
     echo ""
@@ -318,27 +332,28 @@ if [ -n "$EXTRACTED_DIR" ]; then
             print_warning "Deprecated mysql_* function in $(basename "$php_file")"
             echo -e "   ${YELLOW}→${NC} Verwende WoltLab DatabaseObject oder Prepared Statements"
             log "WARNING" "Deprecated mysql_* in $(basename "$php_file")"
-            ((WARNINGS++))
-            ((SECURITY_ISSUES++))
+            WARNINGS=$((WARNINGS + 1))
+            SECURITY_ISSUES=$((SECURITY_ISSUES + 1))
         fi
 
-        # Check 2: Direct $_GET/$_POST in SQL
-        if grep -qE '\$_(GET|POST|REQUEST)\[.*\].*query|query.*\$_(GET|POST|REQUEST)' "$php_file"; then
+        # Check 2: Superglobals directly in SQL string building (same line; not readParameters vs execute)
+        if grep -qE '\$_(GET|POST|REQUEST|COOKIE)\[[^\]]+\][^;]*(prepareStatement|->query\(|getConditionBuilder\(\)->add|ConditionBuilder)' "$php_file" || \
+           grep -qE '(prepareStatement|->query\(|getConditionBuilder\(\)->add)[^;]*\$_(GET|POST|REQUEST|COOKIE)\[' "$php_file"; then
             print_warning "Mögliche SQL-Injection in $(basename "$php_file")"
             echo -e "   ${YELLOW}→${NC} Verwende Prepared Statements mit Parameterbindung!"
             log "WARNING" "Potenzielle SQL-Injection in $(basename "$php_file")"
-            ((WARNINGS++))
-            ((SECURITY_ISSUES++))
+            WARNINGS=$((WARNINGS + 1))
+            SECURITY_ISSUES=$((SECURITY_ISSUES + 1))
         fi
 
-        # Check 3: String Concatenation in Queries
-        if grep -qE 'query.*\$[a-zA-Z_]|\$[a-zA-Z_].*query' "$php_file" && \
-           grep -qE '\..*\$|".*\$|"\s*\.\s*\$' "$php_file"; then
-            print_warning "String-Concatenation in SQL-Query in $(basename "$php_file")"
+        # Check 3: User input concatenated into SQL string literals (narrow heuristic)
+        if grep -qE "['\"][^'\"]*['\"]\s*\.\s*\\\$_(GET|POST|REQUEST|COOKIE)" "$php_file" && \
+           grep -qE '(prepareStatement|->query\(|ConditionBuilder|execute\()' "$php_file"; then
+            print_warning "String-Concatenation mit Request-Daten in $(basename "$php_file")"
             echo -e "   ${YELLOW}→${NC} Verwende Parameter-Binding statt String-Concatenation"
-            log "WARNING" "String-Concatenation in SQL in $(basename "$php_file")"
-            ((WARNINGS++))
-            ((SECURITY_ISSUES++))
+            log "WARNING" "String-Concatenation mit Request in $(basename "$php_file")"
+            WARNINGS=$((WARNINGS + 1))
+            SECURITY_ISSUES=$((SECURITY_ISSUES + 1))
         fi
     done < <(find "$EXTRACTED_DIR" -name "*.php" -type f -print0 2>/dev/null)
 
@@ -353,33 +368,61 @@ if [ -n "$EXTRACTED_DIR" ]; then
 
     echo ""
 
+    # Security-Check: LIKE escaping (WoltLab 6.2.5+ pattern)
+    echo -e "${YELLOW}🛡️  Security-Check: LIKE-Escaping (escapeLikeValue)...${NC}"
+    log "INFO" "Prüfe LIKE-Abfragen auf escapeLikeValue()"
+    LIKE_ISSUES=0
+
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-like-escaping.py" ]; then
+        while IFS= read -r like_line; do
+            [ -z "$like_line" ] && continue
+            like_file=$(echo "$like_line" | cut -d: -f1)
+            like_kind=$(echo "$like_line" | cut -d: -f3)
+            print_warning "LIKE-Escaping ($like_kind) in $like_file"
+            echo -e "   ${YELLOW}→${NC} Verwende WCF::getDB()->escapeLikeValue(\$term) statt addcslashes()"
+            log "WARNING" "LIKE-Escaping: $like_line"
+            WARNINGS=$((WARNINGS + 1))
+            LIKE_ISSUES=$((LIKE_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-like-escaping.py" "$EXTRACTED_DIR" 2>/dev/null || true)
+
+        if [ $LIKE_ISSUES -eq 0 ]; then
+            print_success "LIKE-Abfragen nutzen escapeLikeValue() oder keine Risiko-Muster"
+            log "INFO" "LIKE-Escaping Check: Keine Probleme"
+        else
+            print_warning "$LIKE_ISSUES LIKE-Escaping Problem(e) gefunden"
+            log "WARNING" "$LIKE_ISSUES LIKE-Escaping Warnungen"
+        fi
+    else
+        print_warning "check-like-escaping.py nicht verfügbar, überspringe LIKE-Check"
+        log "WARNING" "LIKE-Check übersprungen"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    echo ""
+
     # Security-Check: XSS in Templates
     echo -e "${YELLOW}🛡️  Security-Check: XSS in Templates...${NC}"
     log "INFO" "Prüfe Templates auf XSS-Risiken"
     XSS_ISSUES=0
 
-    while IFS= read -r -d '' tpl_file; do
-        # Check: Unescaped Variable Output
-        UNESCAPED_VARS=$(grep -oE '\{\$[a-zA-Z_][a-zA-Z0-9_]*\}' "$tpl_file" 2>/dev/null | wc -l)
-
-        if [ "$UNESCAPED_VARS" -gt 0 ]; then
-            print_warning "$UNESCAPED_VARS unescaped Variable(n) in $(basename "$tpl_file")"
-            echo -e "   ${YELLOW}→${NC} Verwende {|escape} für Text, {|encodeJS} für JavaScript"
-            echo -e "   ${YELLOW}→${NC} Nur sichere Variablen (Language, Constants) dürfen unescaped sein"
-            log "WARNING" "Potenzielle XSS in $(basename "$tpl_file"): $UNESCAPED_VARS unescaped vars"
-            ((WARNINGS++))
-            ((XSS_ISSUES++))
-        fi
-
-        # Check: Inline JavaScript mit Variablen
-        if grep -qE '<script.*\{\$' "$tpl_file"; then
-            print_warning "Variable in <script> Tag in $(basename "$tpl_file")"
-            echo -e "   ${YELLOW}→${NC} Verwende {|encodeJS} für Variablen in JavaScript"
-            log "WARNING" "Variable in script-tag in $(basename "$tpl_file")"
-            ((WARNINGS++))
-            ((XSS_ISSUES++))
-        fi
-    done < <(find "$EXTRACTED_DIR" -name "*.tpl" -type f -print0 2>/dev/null)
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-template-xss.py" ]; then
+        while IFS= read -r xss_line; do
+            [ -z "$xss_line" ] && continue
+            xss_file=$(echo "$xss_line" | cut -d: -f1)
+            xss_line_no=$(echo "$xss_line" | cut -d: -f2)
+            xss_kind=$(echo "$xss_line" | cut -d: -f3)
+            print_warning "XSS ($xss_kind) in $xss_file Zeile $xss_line_no"
+            echo -e "   ${YELLOW}→${NC} |encodeHTML für HTML, {unsafe:\$var|encodeJS} in <script>"
+            echo -e "   ${YELLOW}→${NC} Auto-Fix: python3 tools/fix-template-xss-escaping.py PLUGIN_DIR --dry-run"
+            log "WARNING" "XSS: $xss_line"
+            WARNINGS=$((WARNINGS + 1))
+            XSS_ISSUES=$((XSS_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-template-xss.py" "$EXTRACTED_DIR" 2>/dev/null || true)
+    else
+        print_warning "check-template-xss.py nicht verfügbar, überspringe XSS-Check"
+        log "WARNING" "XSS-Check übersprungen"
+        WARNINGS=$((WARNINGS + 1))
+    fi
 
     if [ $XSS_ISSUES -eq 0 ]; then
         print_success "Keine offensichtlichen XSS-Risiken gefunden"
@@ -403,8 +446,8 @@ if [ -n "$EXTRACTED_DIR" ]; then
             print_warning "Debug-Funktionen in $(basename "$php_file")"
             echo -e "   ${YELLOW}→${NC} Entferne var_dump(), print_r(), var_export() vor Release"
             log "WARNING" "Debug-Funktionen in $(basename "$php_file")"
-            ((WARNINGS++))
-            ((DEBUG_ISSUES++))
+            WARNINGS=$((WARNINGS + 1))
+            DEBUG_ISSUES=$((DEBUG_ISSUES + 1))
         fi
 
         # Check 2: Hardcoded Credentials
@@ -412,8 +455,8 @@ if [ -n "$EXTRACTED_DIR" ]; then
             print_error "Test-Credentials in $(basename "$php_file")"
             echo -e "   ${YELLOW}→${NC} Entferne alle Test-Passwörter!"
             log "ERROR" "Test-Credentials in $(basename "$php_file")"
-            ((ERRORS++))
-            ((DEBUG_ISSUES++))
+            ERRORS=$((ERRORS + 1))
+            DEBUG_ISSUES=$((DEBUG_ISSUES + 1))
         fi
 
         # Check 3: error_reporting/ini_set
@@ -421,8 +464,8 @@ if [ -n "$EXTRACTED_DIR" ]; then
             print_warning "error_reporting/display_errors in $(basename "$php_file")"
             echo -e "   ${YELLOW}→${NC} Entferne Debugging-Konfiguration vor Release"
             log "WARNING" "Debug-Config in $(basename "$php_file")"
-            ((WARNINGS++))
-            ((DEBUG_ISSUES++))
+            WARNINGS=$((WARNINGS + 1))
+            DEBUG_ISSUES=$((DEBUG_ISSUES + 1))
         fi
     done < <(find "$EXTRACTED_DIR" -name "*.php" -type f -print0 2>/dev/null)
 
@@ -432,8 +475,8 @@ if [ -n "$EXTRACTED_DIR" ]; then
             print_warning "console.log() in $(basename "$js_file")"
             echo -e "   ${YELLOW}→${NC} Entferne console.log() Statements vor Release"
             log "WARNING" "console.log in $(basename "$js_file")"
-            ((WARNINGS++))
-            ((DEBUG_ISSUES++))
+            WARNINGS=$((WARNINGS + 1))
+            DEBUG_ISSUES=$((DEBUG_ISSUES + 1))
         fi
     done < <(find "$EXTRACTED_DIR" -name "*.js" -type f -print0 2>/dev/null)
 
@@ -459,8 +502,8 @@ if [ -n "$EXTRACTED_DIR" ]; then
             echo -e "   ${YELLOW}→${NC} Verwende HTTPRequest/Guzzle für automatische Proxy-Unterstützung"
             echo -e "   ${YELLOW}→${NC} Cloud-Kompatibilität erfordert Proxy-Support!"
             log "WARNING" "file_get_contents für HTTP in $(basename "$php_file")"
-            ((WARNINGS++))
-            ((API_ISSUES++))
+            WARNINGS=$((WARNINGS + 1))
+            API_ISSUES=$((API_ISSUES + 1))
         fi
 
         # Check 2: curl_* functions
@@ -469,8 +512,8 @@ if [ -n "$EXTRACTED_DIR" ]; then
             echo -e "   ${YELLOW}→${NC} Verwende HTTPRequest oder Guzzle statt curl_*"
             echo -e "   ${YELLOW}→${NC} WoltLab Core APIs unterstützen Proxy automatisch"
             log "WARNING" "curl_* functions in $(basename "$php_file")"
-            ((WARNINGS++))
-            ((API_ISSUES++))
+            WARNINGS=$((WARNINGS + 1))
+            API_ISSUES=$((API_ISSUES + 1))
         fi
 
         # Check 3: Direct DB Access
@@ -478,17 +521,25 @@ if [ -n "$EXTRACTED_DIR" ]; then
             print_warning "Direkte DB-Verbindung in $(basename "$php_file")"
             echo -e "   ${YELLOW}→${NC} Verwende WoltLab DatabaseObject/DatabaseObjectList"
             log "WARNING" "Direkte DB-Verbindung in $(basename "$php_file")"
-            ((WARNINGS++))
-            ((API_ISSUES++))
+            WARNINGS=$((WARNINGS + 1))
+            API_ISSUES=$((API_ISSUES + 1))
         fi
 
         # Check 4: WoltLab Cloud – keine System-Befehle (exec, shell_exec, system, passthru)
-        if grep -qE '\b(exec|shell_exec|system|passthru)\s*\(' "$php_file"; then
+        if python3 - "$php_file" <<'PY' | grep -q 1
+import re, sys
+text = open(sys.argv[1], encoding="utf-8").read()
+# Strip line comments to avoid false positives like "log system (if available)"
+text = re.sub(r"//[^\n]*", "", text)
+if re.search(r"\b(exec|shell_exec|system|passthru)\s*\(", text):
+    print(1)
+PY
+        then
             print_warning "System-Befehl (exec/shell_exec/system/passthru) in $(basename "$php_file")"
             echo -e "   ${YELLOW}→${NC} WoltLab Cloud erlaubt keine direkten System-Aufrufe"
             log "WARNING" "System-Befehl in $(basename "$php_file") – Cloud inkompatibel"
-            ((WARNINGS++))
-            ((API_ISSUES++))
+            WARNINGS=$((WARNINGS + 1))
+            API_ISSUES=$((API_ISSUES + 1))
         fi
     done < <(find "$EXTRACTED_DIR" -name "*.php" -type f -print0 2>/dev/null)
 
@@ -502,13 +553,38 @@ if [ -n "$EXTRACTED_DIR" ]; then
 
     echo ""
 
+    # PHP 8.2+: keine dynamischen Properties auf $eventObj in Event-Listenern
+    echo -e "${YELLOW}🎯 Best-Practice Check: Event-Listener (dynamic properties)...${NC}"
+    log "INFO" "Prüfe Event-Listener auf \$eventObj-> Zuweisungen"
+    DYNAMIC_PROP_ISSUES=0
+
+    while IFS= read -r -d '' listener_file; do
+        if grep -qE '\$eventObj->[a-zA-Z_][a-zA-Z0-9_]*(\[[^\]]*\])?\s*=' "$listener_file"; then
+            print_warning "Dynamische Property auf \$eventObj in $(basename "$listener_file")"
+            echo -e "   ${YELLOW}→${NC} Nur WCF::getTPL()->assign() / \$parameters['variables'] (PHP 8.3 Fatal auf IndexPage)"
+            log "WARNING" "Dynamic property on eventObj in $(basename "$listener_file")"
+            WARNINGS=$((WARNINGS + 1))
+            DYNAMIC_PROP_ISSUES=$((DYNAMIC_PROP_ISSUES + 1))
+        fi
+    done < <(find "$EXTRACTED_DIR/lib/system/event/listener" -name "*.php" -type f -print0 2>/dev/null)
+
+    if [ $DYNAMIC_PROP_ISSUES -eq 0 ]; then
+        print_success "Keine \$eventObj-> Zuweisungen in Event-Listenern"
+        log "INFO" "Event-Listener dynamic property check: OK"
+    else
+        print_warning "$DYNAMIC_PROP_ISSUES Event-Listener mit dynamischen Properties"
+        log "WARNING" "$DYNAMIC_PROP_ISSUES dynamic property Warnungen"
+    fi
+
+    echo ""
+
     # Prüfe auf Müll-Dateien (Plugin Store: nur in package.xml referenzierte Dateien)
     echo -e "${YELLOW}📦 Prüfe auf unerwünschte Dateien (Store/Archiv)...${NC}"
     log "INFO" "Prüfe auf Müll-Dateien"
     JUNK_FOUND=0
     for pattern in ".DS_Store" "Thumbs.db"; do
         while IFS= read -r -d '' f; do
-            ((JUNK_FOUND++))
+            JUNK_FOUND=$((JUNK_FOUND + 1))
             print_warning "Unerwünschte Datei: $f"
             echo -e "   ${YELLOW}→${NC} Nicht in package.xml referenzieren; vor Release entfernen"
             log "WARNING" "Junk-Datei: $f"
@@ -518,7 +594,7 @@ if [ -n "$EXTRACTED_DIR" ]; then
         print_success "Keine typischen Müll-Dateien (.DS_Store, Thumbs.db) gefunden"
         log "INFO" "Junk-Check: Keine gefunden"
     else
-        ((WARNINGS+=JUNK_FOUND))
+        WARNINGS=$((WARNINGS + JUNK_FOUND))
     fi
 
     echo ""
@@ -539,7 +615,7 @@ for xml_file in "${XML_FILES[@]}"; do
     if [ -f "$xml_file" ]; then
         print_success "$xml_file gefunden"
         log "INFO" "$xml_file gefunden"
-        ((XML_FOUND++))
+        XML_FOUND=$((XML_FOUND + 1))
 
         # XML-Syntax prüfen (falls xmllint verfügbar)
         if command -v xmllint &> /dev/null; then
@@ -549,11 +625,17 @@ for xml_file in "${XML_FILES[@]}"; do
             else
                 print_error "XML-Syntax-Fehler in $xml_file!"
                 log "ERROR" "XML-Syntax-Fehler in $xml_file"
-                ((ERRORS++))
+                ERRORS=$((ERRORS + 1))
             fi
         fi
     fi
 done
+
+if [ -f "option.xml" ] && grep -q '<optionsrequired>' option.xml 2>/dev/null; then
+    print_error "option.xml enthält ungültiges <optionsrequired> — WoltLab XSD kennt nur <options>"
+    log "ERROR" "option.xml: invalid optionsrequired tag"
+    ERRORS=$((ERRORS + 1))
+fi
 
 if [ $XML_FOUND -gt 0 ]; then
     echo -e "   ${GREEN}✓${NC} $XML_FOUND XML-Datei(en) gefunden"
@@ -590,19 +672,112 @@ if [ -d "language" ]; then
         echo -e "   ${YELLOW}Gefunden:${NC} DE=$DE_FOUND, EN=$EN_FOUND"
         echo -e "   ${YELLOW}Hinweis:${NC} Beide Sprachen müssen identische Informationen enthalten"
         log "ERROR" "Übersetzungen unvollständig: DE=$DE_FOUND, EN=$EN_FOUND"
-        ((ERRORS++))
+        ERRORS=$((ERRORS + 1))
     else
         print_success "DE + EN Übersetzungen vorhanden"
         log "INFO" "DE + EN Übersetzungen vorhanden"
+    fi
+
+    # Language category/item alignment (blocks ACP install if wrong)
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-language-categories.py" ]; then
+        LANG_CAT_ISSUES=0
+        while IFS= read -r lang_line; do
+            [ -z "$lang_line" ] && continue
+            print_error "Sprach-XML Kategorie-Mismatch: $lang_line"
+            echo -e "   ${YELLOW}→${NC} Item in passende <category> verschieben oder Key umbenennen (siehe tools/docs/LANGUAGE-XML.de.md)"
+            log "ERROR" "Language category mismatch: $lang_line"
+            ERRORS=$((ERRORS + 1))
+            LANG_CAT_ISSUES=$((LANG_CAT_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-language-categories.py" "$PLUGIN_DIR" 2>/dev/null || true)
+        if [ $LANG_CAT_ISSUES -eq 0 ]; then
+            print_success "Sprach-XML: Item/Kategorie-Zuordnung OK"
+            log "INFO" "Language category check OK"
+        fi
+    else
+        print_warning "check-language-categories.py nicht verfügbar, überspringe Sprach-Kategorie-Check"
+        log "WARNING" "check-language-categories.py nicht verfügbar"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    LANG_KEYS_CHECK="$TOOLS_DIR/check-language-keys.py"
+    LANG_SRC="${VALIDATE_SOURCE_DIR:-$PLUGIN_DIR}"
+    if command -v python3 &> /dev/null && [ -f "$LANG_KEYS_CHECK" ] && [ -d "$LANG_SRC/language" ]; then
+        echo -e "${YELLOW}  → Sprach-Keys (Plugin-Keys vs. XML, mit Fundstelle)...${NC}"
+        LANG_KEY_OUT="/tmp/validate-lang-keys-$$.txt"
+        if python3 "$LANG_KEYS_CHECK" "$LANG_SRC" >"$LANG_KEY_OUT" 2>&1; then
+            print_success "Sprach-Keys: Plugin-Keys DE/EN vs. Code OK"
+            log "INFO" "Language keys check OK"
+        else
+            print_error "Sprach-Key-Abweichungen (nur App-Keys, nicht wcf.*)"
+            sed -n '/^--- Orphaned/,${p}' "$LANG_KEY_OUT" | head -50
+            log "ERROR" "Language keys check failed"
+            ERRORS=$((ERRORS + 1))
+        fi
+        rm -f "$LANG_KEY_OUT"
     fi
 else
     print_warning "Kein language/ Verzeichnis - Plugin Store verlangt Übersetzungen!"
     echo -e "   ${YELLOW}Erstelle${NC} language/de.xml und language/en.xml"
     log "WARNING" "Kein language/ Verzeichnis gefunden"
-    ((WARNINGS++))
+    WARNINGS=$((WARNINGS + 1))
 fi
 
 echo ""
+
+# 5b. Bootstrap-Sicherheit (WCF lib/bootstrap vs. App lib — Deinstall/Partial-Deploy)
+echo -e "${YELLOW}🔍 Prüfe Bootstrap-Guards (Deinstall-sicher)...${NC}"
+log "INFO" "Prüfe Bootstrap-Guards"
+BOOTSTRAP_DIR=""
+if [ -d "lib/bootstrap" ]; then
+    BOOTSTRAP_DIR="lib/bootstrap"
+elif [ -n "${EXTRACTED_DIR:-}" ] && [ -d "$EXTRACTED_DIR/lib/bootstrap" ]; then
+    BOOTSTRAP_DIR="$EXTRACTED_DIR/lib/bootstrap"
+fi
+
+if [ -n "$BOOTSTRAP_DIR" ]; then
+    BOOTSTRAP_ISSUES=0
+    while IFS= read -r -d '' bootstrap_file; do
+        if grep -qE 'shrinkr\\|Shrinkr[A-Z]' "$bootstrap_file" 2>/dev/null; then
+            if ! grep -qE 'class_exists\s*\([^,]+,\s*false\s*\)' "$bootstrap_file" 2>/dev/null; then
+                print_error "Bootstrap ohne class_exists(..., false)-Guard: $(basename "$bootstrap_file")"
+                echo -e "   ${YELLOW}→${NC} Bootstrap liegt in wcf/lib; App-Klassen fehlen bei Deinstall — früh return, sonst ACP tot"
+                log "ERROR" "Bootstrap guard missing: $bootstrap_file"
+                ERRORS=$((ERRORS + 1))
+                BOOTSTRAP_ISSUES=$((BOOTSTRAP_ISSUES + 1))
+            fi
+        fi
+    done < <(find "$BOOTSTRAP_DIR" -maxdepth 1 -name '*.php' -type f -print0 2>/dev/null)
+
+    if [ $BOOTSTRAP_ISSUES -eq 0 ]; then
+        print_success "Bootstrap-Guards für App-Klassen vorhanden"
+        log "INFO" "Bootstrap guard check OK"
+    fi
+else
+    print_info "Kein lib/bootstrap/ — übersprungen"
+fi
+
+echo ""
+
+# 5c. PIP-Quellen (WoltLab DevTools-Parität)
+if [ -n "$VALIDATE_SOURCE_DIR" ] && [ -f "${VALIDATE_SOURCE_DIR}/package.xml" ]; then
+    echo -e "${YELLOW}🔍 PIP-Quellen (DevTools-Parität)...${NC}"
+    log "INFO" "PIP-Quellen-Check in $VALIDATE_SOURCE_DIR"
+    PIP_CHECK="$TOOLS_DIR/check-pip-sources.py"
+    if command -v python3 &> /dev/null && [ -f "$PIP_CHECK" ]; then
+        if python3 "$PIP_CHECK" --strict "$VALIDATE_SOURCE_DIR" "${VALIDATE_SOURCE_DIR}/package.xml"; then
+            print_success "PIP-Quellen vollständig (sync vs. Paket-Update siehe Log oben)"
+            log "INFO" "PIP source check OK"
+        else
+            print_error "PIP-Quellen fehlen oder Update-Pfade ungültig"
+            log "ERROR" "PIP source check failed"
+            ERRORS=$((ERRORS + 1))
+        fi
+    else
+        print_warning "check-pip-sources.py nicht verfügbar"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+    echo ""
+fi
 
 # 6. Ergebnis
 print_section "Validierungs-Ergebnis" "Hauptmenü" "Validierung"

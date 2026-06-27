@@ -1,0 +1,126 @@
+/**
+ * ACP-Inhaltsbreite (Stub + Paket) — nicht Login-Schmalspur.
+ * Orientierung: acp/style/style.css layoutBoundary, ohne Sidebar volle Content-Spalte.
+ */
+
+#tplRecoveryTool,
+#tplRecoveryAuth.recovery-stub-acp-page {
+    --recovery-content-max-width: min(96vw, 1400px);
+    --recovery-content-gutter: 24px;
+}
+
+#tplRecoveryTool #main > .layoutBoundary,
+#tplRecoveryAuth.recovery-stub-acp-page #main > .layoutBoundary {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: var(--recovery-content-max-width) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: var(--recovery-content-gutter) !important;
+    padding-right: var(--recovery-content-gutter) !important;
+}
+
+#tplRecoveryTool #pageHeaderContainer,
+#tplRecoveryTool #pageHeader,
+#tplRecoveryTool #pageHeaderPanel,
+#tplRecoveryTool #pageHeaderFacade,
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeaderContainer,
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeader,
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeaderPanel,
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeaderFacade {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool #pageHeaderPanel > .layoutBoundary,
+#tplRecoveryTool #pageHeaderFacade > .layoutBoundary,
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeaderPanel > .layoutBoundary,
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeaderFacade > .layoutBoundary {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: max(
+        var(--recovery-content-gutter),
+        calc((100% - var(--recovery-content-max-width)) / 2 + var(--recovery-content-gutter))
+    ) !important;
+    padding-right: max(
+        var(--recovery-content-gutter),
+        calc((100% - var(--recovery-content-max-width)) / 2 + var(--recovery-content-gutter))
+    ) !important;
+}
+
+#tplRecoveryTool #content,
+#tplRecoveryAuth.recovery-stub-acp-page #content {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .content .section,
+#tplRecoveryAuth.recovery-stub-acp-page .content .section {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .table.tableList,
+#tplRecoveryAuth.recovery-stub-acp-page .table.tableList {
+    width: 100%;
+    table-layout: auto;
+}
+
+#tplRecoveryTool p.info,
+#tplRecoveryTool p.warning,
+#tplRecoveryTool p.error,
+#tplRecoveryTool p.success,
+#tplRecoveryTool .error > p:first-child,
+#tplRecoveryTool .success > p:first-child,
+#tplRecoveryAuth.recovery-stub-acp-page p.info,
+#tplRecoveryAuth.recovery-stub-acp-page p.warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+#tplRecoveryTool p.info fa-icon,
+#tplRecoveryTool p.warning fa-icon,
+#tplRecoveryTool .error fa-icon,
+#tplRecoveryTool .success fa-icon,
+#tplRecoveryAuth.recovery-stub-acp-page p.info fa-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+#tplRecoveryTool .recovery-footer-meta,
+#tplRecoveryAuth.recovery-stub-acp-page .recovery-footer-meta {
+    max-width: var(--recovery-content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--recovery-content-gutter);
+    padding-right: var(--recovery-content-gutter);
+    box-sizing: border-box;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #auth-step-3 .success {
+    margin: 0 0 20px;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #auth-step-3 .formSubmit {
+    margin: 0;
+    padding: 0;
+    clear: both;
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 720px) {
+    #tplRecoveryTool,
+    #tplRecoveryAuth.recovery-stub-acp-page {
+        --recovery-content-gutter: 16px;
+        --recovery-content-max-width: 100%;
+    }
+}

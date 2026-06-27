@@ -1,0 +1,226 @@
+/* Dark-Mode-Ergänzung wenn nur WCFSetup.css geladen wird (kein kompiliertes ACP style.css). */
+@media (prefers-color-scheme: dark) {
+    html[data-color-scheme="dark"] body.wcfAcp,
+    html[data-color-scheme="system"] body.wcfAcp {
+        background-color: #1a1a1a;
+        color: #c8c8c8;
+    }
+
+    html[data-color-scheme="dark"] .contentHeader,
+    html[data-color-scheme="dark"] .contentHeader .contentTitle,
+    html[data-color-scheme="dark"] .sectionTitle,
+    html[data-color-scheme="system"] .contentHeader,
+    html[data-color-scheme="system"] .contentHeader .contentTitle,
+    html[data-color-scheme="system"] .sectionTitle {
+        color: #e8e8e8;
+    }
+
+    html[data-color-scheme="dark"] .section,
+    html[data-color-scheme="system"] .section {
+        background-color: #262626;
+        border-color: #404040;
+    }
+
+    html[data-color-scheme="dark"] .info,
+    html[data-color-scheme="system"] .info {
+        background-color: rgba(33, 150, 243, 0.12);
+        border-left-color: #2196f3;
+        color: #b8d4f0;
+    }
+
+    html[data-color-scheme="dark"] .warning,
+    html[data-color-scheme="system"] .warning {
+        background-color: rgba(255, 193, 7, 0.12);
+        border-left-color: #ffc107;
+        color: #e8d9a8;
+    }
+
+    html[data-color-scheme="dark"] .success,
+    html[data-color-scheme="system"] .success {
+        background-color: rgba(76, 175, 80, 0.12);
+        border-left-color: #4caf50;
+        color: #c8e6c9;
+    }
+
+    html[data-color-scheme="dark"] .error,
+    html[data-color-scheme="system"] .error {
+        background-color: rgba(244, 67, 54, 0.12);
+        border-left-color: #f44336;
+        color: #ffcdd2;
+    }
+
+    html[data-color-scheme="dark"] code,
+    html[data-color-scheme="system"] code {
+        background-color: rgba(255, 255, 255, 0.08);
+        color: #90caf9;
+    }
+
+    html[data-color-scheme="dark"] .recovery-footer-meta,
+    html[data-color-scheme="system"] .recovery-footer-meta {
+        color: #888;
+    }
+
+    html[data-color-scheme="dark"] .recoveryLog,
+    html[data-color-scheme="dark"] .recovery-cmd-block,
+    html[data-color-scheme="dark"] pre.recoveryLog,
+    html[data-color-scheme="system"] .recoveryLog,
+    html[data-color-scheme="system"] .recovery-cmd-block,
+    html[data-color-scheme="system"] pre.recoveryLog {
+        background-color: #1e2832 !important;
+        border-color: #3d4f5f !important;
+        color: #e8ecf0 !important;
+    }
+
+    html[data-color-scheme="dark"] .recovery-panel,
+    html[data-color-scheme="system"] .recovery-panel {
+        background-color: #262626;
+        border-color: #404040;
+    }
+
+    html[data-color-scheme="dark"] #tplRecoveryTool button.recovery-text-link-btn,
+    html[data-color-scheme="system"] #tplRecoveryTool button.recovery-text-link-btn {
+        color: #6ec2ff !important;
+    }
+
+    html[data-color-scheme="dark"] #tplRecoveryTool button.recovery-text-link-btn:hover,
+    html[data-color-scheme="dark"] #tplRecoveryTool button.recovery-text-link-btn:focus,
+    html[data-color-scheme="system"] #tplRecoveryTool button.recovery-text-link-btn:hover,
+    html[data-color-scheme="system"] #tplRecoveryTool button.recovery-text-link-btn:focus {
+        color: #6ec2ff !important;
+    }
+
+    html[data-color-scheme="dark"] .recovery-log-hint,
+    html[data-color-scheme="system"] .recovery-log-hint {
+        background-color: rgba(255, 193, 7, 0.12);
+        border-left-color: #ffc107;
+        color: #e8d9a8;
+    }
+
+    html[data-color-scheme="dark"] .recovery-hint-box,
+    html[data-color-scheme="system"] .recovery-hint-box {
+        background-color: rgba(110, 194, 255, 0.1);
+        border-color: #4a8fc4;
+    }
+
+    html[data-color-scheme="dark"] .recovery-hint-box__icon,
+    html[data-color-scheme="system"] .recovery-hint-box__icon {
+        color: #6ec2ff;
+    }
+
+    html[data-color-scheme="dark"] .recovery-scenario-card,
+    html[data-color-scheme="dark"] .mode-grid .mode-button,
+    html[data-color-scheme="dark"] .recovery-grid-card,
+    html[data-color-scheme="dark"] .acpDashboardBox,
+    html[data-color-scheme="system"] .recovery-scenario-card,
+    html[data-color-scheme="system"] .mode-grid .mode-button,
+    html[data-color-scheme="system"] .recovery-grid-card,
+    html[data-color-scheme="system"] .acpDashboardBox {
+        background-color: #262626;
+        border-color: #404040;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    html[data-color-scheme="dark"] .recovery-scenario-card:hover,
+    html[data-color-scheme="dark"] .recovery-backup-card:hover,
+    html[data-color-scheme="dark"] .mode-grid .mode-button:hover,
+    html[data-color-scheme="dark"] .recovery-grid-card--store:hover,
+    html[data-color-scheme="dark"] .acpDashboardBox--discovery:hover,
+    html[data-color-scheme="system"] .recovery-scenario-card:hover,
+    html[data-color-scheme="system"] .recovery-backup-card:hover,
+    html[data-color-scheme="system"] .mode-grid .mode-button:hover,
+    html[data-color-scheme="system"] .recovery-grid-card--store:hover,
+    html[data-color-scheme="system"] .acpDashboardBox--discovery:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    html[data-color-scheme="dark"] .recovery-sysinfo-cta-strip,
+    html[data-color-scheme="system"] .recovery-sysinfo-cta-strip {
+        border-color: #404040;
+    }
+
+    html[data-color-scheme="dark"] .recovery-sysinfo-cta-strip__block--support,
+    html[data-color-scheme="system"] .recovery-sysinfo-cta-strip__block--support {
+        background-color: rgba(54, 153, 204, 0.14);
+        color: #c8e0f0;
+    }
+
+    html[data-color-scheme="dark"] .recovery-sysinfo-cta-strip__heading,
+    html[data-color-scheme="dark"] .recovery-sysinfo-cta-strip__text,
+    html[data-color-scheme="system"] .recovery-sysinfo-cta-strip__heading,
+    html[data-color-scheme="system"] .recovery-sysinfo-cta-strip__text {
+        color: #c8e0f0;
+    }
+
+    html[data-color-scheme="dark"] .recovery-expert-intro,
+    html[data-color-scheme="system"] .recovery-expert-intro {
+        color: #c8e0f0;
+        border-color: #404040;
+    }
+
+    html[data-color-scheme="dark"] .recovery-sub-nav,
+    html[data-color-scheme="system"] .recovery-sub-nav {
+        border-bottom-color: #404040;
+    }
+
+    html[data-color-scheme="dark"] .mode-grid .mode-button.recovery-mode-button--active,
+    html[data-color-scheme="system"] .mode-grid .mode-button.recovery-mode-button--active {
+        background-color: rgba(33, 150, 243, 0.16);
+        border-color: #2196f3;
+        box-shadow: 0 0 0 1px #2196f3, 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    html[data-color-scheme="dark"] .recovery-rec-step,
+    html[data-color-scheme="system"] .recovery-rec-step {
+        background-color: #1e1e1e;
+        border-color: #404040;
+    }
+
+    html[data-color-scheme="dark"] .recovery-rec-step__why,
+    html[data-color-scheme="system"] .recovery-rec-step__why {
+        color: #b0b0b0;
+    }
+
+    html[data-color-scheme="dark"] .recovery-rec-section-label--after,
+    html[data-color-scheme="system"] .recovery-rec-section-label--after {
+        border-top-color: #404040;
+    }
+
+    html[data-color-scheme="dark"] .recovery-rec-badge--required,
+    html[data-color-scheme="system"] .recovery-rec-badge--required {
+        color: #1a1a1a;
+    }
+
+    html[data-color-scheme="dark"] .recovery-security-notice,
+    html[data-color-scheme="system"] .recovery-security-notice {
+        background-color: rgba(198, 40, 40, 0.16);
+        border-color: #c55;
+    }
+
+    html[data-color-scheme="dark"] .recovery-security-notice__head,
+    html[data-color-scheme="system"] .recovery-security-notice__head {
+        color: #f0a0a0;
+    }
+
+    html[data-color-scheme="dark"] #tplRecoveryTool,
+    html[data-color-scheme="system"] #tplRecoveryTool {
+        --recovery-hero-subtitle-color: #e8e8e8;
+    }
+
+    html[data-color-scheme="dark"] #tplRecoveryTool .recovery-intake-hero .subtitle,
+    html[data-color-scheme="dark"] #tplRecoveryTool .recovery-intake-hero--compact .subtitle,
+    html[data-color-scheme="dark"] #tplRecoveryTool .content .recovery-intake-hero p.subtitle,
+    html[data-color-scheme="dark"] #tplRecoveryTool p.subtitle,
+    html[data-color-scheme="system"] #tplRecoveryTool .recovery-intake-hero .subtitle,
+    html[data-color-scheme="system"] #tplRecoveryTool .recovery-intake-hero--compact .subtitle,
+    html[data-color-scheme="system"] #tplRecoveryTool .content .recovery-intake-hero p.subtitle,
+    html[data-color-scheme="system"] #tplRecoveryTool p.subtitle {
+        color: #e8e8e8 !important;
+        opacity: 1 !important;
+    }
+
+    html[data-color-scheme="dark"] #tplRecoveryTool .recovery-intake-hero .subtitle strong,
+    html[data-color-scheme="system"] #tplRecoveryTool .recovery-intake-hero .subtitle strong {
+        color: #e8e8e8 !important;
+    }
+
+}

@@ -1,0 +1,13 @@
+{
+    "version": "2.7.12",
+    "minStubVersion": "2.7.12",
+    "package": "recovery-tool",
+    "contents": [
+        "app.php — Router, Recovery-Logik und ACP-Oberfläche",
+        "bootstrap.php, paths.php, version.php — Bootstrap und Version",
+        "lib/Recovery/Modes/ — PHP-Modi (Start, Wizard, Plugin entfernen, System-Check, Datensicherung, …)",
+        "lib/Recovery/Ui/ — AcpLayout, RecoveryUi, recovery-acp-extensions.css, recovery-wcfsetup-dark.css",
+        "lib/Recovery/Bootstrap/ — Datenbank-Anbindung",
+        "lib/Recovery/Log/ — Recovery-Logger"
+    ]
+}

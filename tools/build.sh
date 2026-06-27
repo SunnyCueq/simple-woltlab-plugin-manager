@@ -7,9 +7,13 @@
 # Usage:
 #   ./tools/build.sh [plugin] [version] → Plugin bauen
 #   ./tools/build.sh patch              → Patch-Version erhoehen (Standard)
+#   ./tools/build.sh same               → Version aus package.xml NICHT aendern (Entwicklung)
+#   ./tools/build.sh [plugin] same      → wie oben, fuer ein Plugin-Verzeichnis
 #   ./tools/build.sh minor              → Minor-Version erhoehen
 #   ./tools/build.sh major              → Major-Version erhoehen
 #   ./tools/build.sh unpack [plugin] [package.tar.gz] → Plugin entpacken
+#   ./tools/build.sh --dry-run          → Paket-Inhalt anzeigen, ohne zu bauen
+#   ./tools/build.sh --verbose [patch|minor|major|same] → Bauen mit Tree-Output
 #
 # Das Script sucht automatisch nach Plugin-Verzeichnissen
 # im Projekt-Root (Verzeichnisse mit package.xml)
@@ -58,14 +62,103 @@ else
 fi
 
 #=====================================
+# PIP-PARSING (package.xml Instructions)
+#=====================================
+# Leitet aus package.xml die benoetigten Dateien/TARs ab (wspackager-Logik).
+# Liefert eine Liste von Pfaden, die in temp_edit/ existieren muessen.
+parse_package_instructions() {
+    local pkg="$1"
+    local base="${2:-temp_edit}"
+    local list=()
+    # WoltLab Default-PIP-Dateien
+    local -A DEFAULTS=(
+        [file]="files.tar"
+        [template]="templates.tar"
+        [acpTemplate]="acptemplates.tar"
+    )
+    # Instruction-Zeilen mit explizitem Pfad: <instruction type="X">path</instruction>
+    while IFS= read -r line; do
+        local path
+        path=$(echo "$line" | sed -n 's/.*>\([^<]*\)<.*/\1/p' | command tr -d '[:space:]')
+        [ -n "$path" ] && list+=("$base/$path")
+    done < <(grep -E '<instruction[^>]*>[^<]+</instruction>' "$pkg" 2>/dev/null || true)
+    # file mit application=wcf (files_wcf.tar)
+    if grep -qE 'type="file"[^>]*application\s*=\s*"wcf"' "$pkg" 2>/dev/null; then
+        local wcf_path
+        wcf_path=$(grep -oE 'type="file"[^>]*application\s*=\s*"wcf"[^>]*>[^<]+' "$pkg" | sed 's/.*>//')
+        [ -n "$wcf_path" ] && list+=("$base/$wcf_path")
+    fi
+    # file/template/acpTemplate ohne expliziten Pfad -> Default
+    if grep -qE 'type="file"[^>]*/>' "$pkg" 2>/dev/null || grep -qE 'type="file"[^>]*></instruction>' "$pkg" 2>/dev/null; then
+        list+=("$base/files.tar")
+    fi
+    if grep -qE 'type="template"[^>]*/>' "$pkg" 2>/dev/null || grep -qE 'type="template"[^>]*></instruction>' "$pkg" 2>/dev/null; then
+        list+=("$base/templates.tar")
+    fi
+    if grep -qE 'type="acpTemplate"[^>]*/>' "$pkg" 2>/dev/null || grep -qE 'type="acpTemplate"[^>]*></instruction>' "$pkg" 2>/dev/null; then
+        list+=("$base/acptemplates.tar")
+    fi
+    # package.xml, XML-Dateien, language/
+    list+=("$base/package.xml")
+    for f in "$base"/*.xml; do
+        [ -f "$f" ] && [ "$(basename "$f")" != "package.xml" ] && list+=("$f")
+    done
+    [ -d "$base/language" ] && list+=("$base/language")
+    printf '%s\n' "${list[@]}" | sort -u
+}
+
+# PIP-Quellen (DevTools-Parität) — check-pip-sources.py
+run_pip_source_check() {
+    local base="${1:-temp_edit}"
+    local pkg="${2:-$base/package.xml}"
+    local check="${SCRIPT_DIR}/check-pip-sources.py"
+    if command -v python3 &>/dev/null && [ -f "$check" ]; then
+        python3 "$check" --strict "$base" "$pkg"
+        return $?
+    fi
+    print_error "check-pip-sources.py nicht gefunden — PIP-Validierung übersprungen"
+    return 1
+}
+
+# Tree-Output: Zeigt was gepackt wuerde (Quellen in temp_edit)
+output_package_tree() {
+    local base="${1:-temp_edit}"
+    echo ""
+    print_info "Paket-Inhalt (Tree):"
+    echo "  package.xml"
+    [ -d "$base/lib" ] || [ -d "$base/acp" ] || [ -d "$base/style" ] && echo "  files.tar (lib/, acp/, style/)"
+    [ -d "$base/js" ] || [ -d "$base/lib/bootstrap" ] && echo "  files_wcf.tar (js/, lib/bootstrap/)"
+    [ -d "$base/templates" ] && echo "  templates.tar (templates/*.tpl)" || { ls "$base"/*.tpl 1>/dev/null 2>&1 && echo "  templates.tar (*.tpl)"; }
+    [ -d "$base/acptemplates" ] && echo "  acptemplates.tar (acptemplates/*.tpl)"
+    for f in "$base"/*.xml; do
+        [ -f "$f" ] && [ "$(basename "$f")" != "package.xml" ] && echo "  $(basename "$f")"
+    done
+    [ -d "$base/language" ] && echo "  language/"
+    echo ""
+}
+
+#=====================================
 # HAUPTLOGIK (Parameter & Dispatch)
 #=====================================
-COMMAND="${1:-}"
-PLUGIN_TARGET="${2:-}"
-VERSION_TYPE="${3:-patch}"
+DRY_RUN=0
+VERBOSE=0
+
+# --dry-run und --verbose aus Parametern extrahieren
+REST=()
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run)  DRY_RUN=1 ;;
+        --verbose)  VERBOSE=1 ;;
+        *)          REST+=("$arg") ;;
+    esac
+done
+
+N="${#REST[@]}"
+VERSION_TYPE="patch"
+PLUGIN_TARGET=""
 
 # Wenn erster Parameter "unpack" ist, dann unpack.sh aufrufen
-if [ "$COMMAND" = "unpack" ]; then
+if [ "$N" -ge 1 ] && [ "${REST[0]}" = "unpack" ]; then
     TOOLS_DIR="$(cd "${SCRIPT_DIR}" && pwd)"
     UNPACK_SCRIPT="${TOOLS_DIR}/unpack.sh"
     
@@ -74,28 +167,32 @@ if [ "$COMMAND" = "unpack" ]; then
         exit 1
     fi
     
-    # Rufe unpack.sh auf mit verbleibenden Parametern
-    bash "$UNPACK_SCRIPT" "$PLUGIN_TARGET" "$VERSION_TYPE"
+    bash "$UNPACK_SCRIPT" "${REST[1]:-}" "${REST[2]:-}"
     exit $?
 fi
 
-# Wenn erster Parameter ein Version-Typ ist, dann kein Plugin angegeben
-if [[ "$COMMAND" =~ ^(patch|minor|major)$ ]]; then
-    VERSION_TYPE="$COMMAND"
-    PLUGIN_TARGET=""
-    COMMAND=""
-elif [ -n "$COMMAND" ] && [[ ! "$COMMAND" =~ ^(patch|minor|major)$ ]]; then
-    # COMMAND ist wahrscheinlich PLUGIN_TARGET
-    PLUGIN_TARGET="$COMMAND"
-    COMMAND=""
-    # Prüfe ob zweiter Parameter ein Version-Typ ist
-    if [[ "$VERSION_TYPE" =~ ^(patch|minor|major)$ ]]; then
-        # VERSION_TYPE ist bereits korrekt gesetzt
-        :
-    else
-        VERSION_TYPE="patch"
-    fi
-fi
+# Argumente: [plugin] [patch|minor|major|same]  oder nur patch|minor|major|same (erstes Plugin)
+case "$N" in
+    0)
+        ;;
+    1)
+        if [[ "${REST[0]}" =~ ^(patch|minor|major|same)$ ]]; then
+            VERSION_TYPE="${REST[0]}"
+        else
+            PLUGIN_TARGET="${REST[0]}"
+        fi
+        ;;
+    *)
+        if [[ "${REST[1]}" =~ ^(patch|minor|major|same)$ ]]; then
+            PLUGIN_TARGET="${REST[0]}"
+            VERSION_TYPE="${REST[1]}"
+        else
+            print_error "Zweites Argument muss patch, minor, major oder same sein (ist: ${REST[1]})"
+            echo "Verwendung: ${0} <plugin> <patch|minor|major|same>"
+            exit 1
+        fi
+        ;;
+esac
 
 # Suche nach Plugin-Verzeichnissen
 # Prüfe zuerst auf temp_edit/package.xml, dann auf Root-package.xml (optional)
@@ -128,9 +225,9 @@ fi
 cd "${PROJECT_ROOT}"
 
 # Validierung
-if [[ ! "$VERSION_TYPE" =~ ^(patch|minor|major)$ ]]; then
+if [[ ! "$VERSION_TYPE" =~ ^(patch|minor|major|same)$ ]]; then
     print_error "Ungueltiger Version-Typ '$VERSION_TYPE'"
-    echo "Verwendung: ${0} [patch|minor|major]"
+    echo "Verwendung: ${0} [patch|minor|major|same]"
     exit 1
 fi
 
@@ -140,9 +237,8 @@ print_info "Plugin: ${PLUGIN_NAME}"
 print_info "Version-Typ: $VERSION_TYPE"
 echo ""
 
-# TypeScript IMMER neu kompilieren (vor jedem Build)
-# Nutze typescript.sh, das auch .min.js Dateien erstellt und 3rdParty Bibliotheken kopiert
-if [ -d "temp_edit" ] && [ -d "temp_edit/ts" ]; then
+# TypeScript IMMER neu kompilieren (vor jedem Build) – bei --dry-run ueberspringen
+if [ "$DRY_RUN" -eq 0 ] && [ -d "temp_edit" ] && [ -d "temp_edit/ts" ]; then
     TS_COUNT=$(find temp_edit/ts -name "*.ts" 2>/dev/null | wc -l)
     if [ "$TS_COUNT" -gt 0 ]; then
         print_info "[0/5] TypeScript kompilieren (via typescript.sh)..."
@@ -236,6 +332,8 @@ if [ -d "temp_edit" ] && [ -d "temp_edit/ts" ]; then
         print_success "Keine TypeScript-Dateien gefunden, ueberspringe Kompilierung"
         echo ""
     fi
+elif [ "$DRY_RUN" -eq 1 ]; then
+    print_info "[DRY-RUN] TypeScript-Kompilierung uebersprungen"
 fi
 
 # Pruefe ob temp_edit existiert
@@ -262,6 +360,20 @@ if [ ! -f "$PACKAGE_XML" ]; then
     fi
 fi
 
+# --dry-run: PIP-Validierung + Tree-Output, dann Exit (ohne Bauen)
+if [ "$DRY_RUN" -eq 1 ]; then
+    print_info "[DRY-RUN] Pruefe package.xml Instructions und zeige Paket-Inhalt..."
+    if run_pip_source_check "temp_edit" "$PACKAGE_XML"; then
+        :
+    else
+        print_error "PIP-Validierung fehlgeschlagen. Fehlende Quellen siehe oben."
+        exit 1
+    fi
+    output_package_tree "temp_edit"
+    print_success "Dry-run abgeschlossen – Paket wuerde gebaut werden koennen."
+    exit 0
+fi
+
 CURRENT_VERSION=$(grep -oP '<version>\K[^<]+' "$PACKAGE_XML" 2>/dev/null || echo "")
 if [ -z "$CURRENT_VERSION" ]; then
     print_error "Version nicht in $PACKAGE_XML gefunden"
@@ -270,42 +382,185 @@ fi
 
 print_info "Aktuelle Version: $CURRENT_VERSION"
 
-# Version erhoehen
-IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
-MAJOR="${VERSION_PARTS[0]}"
-MINOR="${VERSION_PARTS[1]}"
-PATCH="${VERSION_PARTS[2]}"
+if [ "$VERSION_TYPE" = "same" ]; then
+    NEW_VERSION="$CURRENT_VERSION"
+    print_info "Version-Typ same: Version und Datum in package.xml bleiben unveraendert (Entwicklung)"
+    echo ""
+else
+    # Version erhoehen
+    IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+    MAJOR="${VERSION_PARTS[0]}"
+    MINOR="${VERSION_PARTS[1]}"
+    PATCH="${VERSION_PARTS[2]}"
 
-case "$VERSION_TYPE" in
-    patch)
-        PATCH=$((PATCH + 1))
-        ;;
-    minor)
-        MINOR=$((MINOR + 1))
-        PATCH=0
-        ;;
-    major)
-        MAJOR=$((MAJOR + 1))
-        MINOR=0
-        PATCH=0
-        ;;
-esac
+    case "$VERSION_TYPE" in
+        patch)
+            PATCH=$((PATCH + 1))
+            ;;
+        minor)
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            ;;
+        major)
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+            ;;
+    esac
 
-NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
-TODAY=$(date +%Y-%m-%d)
+    NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+    TODAY=$(date +%Y-%m-%d)
 
-print_info "Neue Version: $NEW_VERSION"
+    print_info "Neue Version: $NEW_VERSION"
+    echo ""
+
+    # Version und Datum in temp_edit/package.xml aktualisieren (Quelle der Wahrheit)
+    sed -i "s/<version>${CURRENT_VERSION}<\/version>/<version>${NEW_VERSION}<\/version>/" "$PACKAGE_XML"
+    sed -i "s/<date>[^<]*<\/date>/<date>${TODAY}<\/date>/" "$PACKAGE_XML"
+
+    print_success "$PACKAGE_XML aktualisiert"
+fi
+
+# ========================================
+# XML-Dateien validieren (Wohlgeformtheit)
+# ========================================
+print_info "XML-Dateien validieren (Wohlgeformtheit)..."
+XML_VALIDATION_ERRORS=0
+
+# Prüfen ob xmllint (libxml2) verfügbar ist, sonst Python-Fallback
+if command -v xmllint >/dev/null 2>&1; then
+    validate_xml() {
+        local f="$1"
+        local xmllint_err
+        xmllint_err=$(xmllint --noout "$f" 2>&1)
+        if [ $? -ne 0 ]; then
+            print_error "Ungültiges XML: $f${xmllint_err:+ ($xmllint_err)}"
+            XML_VALIDATION_ERRORS=$((XML_VALIDATION_ERRORS + 1))
+        else
+            print_success "XML gültig: $f"
+        fi
+    }
+else
+    validate_xml() {
+        local f="$1"
+        local err
+        err=$(python3 -c '
+import xml.etree.ElementTree as ET
+import sys
+try:
+    ET.parse(sys.argv[1])
+except ET.ParseError as e:
+    if e.position:
+        print("Zeile {}, Spalte {}".format(e.position[0], e.position[1]), file=sys.stderr)
+    else:
+        print(str(e), file=sys.stderr)
+    sys.exit(1)
+' "$f" 2>&1)
+        local rc=$?
+        if [ "$rc" -ne 0 ]; then
+            print_error "Ungültiges XML: $f${err:+ ($err)}"
+            XML_VALIDATION_ERRORS=$((XML_VALIDATION_ERRORS + 1))
+        else
+            print_success "XML gültig: $f"
+        fi
+    }
+fi
+
+# package.xml
+if [ -f "$PACKAGE_XML" ]; then
+    validate_xml "$PACKAGE_XML"
+fi
+
+# temp_edit/*.xml (ohne package.xml, wird bereits geprüft)
+for xml_file in temp_edit/*.xml; do
+    if [ -f "$xml_file" ] && [ "$(basename "$xml_file")" != "package.xml" ]; then
+        validate_xml "$xml_file"
+    fi
+done
+
+# temp_edit/language/*.xml
+if [ -d "temp_edit/language" ]; then
+    for xml_file in temp_edit/language/*.xml; do
+        if [ -f "$xml_file" ]; then
+            validate_xml "$xml_file"
+        fi
+    done
+fi
+
+if [ "$XML_VALIDATION_ERRORS" -gt 0 ]; then
+    print_error "XML-Validierung fehlgeschlagen: ${XML_VALIDATION_ERRORS} Datei(en) mit Fehlern."
+    exit 1
+fi
+
+print_success "Alle XML-Dateien sind wohlgeformt"
 echo ""
 
-# Version und Datum in temp_edit/package.xml aktualisieren (Quelle der Wahrheit)
-sed -i "s/<version>${CURRENT_VERSION}<\/version>/<version>${NEW_VERSION}<\/version>/" "$PACKAGE_XML"
-sed -i "s/<date>[^<]*<\/date>/<date>${TODAY}<\/date>/" "$PACKAGE_XML"
+# Language: item name must match parent category (LanguageEditor::validateItemName)
+LANG_CAT_CHECK="${SCRIPT_DIR}/check-language-categories.py"
+if [ -d "temp_edit/language" ] && command -v python3 &> /dev/null && [ -f "$LANG_CAT_CHECK" ]; then
+    print_info "Sprach-XML: Pruefe Item/Kategorie-Zuordnung..."
+    LANG_CAT_ISSUES=0
+    while IFS= read -r lang_line; do
+        [ -z "$lang_line" ] && continue
+        print_error "Sprach-XML: $lang_line"
+        LANG_CAT_ISSUES=$((LANG_CAT_ISSUES + 1))
+    done < <(python3 "$LANG_CAT_CHECK" "temp_edit" 2>/dev/null || true)
+    if [ "$LANG_CAT_ISSUES" -gt 0 ]; then
+        print_error "Sprach-XML: ${LANG_CAT_ISSUES} Item(s) passen nicht zur Kategorie (siehe tools/docs/LANGUAGE-XML.de.md)"
+        exit 1
+    fi
+    print_success "Sprach-XML: Item/Kategorie-Zuordnung OK"
+    echo ""
+fi
 
-print_success "$PACKAGE_XML aktualisiert"
+# Template: ungültige Modifier (|encodeHTML|, |escape|) — Build bricht ab
+TPL_XSS_CHECK="${SCRIPT_DIR}/check-template-xss.py"
+if command -v python3 &> /dev/null && [ -f "$TPL_XSS_CHECK" ]; then
+    print_info "Templates: Pruefe ungueltige Modifier und Script-Escaping..."
+    TPL_XSS_ISSUES=0
+    while IFS= read -r tpl_line; do
+        [ -z "$tpl_line" ] && continue
+        print_error "Template: $tpl_line"
+        TPL_XSS_ISSUES=$((TPL_XSS_ISSUES + 1))
+    done < <(python3 "$TPL_XSS_CHECK" "temp_edit" 2>/dev/null || true)
+    if [ "$TPL_XSS_ISSUES" -gt 0 ]; then
+        print_error "Templates: ${TPL_XSS_ISSUES} Problem(e) — siehe tools/docs/WOLTLAB-TEMPLATE-RULES.de.md"
+        exit 1
+    fi
+    print_success "Templates: Modifier/Escaping OK"
+    echo ""
+fi
+
+# Sprach-Keys DE/EN vs. Code — optional Warnung (kein Build-Abbruch)
+LANG_KEYS_CHECK="${SCRIPT_DIR}/check-language-keys.py"
+if [ -d "temp_edit/language" ] && command -v python3 &> /dev/null && [ -f "$LANG_KEYS_CHECK" ]; then
+    print_info "Sprach-Keys: Pruefe DE/EN-Abdeckung (optional)..."
+    if ! python3 "$LANG_KEYS_CHECK" "temp_edit" >/dev/null 2>&1; then
+        print_warning "Sprach-Keys: Abweichungen gefunden — Details:"
+        python3 "$LANG_KEYS_CHECK" "temp_edit" 2>/dev/null | head -40 || true
+    else
+        print_success "Sprach-Keys: DE/EN vs. Code OK"
+    fi
+    echo ""
+fi
+
+# Strikte Pfadpruefung: Alle in package.xml referenzierten Quellen muessen existieren
+print_info "PIP-Validierung: Pruefe Quellen (DevTools-Paritaet) in temp_edit..."
+if run_pip_source_check "temp_edit" "$PACKAGE_XML"; then
+    print_success "PIP-Quellen OK (sync-faehig vs. Paket-Update siehe Ausgabe oben)"
+else
+    print_error "PIP-Validierung fehlgeschlagen. Fehlende Quellen siehe oben."
+    exit 1
+fi
+echo ""
+
+# --verbose: Tree-Output vor TAR-Erstellung
+[ "$VERBOSE" -eq 1 ] && output_package_tree "temp_edit"
 
 # TARs aus temp_edit neu erstellen
 print_info "[1/5] Packe TARs aus temp_edit..."
 
+PACKAGE_DIR="$(pwd)"
 cd temp_edit
 
 # files.tar erstellen (lib/, acp/, style/, PHP-Dateien, aber keine Templates)
@@ -323,23 +578,23 @@ if [ -n "$FILES_TO_PACK" ]; then
     # Erstelle files.tar und schließe app.config.inc.php und lib/bootstrap/ explizit aus
     # app.config.inc.php wird von WoltLab automatisch erstellt und darf nicht im Paket sein
     # lib/bootstrap/ muss ins WCF-Verzeichnis (wird in files_wcf.tar gepackt)
-    tar -cf ../files.tar --exclude="app.config.inc.php" --exclude="lib/bootstrap" $FILES_TO_PACK
+    tar -cf "${PACKAGE_DIR}/files.tar" --exclude="app.config.inc.php" --exclude="lib/bootstrap" $FILES_TO_PACK
     print_success "files.tar erstellt"
     
     # Pruefe ob app.config.inc.php versehentlich enthalten ist
-    if tar -tf ../files.tar 2>/dev/null | grep -q "^app\.config\.inc\.php$"; then
+    if tar -tf "${PACKAGE_DIR}/files.tar" 2>/dev/null | grep -q "^app\.config\.inc\.php$"; then
         log_error_with_context "app.config.inc.php ist in files.tar enthalten!" "Diese Datei wird von WoltLab automatisch erstellt und darf nicht im Paket sein!"
         exit 1
     fi
     
     # Pruefe ob lib/bootstrap/ versehentlich enthalten ist (muss in files_wcf.tar sein)
-    if tar -tf ../files.tar 2>/dev/null | grep -q "^lib/bootstrap/"; then
+    if tar -tf "${PACKAGE_DIR}/files.tar" 2>/dev/null | grep -q "^lib/bootstrap/"; then
         log_error_with_context "lib/bootstrap/ ist in files.tar enthalten!" "Bootstrap-Dateien müssen in files_wcf.tar sein, damit sie ins WCF-Verzeichnis kopiert werden!"
         exit 1
     fi
     
     # Pruefe ob TAR-Datei nicht leer ist
-    FILE_COUNT=$(tar -tf ../files.tar 2>/dev/null | wc -l)
+    FILE_COUNT=$(tar -tf "${PACKAGE_DIR}/files.tar" 2>/dev/null | wc -l)
     if [ "$FILE_COUNT" -eq 0 ]; then
         log_error_with_context "files.tar ist leer!" "TAR-Datei enthält keine Dateien"
         exit 1
@@ -353,8 +608,8 @@ fi
 if [ -d "templates" ]; then
     cd templates
     if ls *.tpl 1> /dev/null 2>&1; then
-        tar -cf ../../templates.tar *.tpl
-        TEMPLATE_COUNT=$(tar -tf ../../templates.tar 2>/dev/null | wc -l)
+        tar -cf "${PACKAGE_DIR}/templates.tar" *.tpl
+        TEMPLATE_COUNT=$(tar -tf "${PACKAGE_DIR}/templates.tar" 2>/dev/null | wc -l)
         print_success "templates.tar erstellt [aus templates/*.tpl] (${TEMPLATE_COUNT} Datei(en))"
     else
         print_warning "Keine .tpl Dateien in templates/ gefunden"
@@ -362,8 +617,8 @@ if [ -d "templates" ]; then
     cd ..
 elif ls *.tpl 1> /dev/null 2>&1; then
     # Templates liegen direkt im temp_edit
-    tar -cf ../templates.tar *.tpl
-    TEMPLATE_COUNT=$(tar -tf ../templates.tar 2>/dev/null | wc -l)
+    tar -cf "${PACKAGE_DIR}/templates.tar" *.tpl
+    TEMPLATE_COUNT=$(tar -tf "${PACKAGE_DIR}/templates.tar" 2>/dev/null | wc -l)
     print_success "templates.tar erstellt (aus *.tpl) (${TEMPLATE_COUNT} Datei(en))"
 else
     print_warning "Keine Templates gefunden"
@@ -373,8 +628,8 @@ fi
 if [ -d "acptemplates" ]; then
     cd acptemplates
     if ls *.tpl 1> /dev/null 2>&1; then
-        tar -cf ../../acptemplates.tar *.tpl
-        ACP_TEMPLATE_COUNT=$(tar -tf ../../acptemplates.tar 2>/dev/null | wc -l)
+        tar -cf "${PACKAGE_DIR}/acptemplates.tar" *.tpl
+        ACP_TEMPLATE_COUNT=$(tar -tf "${PACKAGE_DIR}/acptemplates.tar" 2>/dev/null | wc -l)
         print_success "acptemplates.tar erstellt (${ACP_TEMPLATE_COUNT} Datei(en))"
     else
         print_warning "Keine .tpl Dateien in acptemplates/ gefunden"
@@ -394,16 +649,16 @@ if [ -d "lib/bootstrap" ]; then
 fi
 
 if [ -n "$WCF_FILES_TO_PACK" ]; then
-    tar -cf ../files_wcf.tar $WCF_FILES_TO_PACK
-    WCF_FILE_COUNT=$(tar -tf ../files_wcf.tar 2>/dev/null | wc -l)
+    tar -cf "${PACKAGE_DIR}/files_wcf.tar" $WCF_FILES_TO_PACK
+    WCF_FILE_COUNT=$(tar -tf "${PACKAGE_DIR}/files_wcf.tar" 2>/dev/null | wc -l)
     if [ "$WCF_FILE_COUNT" -eq 0 ]; then
         log_error_with_context "files_wcf.tar ist leer!" "WCF-Dateien (js/ oder lib/bootstrap/) fehlen"
         exit 1
     fi
     
     # Pruefe ob lib/bootstrap/ enthalten ist
-    if tar -tf ../files_wcf.tar 2>/dev/null | grep -q "^lib/bootstrap/"; then
-        BOOTSTRAP_COUNT=$(tar -tf ../files_wcf.tar 2>/dev/null | grep -c "^lib/bootstrap/" || echo "0")
+    if tar -tf "${PACKAGE_DIR}/files_wcf.tar" 2>/dev/null | grep -q "^lib/bootstrap/"; then
+        BOOTSTRAP_COUNT=$(tar -tf "${PACKAGE_DIR}/files_wcf.tar" 2>/dev/null | grep -c "^lib/bootstrap/" || echo "0")
         print_success "files_wcf.tar erstellt (${WCF_FILE_COUNT} Datei(en), davon ${BOOTSTRAP_COUNT} Bootstrap-Datei(en))"
     else
         print_success "files_wcf.tar erstellt (${WCF_FILE_COUNT} Datei(en))"
@@ -414,7 +669,7 @@ else
 fi
 
 
-cd ..
+cd "$PACKAGE_DIR"
 
 print_success "TARs erfolgreich erstellt"
 echo ""

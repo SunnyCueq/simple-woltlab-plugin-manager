@@ -1,0 +1,259 @@
+/**
+ * Recovery Tool — nur Ergänzungen bei acp/style/style.css.
+ * Layout, Navigation, Hover und Abstände kommen aus dem echten ACP-CSS.
+ */
+
+.recovery-footer-meta {
+    text-align: right;
+    font-size: 13px;
+    margin: 16px;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+.recovery-footer-meta a {
+    color: inherit;
+}
+
+.recovery-auth-step[hidden] {
+    display: none !important;
+}
+
+#tplRecoveryTool.recovery-page-unified:not(.recovery-uses-acp-ui) .contentHeader {
+    display: none;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-intake-hero,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-intake-hero {
+    display: none !important;
+}
+
+/* Auth-Wizard: volle ACP-Breite (recovery-stub-acp-page), nicht Login-Schmalspur */
+#tplRecoveryAuth.recovery-uses-acp-ui.recovery-stub-acp-page form#recovery-auth-wizard {
+    margin: 0;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui.recovery-stub-acp-page .recovery-auth-step {
+    margin: 0 0 16px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui.recovery-stub-acp-page form#recovery-auth-wizard dl {
+    margin-bottom: 0;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui.recovery-stub-acp-page form#recovery-auth-wizard dd small {
+    display: block;
+    margin-top: 4px;
+    color: var(--wcfContentDimmedText);
+    line-height: 1.5;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui.recovery-stub-acp-page form#recovery-auth-wizard .formSubmit {
+    margin-top: 0;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui.recovery-stub-acp-page form#recovery-auth-wizard .formSubmit .button {
+    margin-right: 8px;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui.recovery-stub-acp-page #auth-step-3 .success {
+    margin: 0 0 20px;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui.recovery-stub-acp-page #auth-step-3 .formSubmit {
+    margin: 0;
+    clear: both;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui .error ol,
+#tplRecoveryAuth.recovery-uses-acp-ui .warning ol,
+#tplRecoveryAuth.recovery-uses-acp-ui .info ol {
+    margin: 12px 0 0;
+    padding-left: 1.5em;
+    list-style: decimal;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui .error ol li,
+#tplRecoveryAuth.recovery-uses-acp-ui .warning ol li,
+#tplRecoveryAuth.recovery-uses-acp-ui .info ol li {
+    display: list-item;
+    margin: 6px 0;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui .error ol code,
+#tplRecoveryAuth.recovery-uses-acp-ui .warning ol code {
+    display: inline;
+    white-space: normal;
+    word-break: break-word;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui .success > p,
+#tplRecoveryAuth.recovery-uses-acp-ui .warning > p,
+#tplRecoveryAuth.recovery-uses-acp-ui .error > p,
+#tplRecoveryAuth.recovery-uses-acp-ui .info > p,
+#tplRecoveryAuth.recovery-uses-acp-ui p.warning,
+#tplRecoveryAuth.recovery-uses-acp-ui #authAlert > p:first-child {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui .success fa-icon,
+#tplRecoveryAuth.recovery-uses-acp-ui .warning fa-icon,
+#tplRecoveryAuth.recovery-uses-acp-ui .error fa-icon,
+#tplRecoveryAuth.recovery-uses-acp-ui .info fa-icon,
+#tplRecoveryAuth.recovery-uses-acp-ui p.warning fa-icon,
+#tplRecoveryAuth.recovery-uses-acp-ui #authAlert fa-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-wcf-alert-body ul,
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-wcf-alert-body ol {
+    margin: 8px 0 0 1.5em;
+    padding: 0;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-syscheck-row--warn td,
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-syscheck-row--error td {
+    background: transparent !important;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recoveryLog,
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-log-pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-log-panel {
+    margin-top: 24px;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-log-panel > summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Mobil: Burger-Menü-Overlay (WCF pageMenuMain*, Daten aus acpPageMenu) */
+#tplRecoveryTool.recovery-uses-acp-ui .pageHeaderMenuMobile {
+    display: none;
+}
+
+@media screen and (max-width: 1024px) {
+    #tplRecoveryTool.recovery-uses-acp-ui .pageHeaderMenuMobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #tplRecoveryTool.recovery-uses-acp-ui .pageHeaderMenuMobileInactive,
+    #tplRecoveryTool.recovery-uses-acp-ui .pageHeaderMenuMobile.active .pageHeaderMenuMobileInactive {
+        display: flex;
+    }
+
+    #tplRecoveryTool.recovery-uses-acp-ui .pageHeaderMenuMobile.active .pageHeaderMenuMobileInactive {
+        display: none;
+    }
+
+    #tplRecoveryTool.recovery-uses-acp-ui .pageHeaderMenuMobileActive {
+        display: none;
+    }
+
+    #tplRecoveryTool.recovery-uses-acp-ui .pageHeaderMenuMobile.active .pageHeaderMenuMobileActive {
+        display: flex;
+    }
+}
+
+#recoveryMobileMenuOverlay.recovery-mobile-menu-overlay {
+    position: fixed;
+    inset: 50px 0 0 0;
+    z-index: 500;
+    background: var(--wcfContentBackground, #fff);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#recoveryMobileMenuOverlay .pageMenuMainContainer {
+    min-height: 100%;
+    padding: 12px 0 24px;
+}
+
+body.recovery-mobile-menu-open {
+    overflow: hidden;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .content > .info,
+#tplRecoveryTool.recovery-uses-acp-ui .content > .warning,
+#tplRecoveryTool.recovery-uses-acp-ui .content > .error,
+#tplRecoveryTool.recovery-uses-acp-ui .content > .success,
+#tplRecoveryAuth.recovery-stub-acp-page .content > .info,
+#tplRecoveryAuth.recovery-stub-acp-page .content > .warning {
+    margin: 0 0 20px;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .section + .section,
+#tplRecoveryTool.recovery-uses-acp-ui .section.tabMenuContainer + .section {
+    margin-top: 24px;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .section.tabMenuContainer .tabMenu li span {
+    cursor: default;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui form:empty {
+    display: none;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .content > .breadcrumbs {
+    margin: 0 0 20px;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .section .acpDashboard {
+    margin-top: 0;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .section .acpDashboard.recovery-acp-dashboard--actions {
+    grid-auto-rows: minmax(min-content, auto);
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .section .acpDashboard.recovery-acp-dashboard--actions .acpDashboardBox {
+    min-height: 0;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .section .acpDashboard.recovery-acp-dashboard--actions .acpDashboardBox__content {
+    max-height: none;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .section .acpDashboard.recovery-acp-dashboard--flow .acpDashboardBox__content {
+    max-height: none;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .tableList td.columnText .recovery-check-detail {
+    margin-bottom: 8px;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .tableList td.columnText ul.buttonGroup {
+    margin-top: 10px;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .section > .info,
+#tplRecoveryTool.recovery-uses-acp-ui .section > .warning,
+#tplRecoveryTool.recovery-uses-acp-ui .section > .success,
+#tplRecoveryTool.recovery-uses-acp-ui .section > .error {
+    margin: 16px 0 0;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .section > .formSubmit {
+    margin-top: 16px;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .content > .acpDashboard + .section,
+#tplRecoveryTool.recovery-uses-acp-ui .content > .info + .section {
+    margin-top: 24px;
+}

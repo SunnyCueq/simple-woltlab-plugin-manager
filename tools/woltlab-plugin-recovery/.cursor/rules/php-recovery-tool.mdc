@@ -1,0 +1,87 @@
+---
+description: PHP-Entwicklung Recovery Tool v2 (Stub + Paket, Syntax, Klammern)
+globs: stub/**/*.php,recovery-src/**/*.php,dev/**/*.php,dev/legacy-monolith.php,dist/plugin-recovery-tool.php
+alwaysApply: false
+---
+
+# PHP-Entwicklung: Recovery Tool v2 (Stub + recovery-src)
+
+## Pflicht nach jeder PHP-Änderung
+
+```bash
+cd tools/woltlab-plugin-recovery
+./dev/validate-php-syntax.sh
+# prüft stub/ und recovery-src/ (alle *.php)
+```
+
+**Erst wenn alle Dateien ohne Syntaxfehler sind**, darf committed oder deployed werden.
+
+---
+
+## Bekannte Fehlerquellen (bereits mehrfach aufgetreten)
+
+### 1. `*/` in Docblock-Kommentaren → vermeiden
+
+PHP-Block-Kommentare enden beim **ersten** `*/`. In `/** … */` darf `*/` nicht im erklärenden Text vorkommen.
+
+**Falsch:**
+
+```php
+/**
+ * Dateien wie lib/**/*.php werden gescannt.
+ * Kein Blockkommentar → keine */-Konflikte
+ */
+```
+
+**Richtig** (Leerzeichen zwischen `*` und `/`, oder Zeilen als `//`):
+
+```php
+/**
+ * Dateien wie lib/** /*.php werden gescannt.
+ * Kein Blockkommentar, keine * /-Konflikte
+ */
+// oder problematische Zeilen außerhalb des Docblocks als //
+```
+
+**Regel:** Vor jedem versehentlichen `*/` im Kommentartext ein Leerzeichen: `* /`. Bei Glob-Pfaden (`**/*.php`) bevorzugt `//`-Zeilen statt Docblock-Text.
+
+### 2. Fehlende `}` bei großen elseif-Blöcken → immer prüfen
+
+Jeder Modus folgt diesem Muster:
+
+```php
+elseif ($mode === RECOVERY_MODE_XYZ) {
+    // … gesamter Block …
+}   // ← dieser } muss vorhanden sein
+```
+
+Nach neuen Blöcken Klammern grob zählen (aus `tools/woltlab-plugin-recovery/`):
+
+```bash
+python3 -c "
+content = open('recovery-src/app.php').read()
+opens = content.count('{')
+closes = content.count('}')
+print(f'Öffnend: {opens}, Schließend: {closes}, Differenz: {opens - closes}')
+"
+```
+
+Differenz sollte **0** sein (kleine Abweichung nur durch Strings/Heredoc möglich).
+
+### 3. Versionsnummer nach Release-Änderung hochzählen
+
+`RECOVERY_VERSION` und `@version` im Datei-Docblock **synchron** halten und bei jeder Release-Version erhöhen:
+
+```php
+define('RECOVERY_VERSION', '1.5.XX');  // und @version oben in der Datei
+```
+
+---
+
+## Workflow bei jeder Änderung
+
+1. Änderung vornehmen
+2. `./dev/validate-php-syntax.sh`
+3. Bei Fehler: sofort korrigieren (nicht committen)
+4. Wenn „No syntax errors“: `RECOVERY_VERSION` und `@version` hochzählen
+5. Committen (nur auf ausdrückliche Anweisung des Nutzers)

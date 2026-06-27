@@ -1,0 +1,4492 @@
+/* Recovery-Tool: nur Ergänzungen — Basis ist acp/style/style.css oder WCFSetup.css */
+
+#tplRecoveryTool,
+#tplRecoveryAuth {
+    --recovery-content-max-width: 1120px;
+    --recovery-content-gutter: 24px;
+    --recovery-radius: 8px;
+    --recovery-radius-sm: 6px;
+    --recovery-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --recovery-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.14);
+    --recovery-space-xs: 8px;
+    --recovery-space-md: 16px;
+    --recovery-space-lg: 24px;
+    --recovery-hero-subtitle-color: #757575;
+    /* Navigation — funktioniert auf hellem und dunklem ACP-Theme */
+    --recovery-nav-surface: color-mix(in srgb, var(--wcfContentText, #333) 7%, transparent);
+    --recovery-nav-surface-hover: color-mix(in srgb, var(--wcfContentText, #333) 14%, transparent);
+    --recovery-nav-surface-active: color-mix(in srgb, var(--wcfStatusInfoBorder, #369) 22%, transparent);
+    --recovery-nav-border: var(--wcfContentBorderInner, #ddd);
+    --recovery-nav-accent: var(--wcfStatusInfoBorder, #369);
+    --recovery-nav-accent-text: var(--wcfStatusInfoText, #5b9bd5);
+}
+
+/* Inhalt zentrieren (1120px) — Header NICHT einengen (sonst graue Facade-Ränder) */
+#tplRecoveryTool #main > .layoutBoundary,
+#tplRecoveryAuth #main > .layoutBoundary {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: var(--recovery-content-max-width) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: var(--recovery-content-gutter) !important;
+    padding-right: var(--recovery-content-gutter) !important;
+}
+
+/* Logo mit Inhaltsspalte ausrichten, Header-Hintergrund durchgehend */
+#tplRecoveryTool #pageHeaderContainer,
+#tplRecoveryTool #pageHeader,
+#tplRecoveryTool #pageHeaderPanel,
+#tplRecoveryTool #pageHeaderFacade,
+#tplRecoveryAuth #pageHeaderContainer,
+#tplRecoveryAuth #pageHeader,
+#tplRecoveryAuth #pageHeaderPanel,
+#tplRecoveryAuth #pageHeaderFacade {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool #pageHeaderPanel > .layoutBoundary,
+#tplRecoveryTool #pageHeaderFacade > .layoutBoundary,
+#tplRecoveryAuth #pageHeaderPanel > .layoutBoundary,
+#tplRecoveryAuth #pageHeaderFacade > .layoutBoundary {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: max(
+        var(--recovery-content-gutter),
+        calc((100% - var(--recovery-content-max-width)) / 2 + var(--recovery-content-gutter))
+    ) !important;
+    padding-right: max(
+        var(--recovery-content-gutter),
+        calc((100% - var(--recovery-content-max-width)) / 2 + var(--recovery-content-gutter))
+    ) !important;
+}
+
+#tplRecoveryTool #content,
+#tplRecoveryAuth #content {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .recovery-footer-meta,
+#tplRecoveryAuth .recovery-footer-meta {
+    max-width: var(--recovery-content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--recovery-content-gutter);
+    padding-right: var(--recovery-content-gutter);
+    box-sizing: border-box;
+}
+
+.recovery-footer-meta {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--wcfContentBorderInner, #ddd);
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #888);
+    text-align: right;
+}
+
+.recovery-footer-meta a {
+    color: inherit;
+}
+
+/* Volle Content-Breite — WCFSetup .info floatet sonst als Sidebar */
+#tplRecoveryTool .content .info,
+#tplRecoveryTool .content .warning,
+#tplRecoveryTool .content .error,
+#tplRecoveryTool .content .success,
+#tplRecoveryTool .content .recovery-content-banner,
+#tplRecoveryTool .content .recovery-info-panel,
+#tplRecoveryTool .content .recovery-panel,
+#tplRecoveryTool .content .recovery-expert-panel,
+#tplRecoveryTool .content .recovery-log-hint,
+#tplRecoveryTool .content .recovery-status-feed,
+#tplRecoveryTool .content .recovery-hint-box,
+#tplRecoveryTool .content .recovery-rec-panel,
+#tplRecoveryTool .content .alert,
+#tplRecoveryTool .content .section,
+#tplRecoveryTool .content .recovery-run-block,
+#tplRecoveryTool .content .recovery-alert,
+#tplRecoveryTool .content .recovery-syscheck-page,
+#tplRecoveryTool .content .recovery-intake-hero,
+#tplRecoveryTool .content .recovery-syscheck-checks,
+#tplRecoveryTool .content .recovery-syscheck-support,
+#tplRecoveryTool .content .recovery-global-nav,
+#tplRecoveryTool .content .recovery-page-nav,
+#tplRecoveryTool .content .recovery-chip-bar,
+#tplRecoveryTool .content .recovery-toolbar-row,
+#tplRecoveryTool .content .recovery-breadcrumb,
+#tplRecoveryTool .content .recovery-progress,
+#tplRecoveryTool .content .contentNavigation.recovery-global-nav,
+#tplRecoveryTool .content .recovery-scenario-heading,
+#tplRecoveryTool .content .recovery-sub-nav {
+    clear: both;
+    display: block;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+#tplRecoveryTool .content .mode-grid {
+    clear: both;
+    display: grid !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.recovery-panel {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 20px;
+    padding: 0;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+    box-sizing: border-box;
+    box-shadow: var(--recovery-shadow, 0 2px 8px rgba(0, 0, 0, 0.08));
+}
+
+.recovery-panel__body {
+    padding: 16px 20px 20px;
+    line-height: 1.55;
+}
+
+.recovery-panel__body > :first-child {
+    margin-top: 0;
+}
+
+.recovery-panel__body > :last-child {
+    margin-bottom: 0;
+}
+
+/* Empfehlungen & Hinweise — Wizard-Diagnose */
+.recovery-rec-panel {
+    margin: 0;
+    padding: 0;
+}
+
+.recovery-rec-panel--critical {
+    padding: 16px 18px 12px;
+    border: 1px solid var(--wcfStatusErrorBorder, #c33);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfStatusErrorBackground, rgba(204, 51, 51, 0.12));
+    box-sizing: border-box;
+}
+
+.recovery-rec-panel--warning {
+    padding: 16px 18px 12px;
+    border: 1px solid var(--wcfStatusWarningBorder, #c93);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfStatusWarningBackground, rgba(204, 153, 51, 0.1));
+    box-sizing: border-box;
+}
+
+.recovery-rec-panel--ok {
+    padding: 16px 18px 12px;
+    border: 1px solid var(--wcfStatusSuccessBorder, #3a3);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfStatusSuccessBackground, rgba(51, 153, 51, 0.1));
+    box-sizing: border-box;
+}
+
+.recovery-security-notice {
+    margin: 24px 0 16px;
+    padding: 14px 18px;
+    border: 1px solid var(--wcfStatusErrorBorder, #e57373);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfStatusErrorBackground, rgba(198, 40, 40, 0.08));
+    box-sizing: border-box;
+}
+
+.recovery-security-notice__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px;
+    color: var(--wcfStatusErrorText, #c62828);
+}
+
+.recovery-security-notice__label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.recovery-security-notice__body p {
+    margin: 0 0 8px;
+}
+
+.recovery-security-notice__body p:last-child {
+    margin-bottom: 0;
+}
+
+.recovery-rec-panel__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.recovery-rec-summary {
+    margin: 0 0 16px;
+    padding: 12px 16px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border-left: 4px solid var(--wcfStatusInfoBorder, #369);
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.1));
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.recovery-rec-summary code {
+    font-size: 12px;
+}
+
+.recovery-rec-summary--critical {
+    border-left-color: var(--wcfStatusErrorBorder, #c33);
+    background: var(--wcfStatusErrorBackground, rgba(204, 51, 51, 0.12));
+}
+
+.recovery-rec-panel--critical .recovery-rec-summary--critical {
+    border-radius: var(--recovery-radius-md, 8px);
+    border: 2px solid var(--wcfStatusErrorBorder, #c62828);
+    border-left-width: 5px;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    background: var(--wcfStatusErrorBackground, rgba(198, 40, 40, 0.16));
+}
+
+.recovery-rec-panel--warning .recovery-rec-summary--warning {
+    border-radius: var(--recovery-radius-md, 8px);
+    border: 2px solid var(--wcfStatusWarningBorder, #e65100);
+    border-left-width: 5px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.recovery-rec-summary--warning {
+    border-left-color: var(--wcfStatusWarningBorder, #ff9800);
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.12));
+}
+
+.recovery-rec-summary--ok {
+    border-left-color: var(--wcfStatusSuccessBorder, #4caf50);
+    background: var(--wcfStatusSuccessBackground, rgba(76, 175, 80, 0.12));
+}
+
+.recovery-rec-loghint {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border-left: 4px solid var(--wcfStatusWarningBorder, #ffc107);
+    background: var(--wcfStatusWarningBackground, rgba(255, 193, 7, 0.12));
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.recovery-rec-section-label {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.recovery-rec-section-label--after {
+    margin: 22px 0 12px;
+    padding: 10px 14px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.recovery-rec-steps {
+    list-style: none;
+    margin: 0 0 4px;
+    padding: 0;
+    counter-reset: recovery-rec-step;
+}
+
+.recovery-rec-step {
+    counter-increment: recovery-rec-step;
+    margin: 0 0 10px;
+    padding: 12px 14px 12px 44px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-left-width: 4px;
+    background: var(--wcfContentBackground, rgba(0, 0, 0, 0.02));
+    position: relative;
+}
+
+.recovery-rec-step::before {
+    content: counter(recovery-rec-step) ".";
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--wcfStatusInfoText, #369);
+}
+
+.recovery-rec-step--required {
+    border-left-color: var(--wcfStatusWarningBorder, #ff9800);
+}
+
+.recovery-rec-step--optional {
+    border-left-color: var(--wcfStatusInfoBorder, #369);
+}
+
+.recovery-rec-step__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.recovery-rec-step__title {
+    font-size: 14px;
+}
+
+.recovery-rec-step__why {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+.recovery-rec-step__why code {
+    font-size: 12px;
+}
+
+.recovery-rec-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.recovery-rec-badge--required {
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.35));
+    color: var(--wcfContentText, #1a1a1a);
+}
+
+.recovery-rec-badge--recommended {
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.25));
+    color: var(--wcfStatusInfoText, #369);
+}
+
+.recovery-rec-next {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.recovery-rec-next li {
+    margin: 0;
+    padding: 12px 14px 12px 38px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-left: 4px solid var(--wcfStatusInfoBorder, #369);
+    background: var(--wcfContentBackground, rgba(0, 0, 0, 0.02));
+    line-height: 1.6;
+    font-size: 13px;
+    position: relative;
+}
+
+.recovery-rec-next li::before {
+    content: '→';
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    font-weight: 700;
+    color: var(--wcfStatusInfoText, #369);
+}
+
+.recovery-rec-next code {
+    font-size: 12px;
+}
+
+#tplRecoveryTool .recovery-panel__body .listViewItem__details code {
+    font-size: 12px;
+}
+
+.recovery-panel__body--sysinfo {
+    padding-top: var(--recovery-space-md, 16px);
+}
+
+.recovery-panel summary {
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+}
+
+.recovery-panel summary::-webkit-details-marker {
+    display: none;
+}
+
+.recovery-panel summary::before {
+    content: '▸';
+    color: var(--wcfStatusInfoText, #369);
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.recovery-panel[open] summary::before {
+    content: '▾';
+}
+
+.recovery-panel .recovery-info-hint,
+.recovery-panel__hint {
+    margin: 0 0 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+.recovery-panel summary .recovery-panel__status {
+    margin-left: auto;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+.recovery-panel__status--ok {
+    color: var(--wcfStatusSuccessText, #3a3);
+}
+
+.recovery-panel--compact:not([open]) .recovery-panel__body {
+    display: none;
+}
+
+.recovery-panel--compact .recovery-panel__body {
+    padding-top: 10px;
+    padding-bottom: 12px;
+}
+
+#tplRecoveryTool .content .recovery-panel + .recovery-panel {
+    margin-top: -4px;
+}
+
+.recovery-panel__body--sysinfo {
+    padding-top: var(--recovery-space-md, 16px);
+}
+
+.recovery-license-panel summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--recovery-space-md, 16px);
+}
+
+.recovery-license-panel summary::before {
+    display: block;
+    content: '▸';
+    color: var(--wcfStatusInfoText, #369);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-right: 2px;
+}
+
+.recovery-license-panel[open] summary::before {
+    content: '▾';
+}
+
+.recovery-license-panel__summary-title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--recovery-space-xs, 8px);
+    font-weight: 700;
+}
+
+.recovery-license-panel__summary-badge {
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.recovery-license-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--recovery-space-md, 16px);
+    margin: 0 0 var(--recovery-space-md, 16px);
+    padding-bottom: var(--recovery-space-md, 16px);
+    border-bottom: 1px solid var(--wcfContentBorderInner, #ddd);
+}
+
+.recovery-license-card__title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--recovery-space-xs, 8px);
+    font-size: 15px;
+}
+
+.recovery-sysinfo-cta-strip {
+    margin: 0 0 var(--recovery-space-md, 16px);
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    overflow: hidden;
+}
+
+.recovery-sysinfo-cta-strip__block {
+    padding: 16px 18px;
+}
+
+.recovery-sysinfo-cta-strip__block--support {
+    background: var(--wcfStatusInfoBackground, rgba(54, 153, 204, 0.1));
+}
+
+.recovery-sysinfo-cta-strip__heading {
+    display: flex;
+    align-items: center;
+    gap: var(--recovery-space-xs, 8px);
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.recovery-sysinfo-cta-strip__text {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#tplRecoveryTool .recovery-panel__body--sysinfo .info.recovery-sysinfo-intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding: 10px 14px;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.recovery-sysinfo-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin: 0 0 14px;
+}
+
+.recovery-sysinfo-toolbar .button {
+    margin: 0;
+}
+
+.recovery-expert-hint {
+    display: none !important;
+}
+
+.recovery-info-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.recovery-formSubmit--center {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+
+.recovery-log-hint {
+    margin: 0 0 24px;
+    padding: 16px 18px;
+    border-radius: 4px;
+    border-left: 4px solid var(--wcfStatusWarningBorder, #ff9800);
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.12));
+}
+
+.recovery-log-hint__title {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0 0 10px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.recovery-log-hint__message {
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+/* Startseite: mehrere Hinweise in einer Karte statt gestapelter Alerts */
+#tplRecoveryTool .recovery-status-feed {
+    margin: 0 0 24px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfContentBackground, #fff);
+    overflow: hidden;
+}
+
+#tplRecoveryTool .recovery-status-feed__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfTabularBoxHead, rgba(0, 0, 0, 0.04));
+}
+
+#tplRecoveryTool .recovery-status-feed__heading {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+#tplRecoveryTool .recovery-status-feed__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#tplRecoveryTool .recovery-status-feed__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--wcfContentBorderInner, #ddd);
+    line-height: 1.55;
+    font-size: 14px;
+}
+
+#tplRecoveryTool .recovery-status-feed__item:last-child {
+    border-bottom: none;
+}
+
+#tplRecoveryTool .recovery-status-feed__icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    opacity: 0.92;
+}
+
+#tplRecoveryTool .recovery-status-feed__content {
+    flex: 1;
+    min-width: 0;
+}
+
+#tplRecoveryTool .recovery-status-feed__title {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+#tplRecoveryTool .recovery-status-feed__meta {
+    margin: 0 0 6px;
+    font-size: 12px;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+#tplRecoveryTool .recovery-status-feed__body {
+    margin: 0;
+    color: var(--wcfContentText, inherit);
+}
+
+#tplRecoveryTool .recovery-status-feed__body p {
+    margin: 0;
+}
+
+#tplRecoveryTool .recovery-status-feed__body--mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+#tplRecoveryTool .recovery-status-feed__item--success {
+    border-left: 4px solid var(--wcfStatusSuccessBorder, #4caf50);
+    background: var(--wcfStatusSuccessBackground, rgba(76, 175, 80, 0.1));
+}
+
+#tplRecoveryTool .recovery-status-feed__item--warning {
+    border-left: 4px solid var(--wcfStatusWarningBorder, #ff9800);
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.1));
+}
+
+#tplRecoveryTool .recovery-status-feed__item--error {
+    border-left: 4px solid var(--wcfStatusErrorBorder, #c62828);
+    background: rgba(198, 40, 40, 0.08);
+}
+
+#tplRecoveryTool .recovery-status-feed__item--info {
+    border-left: 4px solid var(--wcfStatusInfoBorder, #369);
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.08));
+}
+
+#tplRecoveryTool .contentHeader {
+    margin-bottom: 0;
+}
+
+/* =============================================================================
+   DESIGN-SYSTEM — Primitives (eine Quelle für alle Seiten)
+   recovery-chip, recovery-chip-bar, recovery-surface, recovery-toolbar-row
+   ============================================================================= */
+
+#tplRecoveryTool .recovery-surface,
+#tplRecoveryAuth .recovery-surface {
+    border: 1px solid var(--recovery-nav-border);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--recovery-nav-surface);
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .recovery-chip-bar,
+#tplRecoveryAuth .recovery-chip-bar {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    float: none !important;
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--recovery-nav-surface);
+    border: 1px solid var(--recovery-nav-border);
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .recovery-chip-bar--grow,
+#tplRecoveryAuth .recovery-chip-bar--grow {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+#tplRecoveryTool .recovery-chip,
+#tplRecoveryAuth .recovery-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+    padding: 8px 14px;
+    border-radius: calc(var(--recovery-radius-sm, 6px) - 2px);
+    text-decoration: none !important;
+    color: var(--wcfContentText, inherit) !important;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+    box-sizing: border-box;
+    white-space: nowrap;
+    transition:
+        background 0.16s ease,
+        border-color 0.16s ease,
+        color 0.16s ease,
+        box-shadow 0.16s ease,
+        transform 0.12s ease;
+}
+
+#tplRecoveryTool a.recovery-chip:hover,
+#tplRecoveryAuth a.recovery-chip:hover {
+    background: var(--recovery-nav-surface-hover) !important;
+    border-color: var(--recovery-nav-border) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    text-decoration: none !important;
+}
+
+#tplRecoveryTool a.recovery-chip:active,
+#tplRecoveryAuth a.recovery-chip:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+#tplRecoveryTool .recovery-chip:focus-visible,
+#tplRecoveryAuth .recovery-chip:focus-visible {
+    outline: 2px solid var(--recovery-nav-accent);
+    outline-offset: 2px;
+}
+
+#tplRecoveryTool .recovery-chip.is-active,
+#tplRecoveryTool .recovery-chip.is-current,
+#tplRecoveryAuth .recovery-chip.is-active,
+#tplRecoveryAuth .recovery-chip.is-current {
+    background: var(--recovery-nav-surface-active) !important;
+    border-color: var(--recovery-nav-accent) !important;
+    color: var(--recovery-nav-accent-text) !important;
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--recovery-nav-accent) 35%, transparent),
+        0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+#tplRecoveryTool a.recovery-chip.is-active:hover,
+#tplRecoveryAuth a.recovery-chip.is-active:hover {
+    background: color-mix(in srgb, var(--recovery-nav-accent) 28%, transparent) !important;
+}
+
+#tplRecoveryTool .recovery-chip.is-current,
+#tplRecoveryAuth .recovery-chip.is-current {
+    cursor: default;
+}
+
+#tplRecoveryTool .recovery-chip--accent,
+#tplRecoveryAuth .recovery-chip--accent {
+    color: var(--recovery-nav-accent-text) !important;
+    border-color: color-mix(in srgb, var(--recovery-nav-accent) 40%, transparent);
+    background: color-mix(in srgb, var(--recovery-nav-accent) 10%, transparent);
+}
+
+#tplRecoveryTool a.recovery-chip--accent:hover,
+#tplRecoveryAuth a.recovery-chip--accent:hover {
+    background: color-mix(in srgb, var(--recovery-nav-accent) 22%, transparent) !important;
+    border-color: var(--recovery-nav-accent) !important;
+}
+
+#tplRecoveryTool .recovery-chip--end,
+#tplRecoveryAuth .recovery-chip--end {
+    margin-left: auto;
+}
+
+#tplRecoveryTool .recovery-toolbar-row,
+#tplRecoveryAuth .recovery-toolbar-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 12px;
+}
+
+#tplRecoveryTool .recovery-toolbar-row__label,
+#tplRecoveryAuth .recovery-toolbar-row__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--wcfContentDimmedText, #888);
+    flex-shrink: 0;
+}
+
+/* Seiten-Navigation — nur Anordnung, keine Extra-Karte */
+#tplRecoveryTool nav.contentNavigation.recovery-global-nav,
+#tplRecoveryAuth nav.recovery-global-nav {
+    clear: both;
+    display: block !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .recovery-page-nav,
+#tplRecoveryAuth .recovery-page-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 0 20px;
+    padding: 0 0 14px;
+    border-bottom: 1px solid var(--recovery-nav-border);
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .recovery-breadcrumb__list,
+#tplRecoveryAuth .recovery-breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#tplRecoveryTool .recovery-breadcrumb__item,
+#tplRecoveryAuth .recovery-breadcrumb__item {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+#tplRecoveryTool .recovery-breadcrumb__item:not(:last-child)::after,
+#tplRecoveryAuth .recovery-breadcrumb__item:not(:last-child)::after {
+    content: '›';
+    margin: 0 6px 0 8px;
+    color: var(--wcfContentDimmedText, #888);
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0.75;
+    pointer-events: none;
+}
+
+#tplRecoveryTool .recovery-breadcrumb .recovery-chip,
+#tplRecoveryAuth .recovery-breadcrumb .recovery-chip {
+    font-size: 13px;
+    padding: 6px 12px;
+}
+
+#tplRecoveryTool .recovery-progress,
+#tplRecoveryAuth .recovery-progress {
+    margin: 0 0 24px;
+    padding: 14px 16px 12px;
+}
+
+#tplRecoveryTool .recovery-progress .wizardSteps,
+#tplRecoveryAuth .recovery-progress .wizardSteps {
+    margin-bottom: 0;
+}
+
+.mode-grid .mode-button.recovery-mode-button--primary {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.08));
+}
+
+.mode-grid .mode-button fa-icon {
+    display: block;
+    align-self: flex-start;
+    margin-bottom: var(--recovery-space-xs, 8px);
+}
+
+.recovery-scenario-heading {
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.recovery-scenario-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--recovery-space-md, 16px);
+    margin-bottom: var(--recovery-space-lg, 24px);
+    width: 100%;
+    box-sizing: border-box;
+    clear: both;
+    float: none !important;
+}
+
+/* WCF .content > * { display:block; width:100% } bricht Grid — explizit überschreiben */
+#tplRecoveryTool .content > .recovery-scenario-grid,
+#tplRecoveryTool .content .recovery-scenario-grid {
+    display: grid !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+#tplRecoveryTool .content .recovery-scenario-grid--2 {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px;
+}
+
+#tplRecoveryTool .content .recovery-scenario-grid--3,
+#tplRecoveryTool .content .recovery-scenario-grid--backup.recovery-scenario-grid--3 {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px;
+}
+
+#tplRecoveryTool .content .recovery-scenario-grid > .recovery-scenario-card,
+#tplRecoveryTool .content .recovery-scenario-grid > .recovery-backup-card,
+#tplRecoveryTool .content .recovery-scenario-grid > a {
+    display: flex !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0;
+    float: none !important;
+    clear: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+@media (max-width: 719px) {
+    #tplRecoveryTool .content .recovery-scenario-grid--2,
+    #tplRecoveryTool .content .recovery-scenario-grid--3,
+    #tplRecoveryTool .content .recovery-scenario-grid--backup.recovery-scenario-grid--3 {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+.recovery-scenario-grid--backup {
+    margin-bottom: var(--recovery-space-md, 16px);
+}
+
+.recovery-backup-card {
+    cursor: default;
+    text-decoration: none;
+    min-height: 240px;
+}
+
+.recovery-backup-card h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.recovery-backup-card p {
+    margin: 0;
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+.recovery-backup-card__actions {
+    margin-top: auto;
+    padding-top: var(--recovery-space-md, 16px);
+}
+
+.recovery-backup-card__actions form,
+.recovery-backup-card__actions .button {
+    width: 100%;
+}
+
+.recovery-backup-card__actions .button {
+    justify-content: center;
+}
+
+.recovery-scenario-card {
+    position: relative;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    padding: var(--recovery-space-lg, 24px);
+    padding-top: calc(var(--recovery-space-lg, 24px) + 4px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius, 8px);
+    text-decoration: none;
+    background: var(--wcfContentBackground, #fff);
+    box-shadow: var(--recovery-shadow, 0 2px 8px rgba(0, 0, 0, 0.08));
+    transition: border-color 0.2s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    overflow: hidden;
+}
+
+.recovery-scenario-card:hover {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    transform: translateY(-3px);
+    box-shadow: var(--recovery-shadow-hover, 0 6px 20px rgba(0, 0, 0, 0.14));
+}
+
+.recovery-scenario-card--primary {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.08));
+}
+
+.recovery-scenario-card__badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px 12px;
+    border-bottom-left-radius: var(--recovery-radius-sm, 6px);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.4;
+    pointer-events: none;
+}
+
+.recovery-scenario-card__badge--primary {
+    background: var(--wcfStatusInfoBorder, #369);
+    color: #fff;
+}
+
+.recovery-scenario-card__badge--admin {
+    background: var(--wcfStatusSuccessBackground, rgba(76, 175, 80, 0.25));
+    color: var(--wcfStatusSuccessText, #2e7d32);
+    border-bottom: 1px solid var(--wcfStatusSuccessBorder, #4caf50);
+    border-left: 1px solid var(--wcfStatusSuccessBorder, #4caf50);
+}
+
+.recovery-scenario-card__badge--plugin {
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.06));
+    color: var(--wcfContentDimmedText, #666);
+    border-bottom: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-left: 1px solid var(--wcfContentBorderInner, #ddd);
+}
+
+.recovery-scenario-card__badge--step {
+    background: var(--wcfStatusInfoBorder, #369);
+    color: #fff;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 12px;
+    min-width: 26px;
+    padding: 4px 9px;
+    text-align: center;
+}
+
+.recovery-copy-row {
+    display: grid;
+    grid-template-columns: minmax(120px, 28%) 1fr auto;
+    gap: 10px 12px;
+    align-items: center;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 4px;
+}
+
+@media (max-width: 640px) {
+    .recovery-copy-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--recovery-space-md, 16px);
+}
+
+.mode-grid .mode-button {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    min-height: 128px;
+    padding: var(--recovery-space-md, 16px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius, 8px);
+    text-decoration: none;
+    color: inherit;
+    background: var(--wcfContentBackground, #fff);
+    box-shadow: var(--recovery-shadow, 0 2px 8px rgba(0, 0, 0, 0.08));
+    transition: border-color 0.2s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.mode-grid .mode-button[class*="recovery-mode-button--badge-"]::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 28px 28px 0;
+    border-color: transparent var(--recovery-mode-badge-color, transparent) transparent transparent;
+    pointer-events: none;
+}
+
+.mode-grid .mode-button.recovery-mode-button--badge-primary {
+    --recovery-mode-badge-color: #00897b;
+}
+
+.mode-grid .mode-button.recovery-mode-button--badge-info {
+    --recovery-mode-badge-color: var(--wcfStatusInfoBorder, #2196f3);
+}
+
+.mode-grid .mode-button.recovery-mode-button--badge-danger {
+    --recovery-mode-badge-color: var(--wcfStatusErrorBorder, #f44336);
+}
+
+.mode-grid .mode-button.recovery-mode-button--badge-warning {
+    --recovery-mode-badge-color: var(--wcfStatusWarningBorder, #ff9800);
+}
+
+.mode-grid .mode-button.recovery-mode-button--badge-neutral {
+    --recovery-mode-badge-color: var(--wcfContentDimmedText, #9e9e9e);
+}
+
+.mode-grid .mode-button.recovery-mode-button--badge-success {
+    --recovery-mode-badge-color: var(--wcfStatusSuccessBorder, #4caf50);
+}
+
+.mode-grid .mode-button.recovery-mode-button--badge-purple {
+    --recovery-mode-badge-color: #7e57c2;
+}
+
+.mode-grid .mode-button.recovery-mode-button--badge-admin {
+    --recovery-mode-badge-color: #5c6bc0;
+}
+
+.mode-grid .mode-button strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    line-height: 1.35;
+}
+
+.mode-grid .mode-button span {
+    display: block;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--wcfContentDimmedText, #666);
+    flex: 1;
+}
+
+.mode-grid .mode-button:hover {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    transform: translateY(-2px);
+    box-shadow: var(--recovery-shadow-hover, 0 6px 20px rgba(0, 0, 0, 0.14));
+}
+
+#tplRecoveryTool .recoveryLog,
+#tplRecoveryTool .recovery-cmd-block,
+#tplRecoveryTool pre.recoveryLog,
+#tplRecoveryAuth .recoveryLog,
+#tplRecoveryAuth .recovery-cmd-block,
+#tplRecoveryAuth pre.recoveryLog {
+    display: block !important;
+    max-height: 320px;
+    overflow: auto;
+    padding: 12px 14px !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #e8ecf0 !important;
+    background: #1e2832 !important;
+    border: 1px solid #3d4f5f !important;
+    border-radius: 4px;
+    box-shadow: none !important;
+}
+
+#tplRecoveryTool pre:not(.recoveryLog):not(.recovery-cmd-block),
+#tplRecoveryAuth pre:not(.recoveryLog):not(.recovery-cmd-block) {
+    color: #e8ecf0 !important;
+    background: #1e2832 !important;
+    border: 1px solid #3d4f5f !important;
+}
+
+/* WoltLab-Paket-Installation: Wizard-Schritte (horizontal — ACP überschreibt sonst nav/div) */
+#tplRecoveryTool div.wizardSteps,
+#tplRecoveryAuth div.wizardSteps,
+div.wizardSteps.recovery-wizard-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    margin: 0 0 28px;
+    padding: 0;
+    gap: 0;
+    list-style: none;
+    width: 100%;
+}
+
+#tplRecoveryTool .wizardStep,
+#tplRecoveryAuth .wizardStep,
+div.wizardSteps .wizardStep {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+    width: auto !important;
+}
+
+.wizardStep::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--wcfContentBorderInner, #ddd);
+    z-index: 0;
+}
+
+.wizardStep:last-child::after {
+    display: none;
+}
+
+#tplRecoveryTool .wizardStepNumber,
+#tplRecoveryAuth .wizardStepNumber,
+.wizardStepNumber {
+    width: 40px !important;
+    max-width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--wcfSidebarBackground, #e8e8e8);
+    color: var(--wcfContentDimmedText, #888);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    position: relative;
+    z-index: 1;
+    border: 2px solid var(--wcfContentBorderInner, #ddd);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.wizardStep.active .wizardStepNumber {
+    background: var(--recovery-nav-accent, var(--wcfStatusInfoBorder, #369));
+    color: #fff;
+    border-color: var(--recovery-nav-accent, var(--wcfStatusInfoBorder, #369));
+}
+
+.wizardStep.completed .wizardStepNumber {
+    background: var(--wcfStatusSuccessBorder, #3a3);
+    border-color: var(--wcfStatusSuccessBorder, #3a3);
+    font-size: 0;
+    line-height: 0;
+    color: transparent;
+}
+
+.wizardStep.completed .wizardStepNumber::after {
+    content: '\2713';
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#tplRecoveryTool .wizardStepLabel,
+#tplRecoveryAuth .wizardStepLabel,
+.wizardStepLabel {
+    display: block;
+    width: auto !important;
+    max-width: 100%;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--wcfContentDimmedText, #888);
+    text-align: center;
+    line-height: 1.35;
+    padding: 0 6px;
+    box-sizing: border-box;
+}
+
+.wizardStep.active .wizardStepLabel {
+    color: var(--recovery-nav-accent-text, var(--wcfStatusInfoText, #369));
+    font-weight: 600;
+}
+
+.wizardStep.completed .wizardStepLabel {
+    color: var(--wcfStatusSuccessText, #3a3);
+}
+
+.recovery-wizard-nav {
+    margin-bottom: 28px;
+}
+
+#tplRecoveryTool .section,
+#tplRecoveryAuth .section {
+    margin-bottom: 24px;
+}
+
+.recovery-wizard-progress {
+    margin: 0 0 24px;
+    padding: 16px 18px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 6px;
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+}
+
+.recovery-wizard-progress progress {
+    width: 100%;
+    height: 8px;
+    margin-bottom: 10px;
+}
+
+.recovery-wizard-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    font-size: 13px;
+}
+
+.recovery-wizard-steps li {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+}
+
+.recovery-wizard-steps li[style*="font-weight:600"] {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.12));
+    font-weight: 600 !important;
+}
+
+.recovery-step-help {
+    margin: 4px 0 12px 24px;
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+#recoveryPipPreviewModal[hidden] {
+    display: none !important;
+}
+
+#recoveryPipPreviewModal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.recovery-pip-preview-dialog {
+    width: 100%;
+    max-width: 820px;
+    max-height: 85vh;
+    overflow: auto;
+    background: var(--wcfContentBackground, #fff);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 4px;
+    padding: 20px;
+}
+
+#recovery-loading-overlay {
+    margin: 20px 0;
+}
+
+#recovery-loading-overlay .recovery-loading-head {
+    align-items: center;
+    display: inline-flex;
+    gap: 10px;
+}
+
+#recovery-loading-overlay small {
+    display: block;
+    margin-top: 8px;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+.recovery-loading-head {
+    align-items: center;
+    display: inline-flex;
+    gap: 10px;
+}
+
+.recovery-loading-head fa-icon {
+    flex-shrink: 0;
+}
+
+.recovery-intake-hero {
+    margin: 0 0 28px;
+    padding: 28px 32px;
+    border-radius: 8px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: linear-gradient(
+        135deg,
+        var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.1)) 0%,
+        var(--wcfContentBackground, #fff) 55%
+    );
+}
+
+.recovery-intake-hero__icon {
+    color: var(--wcfStatusInfoText, #369);
+    margin-bottom: 14px;
+}
+
+.recovery-intake-hero h1 {
+    margin: 0 0 10px;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.recovery-intake-hero .subtitle {
+    margin: 0;
+    max-width: 720px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--recovery-hero-subtitle-color, var(--wcfContentDimmedText, #757575));
+}
+
+#tplRecoveryTool .recovery-intake-hero .subtitle,
+#tplRecoveryTool .recovery-intake-hero--compact .subtitle,
+#tplRecoveryTool .content .recovery-intake-hero p.subtitle,
+#tplRecoveryTool p.subtitle {
+    color: var(--recovery-hero-subtitle-color, var(--wcfContentDimmedText, #757575)) !important;
+    opacity: 1 !important;
+}
+
+html[data-color-scheme="dark"] #tplRecoveryTool .recovery-intake-hero .subtitle,
+html[data-color-scheme="dark"] #tplRecoveryTool .recovery-intake-hero--compact .subtitle,
+html[data-color-scheme="dark"] #tplRecoveryTool .content .recovery-intake-hero p.subtitle,
+html[data-color-scheme="dark"] #tplRecoveryTool p.subtitle,
+html[data-color-scheme="dark"] #tplRecoveryTool .recovery-intake-hero .subtitle strong {
+    color: #e8e8e8 !important;
+    opacity: 1 !important;
+}
+
+html[data-color-scheme="dark"] #tplRecoveryTool,
+html[data-color-scheme="dark"] #tplRecoveryTool .recovery-intake-hero {
+    --recovery-hero-subtitle-color: #e8e8e8;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-color-scheme="dark"] #tplRecoveryTool .recovery-intake-hero .subtitle,
+    html[data-color-scheme="dark"] #tplRecoveryTool .recovery-intake-hero--compact .subtitle,
+    html[data-color-scheme="dark"] #tplRecoveryTool .content .recovery-intake-hero p.subtitle,
+    html[data-color-scheme="dark"] #tplRecoveryTool p.subtitle {
+        color: #e8e8e8 !important;
+        opacity: 1 !important;
+    }
+}
+
+.recovery-intake-hero--compact {
+    margin: 0 0 20px;
+    padding: 16px 20px;
+}
+
+#tplRecoveryTool.recovery-page-wizard .wizardSteps {
+    margin-bottom: 20px;
+}
+
+#tplRecoveryTool .recovery-wizard-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--recovery-space-lg, 24px);
+}
+
+#tplRecoveryTool .recovery-wizard-stack > * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.recovery-intake-hero--compact h1 {
+    font-size: 20px;
+    margin: 0 0 6px;
+}
+
+.recovery-intake-hero--compact .subtitle {
+    font-size: 14px;
+}
+
+.recovery-intake-hero--compact .recovery-intake-hero__icon {
+    margin-bottom: 8px;
+}
+
+#tplRecoveryTool #content .content {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Einheitlicher vertikaler Rhythmus auf Hauptseiten */
+#tplRecoveryTool .recovery-content-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--recovery-space-lg, 24px);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .recovery-content-stack > * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Kompakt-Seiten ohne ACP-native UI: Hero statt contentHeader */
+#tplRecoveryTool.recovery-page-unified:not(.recovery-uses-acp-ui) .contentHeader {
+    display: none;
+}
+
+/* ACP-native UI: WCF contentHeader + tabMenu wie im ACP */
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-page-nav,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-page-nav {
+    margin: 0 0 24px;
+    padding: 0;
+    border-bottom: none;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-main-tabMenu,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-main-tabMenu {
+    margin-bottom: 0;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-main-tabMenu > ul,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-main-tabMenu > ul {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-main-tabMenu .recovery-tabMenu-acp,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-main-tabMenu .recovery-tabMenu-acp {
+    margin-left: auto;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-expert-tabMenu,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-expert-tabMenu {
+    margin-top: 16px;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .breadcrumb,
+#tplRecoveryAuth.recovery-uses-acp-ui .breadcrumb {
+    margin: 14px 0 0;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-intake-hero,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-intake-hero {
+    display: none !important;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-progress.recovery-surface,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-progress.recovery-surface {
+    margin-bottom: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .content .info,
+#tplRecoveryTool.recovery-uses-acp-ui .content .warning,
+#tplRecoveryTool.recovery-uses-acp-ui .content .success,
+#tplRecoveryTool.recovery-uses-acp-ui .content .error,
+#tplRecoveryAuth.recovery-uses-acp-ui .content .info,
+#tplRecoveryAuth.recovery-uses-acp-ui .content .warning,
+#tplRecoveryAuth.recovery-uses-acp-ui .content .success,
+#tplRecoveryAuth.recovery-uses-acp-ui .content .error {
+    margin-bottom: 16px;
+}
+
+#tplRecoveryTool.recovery-page-unified .recovery-page-nav {
+    margin-bottom: 20px;
+}
+
+#tplRecoveryTool.recovery-page-unified .recovery-chip-bar {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #tplRecoveryTool .recovery-chip,
+    #tplRecoveryAuth .recovery-chip {
+        transition: none;
+    }
+
+    #tplRecoveryTool a.recovery-chip:active,
+    #tplRecoveryAuth a.recovery-chip:active {
+        transform: none;
+    }
+}
+
+#tplRecoveryTool.recovery-page-wizard .recovery-intake-hero--compact {
+    margin-top: 0;
+}
+
+#tplRecoveryTool.recovery-page-wizard .wizardSteps {
+    margin-bottom: 20px;
+}
+
+#tplRecoveryTool .recovery-wizard-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--recovery-space-lg, 24px);
+}
+
+#tplRecoveryTool .recovery-wizard-stack > * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#tplRecoveryTool #content .content h2,
+#tplRecoveryTool #content .content .alert,
+#tplRecoveryTool #content .sectionTitle {
+    width: 100%;
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+#tplRecoveryTool #content .alert {
+    overflow: auto;
+    max-height: none;
+    margin: 0 0 20px;
+}
+
+#tplRecoveryTool #content .alert:last-child {
+    margin-bottom: 20px;
+}
+
+/* Text-Link-Submit: eigene Klasse statt WCF buttonTextLink (Konflikt mit .button) */
+#tplRecoveryTool button.recovery-text-link-btn,
+#tplRecoveryTool .formSubmit button.recovery-text-link-btn,
+#tplRecoveryTool .recovery-action-bar button.recovery-text-link-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100%;
+    height: auto !important;
+    min-height: 36px !important;
+    line-height: 1.4 !important;
+    padding: 8px 12px !important;
+    margin: 0;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--wcfStatusInfoText, #369) !important;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-align: center;
+    white-space: normal;
+    cursor: pointer;
+    align-self: center;
+    flex: 0 0 auto;
+    vertical-align: middle;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+#tplRecoveryTool button.recovery-text-link-btn:empty {
+    display: none !important;
+}
+
+#tplRecoveryTool button.recovery-text-link-btn:hover,
+#tplRecoveryTool button.recovery-text-link-btn:focus,
+#tplRecoveryTool button.recovery-text-link-btn:focus-visible {
+    text-decoration: none;
+    color: var(--wcfStatusInfoText, #369) !important;
+    background: transparent !important;
+    outline: 2px solid var(--wcfStatusInfoText, #369);
+    outline-offset: 2px;
+}
+
+#tplRecoveryTool .recovery-action-bar a.button.buttonSmall,
+#tplRecoveryTool .recovery-action-bar button.button.buttonSmall,
+#tplRecoveryTool .recovery-action-bar .button.buttonSmall {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 36px !important;
+    line-height: 1.35 !important;
+    padding: 8px 14px !important;
+    white-space: nowrap;
+    flex: 0 0 auto;
+    align-self: center;
+}
+
+.recovery-planned-summary {
+    max-height: 280px;
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: pre;
+    word-break: normal;
+    margin: 0;
+}
+
+.recovery-planned-actions__dryrun {
+    margin-bottom: 14px;
+}
+
+.recovery-uninstall-backup {
+    margin-bottom: 24px;
+}
+
+.recovery-uninstall-backup-intro,
+.recovery-uninstall-backup-empty {
+    margin: 0 0 16px;
+}
+
+.recovery-uninstall-backup-intro__text {
+    margin: 0;
+    line-height: 1.55;
+}
+
+.recovery-uninstall-backup-intro__text .recovery-panel__hint {
+    display: block;
+    margin-top: 6px;
+}
+
+.recovery-action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 8px;
+    box-sizing: border-box;
+}
+
+.recovery-action-bar .recovery-download-form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.recovery-action-bar .button,
+.recovery-action-bar .buttonPrimary,
+.recovery-action-bar .recovery-text-link-btn {
+    min-height: 38px;
+    white-space: nowrap;
+}
+
+.recovery-action-bar .recovery-text-link-btn {
+    white-space: normal;
+}
+
+.recovery-uninstall-backup-fallback-hint {
+    margin: 0 0 20px;
+}
+
+.recovery-uninstall-sql-preview {
+    margin-top: 0;
+}
+
+.recovery-sql-preview {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-height: 220px;
+    height: 280px;
+    margin: 0;
+    padding: 12px 14px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #e8ecf0;
+    background: #1e2832;
+    border: 1px solid #3d4f5f;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.recovery-uninstall-destructive-hint {
+    margin: 0 0 16px;
+}
+
+.recovery-uninstall-execute-form {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 8px;
+    box-sizing: border-box;
+}
+
+.recovery-uninstall-execute-actions {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#tplRecoveryTool .recovery-uninstall-execute-actions .btn-danger,
+#tplRecoveryTool button.btn-danger {
+    background: var(--wcfStatusErrorBackground, #c62828);
+    border-color: var(--wcfStatusErrorBorder, #b71c1c);
+    color: #fff;
+}
+
+#tplRecoveryTool .recovery-uninstall-execute-actions .btn-danger:hover,
+#tplRecoveryTool .recovery-uninstall-execute-actions .btn-danger:focus,
+#tplRecoveryTool button.btn-danger:hover,
+#tplRecoveryTool button.btn-danger:focus {
+    background: var(--wcfStatusErrorText, #b71c1c);
+    border-color: var(--wcfStatusErrorBorder, #b71c1c);
+    color: #fff;
+}
+
+.recovery-plan-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.recovery-plan-list .listViewItem label.listViewItem__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.recovery-dryrun-panel--compact {
+    margin: 16px 0 0;
+    padding: 10px 14px;
+}
+
+.recovery-package-step-hint {
+    margin: 0 0 16px;
+    font-size: 13px;
+    text-align: center;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.recovery-backup-actions .button--cache {
+    border-color: var(--wcfStatusWarningBorder, #ff9800);
+    color: var(--wcfStatusWarningText, #e65100);
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.12));
+}
+
+.recovery-backup-actions .button--home {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    color: var(--wcfStatusInfoText, #369);
+}
+
+#tplRecoveryTool pre.recovery-cmd-block:focus,
+#tplRecoveryTool pre.recovery-cmd-block:active {
+    outline: 2px solid var(--wcfStatusInfoBorder, #369);
+    outline-offset: 2px;
+}
+
+#tplRecoveryTool .formSubmit,
+#tplRecoveryAuth .formSubmit,
+#tplRecoveryTool .contentNavigation.formSubmit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 14px;
+    margin-top: 24px;
+    padding-top: 8px;
+}
+
+.recovery-content-banner {
+    margin: 0 0 20px;
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.recovery-content-banner a {
+    font-weight: 600;
+}
+
+/* ACP-Dashboard-Boxen (Diagnose) */
+.acpDashboardBoxContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--recovery-space-md, 16px);
+    margin: 0 0 var(--recovery-space-lg, 24px);
+    align-items: stretch;
+}
+
+.acpDashboardBoxContainer--discovery {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+@media (min-width: 768px) {
+    .acpDashboardBoxContainer--discovery {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.acpDashboardBox {
+    display: flex;
+    flex-direction: column;
+    gap: var(--recovery-space-xs, 8px);
+    padding: var(--recovery-space-md, 16px) 18px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius, 8px);
+    background: var(--wcfContentBackground, #fff);
+    min-height: 120px;
+    box-sizing: border-box;
+    box-shadow: var(--recovery-shadow, 0 2px 8px rgba(0, 0, 0, 0.08));
+}
+
+.acpDashboardBox--discovery {
+    position: relative;
+    overflow: hidden;
+    min-height: 132px;
+    padding: var(--recovery-space-md, 16px);
+    transition: border-color 0.2s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.acpDashboardBox--discovery:hover {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    box-shadow: var(--recovery-shadow-hover, 0 6px 20px rgba(0, 0, 0, 0.12));
+    transform: translateY(-2px);
+}
+
+.acpDashboardBox__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 4px;
+}
+
+.acpDashboardBox__label {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--wcfContentText, inherit);
+}
+
+.acpDashboardBox__desc {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--wcfContentDimmedText, #666);
+    flex: 1;
+}
+
+.acpDashboardBox--discovery .acpDashboardBox__desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.acpDashboardBox__icon {
+    color: var(--wcfStatusInfoText, #369);
+    opacity: 0.9;
+}
+
+.acpDashboardBox__title {
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #666);
+    line-height: 1.4;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.acpDashboardBox__value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.acpDashboardBox--error {
+    border-color: var(--wcfStatusErrorBorder, #c62828);
+}
+
+.acpDashboardBox--warn {
+    border-color: var(--wcfStatusWarningBorder, #ff9800);
+}
+
+.recovery-run-block {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0;
+    padding: 16px 20px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfContentBackground, #fff);
+}
+
+.recovery-run-block__title {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.recovery-run-block__desc {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #666);
+    line-height: 1.45;
+}
+
+.recovery-run-const-tag {
+    display: inline-block;
+    margin: 4px 6px 0 0;
+    font-size: 12px;
+}
+
+.recovery-run-log-hints {
+    margin: 0;
+    padding: 0 0 0 18px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.recovery-run-log-hints li {
+    margin-bottom: 6px;
+}
+
+.recovery-run-log-hints code {
+    font-size: 12px;
+    word-break: break-word;
+}
+
+.recovery-panel--inline {
+    margin: 0;
+    border: none;
+    background: transparent;
+}
+
+.recovery-panel--inline > summary {
+    padding: 0;
+    font-size: 13px;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-syscheck-result {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-check-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-check-detail__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 10px;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-check-detail__head .badge {
+    flex-shrink: 0;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-check-detail__text {
+    flex: 1 1 12rem;
+    min-width: 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-check-detail__action {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-check-detail__tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 6px;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-check-detail__tags .recovery-run-const-tag {
+    margin: 0;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-check-detail__more {
+    font-size: 12px;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-post-check-actions {
+    margin-top: 2px;
+    padding-top: 8px;
+    border-top: 1px solid var(--wcfContentBorderInner, #ddd);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-syscheck-row--error .recovery-check-detail__text,
+#tplRecoveryTool .recovery-run-block--post-check .recovery-syscheck-row--error .recovery-check-detail__action {
+    color: var(--wcfStatusErrorText, #c62828);
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-syscheck-row--warn .recovery-check-detail__text,
+#tplRecoveryTool .recovery-run-block--post-check .recovery-syscheck-row--warn .recovery-check-detail__action {
+    color: var(--wcfStatusWarningText, #e65100);
+}
+
+/* List View (Plan, Konstanten) */
+.listView {
+    margin: 0 0 20px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--wcfContentBackground, #fff);
+}
+
+.listViewItem {
+    border-bottom: 1px solid var(--wcfContentBorderInner, #ddd);
+}
+
+.listViewItem:last-child {
+    border-bottom: none;
+}
+
+.listViewItem__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+}
+
+.listViewItem__head label {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.listViewItem__badge {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.listViewItem__details {
+    padding: 0 16px 14px 42px;
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #666);
+    line-height: 1.5;
+}
+
+.recovery-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.recovery-tag-list li code {
+    font-size: 12px;
+}
+
+/* Datei-/Klassenlisten (Wizard, Diagnose) */
+.recovery-file-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+    max-height: min(320px, 50vh);
+    overflow-y: auto;
+}
+
+.recovery-file-list li {
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+    line-height: 1.45;
+}
+
+.recovery-file-list li code {
+    display: block;
+    font-size: 12px;
+    word-break: break-all;
+    white-space: pre-wrap;
+}
+
+.recovery-file-list--classes {
+    margin-bottom: 16px;
+}
+
+.recovery-missing-classes-group:last-child .recovery-file-list--classes {
+    margin-bottom: 0;
+}
+
+.recovery-missing-classes-group {
+    margin-bottom: 18px;
+}
+
+.recovery-missing-classes-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Grid (Backup, Szenarien) */
+.recovery-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--recovery-space-md, 16px);
+    margin: 0 0 var(--recovery-space-lg, 24px);
+}
+
+@media (min-width: 640px) {
+    .recovery-grid--3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .recovery-grid--2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.recovery-grid-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--recovery-space-xs, 8px);
+    padding: var(--recovery-space-lg, 24px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius, 8px);
+    background: var(--wcfContentBackground, #fff);
+    box-shadow: var(--recovery-shadow, 0 2px 8px rgba(0, 0, 0, 0.08));
+    transition: border-color 0.2s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.recovery-grid-card--store {
+    min-height: 220px;
+}
+
+.recovery-grid-card--store:hover {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    transform: translateY(-2px);
+    box-shadow: var(--recovery-shadow-hover, 0 6px 20px rgba(0, 0, 0, 0.14));
+}
+
+.recovery-grid-card__icon {
+    color: var(--wcfStatusInfoText, #369);
+    margin-bottom: 4px;
+}
+
+.recovery-grid-card__actions {
+    margin-top: auto;
+    padding-top: var(--recovery-space-md, 16px);
+}
+
+.recovery-grid-card__actions .button {
+    width: 100%;
+    justify-content: center;
+}
+
+.recovery-grid-card--primary {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.06));
+}
+
+.recovery-grid-card h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.recovery-grid-card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--wcfContentText, rgba(255, 255, 255, 0.75));
+    flex: 1;
+}
+
+html[data-color-scheme="dark"] .recovery-grid-card p,
+html[data-color-scheme="system"] .recovery-grid-card p {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.recovery-grid-card .button {
+    align-self: stretch;
+}
+
+.recovery-backup-result {
+    margin: 16px 0;
+    padding: 14px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+}
+
+.recovery-expert-intro {
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--wcfContentText, #333);
+    border-left: 4px solid var(--wcfStatusInfoBorder, #369);
+    background: linear-gradient(
+        90deg,
+        var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.1)) 0%,
+        var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04)) 100%
+    );
+}
+
+.recovery-cleanup-section .recovery-alert {
+    margin: 0 0 16px;
+}
+
+.recovery-cleanup-section .recovery-step-list {
+    margin: 0 0 20px;
+    padding-left: 24px;
+}
+
+.recovery-cleanup-primary {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 18px;
+}
+
+.recovery-cleanup-primary .buttonPrimary {
+    min-width: 220px;
+}
+
+.recovery-cleanup-secondary-label {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--wcfContentDimmedText, #888);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.recovery-action-bar--cleanup-secondary {
+    margin: 0 0 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--wcfContentBorderInner, #ddd);
+}
+
+.recovery-scenario-card h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 10px;
+}
+
+.recovery-scenario-card p {
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0 0 14px;
+}
+
+.recovery-scenario-icon {
+    color: var(--wcfStatusInfoText, #369);
+    display: block;
+    align-self: flex-start;
+    margin-bottom: var(--recovery-space-md, 16px);
+}
+
+.recovery-scenario-icon fa-icon {
+    display: block;
+    margin: 0;
+}
+
+.recovery-scenario-card--primary .recovery-scenario-icon {
+    color: inherit;
+}
+
+.recovery-scenario-cta {
+    color: var(--wcfStatusInfoText, #369);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.recovery-scenario-card--primary .recovery-scenario-cta {
+    color: inherit;
+}
+
+.recovery-status-bar {
+    color: var(--wcfContentDimmedText, #666);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 20px;
+}
+
+.recovery-status-sep {
+    margin: 0 6px;
+}
+
+.recovery-status-warn {
+    color: var(--wcfStatusWarningText, #c93);
+}
+
+.recovery-status-link {
+    color: var(--wcfStatusInfoText, #369);
+    text-decoration: none;
+}
+
+.recovery-status-link:hover {
+    text-decoration: underline;
+}
+
+.recovery-cleanup-section {
+    margin-top: 24px;
+}
+
+.recovery-hint-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin: 20px 0;
+    padding: 14px 18px;
+    border: 1px solid var(--wcfStatusInfoBorder, #369);
+    border-left-width: 4px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.08));
+    box-sizing: border-box;
+}
+
+.recovery-hint-box__icon {
+    flex-shrink: 0;
+    color: var(--wcfStatusInfoText, #369);
+    line-height: 1;
+    margin-top: 2px;
+}
+
+.recovery-hint-box__content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.recovery-hint-box__title,
+.recovery-hint-box__text,
+.recovery-hint-box__actions {
+    margin: 0;
+}
+
+.recovery-hint-box__title {
+    margin-bottom: 6px;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.recovery-hint-box__text {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--wcfContentText, inherit);
+}
+
+.recovery-hint-box__actions {
+    margin-top: 12px;
+}
+
+.recovery-hint-box__actions .button {
+    margin: 0;
+}
+
+.recovery-hint-box--compact .recovery-hint-box__title {
+    font-size: 14px;
+}
+
+.recovery-hint-box--compact .recovery-hint-box__text {
+    font-size: 13px;
+}
+
+.recovery-cleanup-section .recovery-cleanup-hint {
+    margin: 16px 0 0;
+}
+
+.recovery-hint-box--after-result {
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+.recovery-hint-box--page-footer {
+    margin-top: 24px;
+    margin-bottom: 0;
+}
+
+.recovery-expert-panel.recovery-panel {
+    margin-top: 20px;
+}
+
+.recovery-expert-body {
+    padding: 16px 20px 20px;
+    border-top: 1px solid var(--wcfContentBorderInner, #ddd);
+}
+
+.recovery-expert-body .recovery-expert-intro {
+    margin: 0 0 20px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 4px;
+    border-left: 4px solid var(--wcfStatusInfoBorder, #369);
+    background: linear-gradient(
+        90deg,
+        var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.1)) 0%,
+        var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04)) 100%
+    );
+}
+
+.recovery-expert-body .recovery-expert-intro p {
+    margin: 0;
+}
+
+.recovery-expert-modes .mode-grid {
+    gap: 16px;
+    margin: 0;
+}
+
+.recovery-expert-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Legacy: recovery-sub-nav → recovery-subnav-trail--expert */
+.recovery-sub-nav {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.mode-grid .mode-button.recovery-mode-button--active {
+    border-color: var(--wcfStatusInfoBorder, #369);
+    box-shadow: 0 0 0 1px var(--wcfStatusInfoBorder, #369), var(--recovery-shadow, 0 2px 8px rgba(0, 0, 0, 0.08));
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.08));
+}
+
+@media (max-width: 1100px) {
+    .recovery-expert-subnav-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .recovery-expert-grid,
+    .recovery-expert-subnav-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.recovery-post-check-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 0;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-post-check-actions .button {
+    margin: 0;
+}
+
+/* —— Einheitliche Daten-Tabellen (Spalten, Ausrichtung, WCF-Floats) —— */
+#tplRecoveryTool table.recovery-data-table {
+    table-layout: fixed;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool table.recovery-data-table th,
+#tplRecoveryTool table.recovery-data-table td {
+    float: none !important;
+    display: table-cell !important;
+    box-sizing: border-box;
+    text-align: left;
+    vertical-align: middle;
+}
+
+#tplRecoveryTool table.recovery-data-table thead th {
+    padding: 10px 14px;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+#tplRecoveryTool table.recovery-data-table tbody td {
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+#tplRecoveryTool table.recovery-data-table tbody tr:nth-child(even) td {
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.03));
+}
+
+/* 4 Spalten: Eigenschaft | Wert | Status | Aktion */
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-col-label {
+    width: 24%;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-col-value {
+    width: 48%;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-col-status {
+    width: 14%;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-col-action {
+    width: 14%;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-th-status,
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-status-cell {
+    text-align: center;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-th-action,
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-action-cell {
+    text-align: center;
+}
+
+/* 3 Spalten: Icon | Label | Ergebnis */
+#tplRecoveryTool .recovery-data-table--check .recovery-syscheck-col-icon {
+    width: 52px;
+}
+
+#tplRecoveryTool .recovery-data-table--check .recovery-syscheck-col-label {
+    width: 26%;
+}
+
+#tplRecoveryTool .recovery-data-table--check .recovery-syscheck-th-icon,
+#tplRecoveryTool .recovery-data-table--check .recovery-syscheck-icon {
+    text-align: center;
+    width: 52px;
+    min-width: 52px;
+    max-width: 52px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#tplRecoveryTool .recovery-data-table--check tbody td.recovery-syscheck-result {
+    vertical-align: top;
+}
+
+#tplRecoveryTool .recovery-runtime-table .recovery-sysinfo-label {
+    font-size: 13px;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-value-cell {
+    min-width: 0;
+    overflow: hidden;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-value {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-status-cell {
+    white-space: nowrap;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-status-cell .badge {
+    font-size: 11px;
+    padding: 2px 8px;
+}
+
+#tplRecoveryTool .recovery-data-table--sysinfo .recovery-sysinfo-action-cell {
+    white-space: nowrap;
+}
+
+#tplRecoveryTool .recovery-data-table--check .recovery-syscheck-label {
+    font-weight: 600;
+}
+
+#tplRecoveryTool .recovery-data-table--check .recovery-syscheck-result {
+    word-break: break-word;
+}
+
+#tplRecoveryTool .recovery-dir-path-check-table {
+    margin-top: 12px;
+}
+
+.recovery-copy-btn--icon {
+    min-width: 34px;
+    padding: 4px 8px;
+    line-height: 1;
+}
+
+.recovery-copy-btn--icon fa-icon,
+.recovery-copy-btn--icon .fa-icon {
+    margin: 0;
+}
+
+#tplRecoveryTool .recovery-uninstall-form,
+#tplRecoveryTool .recovery-uninstall-form .form-group,
+#tplRecoveryTool .recovery-uninstall-form input[type="text"] {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.recovery-display-rebuild-result {
+    margin: 0 0 20px;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+    background: var(--wcfSidebarBackground, #eee);
+    color: var(--wcfContentText, #333);
+}
+
+.badgeGreen {
+    background: var(--wcfStatusSuccessBackground, rgba(76, 175, 80, 0.2));
+    color: var(--wcfStatusSuccessText, #2e7d32);
+    border: 1px solid var(--wcfStatusSuccessBorder, #4caf50);
+}
+
+.badgeYellow {
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.15));
+    color: var(--wcfStatusWarningText, #e65100);
+    border: 1px solid var(--wcfStatusWarningBorder, #ff9800);
+}
+
+.badgeRed {
+    background: rgba(198, 40, 40, 0.12);
+    color: var(--wcfStatusErrorText, #c62828);
+    border: 1px solid var(--wcfStatusErrorBorder, #c62828);
+}
+
+/* Diagnose-Metriken */
+.recovery-diag-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.recovery-diag-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 6px;
+    background: var(--wcfContentBackground, #fff);
+}
+
+.recovery-diag-card__label {
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #666);
+    line-height: 1.4;
+}
+
+.recovery-diag-card__value {
+    align-self: flex-start;
+    font-size: 15px;
+}
+
+/* Datei-Upload ACP-Stil */
+.recovery-file-field {
+    margin: 12px 0 20px;
+}
+
+.recovery-file-field label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.recovery-file-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 12px;
+}
+
+.recovery-file-input__native {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.recovery-file-input__name {
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #666);
+    word-break: break-all;
+}
+
+/* Plan-Schritte */
+.recovery-plan-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 16px;
+}
+
+.recovery-plan-step {
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 6px;
+    background: var(--wcfContentBackground, #fff);
+}
+
+.recovery-plan-step label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.recovery-plan-step .recovery-plan-step__badge {
+    margin-left: auto;
+}
+
+.recovery-package-active-badge {
+    margin: 12px 0 16px;
+}
+
+.recovery-plan-package-alt[hidden] {
+    display: none !important;
+}
+
+.recovery-result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.recovery-dryrun-panel {
+    margin: 16px 0;
+    padding: 14px 16px;
+    border: 1px solid var(--wcfStatusWarningBorder, #ff9800);
+    border-radius: 6px;
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.1));
+}
+
+.recovery-dryrun-panel .recovery-dryrun-quick {
+    margin-top: 12px;
+}
+
+#tplRecoveryTool .tableList.recovery-table-list {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .silent {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+#tplRecoveryTool .recovery-summary-table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#tplRecoveryTool .recovery-summary-table th,
+#tplRecoveryTool .recovery-summary-table td {
+    float: none !important;
+    display: table-cell !important;
+    box-sizing: border-box;
+}
+
+#tplRecoveryTool .recovery-summary-table .recovery-summary-col-label {
+    width: 72%;
+}
+
+#tplRecoveryTool .recovery-summary-table .recovery-summary-col-value {
+    width: 28%;
+    min-width: 120px;
+}
+
+#tplRecoveryTool .recovery-summary-table thead th {
+    padding: 10px 14px;
+    font-weight: 600;
+}
+
+#tplRecoveryTool .recovery-summary-table thead th.recovery-summary-th-label {
+    text-align: left;
+}
+
+#tplRecoveryTool .recovery-summary-table thead th.recovery-summary-th-value {
+    text-align: right;
+}
+
+#tplRecoveryTool .recovery-summary-table tbody td {
+    padding: 12px 14px;
+    vertical-align: top;
+}
+
+#tplRecoveryTool .recovery-summary-table tbody tr:nth-child(even) td {
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.03));
+}
+
+#tplRecoveryTool .recovery-summary-table .recovery-summary-label {
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+#tplRecoveryTool .recovery-summary-table .recovery-summary-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+#tplRecoveryTool .recovery-summary-table .recovery-summary-value {
+    font-size: 13px;
+    line-height: 1.45;
+    text-align: right;
+    white-space: nowrap;
+}
+
+#tplRecoveryTool .recovery-summary-table .recovery-summary-count {
+    display: inline-block;
+    min-width: 2ch;
+    font-size: 15px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+#tplRecoveryTool .recovery-wizard-summary,
+#tplRecoveryTool .recovery-run-block.recovery-wizard-summary {
+    margin-bottom: 24px;
+}
+
+#tplRecoveryTool .recovery-run-block.recovery-wizard-summary .recovery-summary-table {
+    margin-top: 4px;
+}
+
+/* ACP-Notfall: Ergebnis nach Kern-Reparatur */
+#tplRecoveryTool .recovery-acp-done-panel {
+    border: 2px solid var(--wcfStatusSuccessBorder, #4caf50);
+    border-radius: var(--recovery-radius-md, 8px);
+    background: var(--wcfStatusSuccessBackground, rgba(76, 175, 80, 0.08));
+    padding: 20px 22px;
+}
+
+#tplRecoveryTool .recovery-acp-done-panel__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+#tplRecoveryTool .recovery-acp-done-panel__head fa-icon,
+#tplRecoveryTool .recovery-acp-done-panel__head .fa-icon {
+    flex-shrink: 0;
+    color: var(--wcfStatusSuccessText, #4caf50);
+}
+
+#tplRecoveryTool .recovery-acp-done-panel .recovery-run-block__title {
+    margin: 0 0 6px;
+}
+
+#tplRecoveryTool .recovery-acp-done-panel .recovery-run-block__desc {
+    margin: 0;
+}
+
+#tplRecoveryTool .recovery-acp-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+#tplRecoveryTool .recovery-acp-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 72px;
+    padding: 12px 10px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfContentBackground, rgba(0, 0, 0, 0.03));
+    text-align: center;
+}
+
+#tplRecoveryTool .recovery-acp-stat__value {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+#tplRecoveryTool .recovery-acp-stat__label {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.35;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+#tplRecoveryTool .recovery-acp-done-panel__loghint {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+    font-size: 13px;
+}
+
+#tplRecoveryTool .recovery-acp-done-continue {
+    margin: 8px 0 0;
+    text-align: center;
+}
+
+@media (max-width: 720px) {
+    #tplRecoveryTool .recovery-acp-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ACP-Notfall: Ergebnis nach Kern-Reparatur */
+#tplRecoveryTool .recovery-acp-done-panel {
+    border: 2px solid var(--wcfStatusSuccessBorder, #4caf50);
+    border-radius: var(--recovery-radius-md, 8px);
+    background: var(--wcfStatusSuccessBackground, rgba(76, 175, 80, 0.08));
+    padding: 20px 22px;
+    margin-bottom: 8px;
+}
+
+#tplRecoveryTool .recovery-acp-done-panel__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+#tplRecoveryTool .recovery-acp-done-panel__head fa-icon,
+#tplRecoveryTool .recovery-acp-done-panel__head .fa-icon {
+    flex-shrink: 0;
+    color: var(--wcfStatusSuccessText, #4caf50);
+    margin-top: 2px;
+}
+
+#tplRecoveryTool .recovery-acp-done-panel__head .recovery-run-block__title {
+    margin: 0 0 6px;
+}
+
+#tplRecoveryTool .recovery-acp-done-panel__head .recovery-run-block__desc {
+    margin: 0;
+}
+
+#tplRecoveryTool .recovery-acp-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+#tplRecoveryTool .recovery-acp-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 72px;
+    padding: 12px 10px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfContentBackground, rgba(0, 0, 0, 0.03));
+    text-align: center;
+}
+
+#tplRecoveryTool .recovery-acp-stat__value {
+    font-size: 22px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    color: var(--wcfContentText, inherit);
+}
+
+#tplRecoveryTool .recovery-acp-stat__label {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.35;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+#tplRecoveryTool .recovery-acp-done-panel__loghint {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#tplRecoveryTool .recovery-acp-done-panel .recovery-rec-section-label {
+    margin-top: 4px;
+}
+
+#tplRecoveryTool .recovery-acp-done-continue {
+    margin: 8px 0 20px;
+    text-align: center;
+}
+
+@media (max-width: 720px) {
+    #tplRecoveryTool .recovery-acp-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-th-icon {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-check-detail {
+    color: var(--wcfContentText, #333);
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-row--error .recovery-check-detail {
+    color: var(--wcfStatusErrorText, #c62828);
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-row--warn .recovery-check-detail {
+    color: var(--wcfStatusWarningText, #e65100);
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-check-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--wcfContentBorderInner, #ddd);
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-check-actions .button {
+    margin: 0;
+}
+
+.snackbarContainer {
+    align-items: start;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    left: 20px;
+    pointer-events: none;
+    position: fixed;
+    z-index: 10050;
+}
+
+.snackbarContainer .snackbar {
+    pointer-events: auto;
+}
+
+.snackbar {
+    background-color: var(--wcfContentBackground, #fff);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 4px;
+    box-shadow: var(--wcfBoxShadow, 0 2px 8px rgba(0, 0, 0, 0.15));
+    color: var(--wcfContentText, #333);
+    display: flex;
+    min-width: 220px;
+    overflow: hidden;
+    padding: 0 5px;
+}
+
+.snackbar--success {
+    background-color: var(--wcfStatusSuccessBackground, rgba(76, 175, 80, 0.15));
+    border-color: var(--wcfStatusSuccessBorder, #4caf50);
+    color: var(--wcfStatusSuccessText, #2e7d32);
+}
+
+.snackbar--progress {
+    background-color: var(--wcfStatusInfoBackground, rgba(33, 150, 243, 0.15));
+    border-color: var(--wcfStatusInfoBorder, #2196f3);
+    color: var(--wcfStatusInfoText, #1565c0);
+}
+
+.snackbar__icon {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 36px;
+}
+
+.snackbar__message {
+    flex: 1 0 auto;
+    padding: 10px 5px 10px 0;
+}
+
+.recovery-wfl-dialog.dialog {
+    background-color: var(--wcfContentBackground, #fff);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    color: var(--wcfContentText, #333);
+    max-width: min(500px, 92vw);
+    padding: 0;
+}
+
+.recovery-wfl-dialog .dialog__document {
+    padding: 20px;
+}
+
+.recovery-wfl-dialog .dialog__control {
+    column-gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+/* Alerts (ersetzt lose p.info / p.warning ohne Inline-Styles) */
+#tplRecoveryTool .recovery-alert {
+    margin: 0 0 20px;
+    padding: 14px 18px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    line-height: 1.55;
+    font-size: 14px;
+}
+
+#tplRecoveryTool .recovery-alert__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0 0 8px;
+}
+
+#tplRecoveryTool .recovery-alert__title {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+#tplRecoveryTool .recovery-alert__body {
+    margin: 0;
+}
+
+#tplRecoveryTool .recovery-alert__body p {
+    margin: 0 0 8px;
+}
+
+#tplRecoveryTool .recovery-alert__body p:last-child {
+    margin-bottom: 0;
+}
+
+#tplRecoveryTool .recovery-alert__meta {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #666);
+    line-height: 1.5;
+}
+
+#tplRecoveryTool .recovery-alert__meta code {
+    font-size: 12px;
+}
+
+#tplRecoveryTool .recovery-alert--info {
+    border-left: 4px solid var(--wcfStatusInfoBorder, #369);
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.1));
+}
+
+#tplRecoveryTool .recovery-alert--success {
+    border-left: 4px solid var(--wcfStatusSuccessBorder, #4caf50);
+    background: var(--wcfStatusSuccessBackground, rgba(76, 175, 80, 0.12));
+}
+
+#tplRecoveryTool .recovery-alert--warning {
+    border-left: 4px solid var(--wcfStatusWarningBorder, #ff9800);
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.12));
+}
+
+#tplRecoveryTool .recovery-alert--error {
+    border-left: 4px solid var(--wcfStatusErrorBorder, #c62828);
+    background: rgba(198, 40, 40, 0.1);
+}
+
+/* Kompakte nummerierte Schritte (Verzeichnisstruktur, Checklisten) */
+.recovery-step-list {
+    margin: 0 0 16px;
+    padding: 0 0 0 22px;
+    line-height: 1.55;
+    font-size: 14px;
+}
+
+.recovery-step-list--ordered {
+    list-style: decimal;
+}
+
+.recovery-step-list__item {
+    margin-bottom: 10px;
+}
+
+.recovery-step-list__title {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.recovery-step-list__body {
+    display: block;
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #888);
+    font-weight: 400;
+}
+
+/* Kompakter Workflow-Status (Verzeichnisstruktur Schritte 2–4 ohne Panel-Header) */
+.recovery-workflow-block {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 16px 20px 18px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfContentBackground, #fff);
+}
+
+.recovery-workflow-block__title {
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--wcfContentDimmedText, #666);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.recovery-workflow-checklist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.recovery-workflow-checklist__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+    padding: 2px 0;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.recovery-workflow-checklist__icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+.recovery-workflow-checklist__item--ok .recovery-workflow-checklist__icon {
+    color: var(--wcfStatusSuccessText, #3a3);
+}
+
+.recovery-workflow-checklist__item--warn .recovery-workflow-checklist__icon {
+    color: var(--wcfStatusWarningText, #c80);
+}
+
+.recovery-workflow-checklist__label {
+    font-weight: 600;
+}
+
+.recovery-workflow-checklist__status {
+    margin-left: auto;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+.recovery-workflow-checklist__item--ok .recovery-workflow-checklist__status {
+    color: var(--wcfStatusSuccessText, #3a3);
+}
+
+.recovery-workflow-block__success {
+    margin: 8px 0 0;
+}
+
+.recovery-workflow-block__hint {
+    margin: 10px 0 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+.recovery-workflow-block__actions {
+    margin: 10px 0 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--wcfContentBorderInner, #ddd);
+}
+
+.recovery-workflow-block__actions form {
+    display: inline-flex;
+    margin: 0;
+}
+
+/* Action-Bar (einheitliche Primär-/Sekundär-Aktionen) */
+.recovery-action-bar {
+    margin-top: 20px;
+}
+
+.recovery-action-bar form {
+    display: inline-flex;
+    margin: 0;
+}
+
+/* Download-Zeile (SQL + JS) */
+.recovery-download-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px 14px;
+    margin: 12px 0 0;
+    padding: 0;
+}
+
+.recovery-download-actions .recovery-download-form {
+    display: inline-flex;
+    margin: 0;
+}
+
+/* Domain-Panel (Verzeichnisstruktur — immer sichtbar, Aktion nicht einklappbar) */
+.recovery-domain-panel {
+    margin: 0 0 24px;
+    border-color: var(--wcfStatusInfoBorder, #369);
+}
+
+.recovery-domain-panel--warn {
+    border-color: var(--wcfStatusWarningBorder, #ff9800);
+}
+
+.recovery-domain-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--wcfContentBorderInner, #ddd);
+    font-size: 15px;
+}
+
+.recovery-domain-header strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.recovery-domain-status {
+    margin-left: auto;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.06));
+}
+
+.recovery-domain-status--match {
+    color: var(--wcfStatusSuccessText, #3a3);
+    background: rgba(58, 170, 58, 0.12);
+}
+
+.recovery-domain-status--warn {
+    color: var(--wcfStatusWarningText, #b36b00);
+    background: rgba(255, 152, 0, 0.15);
+}
+
+.recovery-domain-status--action {
+    margin-left: 0;
+    color: var(--wcfStatusInfoText, #369);
+    background: rgba(51, 102, 153, 0.12);
+}
+
+.recovery-domain-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+    margin: 0 0 16px;
+}
+
+@media (max-width: 720px) {
+    .recovery-domain-split {
+        grid-template-columns: 1fr;
+    }
+}
+
+.recovery-domain-split__col {
+    padding: 12px 14px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.03));
+}
+
+.recovery-domain-split__col--tool {
+    border-color: var(--wcfStatusInfoBorder, #369);
+}
+
+.recovery-domain-split__title {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.recovery-domain-split__list {
+    margin: 0;
+    font-size: 13px;
+}
+
+.recovery-domain-action {
+    margin: 0 0 16px;
+    padding: 16px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 2px solid var(--wcfStatusInfoBorder, #369);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+}
+
+.recovery-domain-panel--warn .recovery-domain-action {
+    border-color: var(--wcfStatusWarningBorder, #ff9800);
+}
+
+.recovery-domain-preview {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.recovery-domain-preview--action {
+    margin-bottom: 12px;
+}
+
+.recovery-domain-action__lead,
+.recovery-domain-action__targets {
+    margin: 0 0 8px;
+}
+
+.recovery-domain-action__lead .badge {
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.recovery-domain-action__bar {
+    margin: 12px 0 0;
+}
+
+.recovery-domain-action__bar .buttonLarge {
+    font-size: 15px;
+    padding: 10px 20px;
+}
+
+.recovery-domain-details {
+    margin-top: 8px;
+}
+
+.recovery-domain-details > summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 0;
+    color: var(--wcfStatusInfoText, #369);
+}
+
+.recovery-domain-details > summary::-webkit-details-marker {
+    display: none;
+}
+
+.recovery-domain-details > summary::before {
+    content: '▸ ';
+}
+
+.recovery-domain-details[open] > summary::before {
+    content: '▾ ';
+}
+
+.recovery-page-intro {
+    margin: 0 0 20px;
+    padding: 14px 18px;
+    border-radius: var(--recovery-radius-sm, 6px);
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.recovery-page-intro a {
+    font-weight: 600;
+}
+
+.recovery-diag-cta {
+    margin: 20px 0;
+    padding: 16px 18px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+}
+
+.recovery-diag-cta p {
+    margin: 0 0 14px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Uninstall: Paket-Info ohne rohe p.info */
+.recovery-uninstall-pkg-banner {
+    margin: 0 0 20px;
+}
+
+.recovery-uninstall-pkg-banner dl {
+    margin: 8px 0 0;
+    display: grid;
+    grid-template-columns: minmax(100px, 28%) 1fr;
+    gap: 6px 12px;
+    font-size: 14px;
+}
+
+.recovery-uninstall-pkg-banner dt {
+    color: var(--wcfContentDimmedText, #888);
+    font-weight: 600;
+}
+
+.recovery-uninstall-pkg-banner dd {
+    margin: 0;
+}
+
+.recovery-uninstall-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--recovery-space-md, 16px);
+    margin-bottom: var(--recovery-space-lg, 24px);
+}
+
+.recovery-uninstall-entry-grid {
+    margin-top: 0;
+}
+
+.recovery-uninstall-pkg-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.recovery-uninstall-pkg-list__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+    padding: 12px 14px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfContentBackground, #fff);
+}
+
+.recovery-muted-inline {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #888);
+    line-height: 1.45;
+}
+
+.recovery-panel__intro {
+    margin: 0 0 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+#tplRecoveryTool .recovery-formSubmit--tight {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#tplRecoveryTool.recovery-page-plugin-uninstall .contentHeader {
+    display: none;
+}
+
+/* Tool-Script-Hinweis im Footer */
+.recovery-footer-meta code.recovery-tool-script {
+    font-size: 12px;
+}
+
+/* Spacing utilities (ersetzt Inline margin/padding) */
+.recovery-panel--mb {
+    margin-bottom: 16px;
+}
+
+.recovery-panel--mt {
+    margin-top: 12px;
+}
+
+.recovery-grid--mb {
+    margin-bottom: 16px;
+}
+
+.recovery-mt-lg {
+    margin-top: 24px;
+}
+
+.recovery-mt-md {
+    margin-top: 16px;
+}
+
+.recovery-mb-sm {
+    margin-bottom: 12px;
+}
+
+.recovery-inline-form {
+    display: inline;
+}
+
+.recovery-log-pre--tall {
+    max-height: 320px;
+    overflow: auto;
+    margin-top: 8px;
+}
+
+.recovery-log-pre--medium {
+    max-height: 280px;
+    overflow: auto;
+    margin: 0;
+}
+
+.recovery-input--package-id {
+    max-width: 420px;
+}
+
+.recovery-emergency-banner__btn {
+    margin-left: 12px;
+    margin-top: 8px;
+    display: inline-block;
+}
+
+.recovery-link-accent {
+    color: #6ec2ff;
+    font-weight: 600;
+}
+
+.recovery-checkbox-label {
+    cursor: pointer;
+    margin: 0;
+}
+
+.recovery-checkbox-label--block {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.recovery-checkbox-label input[type="checkbox"] {
+    margin-right: 6px;
+}
+
+.recovery-section-heading {
+    margin: 24px 0 10px;
+}
+
+.recovery-section-heading--first {
+    margin: 0 0 10px;
+}
+
+.recovery-loading--visible {
+    display: block;
+}
+
+.recovery-plan-change-pkg {
+    margin-left: 8px;
+}
+
+.recovery-next-list--panel {
+    margin: 12px 0 0;
+}
+
+.recovery-form-field-label {
+    margin-top: 16px;
+}
+
+.recovery-muted-empty {
+    color: var(--wcfContentDimmedText, #999);
+}
+
+.recovery-backup-reminder {
+    border-color: var(--wcfStatusErrorBorder, #c62828);
+}
+
+.recovery-uninstall-advanced label {
+    cursor: pointer;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.recovery-uninstall-advanced small {
+    margin-top: 6px;
+    display: block;
+}
+
+.recovery-form-hint-inline {
+    display: block;
+    margin-top: 5px;
+}
+
+.recovery-app-group-label small {
+    color: var(--wcfContentDimmedText, #9d9d9d);
+}
+
+/* PIP / Uninstall-Auswahl-Tabellen */
+#tplRecoveryTool .recovery-table-list.recovery-pip-table {
+    table-layout: auto;
+}
+
+#tplRecoveryTool .recovery-pip-table.recovery-data-table th,
+#tplRecoveryTool .recovery-pip-table.recovery-data-table td {
+    float: none !important;
+    display: table-cell !important;
+}
+
+#tplRecoveryTool .recovery-pip-table thead th {
+    padding: 10px 12px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+#tplRecoveryTool .recovery-pip-table tbody td {
+    padding: 8px 12px;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+#tplRecoveryTool .recovery-pip-table tbody tr:nth-child(even) td {
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+}
+
+#tplRecoveryTool .recovery-pip-table .recovery-col-check {
+    width: 36px;
+    text-align: center;
+}
+
+#tplRecoveryTool .recovery-pip-table .recovery-col-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+#tplRecoveryTool .recovery-pip-table tr.recovery-row--muted td {
+    opacity: 0.45;
+}
+
+#tplRecoveryTool .recovery-pip-table tr.recovery-row--empty td {
+    opacity: 0.55;
+}
+
+/* User Management */
+.recovery-um-meta {
+    font-size: 16px;
+    color: var(--wcfContentDimmedText, #9d9d9d);
+}
+
+.recovery-um-hint {
+    margin: 0 0 16px;
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #9d9d9d);
+}
+
+.recovery-um-hint--tight {
+    margin-bottom: 12px;
+}
+
+.recovery-um-status--banned {
+    color: #e74c3c;
+}
+
+.recovery-um-status--pending {
+    color: #f39c12;
+}
+
+.recovery-um-status--active {
+    color: #00bc8c;
+}
+
+.recovery-um-status--muted {
+    color: #9d9d9d;
+}
+
+#tplRecoveryTool .recovery-um-detail-table {
+    margin-bottom: 24px;
+}
+
+#tplRecoveryTool .recovery-um-detail-table th {
+    width: 160px;
+}
+
+#tplRecoveryTool .recovery-um-groups-table .recovery-col-check {
+    width: 1px;
+    text-align: center;
+}
+
+#tplRecoveryTool .recovery-um-groups-table .recovery-col-id {
+    width: 55px;
+}
+
+#tplRecoveryTool .recovery-um-groups-table .recovery-col-type {
+    width: 80px;
+}
+
+#tplRecoveryTool .recovery-um-search-table {
+    margin-top: 20px;
+}
+
+#tplRecoveryTool .recovery-um-search-table .recovery-col-id {
+    width: 55px;
+}
+
+#tplRecoveryTool .recovery-um-search-table .recovery-col-status {
+    width: 100px;
+}
+
+#tplRecoveryTool .recovery-um-search-table .recovery-col-2fa {
+    width: 55px;
+}
+
+#tplRecoveryTool .recovery-um-search-table .recovery-col-action {
+    width: 1px;
+}
+
+.recovery-um-search-actions .button {
+    padding: 5px 12px;
+    font-size: 13px;
+}
+
+#tplRecoveryTool .recovery-run-block--post-check .recovery-post-check-actions form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.recovery-missing-classes-app {
+    margin: 8px 0 4px;
+}
+
+/* System-Check: volle Breite, Sysinfo-Panels + Prüftabelle */
+.recovery-syscheck-page .recovery-syscheck-checks .recovery-system-check-table,
+.recovery-syscheck-page .recovery-syscheck-support .recovery-sysinfo-cta-strip {
+    margin-bottom: 0;
+}
+
+.recovery-syscheck-page .recovery-syscheck-checks + .recovery-syscheck-support {
+    margin-top: 0;
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-row--error td,
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-row--warn td {
+    background: transparent;
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-row--error .recovery-syscheck-icon,
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-row--error .recovery-syscheck-label {
+    vertical-align: top;
+    padding-top: 18px;
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-row--error .recovery-syscheck-result {
+    padding: 14px 16px;
+    border-radius: var(--recovery-radius-md, 8px);
+    border: 2px solid var(--wcfStatusErrorBorder, #e57373);
+    background: var(--wcfStatusErrorBackground, rgba(198, 40, 40, 0.12));
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-row--warn td {
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.06));
+}
+
+#tplRecoveryTool .recovery-system-check-table .recovery-syscheck-row--warn .recovery-syscheck-result {
+    padding: 12px 14px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+.recovery-syscheck-page .recovery-syscheck-support {
+    margin-bottom: var(--recovery-space-lg, 24px);
+}
+
+.recovery-syscheck-page .recovery-syscheck-support .recovery-panel__body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.recovery-syscheck-page .recovery-syscheck-checks .recovery-panel__body {
+    padding-top: 8px;
+}
+
+.recovery-syscheck-page .recovery-syscheck-checks .recovery-data-table--check thead th,
+.recovery-syscheck-page .recovery-syscheck-checks .recovery-data-table--check tbody td {
+    padding: 14px 16px;
+}
+
+.recovery-syscheck-support__label {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 14px;
+}
+
+.recovery-syscheck-support__hint {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #666);
+    line-height: 1.45;
+}
+
+.recovery-syscheck-support__textarea {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.recovery-syscheck-support .recovery-alert {
+    margin-top: 12px;
+}
+
+/* Plan: Klassen-Auswahl */
+#tplRecoveryTool .content .recovery-plan-classes,
+#tplRecoveryTool .content #recoveryPlanForm .recovery-plan-classes {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.recovery-plan-classes .recovery-panel__body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.recovery-plan-class-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin: 0 0 12px;
+}
+
+.recovery-plan-class-filter {
+    flex: 1 1 220px;
+    min-width: 0;
+    max-width: none;
+    width: auto;
+    margin: 0;
+    padding: 8px 12px;
+    box-sizing: border-box;
+}
+
+.recovery-plan-class-toolbar__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.recovery-plan-class-grid-wrap {
+    max-height: min(420px, 55vh);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 8px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 4px;
+    background: var(--wcfContentBackground, #fff);
+    scrollbar-gutter: stable;
+}
+
+.recovery-plan-class-grid-wrap::-webkit-scrollbar {
+    width: 8px;
+}
+
+.recovery-plan-class-grid-wrap::-webkit-scrollbar-thumb {
+    background: var(--wcfContentBorderInner, #ccc);
+    border-radius: 4px;
+}
+
+.recovery-plan-class-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.recovery-plan-class-grid__item {
+    min-width: 0;
+}
+
+@media (max-width: 640px) {
+    .recovery-plan-class-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.recovery-plan-class-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.recovery-plan-class-item input[type="checkbox"],
+.recovery-plan-class-chk {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    min-width: 1rem;
+    margin: 2px 0 0;
+}
+
+.recovery-plan-class-item:hover {
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+}
+
+.recovery-plan-class-name {
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+    font-size: 12px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* Domain-Panel: nummerierter Ablauf */
+.recovery-domain-flow {
+    margin: 0 0 16px;
+    padding-left: 1.25rem;
+    line-height: 1.55;
+}
+
+.recovery-domain-flow li {
+    margin-bottom: 6px;
+}
+
+.recovery-domain-current-url {
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    border: 1px solid var(--wcfStatusInfoBorder, #369);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfStatusInfoBackground, rgba(51, 102, 153, 0.08));
+}
+
+.recovery-domain-current-url__label {
+    margin: 0 0 6px;
+    font-size: 13px;
+}
+
+.recovery-domain-current-url__value {
+    display: block;
+    font-size: 15px;
+    word-break: break-all;
+}
+
+.recovery-domain-write-preview {
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: var(--recovery-radius-sm, 6px);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.03));
+}
+
+.recovery-domain-write-preview__label {
+    margin: 0 0 10px;
+    font-size: 13px;
+}
+
+.recovery-domain-write-preview__fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px 16px;
+    margin: 0;
+}
+
+.recovery-domain-write-preview__field {
+    margin: 0;
+}
+
+.recovery-domain-write-preview__field dt {
+    margin: 0 0 4px;
+    font-size: 12px;
+    color: var(--wcfContentDimmedText, #666);
+}
+
+.recovery-domain-write-preview__field dd {
+    margin: 0;
+}
+
+.recovery-domain-write-preview__value {
+    display: block;
+    word-break: break-all;
+}
+
+.recovery-domain-action__bar {
+    margin-top: 8px;
+}
+
+.recovery-expert-secondary-grid {
+    margin-bottom: 0;
+}
+
+/* =============================================================================
+   ACP-native (recovery-uses-acp-ui): WCF-Optik aus acp/style/style.css, weniger Custom
+   Referenz: tabMenu, contentHeader, section, p.info/warning, acpDashboardBox
+   ============================================================================= */
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-scenario-card,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-scenario-card {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 20px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-scenario-card:hover,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-scenario-card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--wcfStatusInfoBorder);
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-scenario-card--primary,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-scenario-card--primary {
+    border-width: 1px;
+    border-color: var(--wcfStatusInfoBorder);
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-panel,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-panel {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-panel summary,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-panel summary {
+    font-weight: 600;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-scenario-heading,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-scenario-heading {
+    display: none;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-content-stack > .section,
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-content-stack > .section {
+    margin-top: 0;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .main,
+#tplRecoveryAuth.recovery-uses-acp-ui .main {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+/* Auth-Stub: gleiche Shell wie ACP-Login (acpAuthFlow + pageHeaderContainerIsLogin) */
+#tplRecoveryAuth.recovery-uses-acp-ui.acpAuthFlow .recovery-content-banner {
+    margin: 0 0 16px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-step-list {
+    margin: 10px 0 0 1.25em;
+    padding: 0;
+}
+
+#tplRecoveryAuth.recovery-uses-acp-ui .recovery-step-list li {
+    margin: 6px 0;
+}
+
+/* Startseite: Szenario-Kacheln wie ACP-Dashboard (acpDashboard + acpDashboardBox) */
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-scenario-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 0 0 24px;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-scenario-dashboard__box {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-scenario-dashboard__box:hover {
+    text-decoration: none;
+}
+
+#tplRecoveryTool.recovery-uses-acp-ui .recovery-scenario-dashboard__box .acpDashboardBox__content p {
+    margin: 8px 0 0;
+}

@@ -1,0 +1,108 @@
+/**
+ * Nur Stub-Auth / WCFSetup ohne kompiliertes ACP-CSS.
+ * Bei recovery-uses-acp-ui übernimmt acp/style/style.css das komplette Layout.
+ */
+
+#tplRecoveryAuth.recovery-stub-acp-page {
+    --recovery-content-max-width: min(96vw, 1400px);
+    --recovery-content-gutter: 24px;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #main > .layoutBoundary {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: var(--recovery-content-max-width) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: var(--recovery-content-gutter) !important;
+    padding-right: var(--recovery-content-gutter) !important;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeaderContainer,
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeader,
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeaderPanel {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #pageHeaderPanel > .layoutBoundary {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: max(
+        var(--recovery-content-gutter),
+        calc((100% - var(--recovery-content-max-width)) / 2 + var(--recovery-content-gutter))
+    ) !important;
+    padding-right: max(
+        var(--recovery-content-gutter),
+        calc((100% - var(--recovery-content-max-width)) / 2 + var(--recovery-content-gutter))
+    ) !important;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #content {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page form#recovery-auth-wizard {
+    margin: 0;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page form#recovery-auth-wizard .recovery-auth-step {
+    margin: 0 0 16px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page form#recovery-auth-wizard dl {
+    margin-bottom: 0;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page form#recovery-auth-wizard dd small {
+    display: block;
+    margin-top: 4px;
+    color: var(--wcfContentDimmedText, #888);
+    line-height: 1.5;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page form#recovery-auth-wizard .formSubmit {
+    margin-top: 0;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page form#recovery-auth-wizard .formSubmit .button {
+    margin-right: 8px;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page .error ol,
+#tplRecoveryAuth.recovery-stub-acp-page .warning ol,
+#tplRecoveryAuth.recovery-stub-acp-page .info ol {
+    margin: 12px 0 0;
+    padding-left: 1.5em;
+    list-style: decimal;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #authAlert[hidden] {
+    display: none !important;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #authAlert {
+    margin: 0 0 16px;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #auth-step-3 .success {
+    margin: 0 0 20px;
+}
+
+#tplRecoveryAuth.recovery-stub-acp-page #auth-step-3 .formSubmit {
+    margin: 0;
+    padding: 0;
+    clear: both;
+    position: relative;
+    z-index: 1;
+}

@@ -1,1 +1,119 @@
-{"folders":[{"name":"📦 Basis App","path":"basis-plugin"},{"name":"🎨 Mein Plugin","path":"mein-plugin"},{"name":"🔌 Plugins Integrieren","path":"plugins-integrieren","readonly":true},{"name":"📥 WoltLab Core (Setup-Dateien)","path":"woltlab-core","readonly":true},{"name":"🌐 WoltLab (lokal)","path":"/home/benny/Dokumente/woltlab-webserver/woltlab","readonly":true},{"name":"📚 WoltLab Docs","path":"woltlab-docs","readonly":true},{"name":"🐙 WoltLab GitHub","path":"woltlab-github","readonly":true},{"name":"📘 WoltLab d.ts","path":"woltlab-d-ts","readonly":true}],"settings":{"files.exclude":{"**/node_modules":true,"**/.git":true,"**/cache":true,"**/tmp":true,"**/build":true,"**/_temp_*":true},"search.exclude":{"**/node_modules":true,"**/cache":true,"**/tmp":true,"**/build":true,"**/_temp_*":true,"**/woltlab-core/cache":true,"**/woltlab-core/tmp":true},"files.associations":{"*.tpl":"smarty","*.xml":"xml"},"editor.tabSize":4,"editor.insertSpaces":false,"editor.detectIndentation":false,"[typescript]":{"editor.tabSize":4,"editor.insertSpaces":false},"[javascript]":{"editor.tabSize":4,"editor.insertSpaces":false},"[php]":{"editor.tabSize":4,"editor.insertSpaces":false,"editor.defaultFormatter":"bmewburn.vscode-intelephense-client","editor.formatOnSave":false},"php.validate.enable":false,"intelephense.environment.phpVersion":"8.3.23","intelephense.environment.includePaths":["/home/benny/Dokumente/woltlab-webserver/woltlab"],"intelephense.files.maxSize":5000000,"intelephense.diagnostics.enable":true,"intelephense.diagnostics.run":"onSave","intelephense.diagnostics.undefinedTypes":true,"intelephense.diagnostics.undefinedFunctions":true,"intelephense.diagnostics.undefinedConstants":true,"intelephense.diagnostics.undefinedClassConstants":true,"intelephense.diagnostics.undefinedMethods":true,"intelephense.diagnostics.undefinedProperties":true,"intelephense.diagnostics.undefinedVariables":true,"intelephense.diagnostics.deprecated":true,"intelephense.diagnostics.unusedSymbols":true,"intelephense.diagnostics.duplicateSymbols":true,"intelephense.diagnostics.argumentCount":true,"intelephense.diagnostics.typeErrors":true,"intelephense.diagnostics.languageConstraints":true,"intelephense.diagnostics.embeddedLanguages":true,"intelephense.trace.server":"off","coderabbit.selfHostedUrl":"Y3Vyc29yOi8vY29kZXJhYmJpdC5jb2RlcmFiYml0LXZzY29kZS9hdXRoLWNhbGxiYWNrP2NvZGU9NDA1ZWQ2YzEyMTk4MDdlOTU1MjAmc3RhdGU9ZWJiZjQ5NGMtZTFhZi00OWE2LWE4MmItOGE4YWQ4NjQyYTYwJnByb3ZpZGVyPWdpdGh1YiZzZWxmSG9zdGVkRG9tYWluPSZyZWRpcmVjdF91cmk9"},"extensions":{"recommendations":["bmewburn.vscode-intelephense-client","xdebug.php-debug","ms-vscode.vscode-typescript-next"]}}
+{
+  "folders": [
+    {
+      "name": "📦 Basis App",
+      "path": "basis-plugin"
+    },
+    {
+      "name": "📥 WoltLab Core (Setup-Dateien)",
+      "path": "woltlab-core",
+      "readonly": true
+    },
+    {
+      "name": "🌐 WoltLab (lokal)",
+      "path": "../lokal-webserver/woltlab",
+      "readonly": true
+    },
+    {
+      "name": "📚 WoltLab Docs",
+      "path": "woltlab-docs",
+      "readonly": true
+    },
+    {
+      "name": "🐙 WoltLab GitHub",
+      "path": "woltlab-github",
+      "readonly": true
+    },
+    {
+      "name": "📘 WoltLab d.ts",
+      "path": "woltlab-d-ts",
+      "readonly": true
+    }
+  ],
+  "settings": {
+    "npm.exclude": "**/temp_edit/**",
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.git": true,
+      "**/cache": true,
+      "**/tmp": true,
+      "**/build": true,
+      "**/_temp_*": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/cache": true,
+      "**/tmp": true,
+      "**/build": true,
+      "**/_temp_*": true,
+      "**/woltlab-core/cache": true,
+      "**/woltlab-core/tmp": true
+    },
+    "files.associations": {
+      "*.tpl": "smarty",
+      "*.xml": "xml"
+    },
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false,
+    "editor.detectIndentation": false,
+    "[typescript]": {
+      "editor.tabSize": 4,
+      "editor.insertSpaces": false
+    },
+    "[javascript]": {
+      "editor.tabSize": 4,
+      "editor.insertSpaces": false
+    },
+    "[php]": {
+      "editor.tabSize": 4,
+      "editor.insertSpaces": false,
+      "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+      "editor.formatOnSave": false
+    },
+    "php.validate.enable": false,
+    "intelephense.environment.phpVersion": "8.3.23",
+    "intelephense.environment.includePaths": [
+      "/home/benny/Dokumente/woltlab/lokal-webserver/woltlab"
+    ],
+    "intelephense.files.maxSize": 5000000,
+    "intelephense.diagnostics.enable": true,
+    "intelephense.diagnostics.run": "onSave",
+    "intelephense.diagnostics.undefinedTypes": true,
+    "intelephense.diagnostics.undefinedFunctions": true,
+    "intelephense.diagnostics.undefinedConstants": true,
+    "intelephense.diagnostics.undefinedClassConstants": true,
+    "intelephense.diagnostics.undefinedMethods": true,
+    "intelephense.diagnostics.undefinedProperties": true,
+    "intelephense.diagnostics.undefinedVariables": true,
+    "intelephense.diagnostics.deprecated": true,
+    "intelephense.diagnostics.unusedSymbols": true,
+    "intelephense.diagnostics.duplicateSymbols": true,
+    "intelephense.diagnostics.argumentCount": true,
+    "intelephense.diagnostics.typeErrors": true,
+    "intelephense.diagnostics.languageConstraints": true,
+    "intelephense.diagnostics.embeddedLanguages": true,
+    "intelephense.trace.server": "off",
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#5c2808",
+      "titleBar.activeForeground": "#f5faf7",
+      "titleBar.inactiveBackground": "#3d1a05",
+      "titleBar.inactiveForeground": "#b8c4bc",
+      "statusBar.background": "#4a2207",
+      "statusBar.foreground": "#f5faf7",
+      "statusBar.noFolderBackground": "#4a2207",
+      "commandCenter.background": "#5c2808",
+      "commandCenter.activeBackground": "#743208",
+      "commandCenter.foreground": "#f5faf7",
+      "commandCenter.activeForeground": "#ffffff",
+      "commandCenter.inactiveForeground": "#a8b5ae",
+      "commandCenter.border": "#8b5230"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "bmewburn.vscode-intelephense-client",
+      "xdebug.php-debug",
+      "ms-vscode.vscode-typescript-next"
+    ]
+  }
+}

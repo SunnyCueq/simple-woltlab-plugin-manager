@@ -1,160 +1,153 @@
 # Plugin Store Submission Checklist
 
-**Last updated:** 2025-01-18  
-**Version:** 1.0.0
+**Last updated:** 2026-06-26 (aligned with [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/))  
+**Version:** 1.1.0
 
-This checklist is aligned with **validate-plugin.sh** and the [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/).
+WoltLab reviews in **two stages**: automated pre-check on upload, then manual review. Our tools cover stage 1 extensively; stage 2 requires additional manual testing (functionality, UX, permissions).
 
----
-
-## Before submission: Automatic validation
-
-Run the automatic validation first:
+**Required before every store upload:**
 
 ```bash
+./tools/build.sh [PLUGIN_DIR]          # fails on template/build errors
 ./tools/validate-plugin.sh [PLUGIN_DIR]
 ```
 
 Or in the main menu: **Option 6) Plugin Validation**
 
-### ✅ Criteria checked automatically
+---
 
-The following are checked by the `validate-plugin.sh` script:
+## 1. WoltLab pre-check (automatic on upload)
 
-- [ ] **PHP syntax:** All PHP files syntactically correct
-- [ ] **XML syntax:** package.xml and all PIP XMLs valid
-- [ ] **File completeness:** All files declared in package.xml present
-- [ ] **Translations:** German (de.xml) AND English (en.xml) present
-- [ ] **Min version:** Supported WoltLab Core version (6.0+)
-- [ ] **No package servers:** No packageUpdateServer PIP
-- [ ] **SQL injection:** No dangerous query patterns
-- [ ] **XSS risks:** Templates use escaping (|escape, |encodeJS)
-- [ ] **Debug code:** No var_dump(), print_r(), console.log()
-- [ ] **Test credentials:** No hardcoded passwords
-- [ ] **API usage:** HTTPRequest/Guzzle instead of file_get_contents/curl
-- [ ] **WoltLab Cloud:** No exec(), shell_exec(), system(), passthru()
-- [ ] **Archive:** No junk files (.DS_Store, Thumbs.db) in the package
+| WoltLab criterion | Our tool / action |
+|-------------------|-------------------|
+| PHP and XML files syntactically correct | `validate-plugin.sh` → PHP/XML syntax |
+| Archive contains all files declared in `package.xml` | `validate-plugin.sh` → file completeness |
+| No junk files (`.DS_Store`, `Thumbs.db`, …) | `validate-plugin.sh` + `build.sh` |
+| Compatibility metadata complete and valid | `validate-plugin.sh` → `requiredpackages`, version |
+| Minimum `com.woltlab.wcf` version with security support | `validate-plugin.sh` → min version (6.0+; use current 6.2.x at release) |
 
 ---
 
-## Manual checks (before submission)
+## 2. WoltLab manual review (staff)
 
-### Documentation & description
+WoltLab priority: **security first**, then operability and UX.
 
-- [ ] **German description:** Complete and meaningful
-- [ ] **English description:** Same information as DE
-- [ ] **Screenshots:** Meaningful and up to date (required for styles)
-- [ ] **Release notes:** Changelog documents changes
-- [ ] **External links:** Only at the end, only for relevant info
+| WoltLab criterion | Our tool / manual check |
+|-------------------|-------------------------|
+| **Security:** bad parameters, SQL, missing permissions, XSS | `validate-plugin.sh`; manual admin/user flows, uploads |
+| **Operability:** install through smoke test; UI aligned with WoltLab | ACP upload via `prepare-acp-install.sh`; plugin E2E / QA checklist |
+| **API usage:** e.g. Guzzle/HTTPRequest instead of `file_get_contents`/`curl` | `validate-plugin.sh` → HTTP API check |
+| **No test/debug code or baked-in test API keys** | `validate-plugin.sh` → debug code, test credentials |
+| **Efficiency:** no obviously expensive DB queries | Manual: N+1, pagination; verify raw SQL against schema |
+| **Translations:** DE **and** EN complete, equivalent content | `validate-plugin.sh` + optional `check-language-keys.py`; store listing DE/EN |
+| **Copyright:** apps on app pages only; styles may show on all pages | Manual: no banners on foreign pages |
+| **No implicit/explicit package server installation** | `validate-plugin.sh` → no `packageUpdateServer` PIP |
 
-### Security & authorization
+### Raw SQL / schema pitfalls (Shr1nkr 1.4.x learnings)
 
-- [ ] **Permission checks:** All admin functions check permissions
-- [ ] **User input validation:** All inputs validated
-- [ ] **SQL queries:** Prepared statements with parameter binding only
-- [ ] **Template output:** User data escaped
-- [ ] **File uploads:** Validate type, size, name
+Before release, verify every **custom SQL query** against `install.sql` / DBObject — not every table has `isDisabled`; WCF 6.2 box limits live in `additionalData`, not `wcf*_box.limit`.
 
-### Performance & code quality
+Examples fixed in Shr1nkr:
 
-- [ ] **DB queries:** Efficient (no N+1)
-- [ ] **Caching:** Expensive operations cached
-- [ ] **Lazy loading:** Large data sets paginated
-- [ ] **Code duplication:** Reusable logic in shared functions
-
-### WoltLab Cloud compatibility
-
-- [ ] **HTTP requests:** Use HTTPRequest/Guzzle (proxy support)
-- [ ] **No custom ports:** Standard HTTP/HTTPS (80/443) only
-- [ ] **No bulk email:** No mass email sending
-- [ ] **No system commands:** No exec(), shell_exec(), system()
-
-### Package quality
-
-- [ ] **Package name:** Format com.domain.pluginname correct
-- [ ] **Version:** Semantic versioning (MAJOR.MINOR.PATCH)
-- [ ] **Date:** Current release date
-- [ ] **Dependencies:** All requiredpackages correct
-- [ ] **Excluded packages:** WoltLab 7.0 Alpha excluded (recommended)
+- `shrinkr1_link`: **no** `isDisabled` (links are deleted, not disabled)
+- `wcf*_box`: **no** SQL column `limit` — read from `unserialize(additionalData)['limit']`
 
 ---
 
-## Workflow: From development to Plugin Store
+## 3. Automatically checked criteria (`validate-plugin.sh` + `build.sh`)
 
-### 1. Development complete
+- [ ] **PHP syntax:** all `.php` valid
+- [ ] **XML syntax:** `package.xml` and PIP XMLs valid
+- [ ] **File completeness:** declared files present
+- [ ] **Translations:** `language/de.xml` **and** `language/en.xml`
+- [ ] **Language XML structure:** item name matches category (`check-language-categories.py`)
+- [ ] **Min version:** supported WCF version (security support)
+- [ ] **No package servers:** no `packageUpdateServer` PIP
+- [ ] **SQL injection:** no request data in SQL string concatenation
+- [ ] **LIKE escaping:** `escapeLikeValue()` instead of `addcslashes()` (WCF 6.2.5+)
+- [ ] **XSS:** no `|encodeHTML`/`|escape`; in `<script>` only `{unsafe:$var|encodeJS}` (`check-template-xss.py`, **build-breaking** in `build.sh`)
+- [ ] **Debug code:** no `var_dump()`, `print_r()`, `console.log()` in release
+- [ ] **Test credentials:** no hardcoded passwords
+- [ ] **HTTP:** HTTPRequest/Guzzle instead of `file_get_contents`/`curl` for HTTP(S)
+- [ ] **WoltLab Cloud:** no `exec()`, `shell_exec()`, `system()`, `passthru()`
+- [ ] **Event listeners:** no dynamic properties on `$eventObj` (PHP 8.2+)
+- [ ] **Archive:** no junk files in package
 
-```bash
-cd /path/to/mein-plugin
-./tools/build.sh mein-plugin
-```
-
-### 2. Run validation
-
-```bash
-./tools/validate-plugin.sh mein-plugin
-# Expected: ✅ Validation successful! No errors or warnings.
-```
-
-Fix any errors or warnings before continuing.
-
-### 3. Create package
-
-The build step creates the release package; the .tar file is in the plugin directory.
-
-### 4. Manual testing
-
-- [ ] Test plugin on a real WoltLab installation
-- [ ] Test all features
-- [ ] Test permissions (as user and admin)
-- [ ] Test uninstall/reinstall
-- [ ] Test in different browsers
-
-### 5. Plugin Store submission
-
-1. Go to https://www.woltlab.com/pluginstore/
-2. Click “Upload new plugin”
-3. Upload the TAR.GZ file
-4. Fill in description (DE + EN identical)
-5. Upload screenshots
-6. Choose category
-7. Submit for review
-
-### 6. Wait for review
-
-- **Typical:** About one in three submissions is rejected on first try
-- **Common reasons:** Security, missing translations, API usage
-- **Review time:** A few days to a week
+See also: [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md), [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.de.md), [LANGUAGE-XML.de.md](LANGUAGE-XML.de.md)
 
 ---
 
-## Common rejection reasons
+## 4. AI-assisted tools (WoltLab policy, new 2026)
+
+WoltLab allows AI **only as support**. The vendor must **independently** understand, maintain, and fix review feedback.
+
+**For our development:**
+
+- Always verify AI output against local sources (`woltlab-docs/`, `wcfsetup/`) and `validate-plugin.sh`
+- Do not ship unverified SQL columns, template modifiers, or API assumptions from model answers
+- Store upload only after human review + green validator
+
+---
+
+## 5. Store listing requirements
+
+- [ ] **German description:** complete, factual
+- [ ] **English description:** same content as German
+- [ ] **Screenshots:** meaningful (**required for styles**; recommended for plugins)
+- [ ] **Changelog / release notes:** documented
+- [ ] **External links:** only at the end, only if relevant (demo, help)
+- [ ] **No advertising** for offers outside the Plugin Store / no third-party shop promotion
+- [ ] Links to **your own** add-on packages in the Plugin Store are allowed
+- [ ] **License:** via store fields or external link → `text/plain`; valid TLS cert for HTTPS
+
+Shr1nkr materials: `wsc-shr1nkr/docs/store/` (listing DE/EN, screenshot guide)
+
+---
+
+## 6. WoltLab Cloud (technical approval)
+
+- [ ] Compatible with current WSC version
+- [ ] Outbound HTTP(S) via Guzzle / proxy configuration
+- [ ] No connections to non-standard TCP/UDP ports
+- [ ] No bulk email sending
+- [ ] No privileges reserved in managed hosting (e.g. direct DB administration)
+
+---
+
+## 7. Workflow: development → store
+
+Same steps as the German checklist: build → validate → manual tests → upload → wait for review.
+
+---
+
+## 8. Common rejection reasons
 
 ### Critical (errors)
 
-1. **Missing EN translation** → Add language/en.xml
-2. **SQL injection risks** → Use prepared statements
-3. **XSS in templates** → Use {|escape} for user data
-4. **Test credentials** → Remove all dummy passwords
-5. **Package server installation** → Remove packageUpdateServer PIP
+1. **Missing EN translation** → add `language/en.xml`
+2. **SQL injection / wrong schema in raw SQL** → prepared statements; verify columns in `install.sql`
+3. **XSS in templates** → plain `{$var}` (auto-escape); `{unsafe:…|encodeJS}` in scripts — **not** `|escape`/`|encodeHTML`
+4. **Test credentials / debug code** → remove
+5. **Package server** → remove `packageUpdateServer` PIP
+6. **Missing permission checks** → explicit checks in form/page/action
 
-### Important (warnings)
+### Important (warnings / notes)
 
-1. **file_get_contents() for HTTP** → Use HTTPRequest/Guzzle
-2. **Missing permission checks** → Check permissions explicitly
-3. **Inefficient DB queries** → Fix N+1 issues
-4. **Debug code** → Remove var_dump(), console.log()
-5. **Outdated min version** → Upgrade to 6.0.0+
+1. **`file_get_contents()` for HTTP** → HTTPRequest/Guzzle
+2. **Inefficient DB queries** → pagination, caching, avoid N+1
+3. **Outdated min version** → current 6.2.x with security support
+4. **Listing DE ≠ EN** → align texts
 
 ---
 
 ## Resources
 
 - **Plugin Store guidelines:** https://www.woltlab.com/pluginstore/en/guidelines/
-- **WoltLab Docs 6.0+:** https://docs.woltlab.com/
-- **Security best practices:** https://docs.woltlab.com/6.0/php/database-access/
-- **API reference:** https://docs.woltlab.com/6.0/php/api/
-- **Template security:** https://docs.woltlab.com/6.0/view/templates/
+- **WoltLab Docs:** https://docs.woltlab.com/6.2/
+- **Security (DB):** https://docs.woltlab.com/6.0/php/database-access/
+- **Templates:** https://docs.woltlab.com/6.0/view/templates/
+- **Security checks (this repo):** [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md)
 
 ---
 
-This checklist is based on the official Plugin Store guidelines and WoltLab community best practices.
+When WoltLab updates their guidelines, update this checklist and `validate-plugin.sh` — the WoltLab page above is the source of truth.

@@ -1,0 +1,245 @@
+/* Recovery Tool — Layout & Banner (Stub + eingebettet in plugin-recovery-tool.php) */
+
+/* Volle Breite im Content — kein WCFSetup-Sidebar-Float */
+#tplRecoveryAuth .content .info,
+#tplRecoveryAuth .content .warning,
+#tplRecoveryAuth .content .error,
+#tplRecoveryAuth .content .success,
+#tplRecoveryAuth .content .recovery-content-banner,
+#tplRecoveryAuth .content .recovery-panel,
+#tplRecoveryAuth .content .recovery-info-panel,
+#tplRecoveryAuth .content .recovery-log-hint,
+#tplRecoveryAuth .content .recovery-auth-alert,
+#tplRecoveryAuth .content .section,
+#tplRecoveryAuth .content .recovery-log-panel {
+    clear: both;
+    display: block;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.recovery-content-banner {
+    margin: 0 0 20px;
+    padding: 14px 16px;
+    border-radius: 4px;
+    border-left: 4px solid var(--wcfStatusInfoBorder, #2196f3);
+    background: var(--wcfStatusInfoBackground, rgba(33, 150, 243, 0.08));
+}
+
+.recovery-info-panel {
+    width: 100%;
+    margin: 0 0 20px;
+    padding: 18px 20px;
+    border: 1px solid var(--wcfContentBorderInner, rgba(0, 0, 0, 0.12));
+    border-radius: 6px;
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+    box-sizing: border-box;
+}
+
+.recovery-info-panel h2 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.recovery-info-panel .recovery-info-hint {
+    margin: 0 0 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+.recovery-info-panel--drawer summary {
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+}
+
+.recovery-info-panel--drawer summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Kommandozeilen — lesbar im Dark Mode */
+.recovery-cmd-block,
+pre.recoveryLog,
+.recovery-log-pre {
+    display: block !important;
+    overflow-x: auto;
+    margin: 12px 0;
+    padding: 12px 14px !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #e8ecf0 !important;
+    background: #1e2832 !important;
+    border: 1px solid #3d4f5f !important;
+    border-radius: 4px;
+    box-shadow: none !important;
+}
+
+html[data-color-scheme="light"] .recovery-cmd-block,
+html[data-color-scheme="light"] pre.recoveryLog,
+html[data-color-scheme="light"] .recovery-log-pre {
+    color: #1a1a1a !important;
+    background: #f4f4f4 !important;
+    border-color: #ccc !important;
+}
+
+/* Auth wizard alerts */
+.recovery-auth-alert {
+    margin: 0 0 20px;
+    padding: 14px 16px;
+    border-radius: 4px;
+    border-left: 4px solid var(--wcfStatusInfoBorder, #2196f3);
+    background: var(--wcfStatusInfoBackground, rgba(33, 150, 243, 0.08));
+}
+.recovery-auth-alert--error {
+    border-left-color: var(--wcfStatusErrorBorder, #f44336);
+    background: var(--wcfStatusErrorBackground, rgba(244, 67, 54, 0.08));
+}
+.recovery-auth-alert--warning {
+    border-left-color: var(--wcfStatusWarningBorder, #ff9800);
+    background: var(--wcfStatusWarningBackground, rgba(255, 152, 0, 0.1));
+}
+.recovery-auth-alert--info {
+    border-left-color: var(--wcfStatusInfoBorder, #2196f3);
+    background: var(--wcfStatusInfoBackground, rgba(33, 150, 243, 0.08));
+}
+.recovery-auth-alert[hidden] {
+    display: none !important;
+}
+.recovery-auth-alert-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0 0 8px;
+}
+.recovery-auth-alert-title strong {
+    font-weight: 600;
+}
+.recovery-auth-alert p {
+    margin: 0 0 8px;
+}
+.recovery-auth-alert-steps {
+    margin: 8px 0 0 1.25em;
+    padding: 0;
+}
+.recovery-auth-alert-steps li {
+    margin: 6px 0;
+}
+.recovery-auth-alert-steps code {
+    font-size: 0.92em;
+}
+
+/* Wizard-Fortschritt */
+.recovery-wizard-progress {
+    margin: 0 0 24px;
+}
+.recovery-wizard-progress progress {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    margin-bottom: 8px;
+}
+.recovery-wizard-steps {
+    list-style: decimal;
+    margin: 0 0 24px 24px;
+    padding: 0;
+    line-height: 1.6;
+}
+
+#tplRecoveryAuth .recovery-content-banner {
+    margin-bottom: 16px;
+}
+
+.recovery-panel {
+    width: 100%;
+    margin: 0 0 20px;
+    padding: 0;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    border-radius: 6px;
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+    box-sizing: border-box;
+}
+
+.recovery-panel summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-weight: 600;
+    list-style: none;
+}
+
+.recovery-panel summary::-webkit-details-marker {
+    display: none;
+}
+
+.recovery-panel__body {
+    padding: 0 18px 16px;
+    line-height: 1.55;
+}
+
+.recovery-panel--package-contents .recovery-panel__body--package-contents {
+    padding: 16px 18px 18px;
+}
+
+.recovery-package-contents-intro {
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfSidebarBackground, rgba(0, 0, 0, 0.04));
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+.recovery-package-contents-intro code {
+    font-size: 12px;
+}
+
+.recovery-package-contents {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.recovery-package-contents__item {
+    display: grid;
+    grid-template-columns: minmax(11rem, 36%) 1fr;
+    gap: 8px 16px;
+    align-items: start;
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--wcfContentBorderInner, #ddd);
+    background: var(--wcfContentBackground, rgba(0, 0, 0, 0.02));
+    line-height: 1.5;
+}
+
+.recovery-package-contents__path {
+    display: block;
+    font-size: 12px;
+    word-break: break-word;
+    color: var(--wcfContentText, inherit);
+}
+
+.recovery-package-contents__desc {
+    display: block;
+    font-size: 13px;
+    color: var(--wcfContentDimmedText, #888);
+}
+
+@media (max-width: 640px) {
+    .recovery-package-contents__item {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+}

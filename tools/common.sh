@@ -207,21 +207,15 @@ sed_inplace() {
     fi
 }
 
-# Farben
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-MAGENTA='\033[0;35m'
-NC='\033[0m' # No Color
-
-# Unicode-Symbole
-CHECK="✓"
-CROSS="✗"
-ARROW="→"
-WARNING="⚠"
-INFO="ℹ"
+# Farben und Symbole (TTY-sicher via ui.sh)
+_UI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "$_UI_DIR/ui.sh" ]; then
+    source "$_UI_DIR/ui.sh"
+else
+    RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'
+    CYAN='\033[0;36m'; MAGENTA='\033[0;35m'; BOLD='\033[1m'; DIM='\033[2m'; RESET='\033[0m'; NC='\033[0m'
+    CHECK="✓"; CROSS="✗"; ARROW="→"; WARNING="⚠"; INFO="ℹ"
+fi
 
 # ============================================================
 # Debug-Log-System (zentral für alle Tools)
@@ -770,54 +764,56 @@ get_git_repo_display() {
 # Funktion: System-Übersicht anzeigen (Plugin-Tools: Git, Node, Debug-Log)
 show_system_overview() {
     debug_info "show_system_overview" "displaying system overview"
-    print_section "System-Übersicht"
-    echo -e "${CYAN}Plugin-Entwicklung:${NC}"
-    echo ""
+    if declare -f ui_section &>/dev/null; then
+        ui_section "System-Übersicht"
+    else
+        echo ""; echo -e "${CYAN}─── System-Übersicht ───${NC}"; echo ""
+    fi
     local git_version=$(get_git_version)
     if [ "$git_version" != "not installed" ]; then
-        echo -e "   ${GREEN}✓${NC} ${CYAN}Git:${NC}          ${YELLOW}${git_version}${NC}"
+        ui_kv "Git" "$git_version" ""
     else
-        echo -e "   ${RED}✗${NC} ${CYAN}Git:${NC}          ${YELLOW}nicht installiert${NC}"
+        echo -e "  ${RED}${FAIL}${RESET} Git: nicht installiert"
     fi
     if command -v node &>/dev/null; then
         local node_version=$(node -v 2>/dev/null || echo "?")
-        echo -e "   ${GREEN}✓${NC} ${CYAN}Node:${NC}         ${YELLOW}${node_version}${NC} ${BLUE}(für TypeScript)${NC}"
+        ui_kv "Node" "$node_version" "für TypeScript"
     else
-        echo -e "   ${YELLOW}?${NC} ${CYAN}Node:${NC}         ${YELLOW}nicht gefunden${NC} ${BLUE}(optional, für TypeScript)${NC}"
+        ui_warn "Node: nicht gefunden (optional, für TypeScript)"
     fi
     local woltlab_ver
     woltlab_ver=$(get_woltlab_version "$(get_public_dir)" 2>/dev/null || echo "unknown")
     if [ -n "$woltlab_ver" ] && [ "$woltlab_ver" != "unknown" ]; then
-        echo -e "   ${GREEN}✓${NC} ${CYAN}WoltLab:${NC}       ${YELLOW}${woltlab_ver}${NC} ${BLUE}(Core)${NC}"
+        ui_kv "WoltLab" "$woltlab_ver" "Core"
     else
-        echo -e "   ${YELLOW}?${NC} ${CYAN}WoltLab:${NC}       ${YELLOW}nicht ermittelt${NC} ${BLUE}(Core)${NC}"
+        ui_warn "WoltLab: nicht ermittelt (Core)"
     fi
     local repo_display
     repo_display=$(get_git_repo_display)
     echo ""
-    echo -e "${CYAN}Git-Repository (für Push):${NC}"
-    echo -e "   ${CYAN}Aktiv:${NC} ${YELLOW}${repo_display}${NC}"
-    echo ""
-    echo -e "${CYAN}Debug-Log:${NC}"
-    echo -e "   ${BLUE}${DEBUG_LOG_FILE}${NC}"
+    ui_infobox "Repository (Push): $repo_display"
+    ui_infobox "Debug-Log: $DEBUG_LOG_FILE"
     if [ -f "$DEBUG_LOG_FILE" ]; then
         local log_size=$(du -h "$DEBUG_LOG_FILE" 2>/dev/null | cut -f1)
         local log_lines=$(wc -l < "$DEBUG_LOG_FILE" 2>/dev/null || echo "0")
-        echo -e "   ${YELLOW}Größe: ${log_size} | Zeilen: ${log_lines}${NC}"
+        echo -e "  ${DIM}Größe: ${log_size} | Zeilen: ${log_lines}${RESET}"
     fi
     echo ""
 }
 
 # REMOVED: check_woltlab_requirements, check_updates, install_phpmyadmin_from_updates, show_update_check, _debug_log, MISSING_* (Phase 1.2)
-# Funktion: Header mit Titel
+# Funktion: Header mit Titel (moderne Box via ui.sh)
 print_header() {
-    local title="${1:-WoltLab Development Tools}"
-    # Nur clear aufrufen, wenn interaktiv (TTY vorhanden)
+    local title="${1:-Simple WoltLab Plugin Manager}"
     [ -t 0 ] && clear 2>/dev/null || true
-    echo -e "${BLUE}==========================================${NC}"
-    echo -e "${BLUE}${CYAN}${title}${NC}"
-    echo -e "${BLUE}==========================================${NC}"
-    echo ""
+    if declare -f ui_header &>/dev/null; then
+        ui_header "$title"
+    else
+        echo -e "${BLUE}==========================================${NC}"
+        echo -e "${CYAN}${title}${NC}"
+        echo -e "${BLUE}==========================================${NC}"
+        echo ""
+    fi
     debug_log "print_header" "title=$title"
 }
 
@@ -842,21 +838,24 @@ print_breadcrumb() {
     echo ""
 }
 
-# Funktion: Sektion-Header (mit optionaler Breadcrumb)
+# Funktion: Sektion-Header (mit optionaler Breadcrumb, moderner Stil via ui.sh)
 print_section() {
     local title="$1"
     shift
     local breadcrumbs=("$@")
     
-    # Zeige Breadcrumb falls vorhanden
     if [ ${#breadcrumbs[@]} -gt 0 ]; then
         print_breadcrumb "${breadcrumbs[@]}"
     fi
     
-    echo -e "${CYAN}==========================================${NC}"
-    echo -e "${CYAN}${title}${NC}"
-    echo -e "${CYAN}==========================================${NC}"
-    echo ""
+    if declare -f ui_section &>/dev/null; then
+        ui_section "$title"
+    else
+        echo -e "${CYAN}==========================================${NC}"
+        echo -e "${CYAN}${title}${NC}"
+        echo -e "${CYAN}==========================================${NC}"
+        echo ""
+    fi
     debug_log "print_section" "title=$title"
 }
 
