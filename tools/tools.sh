@@ -29,6 +29,8 @@ readonly SETUP_DONE_FILE="$TOOLS_DIR/.woltlab-setup-done"
 # shellcheck source=common.sh
 source "$TOOLS_DIR/common.sh"
 
+check_swpm_requirements || exit 1
+
 # ── Optik (CSRetro-ähnlich) ─────────────────────────────────────────────────
 
 tools_divider() {

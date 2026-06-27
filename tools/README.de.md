@@ -8,7 +8,7 @@
 
 Der Ordner `tools/` enthält alle Skripte für die **WoltLab-Plugin-Entwicklung**: Plugins bauen, zu Git pushen, Releases erstellen, TypeScript kompilieren, Pakete entpacken, Code prüfen und ein einmaliges Setup. Die Tools unterstützen den Weg von der Entwicklung bis zum **WoltLab Plugin-Store** und beachten dabei WoltLab- und Store-Anforderungen. Alles wird über das Hauptmenü (`tools.sh`) oder durch direkten Aufruf der Skripte gesteuert. Diese Seite beschreibt jedes Tool, damit du weißt, wann und wie du es nutzt.
 
-**Plattformen:** Unter Windows **WSL2** oder **Git Bash** verwenden; reines cmd oder PowerShell wird nicht unterstützt.
+**Plattformen:** Linux, macOS, **Windows (WSL2)** und **Windows (Git Bash)**. Unter Windows aus cmd/Explorer: `tools.cmd`. Reines cmd/PowerShell wird nicht unterstützt. Details: [docs/CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md).
 
 ---
 
@@ -26,7 +26,7 @@ Der Ordner `tools/` enthält alle Skripte für die **WoltLab-Plugin-Entwicklung*
 | 4 | Unpack | Plugin-Paket nach `temp_edit/` entpacken. |
 | 5 | Hilfe & Dokumentation | Diese Doku öffnen. |
 | 6 | Plugin-Validierung | Sicherheits- und Store-Compliance-Prüfungen ausführen. |
-| 7 | Setup / Vorbereitung | Einmaliges Setup (Core, Doku, Typings, Pfade, MCP). |
+| 7 | Setup / Vorbereitung | Einmaliges Setup (Core, Doku, Typings, Pfade). |
 | 8 | Repo | Git-Repository (origin) für Push anzeigen oder ändern. |
 | 0 | Beenden | Menü verlassen. |
 
@@ -155,7 +155,7 @@ Sprach-XML (Kategorie/Item): [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md)
 
 **Was es macht:** Findet das neueste `.tar.gz` im Plugin-Ordner, kopiert es in den lokalen Docker-Webserver (`woltlab-web`) und gibt die exakten Schritte für den manuellen ACP-Upload aus.
 
-**Wann nutzen:** Nach `./tools/build.sh`, bevor du das Paket in WoltLab testest. Der Cursor-Agent kann den Datei-Dialog im ACP nicht bedienen – du wählst die Datei, der Agent macht danach weiter.
+**Wann nutzen:** Nach `./tools/build.sh`, bevor du das Paket in WoltLab testest. Paketdatei im ACP manuell im Installationsdialog auswählen.
 
 **Befehl:**
 
@@ -169,7 +169,7 @@ Details: [docs/ACP-PACKAGE-INSTALL.de.md](docs/ACP-PACKAGE-INSTALL.de.md)
 
 ### setup-minimal.sh – Einmaliges Setup
 
-**Was es macht:** Führt dich durch ein minimales Setup: WoltLab Core herunterladen (oder Pfad setzen), WoltLab-Doku und/oder WCF von GitHub klonen, WoltLab-d.ts-Typings für TypeScript klonen, optionalen Pfad zu einer lokalen WoltLab-Installation setzen und optional eine MCP-Vorlage nach `basis-plugin/.cursor/` kopieren. Einstellungen werden in `tools/.env` geschrieben; Workspace-Datei und Intelephense-Pfade können angepasst werden.
+**Was es macht:** Führt dich durch ein minimales Setup: WoltLab Core herunterladen (oder Pfad setzen), WoltLab-Doku und/oder WCF von GitHub klonen, WoltLab-d.ts-Typings für TypeScript klonen, optionalen Pfad zu einer lokalen WoltLab-Installation setzen. Einstellungen werden in `tools/.env` geschrieben; Workspace-Datei und Intelephense-Pfade können angepasst werden.
 
 **Wann nutzen:** Einmal nach dem Klonen des Repos oder wenn du Core, Doku, Typings oder den lokalen Installationspfad hinzufügen/ändern willst.
 
@@ -204,16 +204,6 @@ Vom Repo-Root aus ausführen. Du wirst für jeden Schritt gefragt; einzelne Schr
 **Wann nutzen:** Wenn du Core getrennt vom vollständigen Setup brauchst (z. B. du hast das Setup schon ausgeführt und den Download übersprungen). Ansonsten kann das Haupt-Setup (`setup-minimal.sh`) das für dich erledigen.
 
 **Befehl:** Vom Repo-Root aus ausführen; das Skript oder das Haupt-README nennt den genauen Befehl (z. B. `./tools/download-woltlab-core.sh`). Du musst im WoltLab-Kundenbereich eingeloggt sein für den Download.
-
----
-
-### Build-Button-Extension (woltlab-build-button/)
-
-**Was es macht:** Eine kleine VS Code-/Cursor-Extension, die in der Seitenleiste einen **WoltLab**-Bereich mit Buttons für Build, Git Push, TypeScript, Unpack, Hilfe, Validierung und das komplette Tools-Menü hinzufügt. Du startest dieselben Tools mit einem Klick statt über die Eingabe von Befehlen.
-
-**Wann nutzen:** Wenn du lieber eine grafische Schnellstart-Oberfläche zu den Skripten nutzt.
-
-**So nutzen:** Ordner `tools/woltlab-build-button` in **VS Code** oder **Cursor** öffnen und als **Development Extension** laden (z. B. „Load“ oder „Run“ im Kontext der Extension). Die Extension nutzt den Workspace-Root, um `tools.sh` und die Skripte zu finden; bei abweichendem Workspace-Aufbau kannst du `woltlabDevelopment.toolsRoot` in den Einstellungen setzen.
 
 ---
 
@@ -265,6 +255,7 @@ Der Plugin-Manager liefert nur generische Tools: `build.sh`, `validate-plugin.sh
 
 Dokumente in `tools/docs/`:
 
+- **[docs/CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md)** — Linux, macOS, Windows (WSL2, Git Bash), `tools.cmd`.
 - **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checkliste vor der Einreichung eines Plugins im WoltLab-Store: Was `validate-plugin.sh` abdeckt und was du zusätzlich manuell prüfen solltest. Englische Version: [docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
 - **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL-Heuristiken der Validierung (Shr1nkr-/6.2.5-Erkenntnisse).
 - **[docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md)** — Sprach-PIP: Item/Kategorie-Zuordnung (verhindert ACP-Update-Fehler).

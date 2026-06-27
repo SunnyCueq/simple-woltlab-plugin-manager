@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copywriting-Review – nutzt System-Python (nicht Cursor-AppImage).
+# Copywriting-Review – nutzt System-Python.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

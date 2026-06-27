@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Plugin-Manager
+
+- Cursor/MCP-Integration und VS-Code-Build-Button-Extension entfernt.
+- Cross-Platform: Linux, macOS, Windows (WSL2, Git Bash), `tools.cmd`, `check_swpm_requirements()`, Docs unter `tools/docs/CROSS-PLATFORM*.md`.
+
 ## Version 1.0.34 – 2026-05-29
 
 ### Shr1nkr (de.sunnyc.wsc.shrinkr)

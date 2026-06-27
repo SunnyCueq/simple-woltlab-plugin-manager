@@ -41,15 +41,14 @@ Der ACP-Installer schreibt als **`www-data`**. Dateien, die per `docker cp` land
 `prepare-acp-install.sh` führt den Fix nach dem Kopieren des Pakets automatisch aus.  
 Details: [`DOCKER-APP-PERMISSIONS.de.md`](DOCKER-APP-PERMISSIONS.de.md)
 
-## Wichtig für Cursor-Agent / Browser-Automation
+## Manueller ACP-Upload
 
-Der Datei-Dialog (**„Datei auswählen“**) kann **nicht** automatisiert werden
-(CDP `DOM.setFileInputFiles` ist blockiert). Der Agent:
+Der Datei-Dialog (**„Datei auswählen“**) im ACP wird **manuell** bedient:
 
-- bereitet Build + Kopie vor,
-- navigiert im ACP weiter,
-- **stoppt** vor dem Datei-Upload und bittet Benny, die Datei manuell zu wählen,
-- setzt danach mit Bestätigung und Tests fort.
+1. Build + `prepare-acp-install.sh` ausführen,
+2. im ACP zur Paketinstallation navigieren,
+3. die vorbereitete `.tar.gz` auswählen,
+4. Installation bestätigen und testen.
 
 ## Paket-Pfad (nach `prepare-acp-install.sh`)
 

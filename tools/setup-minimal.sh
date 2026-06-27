@@ -195,23 +195,7 @@ else
 fi
 echo ""
 
-# 6) Cursor MCP-Konfiguration (mcp.json) nach basis-plugin/.cursor/ kopieren?
-MCP_TEMPLATE="$TOOLS_DIR/templates/mcp.json.example"
-if [ -f "$MCP_TEMPLATE" ] && [ -d "$MAIN_DIR/basis-plugin" ]; then
-    read -p "Cursor MCP-Konfiguration (mcp.json) nach basis-plugin/.cursor/ kopieren? (j/n) [n]: " mcp_choice
-    mcp_choice=${mcp_choice:-n}
-    if [[ "$mcp_choice" =~ ^[jJyY] ]]; then
-        mkdir -p "$MAIN_DIR/basis-plugin/.cursor"
-        if cp "$MCP_TEMPLATE" "$MAIN_DIR/basis-plugin/.cursor/mcp.json"; then
-            print_success "MCP-Vorlage nach basis-plugin/.cursor/mcp.json kopiert."
-        else
-            print_warning "Kopieren fehlgeschlagen."
-        fi
-    fi
-fi
-echo ""
-
-# 7) Git-Repository (origin) für diesen Workspace angeben?
+# 6) Git-Repository (origin) für diesen Workspace angeben?
 read -p "Git-Repository (origin) für diesen Workspace angeben? (j/n) [n]: " repo_choice
 repo_choice=${repo_choice:-n}
 if [[ "$repo_choice" =~ ^[jJyY] ]]; then

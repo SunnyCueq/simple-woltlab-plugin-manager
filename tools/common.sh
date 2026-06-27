@@ -4,7 +4,7 @@
 # WoltLab Development Tools - Gemeinsame Funktionen
 # Zentrale Funktionen für alle Tools (Farben, Formatierung, etc.)
 # 
-# Kompatibilität: Linux, macOS, Windows WSL2
+# Kompatibilität: Linux, macOS, Windows (WSL2, Git Bash / MSYS)
 #################################################################
 
 #=====================================
@@ -35,6 +35,39 @@ detect_platform() {
 
 # Setze Plattform-Variable
 PLATFORM=$(detect_platform)
+
+# Anzeigename für Logs und README
+platform_label() {
+    case "$PLATFORM" in
+        linux) echo "Linux" ;;
+        macos) echo "macOS" ;;
+        wsl) echo "Windows (WSL2)" ;;
+        msys|cygwin) echo "Windows (Git Bash)" ;;
+        *) echo "unknown ($OSTYPE)" ;;
+    esac
+}
+
+# Pflicht-Tools für alle Skripte (Cross-Platform)
+check_swpm_requirements() {
+    local missing=0
+    for cmd in bash git tar; do
+        if ! command -v "$cmd" &>/dev/null; then
+            print_error "Erforderlich, fehlt im PATH: $cmd"
+            missing=1
+        fi
+    done
+    if ! command -v python3 &>/dev/null; then
+        print_warning "python3 empfohlen (Validierung, Sprach-Checks)"
+    fi
+    if [ "$missing" -ne 0 ]; then
+        echo ""
+        echo "Plattform: $(platform_label)"
+        echo "Unterstützt: Linux, macOS, Windows via WSL2 oder Git Bash."
+        echo "Details: tools/docs/CROSS-PLATFORM.md"
+        return 1
+    fi
+    return 0
+}
 
 # Funktion: Prüft ob ein Port (TCP) bereits belegt ist (LISTEN)
 # Aufruf: is_port_free <port>; Rückgabe: 0 = frei, 1 = belegt

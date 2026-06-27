@@ -87,7 +87,7 @@ WoltLab erlaubt KI **nur unterstützend**. Der Anbieter muss Code **eigenständi
 - Keine ungeprüften SQL-Spalten, Template-Modifier oder API-Annahmen aus Modell-Antworten übernehmen
 - Store-Upload nur nach menschlichem Review + grünem Validator
 
-**Community-Thread 318738 (#48–#51, Alexander Ebert):** Lauffähig ≠ Store-Qualität. Reviewer erkennen „AI slop“ u. a. an falschen Option-Namen (`enable_seo_urls` statt `url_omit_index_php`), fehlenden Lang-Keys (`wcf.global.status`), Dialog-Templates als Vollseiten, Legacy-Notices (`<p class="success">`), leeren Grid-Menü-Einträgen (`ToggleInteraction` im Dropdown), Custom-Nav statt `tabMenuContainer`. Siehe auch `wsc-shr1nkr/.cursor/rules/shrinkr-conformity.mdc` Abschnitt 5–6.
+**Community-Thread 318738 (#48–#51, Alexander Ebert):** Lauffähig ≠ Store-Qualität. Reviewer erkennen „AI slop“ u. a. an falschen Option-Namen (`enable_seo_urls` statt `url_omit_index_php`), fehlenden Lang-Keys (`wcf.global.status`), Dialog-Templates als Vollseiten, Legacy-Notices (`<p class="success">`), leeren Grid-Menü-Einträgen (`ToggleInteraction` im Dropdown), Custom-Nav statt `tabMenuContainer`. Siehe auch `tools/docs/WOLTLAB-TEMPLATE-RULES.de.md` und `tools/docs/SECURITY-CHECKS.de.md`.
 
 **Anti-Pattern-Check vor Upload:** Option-Namen + Lang-Keys gegen Core grep-en; ACP-Templates gegen `woltlab-docs/view/templates.md`; Notices nur `woltlab-core-notice`.
 
@@ -183,7 +183,7 @@ cd /path/to/mein-plugin
 - **Security (DB):** https://docs.woltlab.com/6.0/php/database-access/
 - **Templates:** https://docs.woltlab.com/6.0/view/templates/
 - **Security-Checks (dieses Repo):** [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md)
-- **Cursor-Regeln:** `plugin-manager/.cursor/rules/woltlab.mdc`, `woltlab-plugin-learnings.mdc`
+- **Dokumentation:** `tools/docs/` (Template-Regeln, Sicherheits-Checks, Store-Checkliste)
 
 ---
 

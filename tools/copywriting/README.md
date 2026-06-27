@@ -36,19 +36,19 @@ export OPENAI_API_KEY=sk-...
 | `java-properties` | `.properties` |
 | `markdown-blocks` | Markdown mit ` ```key``` ` (wie Vale-Export) |
 
-## Ohne API-Key (Cursor-Workflow)
+## Ohne API-Key (manueller Review-Workflow)
 
 1. **Regel-Review:** `./tools.sh copywriting --project basis-plugin --mode rules`
 2. **Report lesen:** `copywriting-output/review-de-*.md`
-3. **Texte in Cursor überarbeiten** (Agent/Composer) – z. B. Block `wcf.acp.option.*` in `de.xml` / `en.xml`
+3. **Texte im Editor überarbeiten** – z. B. Block `wcf.acp.option.*` in `de.xml` / `en.xml`
 4. **Sichere Glossar-Fixes anwenden:** `./tools.sh copywriting:apply --project basis-plugin --dry-run` (Vorschau), dann ohne `--dry-run`
 5. **Optional Vale:** `python3 temp_edit/language/extract_for_vale.py` + `vale …`
 
-Der LLM-Teil (`--mode full`) ist optional und braucht `OPENAI_API_KEY`. Für die Plugin-Texte reicht der Cursor-Agent plus Regel-Review.
+Der LLM-Teil (`--mode full`) ist optional und braucht `OPENAI_API_KEY`. Für Plugin-Texte reicht oft Regel-Review plus manuelle Überarbeitung.
 
 ## Ausgabe
 
-`copywriting-output/review-{locale}-{timestamp}.md` und `.json` – **kein automatisches Überschreiben** der Sprachdateien. Vorschläge manuell oder per Cursor übernehmen.
+`copywriting-output/review-{locale}-{timestamp}.md` und `.json` – **kein automatisches Überschreiben** der Sprachdateien. Vorschläge manuell im Editor übernehmen.
 
 ## LLM
 

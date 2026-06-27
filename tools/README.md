@@ -8,7 +8,7 @@
 
 The `tools/` folder contains all scripts used for **WoltLab plugin development**: building plugins, pushing to Git, creating releases, compiling TypeScript, unpacking packages, validating code, and running a one-time setup. The tools support the path from development to the **WoltLab Plugin Store** and take WoltLab and Store requirements into account. Everything is driven from the main menu (`tools.sh`) or by calling the scripts directly. This page describes each tool so you know when and how to use it.
 
-**Platforms:** On Windows, use **WSL2** or **Git Bash** to run the scripts. Plain cmd or PowerShell is not supported.
+**Platforms:** Linux, macOS, **Windows (WSL2)** and **Windows (Git Bash)**. Use `tools.cmd` from cmd/Explorer on Windows. Plain cmd/PowerShell are not supported. Details: [docs/CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md).
 
 ---
 
@@ -26,7 +26,7 @@ The `tools/` folder contains all scripts used for **WoltLab plugin development**
 | 4 | Unpack | Unpack a plugin package into `temp_edit/`. |
 | 5 | Help & Documentation | Open this documentation. |
 | 6 | Plugin Validation | Run security and store-compliance checks. |
-| 7 | Setup / Preparation | Run the one-time setup (Core, docs, typings, paths, MCP). |
+| 7 | Setup / Preparation | Run the one-time setup (Core, docs, typings, paths). |
 | 8 | Repo | Show or change the Git repository (origin) used for push. |
 | 0 | Exit | Quit the menu. |
 
@@ -153,7 +153,7 @@ Language XML category rules: [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md).
 
 ### setup-minimal.sh – One-time setup
 
-**What it does:** Guides you through a minimal setup: download WoltLab Core (or set path), clone WoltLab docs and/or WCF from GitHub, clone the WoltLab d.ts typings for TypeScript, set an optional path to a local WoltLab installation, and optionally copy an MCP template into `basis-plugin/.cursor/`. It writes settings into `tools/.env` and can update the workspace file and Intelephense paths.
+**What it does:** Guides you through a minimal setup: download WoltLab Core (or set path), clone WoltLab docs and/or WCF from GitHub, clone the WoltLab d.ts typings for TypeScript, set an optional path to a local WoltLab installation. It writes settings into `tools/.env` and can update the workspace file and Intelephense paths.
 
 **When to use it:** Once after cloning the repo, or when you want to add/change Core, docs, typings, or the local install path.
 
@@ -191,17 +191,7 @@ Run from the repo root. You will be prompted for each step; you can skip any you
 
 ---
 
-### Build Button extension (woltlab-build-button/)
-
-**What it does:** A small VS Code / Cursor extension that adds a **WoltLab** section in the sidebar with buttons for Build, Git Push, TypeScript, Unpack, Help, Validation, and the full tools menu. You run the same tools with one click instead of typing commands.
-
-**When to use it:** If you prefer a graphical shortcut to the scripts.
-
-**How to use it:** Open the folder `tools/woltlab-build-button` in VS Code/Cursor and load it as a **Development Extension** (e.g. “Load” or “Run” from the extension’s context). The extension uses the workspace root to find `tools.sh` and the scripts; you can set `woltlabDevelopment.toolsRoot` in settings if your workspace layout is different.
-
----
-
-## TypeScript typings (d.ts)
+## Further documentation
 
 The typings come from the **official WoltLab d.ts repository** on GitHub. During setup you can clone it into `woltlab-d-ts` so your API usage stays in sync with WoltLab. To update them later, run `git pull` in the `woltlab-d-ts` folder.
 
@@ -235,6 +225,7 @@ After that, your editor and the TypeScript compiler can use WoltLab API types. S
 
 Documents in `tools/docs/`:
 
+- **[docs/CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md)** — Linux, macOS, Windows (WSL2, Git Bash), `tools.cmd`.
 - **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checklist before submitting a plugin to the WoltLab store: what `validate-plugin.sh` covers and what you should still check manually. English version: [docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
 - **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL validation heuristics (Shr1nkr / WoltLab 6.2.5 learnings).
 
