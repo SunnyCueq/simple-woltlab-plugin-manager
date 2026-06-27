@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/swpm-logo.jpg" alt="SWPM — Simple WoltLab Plugin Manager" width="360">
+</p>
+
 # Simple WoltLab Plugin Manager
 
 **[Deutsche Version](README.de.md)**
