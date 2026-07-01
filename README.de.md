@@ -1,136 +1,209 @@
 <p align="center">
-  <img src="docs/assets/swpm-logo.jpg" alt="SWPM — Simple WoltLab Plugin Manager" width="360">
+  <img src="docs/assets/swpm-logo.jpg" alt="SWPM — Simple WoltLab Plugin Manager" width="320">
 </p>
 
 <h1 align="center">Simple WoltLab Plugin Manager</h1>
 
 <p align="center">
-  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager"><img src="https://img.shields.io/github/stars/benjarogit/simple-woltlab-plugin-manager?style=flat-square" alt="GitHub stars"></a>
-  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20WSL2%20%7C%20Git%20Bash-2d6a4f?style=flat-square" alt="Plattformen">
-  <img src="https://img.shields.io/badge/WoltLab%20Suite-6.x-1a5fb4?style=flat-square" alt="WoltLab Suite">
-  <img src="https://img.shields.io/badge/Doku-DE%20%7C%20EN-555?style=flat-square" alt="Zweisprachige Doku">
+  <strong>Plattformübergreifende CLI-Workbench für WoltLab-Plugins — entstanden beim eigenen Plugin-Bau, semi-automatisiert mit Checks und Validierung.</strong>
 </p>
 
-<p align="center"><strong><a href="README.md">English version</a></strong></p>
+<p align="center">
+  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager/releases/latest"><img src="https://img.shields.io/github/v/release/benjarogit/simple-woltlab-plugin-manager?style=flat-square&label=Release" alt="Aktuelles Release"></a>
+  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/LICENSE"><img src="https://img.shields.io/badge/Lizenz-MIT-blue?style=flat-square" alt="MIT-Lizenz"></a>
+  <img src="https://img.shields.io/badge/Plattform-Linux%20%7C%20macOS%20%7C%20WSL2%20%7C%20Git%20Bash-2d6a4f?style=flat-square" alt="Plattformen">
+  <img src="https://img.shields.io/badge/WoltLab%20Suite-6.2%2B-1a5fb4?style=flat-square" alt="WoltLab Suite 6.2+">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Bash-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white" alt="Bash">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/Shell_Skripte-121011?style=flat-square&logo=gnubash&logoColor=white" alt="Shell">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript (optional)">
+  <img src="https://img.shields.io/badge/Docker-optional-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker optional">
+</p>
+
+<p align="center"><a href="README.md"><strong>English version</strong></a></p>
 
 ---
 
-## Inhaltsverzeichnis
+## Über das Projekt
 
-- [Überblick](#überblick)
-- [Funktionen](#funktionen)
-- [Voraussetzungen](#voraussetzungen)
-- [Schnellstart](#schnellstart)
-- [Plattformen](#plattformen)
-- [Ordnerstruktur](#ordnerstruktur)
-- [Tools im Überblick](#tools-im-überblick)
-- [Dokumentation](#dokumentation)
-- [Konfiguration](#konfiguration)
-- [Externe Links](#externe-links)
+**SWPM** ist aus der Praxis entstanden: Beim Entwickeln eigener WoltLab-Suite-Plugins musste ich immer wieder dieselben Schritte manuell erledigen — `package.xml` packen, Checks fahren, Store-Regeln prüfen, Übersetzungen abgleichen. SWPM semi-automatisiert genau diesen Workflow in einem Terminal-Menü, damit der Fokus auf dem Plugin bleibt.
+
+Heute ist es ein **generisches**, plattformübergreifendes CLI-Toolkit für den kompletten Lebenszyklus: Setup, Build, Validierung und GitHub-Release — ohne Bindung an ein bestimmtes Produkt-Plugin.
+
+Orientierung an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/).
 
 ---
-
-## Überblick
-
-Der **Simple WoltLab Plugin Manager (SWPM)** ist ein plattformübergreifendes Kommandozeilen-Toolkit für den kompletten **WoltLab Suite**-Plugin-Lebenszyklus: Setup, Entwicklung, Build, Validierung und Release. Ein zentrales Textmenü steuert alles im Terminal.
 
 ## Funktionen
 
-- **Umgebungs-Setup** — WoltLab Core, offizielle Doku und WCF-Quellcode, TypeScript-Typings (d.ts), Pfade zur lokalen Installation.
-- **Entwicklung** — TypeScript-Kompilierung (inkl. Watch), Pakete entpacken, zentrales Debug-Log.
-- **Build** — Verteilbare `.tar.gz`-Pakete mit Versionserhöhung; [wspackager-Parität](tools/docs/WSPACKAGER-PARITY.de.md) (`files/`, `files_wcf/`, `--json`).
-- **Qualitätssicherung** — Sicherheit (SQL, XSS), Übersetzungen (DE/EN), offline DevTools-Parität (PIP-Quellen, Sprach-Keys mit Datei:Zeile), Minversion, WoltLab-Cloud, Store-Vorgaben.
-- **Release** — Git-Commit, Push, Tags, GitHub-Release inkl. Assets.
-- **Optional** — Docker-Helfer für lokale ACP-Tests; DDEV-Anbindung.
+- **Interaktives Menü** — `./tools.sh` für Build, Validierung, TypeScript, Git-Push und Setup.
+- **Paket-Build** — Installierbare `.tar.gz`-Archive mit patch/minor/major/same; [wspackager-kompatible Layouts](tools/docs/WSPACKAGER-PARITY.de.md) (`files/`, `files_wcf/`, `--json` für CI).
+- **Validierung** — PHP/XML, XSS/SQL-Heuristiken, DE/EN-Sprachkeys, PIP-Quellen (DevTools-Parität), Store-Checkliste.
+- **Workspace-Setup** — Optional WoltLab Core, offizielle Doku, WCF-Quellcode und [WoltLab d.ts](https://github.com/WoltLab/d.ts).
+- **Release** — Commit, Push, Tag und GitHub-Release über `gitpush.sh`.
+- **Plattformen** — Linux, macOS, Windows (WSL2 oder Git Bash); unter Windows `tools.cmd`.
+- **Docker optional** — Lokale ACP-Installation und Berechtigungen; **Kern-Tools laufen ohne Docker**.
 
-Ausgerichtet an den [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/). Typings von [WoltLab d.ts](https://github.com/WoltLab/d.ts).
+---
 
-## Voraussetzungen
+## Tech Stack
 
-- **Bash** — Linux, macOS, **Windows WSL2** oder **Git Bash** ([Details](tools/docs/CROSS-PLATFORM.de.md))
-- **Git** und **tar**
-- **Python 3** (empfohlen) — Validierungsskripte
-- **Node.js** (optional) — TypeScript im Plugin
+| Ebene | Technologie |
+|-------|-------------|
+| Einstieg & Orchestrierung | Bash (`tools.sh`, `tools/*.sh`) |
+| Validierung | Python 3 (`check-*.py`, `validate-plugin.sh`) |
+| Plugin-Assets (optional) | Node.js / TypeScript im Plugin-Projekt |
+| Paketierung | `tar`, `package.xml`, WoltLab-PIP-Archive |
+| Lokaler Test (optional) | Docker, DDEV |
 
-Kein Vorwissen nötig. Menü und [Tools-Dokumentation](tools/README.de.md) führen Schritt für Schritt.
+Pflicht für den Kern: **Bash + Git + tar**. Python 3 wird für Validierung dringend empfohlen.
 
-## Schnellstart
+---
 
-1. Repo klonen, Terminal im Root öffnen (Ordner mit `tools.sh`).
+## Installation
 
-2. Toolkit starten:
-   ```bash
-   ./tools.sh
-   ```
-   Windows ohne Unix-Shell: **`tools.cmd`** ([Git for Windows](https://git-scm.com/download/win)).
+### Voraussetzungen
 
-3. Interaktives Menü nutzen (Build, Git Push, Validierung, …). CLI: `./tools.sh help`. **`./tools.sh setup`** für Core, Doku, Typings und Pfade — nicht beim ersten Start.
+| Anforderung | Pflicht | Hinweis |
+|-------------|---------|---------|
+| Bash | Ja | WSL2 oder [Git for Windows](https://git-scm.com/download/win) |
+| Git | Ja | Klonen und Release |
+| tar | Ja | Paket-Archive |
+| Python 3 | Empfohlen | Validierungsskripte |
+| Node.js | Optional | Nur bei TypeScript im Plugin |
 
-## Plattformen
+### Schritte
 
-| Plattform | Befehl |
-|-----------|--------|
-| Linux / macOS | `./tools.sh` |
-| Windows (WSL2) | `./tools.sh` in WSL |
-| Windows (Git Bash) | `./tools.sh` oder `tools.cmd` |
+**1. Repository klonen**
 
-Details: **[tools/docs/CROSS-PLATFORM.de.md](tools/docs/CROSS-PLATFORM.de.md)**
-
-## Ordnerstruktur
-
-| Ordner | Zweck |
-|--------|--------|
-| `basis-plugin` | Haupt- oder Basis-Plugin |
-| `mein-plugin` | Weitere Plugin-Projekte |
-| `plugins-integrieren` | Externe/Referenz-Plugins im Workspace |
-| `woltlab-core` | WoltLab-Core nach Setup-Download |
-| `woltlab-docs` | WoltLab-Doku (optional) |
-| `woltlab-github` | WCF-Quellcode (optional) |
-| `woltlab-d-ts` | TypeScript-Typings für dein Plugin |
-| `tools` | Skripte und Setup |
-
-## Tools im Überblick
-
-| Tool | Zweck | Befehl |
-|------|--------|--------|
-| **Hauptmenü** | Menü + CLI | `./tools.sh` |
-| **Setup** | Core, Doku, Typings, Pfade | `./tools/setup-minimal.sh` |
-| **Build** | Paket + Version | `./tools/build.sh patch` |
-| **Git Push** | Commit, Push, GitHub-Release | `./tools/gitpush.sh` |
-| **TypeScript** | TS → JS | `./tools/typescript.sh` |
-| **Unpack** | Paket nach `temp_edit/` | `./tools/unpack.sh` |
-| **Validierung** | Sicherheit und Store | `./tools/validate-plugin.sh` |
-| **Hilfe** | Tools-Doku öffnen | `./tools/help.sh` |
-
-Details: **[tools/README.de.md](tools/README.de.md)**
-
-## Dokumentation
-
-| Ressource | English | Deutsch |
-|-----------|---------|---------|
-| Tools-Referenz | [tools/README.md](tools/README.md) | [tools/README.de.md](tools/README.de.md) |
-| Alle Anleitungen | [tools/docs/README.md](tools/docs/README.md) | [tools/docs/README.de.md](tools/docs/README.de.md) |
-| Mitwirken | [CONTRIBUTING.md](CONTRIBUTING.md) | [CONTRIBUTING.de.md](CONTRIBUTING.de.md) |
-
-## Konfiguration
-
-Einstellungen (WoltLab-Pfad, GitHub-URL, …) in **`tools/.env`** (nicht im Git). Vorlage: **`tools/.env.example`**. Setup kann die Datei anlegen.
-
-### Optional: TypeScript-Typings
-
-Nach Setup mit **„d.ts klonen“** im Plugin-`tsconfig.json`:
-
-```json
-"typeRoots": ["../../woltlab-d-ts"]
+```bash
+git clone https://github.com/benjarogit/simple-woltlab-plugin-manager.git
+cd simple-woltlab-plugin-manager
 ```
 
-### Optional: Editor-Workspace
+**2. Toolkit starten**
 
-`simple-woltlab-plugin-manager.code-workspace` — optionales VS-Code-Multiroot-Layout. **Nicht Pflicht** — alles läuft im Terminal.
+```bash
+./tools.sh
+```
 
-## Externe Links
+Unter Windows ohne Unix-Shell:
 
+```cmd
+tools.cmd
+```
+
+**3. (Empfohlen) Setup für Core, Doku oder Typings**
+
+```bash
+./tools.sh setup
+```
+
+**4. Lokale Pfade konfigurieren (optional)**
+
+```bash
+cp tools/.env.example tools/.env
+# tools/.env bearbeiten — WoltLab-Pfad, GIT_REPO_URL, …
+```
+
+Plugin-Ordner mit `package.xml` anlegen (z. B. `basis-plugin/`) oder bestehendes Paket nach `temp_edit/` entpacken.
+
+---
+
+## Verwendung
+
+### Interaktives Menü
+
+```bash
+./tools.sh
+```
+
+Beispiel (gekürzt):
+
+```text
+╔══════════════════════════════════════════════════════════╗
+║              Simple WoltLab Plugin Manager               ║
+╚══════════════════════════════════════════════════════════╝
+
+  Plugins
+  ✓ Mein Plugin    v1.0.0 [basis-plugin]
+
+  ENTWICKLUNG
+  1   Build / Update-Paket
+  2   TypeScript
+  3   Unpack
+  4   Plugin validieren
+  …
+```
+
+### Häufige Befehle
+
+```bash
+# Build mit Patch-Versionserhöhung
+./tools.sh build
+
+# Build ohne Versionsänderung (Entwicklung)
+./tools.sh build:same
+
+# Validierung vor Store-Einreichung
+./tools.sh validate basis-plugin
+
+# TypeScript kompilieren
+./tools.sh typescript
+
+# Commit, Push, GitHub-Release
+./tools.sh push
+
+# CLI-Übersicht
+./tools.sh help
+```
+
+### CI-Build (JSON-Report)
+
+```bash
+./tools/build.sh --json patch
+```
+
+### Ordnerstruktur
+
+| Ordner | Zweck |
+|--------|---------|
+| `basis-plugin/` | Dein Haupt-Plugin (Beispielname) |
+| `tools/` | Alle Skripte |
+| `woltlab-core/` | Core nach Setup |
+| `woltlab-d-ts/` | TypeScript-Typings nach Setup |
+
+Tools-Referenz: **[tools/README.de.md](tools/README.de.md)** · Anleitungen: **[tools/docs/README.de.md](tools/docs/README.de.md)**
+
+---
+
+## Mitwirken
+
+Beiträge sind willkommen. SWPM bleibt **generisch** — keine fest verdrahteten Pfade oder Skripte für ein einzelnes Produkt-Plugin.
+
+1. Repository forken und Feature-Branch anlegen.
+2. Änderungen fokussiert halten; bestehenden Stil in Bash/Python beibehalten.
+3. Bei nutzersichtbaren Änderungen **Deutsch und Englisch** dokumentieren.
+4. Pull Request mit klarer Beschreibung (was / warum).
+
+Details: **[CONTRIBUTING.de.md](CONTRIBUTING.de.md)** (EN: [CONTRIBUTING.md](CONTRIBUTING.md))
+
+---
+
+## Lizenz
+
+Dieses Projekt steht unter der **[MIT-Lizenz](LICENSE)**.
+
+Du darfst SWPM frei nutzen, ändern und weitergeben. Den Copyright-Hinweis bitte beibehalten. Mitwirken ist ausdrücklich erwünscht; die Software als eigenes proprietäres Produkt ohne Namensnennung auszugeben, entspricht nicht der Idee dieser Lizenz.
+
+---
+
+## Links
+
+- [Aktuelles Release](https://github.com/benjarogit/simple-woltlab-plugin-manager/releases/latest)
+- [Changelog](CHANGELOG.md)
 - [WoltLab Suite Download](https://www.woltlab.com/de/woltlab-suite-download/)
-- [WoltLab Docs (GitHub)](https://github.com/WoltLab/docs.woltlab.com)
-- [WoltLab WCF (GitHub)](https://github.com/WoltLab/WCF)
 - [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/)
