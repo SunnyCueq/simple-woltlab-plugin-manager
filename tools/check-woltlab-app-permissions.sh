@@ -25,7 +25,7 @@ if ! docker ps --format '{{.Names}}' | grep -qx "$CONTAINER"; then
     exit 1
 fi
 
-SCAN_ROOTS=(/var/www/html/shrinkr)
+SCAN_ROOTS=(/var/www/html/shrinkr /var/www/html/js/Shrinkr /var/www/html/lib/bootstrap/de.sunnyc.wsc.shrinkr.php)
 if [ $# -gt 0 ]; then
     SCAN_ROOTS=("$@")
 fi

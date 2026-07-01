@@ -30,6 +30,8 @@ fi
 
 PATHS=(
     /var/www/html/shrinkr
+    /var/www/html/js/Shrinkr
+    /var/www/html/lib/bootstrap/de.sunnyc.wsc.shrinkr.php
     /var/www/html/shrinkr-max-test.php
     /var/www/html/shrinkr-cron-run.php
 )

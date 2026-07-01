@@ -41,7 +41,14 @@ if [ -x "$FIX_PERMS" ]; then
     "$FIX_PERMS"
 fi
 if [ -x "$CHECK_PERMS" ]; then
-    "$CHECK_PERMS" || true
+    if ! "$CHECK_PERMS"; then
+        echo "" >&2
+        echo "✗ ACP-Paket-Update würde mit „Permission denied“ scheitern." >&2
+        echo "  Ursache: früheres docker cp ohne www-data-Besitzer." >&2
+        echo "  Fix erneut: $FIX_PERMS" >&2
+        echo "  Doku: tools/docs/DOCKER-APP-PERMISSIONS.de.md" >&2
+        exit 1
+    fi
 fi
 
 echo ""

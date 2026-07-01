@@ -59,6 +59,20 @@ WHERE done = 0 AND package = 'de.sunnyc.wsc.shrinkr';
 
 Danach ACP-Upload erneut starten.
 
+## ACP: „Das angegebene Verzeichnis enthält bereits eine App.“
+
+**Ursache:** WoltLab-Deinstallation löscht nur Dateien aus `wcf1_package_installation_file_log`.  
+Dateien aus **`docker cp`** (oder abgebrochene Installation vor dem File-Log) bleiben in `/var/www/html/shrinkr/` — inkl. `global.php`. Beim ACP-Neuinstall prüft WoltLab genau das.
+
+**Reset (empfohlen vor erneuter Neuinstallation):**
+
+```bash
+./tools/reset-shrinkr-for-acp-install.sh
+./tools/prepare-acp-install.sh basis-plugin
+```
+
+Das Skript entfernt halbfertige DB-Einträge **und** das verwaiste App-Verzeichnis.
+
 ## Integration
 
 - `prepare-acp-install.sh` — ruft Fix nach `docker cp` auf

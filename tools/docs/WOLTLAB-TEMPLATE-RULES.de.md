@@ -26,9 +26,10 @@ Kurzreferenz für `.tpl`-Dateien in WoltLab-Suite-Plugins. Der Build (`build.sh`
 
 ## Praxis
 
-1. HTML: plain `{$var}` — nicht „zusätzlich escapen“.
+1. HTML: plain `{$var}` — **niemals** `|encodeHTML` oder `|escape` anhängen (Modifier existieren nicht).
 2. JS: `{unsafe:$var|encodeJS}` oder Daten per `data-*` + DOM.
 3. Nach Template-Änderung: `python3 tools/check-template-xss.py /pfad/zum/plugin`
 4. Build: `./tools/build.sh same` (oder patch/minor) — Template-Fehler stoppen den Build.
+5. Cleanup falscher Modifier: `wsc-shr1nkr/tools/fix-template-xss-escaping.py` (entfernt nur; fügt kein `|encodeHTML` hinzu).
 
 Siehe auch: `tools/docs/SECURITY-CHECKS.de.md`, `check-template-xss.py`.
