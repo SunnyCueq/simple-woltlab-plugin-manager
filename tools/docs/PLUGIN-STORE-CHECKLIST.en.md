@@ -43,13 +43,13 @@ WoltLab priority: **security first**, then operability and UX.
 | **Copyright:** apps on app pages only; styles may show on all pages | Manual: no banners on foreign pages |
 | **No implicit/explicit package server installation** | `validate-plugin.sh` → no `packageUpdateServer` PIP |
 
-### Raw SQL / schema pitfalls (Shr1nkr 1.4.x learnings)
+### Raw SQL / schema pitfalls (plugin reviews)
 
 Before release, verify every **custom SQL query** against `install.sql` / DBObject — not every table has `isDisabled`; WCF 6.2 box limits live in `additionalData`, not `wcf*_box.limit`.
 
-Examples fixed in Shr1nkr:
+Typical mistakes:
 
-- `shrinkr1_link`: **no** `isDisabled` (links are deleted, not disabled)
+- App table: use columns only if they exist in the schema
 - `wcf*_box`: **no** SQL column `limit` — read from `unserialize(additionalData)['limit']`
 
 ---
@@ -100,7 +100,7 @@ WoltLab allows AI **only as support**. The vendor must **independently** underst
 - [ ] Links to **your own** add-on packages in the Plugin Store are allowed
 - [ ] **License:** via store fields or external link → `text/plain`; valid TLS cert for HTTPS
 
-Shr1nkr materials: `wsc-shr1nkr/docs/store/` (listing DE/EN, screenshot guide)
+Maintain store listing and screenshots in your **plugin repo** under `docs/store/`.
 
 ---
 

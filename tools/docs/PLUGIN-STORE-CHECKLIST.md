@@ -43,13 +43,13 @@ Priorität laut WoltLab: **Sicherheit zuerst**, dann Lauffähigkeit und UX.
 | **Copyright:** nur auf App-eigenen Seiten (Apps) bzw. bei Stilen auf allen Seiten | Manuell: keine Footer-Banner fremder Seiten |
 | **Keine implizite/explizite Paketserver-Installation** | `validate-plugin.sh` → kein `packageUpdateServer` PIP |
 
-### Raw-SQL / Schema-Fallen (Learnings Shr1nkr 1.4.x)
+### Raw-SQL / Schema-Fallen (Plugin-Reviews)
 
 Vor Release jede **eigene SQL-Abfrage** gegen `install.sql` / DBObject prüfen — nicht jede Tabelle hat `isDisabled`; Box-Limits liegen in WCF 6.2 in `additionalData`, nicht in `wcf*_box.limit`.
 
-Beispiele behoben in Shr1nkr:
+Beispiele (typische Fehler):
 
-- `shrinkr1_link`: **kein** `isDisabled` (Links werden gelöscht, nicht deaktiviert)
+- App-Tabelle: Spalte nur nutzen, wenn sie im Schema existiert (z. B. kein `isDisabled`, wenn nur Delete vorgesehen ist)
 - `wcf*_box`: **kein** SQL-Feld `limit` — Wert aus `unserialize(additionalData)['limit']`
 
 ---
@@ -104,7 +104,7 @@ WoltLab erlaubt KI **nur unterstützend**. Der Anbieter muss Code **eigenständi
 - [ ] Verweise auf **eigene** Zusatzpakete im Plugin-Store sind erlaubt
 - [ ] **Lizenz:** über Store-Felder oder externer Link → `text/plain`, bei HTTPS gültiges Zertifikat
 
-Shr1nkr-Materialien: `wsc-shr1nkr/docs/store/` (Listing DE/EN, Screenshots-Anleitung)
+Store-Listing und Screenshots im **eigenen Plugin-Repo** unter `docs/store/` pflegen.
 
 ---
 
@@ -139,7 +139,7 @@ cd /path/to/mein-plugin
 - [ ] Installation / Update / Deinstallation auf echter WSC-Instanz
 - [ ] Alle Hauptfunktionen (User + Admin)
 - [ ] Berechtigungen und Sichtbarkeit
-- [ ] Shr1nkr: `maintainer/e2e/` bzw. `docs/manual-qa-checklist-de.md`
+- [ ] E2E/Manuelle QA-Checkliste im Plugin-Repo (falls vorhanden)
 
 ### 4. Upload
 

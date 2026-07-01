@@ -8,7 +8,7 @@ Kurzreferenz für `.tpl`-Dateien in WoltLab-Suite-Plugins. Der Build (`build.sh`
 |--------|-----------|
 | `{$variable}` | **Auto-Escape** via `StringUtil::encodeHTML` — Standard für HTML |
 | `{$variable\|encodeHTML}` | **Ungültig** — Modifier existiert nicht → Compile-Fatal |
-| `{$variable\|escape}` | **Ungültig** — wie oben (z. B. Shr1nkr 1.3.22: `demoShowcase.tpl`) |
+| `{$variable\|escape}` | **Ungültig** — wie oben |
 
 ## JavaScript in `<script>`
 
@@ -30,6 +30,6 @@ Kurzreferenz für `.tpl`-Dateien in WoltLab-Suite-Plugins. Der Build (`build.sh`
 2. JS: `{unsafe:$var|encodeJS}` oder Daten per `data-*` + DOM.
 3. Nach Template-Änderung: `python3 tools/check-template-xss.py /pfad/zum/plugin`
 4. Build: `./tools/build.sh same` (oder patch/minor) — Template-Fehler stoppen den Build.
-5. Cleanup falscher Modifier: `wsc-shr1nkr/tools/fix-template-xss-escaping.py` (entfernt nur; fügt kein `|encodeHTML` hinzu).
+5. Cleanup falscher Modifier: `python3 tools/fix-template-xss-escaping.py /pfad/zum/plugin --dry-run`
 
 Siehe auch: `tools/docs/SECURITY-CHECKS.de.md`, `check-template-xss.py`.

@@ -38,10 +38,10 @@ docker cp "$PACKAGE" "$DOCKER_CONTAINER:/var/www/html/$BASENAME"
 FIX_PERMS="$SCRIPT_DIR/fix-woltlab-app-permissions.sh"
 CHECK_PERMS="$SCRIPT_DIR/check-woltlab-app-permissions.sh"
 if [ -x "$FIX_PERMS" ]; then
-    "$FIX_PERMS"
+    "$FIX_PERMS" "$PLUGIN"
 fi
 if [ -x "$CHECK_PERMS" ]; then
-    if ! "$CHECK_PERMS"; then
+    if ! "$CHECK_PERMS" "$PLUGIN"; then
         echo "" >&2
         echo "✗ ACP-Paket-Update würde mit „Permission denied“ scheitern." >&2
         echo "  Ursache: früheres docker cp ohne www-data-Besitzer." >&2

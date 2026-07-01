@@ -1,41 +1,64 @@
 #!/usr/bin/env bash
-# Entfernt halbfertige Shr1nkr-Installation + verwaistes App-Verzeichnis.
+# Entfernt halbfertige Plugin-Installation + verwaistes App-Verzeichnis im Docker-Container.
 #
 # Hintergrund: WoltLab-Deinstallation löscht nur Dateien aus wcf1_package_installation_file_log.
-# Dateien aus docker cp landen nie im Log → /var/www/html/shrinkr/ bleibt mit global.php.
+# Dateien aus docker cp landen nie im Log → App-Ordner bleibt mit global.php.
 # ACP-Neuinstallation scheitert dann mit „Das angegebene Verzeichnis enthält bereits eine App.“
 #
-# Usage: ./tools/reset-shrinkr-for-acp-install.sh [--keep-dev-scripts]
-# Danach: ./tools/prepare-acp-install.sh basis-plugin → ACP-Upload
+# Usage:
+#   ./tools/reset-app-for-acp-install.sh [plugin-dir] [--remove-path /var/www/html/extra.php ...]
+# Danach: ./tools/prepare-acp-install.sh [plugin-dir] → ACP-Upload
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly MAIN_DIR="$(dirname "$SCRIPT_DIR")"
 readonly CONTAINER="${WOLTLAB_DOCKER_CONTAINER:-woltlab-web}"
-readonly PACKAGE="de.sunnyc.wsc.shrinkr"
-KEEP_DEV_SCRIPTS=0
 
-for arg in "$@"; do
-    case "$arg" in
-        --keep-dev-scripts) KEEP_DEV_SCRIPTS=1 ;;
+# shellcheck source=swpm-package-resolve.sh
+source "$SCRIPT_DIR/swpm-package-resolve.sh"
+
+PLUGIN_ARG="${WOLTLAB_PLUGIN_DIR:-basis-plugin}"
+REMOVE_PATHS=()
+
+if [ $# -gt 0 ] && [[ "$1" != --* ]]; then
+    PLUGIN_ARG="$1"
+    shift
+fi
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --remove-path)
+            shift
+            [ $# -gt 0 ] || { echo "--remove-path braucht ein Argument" >&2; exit 1; }
+            REMOVE_PATHS+=("$1")
+            ;;
         -h|--help)
             sed -n '2,12p' "$0"
             exit 0
             ;;
         *)
-            echo "Unbekanntes Argument: $arg (nur --keep-dev-scripts)" >&2
-            exit 1
+            REMOVE_PATHS+=("$1")
             ;;
     esac
+    shift
 done
+
+if ! swpm_load_plugin_context "$PLUGIN_ARG" "$SCRIPT_DIR" "$MAIN_DIR"; then
+    exit 1
+fi
+
+APP_DIR="/var/www/html/${SWPM_APP_ABBREV}"
 
 if ! docker ps --format '{{.Names}}' | grep -qx "$CONTAINER"; then
     echo "Container '$CONTAINER' läuft nicht." >&2
     exit 1
 fi
 
-echo "ℹ Bereinige DB (Queue, Formulare, Paket $PACKAGE) …"
-docker exec -i -u www-data "$CONTAINER" php <<'PHP'
+echo "ℹ Bereinige DB (Queue, Formulare, Paket $SWPM_PACKAGE_ID) …"
+docker exec -i -u www-data \
+    -e "SWPM_PACKAGE=$SWPM_PACKAGE_ID" \
+    "$CONTAINER" php <<'PHP'
 <?php
 require '/var/www/html/global.php';
 
@@ -44,8 +67,13 @@ use wcf\data\package\PackageEditor;
 use wcf\system\cache\builder\PackageCacheBuilder;
 use wcf\system\WCF;
 
+$packageName = getenv('SWPM_PACKAGE') ?: '';
+if ($packageName === '') {
+    fwrite(STDERR, "SWPM_PACKAGE fehlt\n");
+    exit(1);
+}
+
 $db = WCF::getDB();
-$packageName = 'de.sunnyc.wsc.shrinkr';
 
 $stmt = $db->prepareStatement('SELECT queueID FROM wcf1_package_installation_queue WHERE package = ?');
 $stmt->execute([$packageName]);
@@ -77,8 +105,8 @@ $fileCount = (int) $fileLog->fetchSingleColumn();
 
 $incomplete = $row['packageDir'] === '' || $fileCount === 0;
 if (!$incomplete) {
-    \fwrite(\STDERR, '  Paket ' . $packageID . ' wirkt vollständig installiert (packageDir gesetzt, ' . $fileCount . " Datei-Log-Einträge).\n");
-    \fwrite(\STDERR, "  Für saubere Neuinstallation zuerst im ACP deinstallieren, dann dieses Skript erneut.\n");
+    fwrite(STDERR, '  Paket ' . $packageID . ' wirkt vollständig installiert (packageDir gesetzt, ' . $fileCount . " Datei-Log-Einträge).\n");
+    fwrite(STDERR, "  Für saubere Neuinstallation zuerst im ACP deinstallieren, dann dieses Skript erneut.\n");
     exit(1);
 }
 
@@ -104,24 +132,22 @@ PackageCacheBuilder::getInstance()->reset();
 echo "  DB bereinigt\n";
 PHP
 
-echo "ℹ Entferne verwaistes App-Verzeichnis /var/www/html/shrinkr/ …"
-docker exec "$CONTAINER" rm -rf /var/www/html/shrinkr
-if docker exec "$CONTAINER" test -d /var/www/html/shrinkr 2>/dev/null; then
-    echo "✗ /var/www/html/shrinkr/ konnte nicht entfernt werden." >&2
+echo "ℹ Entferne verwaistes App-Verzeichnis ${APP_DIR}/ …"
+docker exec "$CONTAINER" rm -rf "$APP_DIR"
+if docker exec "$CONTAINER" test -d "$APP_DIR" 2>/dev/null; then
+    echo "✗ ${APP_DIR}/ konnte nicht entfernt werden." >&2
     exit 1
 fi
-echo "✓ /var/www/html/shrinkr/ entfernt"
+echo "✓ ${APP_DIR}/ entfernt"
 
-if [ "$KEEP_DEV_SCRIPTS" -eq 0 ]; then
-    for devScript in shrinkr-max-test.php shrinkr-cron-run.php; do
-        if docker exec "$CONTAINER" test -f "/var/www/html/$devScript" 2>/dev/null; then
-            docker exec "$CONTAINER" rm -f "/var/www/html/$devScript"
-            echo "✓ /var/www/html/$devScript entfernt"
-        fi
-    done
-fi
+for extra in "${REMOVE_PATHS[@]}"; do
+    if docker exec "$CONTAINER" test -e "$extra" 2>/dev/null; then
+        docker exec "$CONTAINER" rm -rf "$extra"
+        echo "✓ $extra entfernt"
+    fi
+done
 
 echo ""
 echo "✓ Reset abgeschlossen. Nächster Schritt:"
-echo "  ./tools/prepare-acp-install.sh basis-plugin"
-echo "  → ACP Paket hochladen (Neuinstallation, Verzeichnis /var/www/html/shrinkr/ ist jetzt leer)"
+echo "  ./tools/prepare-acp-install.sh $PLUGIN_ARG"
+echo "  → ACP Paket hochladen (Neuinstallation, ${APP_DIR}/ ist leer)"

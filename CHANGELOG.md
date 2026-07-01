@@ -6,6 +6,7 @@
 
 - Cursor/MCP-Integration und VS-Code-Build-Button-Extension entfernt.
 - Cross-Platform: Linux, macOS, Windows (WSL2, Git Bash), `tools.cmd`, `check_swpm_requirements()`, Docs unter `tools/docs/CROSS-PLATFORM*.md`.
+- Generische Docker/ACP-Hilfen: Pfade aus `package.xml` (`swpm-package-resolve.sh`), `reset-app-for-acp-install.sh`; Shr1nkr-spezifische Skripte entfernt.
 
 ## Version 1.0.34 – 2026-05-29
 

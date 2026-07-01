@@ -144,7 +144,7 @@ python3 tools/check-language-categories.py /path/to/plugin
 python3 tools/fix-template-xss-escaping.py /path/to/plugin --dry-run
 ```
 
-`check-pip-sources.py` mirrors WoltLab DevTools PIP targets offline (no ACP sync). `check-language-keys.py` reports missing **app** keys (`shrinkr.*` etc.) with locations; core `wcf.*` phrases are ignored.
+`check-pip-sources.py` mirrors WoltLab DevTools PIP targets offline (no ACP sync). `check-language-keys.py` reports missing **app** keys (prefix from `package.xml`) with locations; core `wcf.*` phrases are ignored.
 
 See [docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md) for heuristics and false positives.  
 Language XML category rules: [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md).
@@ -227,7 +227,7 @@ Documents in `tools/docs/`:
 
 - **[docs/CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md)** — Linux, macOS, Windows (WSL2, Git Bash), `tools.cmd`.
 - **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checklist before submitting a plugin to the WoltLab store: what `validate-plugin.sh` covers and what you should still check manually. English version: [docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
-- **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL validation heuristics (Shr1nkr / WoltLab 6.2.5 learnings).
+- **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL validation heuristics (WoltLab 6.2.x).
 
 ---
 

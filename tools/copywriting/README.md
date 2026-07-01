@@ -56,6 +56,6 @@ Der LLM-Teil (`--mode full`) ist optional und braucht `OPENAI_API_KEY`. Für Plu
 - Env: `OPENAI_API_KEY` oder `COPYWRITING_API_KEY`, optional `OPENAI_BASE_URL`, `COPYWRITING_MODEL` (Default: `gpt-4o-mini`).
 - **CrewAI:** nur mit Python &lt; 3.14 und `pip install crewai`; unter Python 3.14 automatisch Fallback auf OpenAI-Agenten.
 
-## Shr1nkr / basis-plugin
+## Projekt-Konfiguration
 
-Siehe `basis-plugin/.copywriting.yml` – inkl. Glossar und Projektregeln aus `temp_edit/language/`.
+Siehe `basis-plugin/.copywriting.yml` – Glossar und Projektregeln aus `temp_edit/language/`.

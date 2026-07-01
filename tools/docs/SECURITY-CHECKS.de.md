@@ -1,6 +1,6 @@
 # Security-Checks (Plugin-Validierung)
 
-Erkenntnisse aus Shr1nkr-Review und WoltLab 6.2.5, umgesetzt als wiederverwendbare Tools.
+Erkenntnisse aus Plugin-Reviews und WoltLab 6.2.5, umgesetzt als wiederverwendbare Tools.
 
 ## Tools
 
@@ -59,7 +59,7 @@ Die breite „String-Concatenation in Query“-Regel wurde verengt:
 ## Referenz
 
 - [WoltLab Update 6.2.5](https://www.woltlab.com/community/thread/318621-aktualisierung-woltlab-suite-6-2-5-6-1-22-6-0-26-5-5-26/)
-- Shr1nkr: `docs/store/compatibility-wcf-6.2.5.md` (Plugin-Repo)
+- Plugin-Repo: eigene Kompatibilitäts-/Store-Doku unter `docs/store/`
 
 ## Dynamische Properties auf Page-Objekten (PHP 8.2+)
 

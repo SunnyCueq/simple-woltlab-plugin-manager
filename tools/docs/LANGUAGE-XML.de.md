@@ -1,6 +1,6 @@
 # Sprach-XML (language/*.xml)
 
-Erkenntnisse aus Shr1nkr / WoltLab 6.2.5 — verhindert ACP-Fehler beim Paket-Update.
+Erkenntnisse aus Plugin-Reviews / WoltLab 6.2.5 — verhindert ACP-Fehler beim Paket-Update.
 
 ## Kategorie ↔ Item-Name (Pflicht)
 
@@ -13,22 +13,22 @@ WoltLab prüft beim Import jedes `<item>` gegen die übergeordnete `<category>` 
 
 ```xml
 <!-- OK -->
-<category name="shrinkr.topLinks">
-  <item name="shrinkr.topLinks.byViews"><![CDATA[…]]></item>
+<category name="myapp.topLinks">
+  <item name="myapp.topLinks.byViews"><![CDATA[…]]></item>
 </category>
 
 <!-- FEHLER beim Update — Item gehört nicht zur Kategorie -->
-<category name="shrinkr.demo">
-  <item name="shrinkr.topLinks.byViews"><![CDATA[…]]></item>
+<category name="myapp.demo">
+  <item name="myapp.topLinks.byViews"><![CDATA[…]]></item>
 </category>
 ```
 
-**Symptom im ACP:** `InvalidArgumentException` — *Die Variable „shrinkr.topLinks.byViews“ gehört nicht zur Kategorie „shrinkr.demo“.*
+**Symptom im ACP:** `InvalidArgumentException` — *Die Variable „myapp.topLinks.byViews“ gehört nicht zur Kategorie „myapp.demo“.*
 
 **Fix-Optionen:**
 
-1. Item in passende Kategorie verschieben (`shrinkr.topLinks.*` → `<category name="shrinkr.topLinks">`).
-2. Key umbenennen, wenn er zur Demo-Kategorie gehört (`shrinkr.demo.topLinks.byViews`).
+1. Item in passende Kategorie verschieben (`myapp.topLinks.*` → `<category name="myapp.topLinks">`).
+2. Key umbenennen, wenn er zur Demo-Kategorie gehört (`myapp.demo.topLinks.byViews`).
 
 Der Key-Name in Templates/PHP muss dann mitgezogen werden.
 

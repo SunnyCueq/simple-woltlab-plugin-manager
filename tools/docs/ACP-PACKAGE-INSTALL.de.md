@@ -52,8 +52,8 @@ Der Datei-Dialog (**„Datei auswählen“**) im ACP wird **manuell** bedient:
 
 ## Paket-Pfad (nach `prepare-acp-install.sh`)
 
-Im Container: `/var/www/html/de.sunnyc.wsc.shrinkr_vX.Y.Z.tar.gz`  
-Lokal zum Auswählen: `plugin-manager/basis-plugin/de.sunnyc.wsc.shrinkr_v*.tar.gz`
+Im Container: `/var/www/html/de.vendor.myapp_vX.Y.Z.tar.gz`  
+Lokal: `basis-plugin/de.vendor.myapp_v*.tar.gz` (oder dein Plugin-Ordner)
 
 ## Dev-Fallback (nur wenn ACP-Upload nicht möglich)
 

@@ -1,84 +1,52 @@
-# Docker — App-Berechtigungen (ACP-Updates)
+# Docker: App-Berechtigungen nach `docker cp`
 
-## Symptom
+## Problem
 
-ACP-Paket-Update bricht ab:
+Nach `docker cp` eines Plugin-Pakets oder manuellen Kopieren von App-Dateien gehören Dateien oft **root**, der ACP-Installer läuft als **www-data**:
 
 ```
-error(s) during the installation of the files.
-fopen(/var/www/html/shrinkr/lib/...): Failed to open stream: Permission denied
+fopen(/var/www/html/myapp/lib/...): Failed to open stream: Permission denied
 ```
 
-Der WoltLab-Installer läuft als **`www-data`**. Dateien mit anderem Besitzer (z. B. Host-UID `1000` nach `docker cp`) kann er nicht überschreiben.
-
-## Ursache
-
-| Aktion | Besitzer danach | ACP-Update |
-|--------|-----------------|------------|
-| ACP/CLI-Paket-Install | `www-data` | OK |
-| `docker cp` vom Host | oft UID 1000 / root | **blockiert Updates** |
-| Agent-Hotfix per `docker cp` | oft UID 1000 | **blockiert Updates** |
-
-## Regel (Pflicht)
-
-**Nach jedem `docker cp` in den Web-Container:**
+## Lösung
 
 ```bash
-./tools/fix-woltlab-app-permissions.sh
+./tools/fix-woltlab-app-permissions.sh [plugin-dir]
+./tools/check-woltlab-app-permissions.sh [plugin-dir]
 ```
 
-Optional vor ACP-Upload prüfen:
+Pfade werden aus **`package.xml`** des Plugin-Ordners abgeleitet (`application`-Attribut, Bootstrap-Datei, `js/`).
+
+Optional in `tools/.env`:
 
 ```bash
-./tools/check-woltlab-app-permissions.sh
+WOLTLAB_PLUGIN_DIR=basis-plugin
+WOLTLAB_PACKAGE_ID=com.vendor.myapp
+WOLTLAB_APP_ABBREV=myapp
+WOLTLAB_EXTRA_CONTAINER_PATHS=/var/www/html/my-dev-script.php
 ```
 
-Umgebungsvariablen (optional):
-
-- `WOLTLAB_DOCKER_CONTAINER` (Default: `woltlab-web`)
-- `WOLTLAB_WEB_USER` / `WOLTLAB_WEB_GROUP` (Default: `www-data`)
-
-## Standard-Pfade
-
-Das Fix-Skript setzt Besitzer für:
-
-- `/var/www/html/shrinkr`
-- `/var/www/html/shrinkr-max-test.php`
-- `/var/www/html/shrinkr-cron-run.php`
-
-Weitere Pfade als Argument: `./tools/fix-woltlab-app-permissions.sh /var/www/html/andere-app`
-
-## Hängende Installations-Queue
-
-Nach fehlgeschlagenem Update ggf. Queue bereinigen (MySQL):
+## Halbfertige Installation bereinigen
 
 ```sql
-DELETE FROM wcf1_package_installation_queue
-WHERE done = 0 AND package = 'de.sunnyc.wsc.shrinkr';
+SELECT * FROM wcf1_package_installation_queue
+WHERE done = 0 AND package = 'com.vendor.myapp';
 ```
-
-Danach ACP-Upload erneut starten.
 
 ## ACP: „Das angegebene Verzeichnis enthält bereits eine App.“
 
 **Ursache:** WoltLab-Deinstallation löscht nur Dateien aus `wcf1_package_installation_file_log`.  
-Dateien aus **`docker cp`** (oder abgebrochene Installation vor dem File-Log) bleiben in `/var/www/html/shrinkr/` — inkl. `global.php`. Beim ACP-Neuinstall prüft WoltLab genau das.
+Dateien aus **`docker cp`** bleiben im App-Ordner — inkl. `global.php`.
 
-**Reset (empfohlen vor erneuter Neuinstallation):**
+**Reset:**
 
 ```bash
-./tools/reset-shrinkr-for-acp-install.sh
+./tools/reset-app-for-acp-install.sh basis-plugin
 ./tools/prepare-acp-install.sh basis-plugin
 ```
 
-Das Skript entfernt halbfertige DB-Einträge **und** das verwaiste App-Verzeichnis.
+Optional weitere Pfade: `--remove-path /var/www/html/extra.php`
 
 ## Integration
 
-- `prepare-acp-install.sh` — ruft Fix nach `docker cp` auf
-- `wsc-shr1nkr/tools/run-all-shrinkr-tests.sh` — ruft Fix nach Deploy der Test-Skripte auf
-
-## Nicht tun
-
-- Plugin-Dateien per `docker cp` hotfixen **ohne** anschließendes `fix-woltlab-app-permissions.sh`
-- ACP-Update versuchen, während `check-woltlab-app-permissions.sh` fehlschlägt
+- `prepare-acp-install.sh` — ruft Fix + Check nach `docker cp` auf

@@ -736,8 +736,24 @@ fi
 
 if [ -n "$BOOTSTRAP_DIR" ]; then
     BOOTSTRAP_ISSUES=0
+    APP_ABBREV=""
+    APP_NS_PATTERN=""
+    if [ -f "$TOOLS_DIR/swpm-package-resolve.sh" ]; then
+        # shellcheck source=swpm-package-resolve.sh
+        source "$TOOLS_DIR/swpm-package-resolve.sh"
+        if swpm_load_plugin_context "$PLUGIN_DIR" "$TOOLS_DIR" "$MAIN_DIR" 2>/dev/null; then
+            APP_ABBREV="$SWPM_APP_ABBREV"
+            APP_PASCAL=$(swpm_app_pascal_case "$APP_ABBREV")
+            APP_NS_PATTERN="${APP_ABBREV}\\\\|${APP_PASCAL}[A-Z]"
+        fi
+    fi
     while IFS= read -r -d '' bootstrap_file; do
-        if grep -qE 'shrinkr\\|Shrinkr[A-Z]' "$bootstrap_file" 2>/dev/null; then
+        if [ -n "$APP_NS_PATTERN" ]; then
+            match_pattern="$APP_NS_PATTERN"
+        else
+            match_pattern='[a-z][a-z0-9]*\\\\|[A-Z][a-zA-Z0-9]*[A-Z]'
+        fi
+        if grep -qE "$match_pattern" "$bootstrap_file" 2>/dev/null; then
             if ! grep -qE 'class_exists\s*\([^,]+,\s*false\s*\)' "$bootstrap_file" 2>/dev/null; then
                 print_error "Bootstrap ohne class_exists(..., false)-Guard: $(basename "$bootstrap_file")"
                 echo -e "   ${YELLOW}→${NC} Bootstrap liegt in wcf/lib; App-Klassen fehlen bei Deinstall — früh return, sonst ACP tot"
