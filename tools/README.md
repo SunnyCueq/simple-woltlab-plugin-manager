@@ -1,6 +1,6 @@
 # Tools – WoltLab Plugin Manager
 
-**[Deutsche Version](README.de.md)**
+**[Deutsche Version](README.de.md)** · **[Documentation index](docs/README.md)**
 
 ---
 
@@ -62,7 +62,7 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 ./tools/build.sh --dry-run patch     # Show planned package contents only
 ```
 
-**Layouts:** Classic (`lib/`, `js/`, …) or wspackager (`files/`, `files_wcf/`, `style/style.xml`). See [docs/WSPACKAGER-PARITY.md](docs/WSPACKAGER-PARITY.md).
+**Layouts:** Classic (`lib/`, `js/`, …) or wspackager (`files/`, `files_wcf/`, `style/style.xml`). See [docs/WSPACKAGER-PARITY.en.md](docs/WSPACKAGER-PARITY.en.md).
 
 ---
 
@@ -123,7 +123,7 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 
 ### validate-plugin.sh – Security and store compliance
 
-**What it does:** Checks your plugin for common issues before release or store submission. It validates: **PHP and XML syntax**; **translations** (DE and EN present and consistent); **PIP sources** (DevTools parity: syncable vs package-only instructions); **plugin language keys** used in code vs `language/*.xml` with **file:line** locations; **minimum WoltLab version**; that no external package servers are used; **security** (e.g. SQL injection, XSS); **debug and development code** that should not ship; and **cloud/compatibility** and other store-related rules. The checks align with the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.md), which also lists manual steps the script does not cover.
+**What it does:** Checks your plugin for common issues before release or store submission. It validates: **PHP and XML syntax**; **translations** (DE and EN present and consistent); **PIP sources** (DevTools parity: syncable vs package-only instructions); **plugin language keys** used in code vs `language/*.xml` with **file:line** locations; **minimum WoltLab version**; that no external package servers are used; **security** (e.g. SQL injection, XSS); **debug and development code** that should not ship; and **cloud/compatibility** and other store-related rules. The checks align with the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.en.md), which also lists manual steps the script does not cover.
 
 **When to use it:** Before releasing or submitting to the store, to catch problems early.
 
@@ -230,13 +230,13 @@ After that, your editor and the TypeScript compiler can use WoltLab API types. S
 Documents in `tools/docs/`:
 
 - **[docs/CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md)** — Linux, macOS, Windows (WSL2, Git Bash), `tools.cmd`.
-- **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checklist before submitting a plugin to the WoltLab store: what `validate-plugin.sh` covers and what you should still check manually. English version: [docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
+- **[docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md)** — Checklist before submitting a plugin to the WoltLab store. German: [PLUGIN-STORE-CHECKLIST.de.md](docs/PLUGIN-STORE-CHECKLIST.de.md).
 - **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL validation heuristics (WoltLab 6.2.x).
 
 ---
 
 ## Other notes
 
-- **Logging:** A single central debug log is used (`tools/docs/logs/woltlab-dev-debug.log`). Level and paths are configurable via `DEBUG_LEVEL`, `DEBUG_LOG_FILE`. See [tools/docs/LOGGING.md](docs/LOGGING.md) for the convention and levels.
+- **Logging:** Central debug log at `tools/docs/logs/woltlab-dev-debug.log`. See [LOGGING.en.md](docs/LOGGING.en.md) / [LOGGING.de.md](docs/LOGGING.de.md).
 - **Language:** Menu language can be set to DE or EN via `WOLTLAB_LANG` in `tools/.env` or the menu option “Switch language” (L). Translations live in `tools/language/de.txt` and `tools/language/en.txt` (key=value). The `tr "key"` function in `common.sh` returns the string for the current language; scripts can be migrated to use it step by step.
 - **Repo root:** All commands assume you are in the repository root (the folder that contains `tools/`) unless stated otherwise.

@@ -1,5 +1,7 @@
 # Plugin Store Submission Checkliste
 
+**[English version](PLUGIN-STORE-CHECKLIST.en.md)**
+
 **Letzte Aktualisierung:** 2026-06-26 (abgestimmt mit [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/))  
 **Version:** 1.1.0
 

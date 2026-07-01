@@ -1,0 +1,37 @@
+# WoltLab template rules (plugins)
+
+**[Deutsche Version](WOLTLAB-TEMPLATE-RULES.de.md)**
+
+Quick reference for `.tpl` files in WoltLab Suite plugins. The build (`build.sh`) aborts on **invalid modifiers** (`check-template-xss.py`).
+
+## HTML output
+
+| Pattern | Behavior |
+|---------|----------|
+| `{$variable}` | **Auto-escape** via `StringUtil::encodeHTML` — default for HTML |
+| `{$variable\|encodeHTML}` | **Invalid** — modifier does not exist → compile fatal |
+| `{$variable\|escape}` | **Invalid** — same as above |
+
+## JavaScript in `<script>`
+
+| Pattern | Behavior |
+|---------|----------|
+| Plain `{$var}` in `<script>` | XSS risk — build warns |
+| `{unsafe:$var\|encodeJS}` | Correct for JS context |
+| `'{$var}'` in `<script>` without `{unsafe:…\|encodeJS}` | Build warns |
+
+## Ignored by the check
+
+- `{* Smarty comments *}`
+- `{lang}…{/lang}` and `{jslang}…{/jslang}`
+- Already compiled `{unsafe:…}` blocks
+
+## Practice
+
+1. HTML: plain `{$var}` — **never** append `|encodeHTML` or `|escape` (modifiers do not exist).
+2. JS: `{unsafe:$var|encodeJS}` or pass data via `data-*` + DOM.
+3. After template changes: `python3 tools/check-template-xss.py /path/to/plugin`
+4. Build: `./tools/build.sh same` (or patch/minor) — template errors stop the build.
+5. Clean up wrong modifiers: `python3 tools/fix-template-xss-escaping.py /path/to/plugin --dry-run`
+
+See also: `tools/docs/SECURITY-CHECKS.en.md`, `check-template-xss.py`.

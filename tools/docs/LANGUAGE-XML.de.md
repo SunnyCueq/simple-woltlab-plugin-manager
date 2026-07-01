@@ -1,5 +1,7 @@
 # Sprach-XML (language/*.xml)
 
+**[English version](LANGUAGE-XML.en.md)**
+
 Erkenntnisse aus Plugin-Reviews / WoltLab 6.2.5 — verhindert ACP-Fehler beim Paket-Update.
 
 ## Kategorie ↔ Item-Name (Pflicht)

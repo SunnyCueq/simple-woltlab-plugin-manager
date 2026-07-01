@@ -2,56 +2,69 @@
   <img src="docs/assets/swpm-logo.jpg" alt="SWPM — Simple WoltLab Plugin Manager" width="360">
 </p>
 
-# Simple WoltLab Plugin Manager
+<h1 align="center">Simple WoltLab Plugin Manager</h1>
 
-**[Deutsche Version](README.de.md)**
+<p align="center">
+  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager"><img src="https://img.shields.io/github/stars/benjarogit/simple-woltlab-plugin-manager?style=flat-square" alt="GitHub stars"></a>
+  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20WSL2%20%7C%20Git%20Bash-2d6a4f?style=flat-square" alt="Platforms">
+  <img src="https://img.shields.io/badge/WoltLab%20Suite-6.x-1a5fb4?style=flat-square" alt="WoltLab Suite">
+  <img src="https://img.shields.io/badge/docs-EN%20%7C%20DE-555?style=flat-square" alt="Bilingual docs">
+</p>
+
+<p align="center"><strong><a href="README.de.md">Deutsche Version</a></strong></p>
 
 ---
 
-## What is this?
+## Table of contents
 
-The **Simple WoltLab Plugin Manager** is a **cross-platform** command-line toolkit for the full **WoltLab Suite** plugin lifecycle: setup, development, build, validation, and release. A central text menu runs everything from any terminal.
+- [Overview](#overview)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Quick start](#quick-start)
+- [Cross-platform](#cross-platform)
+- [Workspace layout](#workspace-layout)
+- [Tools at a glance](#tools-at-a-glance)
+- [Documentation](#documentation)
+- [Configuration](#configuration)
+- [External links](#external-links)
 
-- **Environment setup** — Downloads WoltLab Core, clones official docs and WCF source, installs TypeScript typings (d.ts), sets paths to your local WoltLab install.
+---
+
+## Overview
+
+The **Simple WoltLab Plugin Manager (SWPM)** is a cross-platform command-line toolkit for the full **WoltLab Suite** plugin lifecycle: setup, development, build, validation, and release. A central text menu drives everything from the terminal.
+
+## Features
+
+- **Environment setup** — Downloads WoltLab Core, clones official docs and WCF source, installs TypeScript typings (d.ts), configures paths to your local WoltLab install.
 - **Development** — TypeScript compile (with watch), unpack packages for inspection, centralized debug logging.
-- **Build** — Creates distributable `.tar.gz` packages with semantic version bumping (patch/minor/major).
-- **Quality assurance** — Validates plugins with security (SQL, XSS), translations (DE/EN), **offline DevTools-parity checks** (PIP sources, missing language keys with file:line), minimum version, WoltLab Cloud compatibility, store requirements.
-- **Release** — Git commit, push, version tagging, GitHub release creation and asset upload.
-- **Optional** — DDEV integration for a local WoltLab dev server.
+- **Build** — Creates distributable `.tar.gz` packages with semantic version bumping; [wspackager parity](tools/docs/WSPACKAGER-PARITY.en.md) (`files/`, `files_wcf/`, `--json`).
+- **Quality assurance** — Security (SQL, XSS), translations (DE/EN), offline DevTools-parity checks (PIP sources, language keys with file:line), minimum version, WoltLab Cloud compatibility, store requirements.
+- **Release** — Git commit, push, version tags, GitHub release creation and asset upload.
+- **Optional** — Docker helpers for local ACP testing; DDEV integration.
 
-Aligned with the official [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/). TypeScript typings come from the official [WoltLab d.ts](https://github.com/WoltLab/d.ts) repo and are cloned during setup.
+Aligned with the official [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/). TypeScript typings come from [WoltLab d.ts](https://github.com/WoltLab/d.ts).
 
----
+## Requirements
 
-## What do I need?
+- **Bash** — Linux, macOS, **Windows WSL2**, or **Git Bash** ([details](tools/docs/CROSS-PLATFORM.md))
+- **Git** and **tar**
+- **Python 3** (recommended) — validation scripts
+- **Node.js** (optional) — TypeScript in your plugin
 
-- **Bash environment** — Linux, macOS, **Windows WSL2**, or **Git Bash** (see [Cross-platform](tools/docs/CROSS-PLATFORM.md)).
-- **Git** and **tar** — required for cloning, building, and packaging.
-- **Python 3** (recommended) — validation and language-check scripts.
-- **Node.js and npm** (optional) — TypeScript in your plugin.
+No prior WoltLab plugin knowledge required. The menu and [tools documentation](tools/README.md) guide you step by step.
 
-No prior knowledge of WoltLab plugin structure is required. The menu and [tools documentation](tools/README.md) guide you step by step.
+## Quick start
 
----
+1. Clone the repo and open a terminal in the root (folder containing `tools.sh`).
 
-## Quick Start
-
-1. **Clone and open a terminal** in the repo root (the folder that contains `tools.sh`).
-
-2. **Run the tools**
+2. Start the toolkit:
    ```bash
    ./tools.sh
    ```
-   On Windows without a Unix shell, use **`tools.cmd`** (requires [Git for Windows](https://git-scm.com/download/win)).
+   On Windows without a Unix shell: **`tools.cmd`** ([Git for Windows](https://git-scm.com/download/win)).
 
-   Without arguments you get the **interactive menu** (Build, TypeScript, Git, validation, etc.). For all CLI commands: `./tools.sh help`. For Core, docs, typings, and paths: **`./tools.sh setup`** when you are ready—not on first launch.
-
-3. **Use the menu**  
-   Type the number of the option you want (e.g. `1` for Build, `2` for Git Push) and follow the prompts. Type `0` to exit. Details in [tools/README.md](tools/README.md).
-
-> **Tip:** Run setup anytime via **`./tools.sh setup`** or `./tools/setup-minimal.sh`. If you set a path to a local WoltLab installation, optional editor workspace paths can be updated automatically.
-
----
+3. Use the interactive menu (Build, Git Push, validation, …). CLI overview: `./tools.sh help`. Run **`./tools.sh setup`** when you need Core, docs, typings, and paths — not on first launch.
 
 ## Cross-platform
 
@@ -61,69 +74,63 @@ No prior knowledge of WoltLab plugin structure is required. The menu and [tools 
 | Windows (WSL2) | `./tools.sh` inside WSL |
 | Windows (Git Bash) | `./tools.sh` or `tools.cmd` |
 
-Full details: **[tools/docs/CROSS-PLATFORM.md](tools/docs/CROSS-PLATFORM.md)**
+Full guide: **[tools/docs/CROSS-PLATFORM.md](tools/docs/CROSS-PLATFORM.md)**
 
----
-
-## Folder structure
+## Workspace layout
 
 | Folder | Purpose |
 |--------|---------|
-| `basis-plugin` | Your main or base plugin project. |
-| `mein-plugin` | Additional plugin projects (e.g. that depend on the base plugin). |
-| `plugins-integrieren` | External or reference plugins you want to keep in the workspace. |
-| `woltlab-core` | Where setup stores WoltLab Core files (e.g. WCFSetup) after download. |
-| `woltlab-docs` | WoltLab documentation (Git clone, optional during setup). |
-| `woltlab-github` | WoltLab WCF source code (Git clone, optional during setup). |
-| `woltlab-d-ts` | WoltLab TypeScript typings (d.ts) for use in your plugin’s TypeScript code. |
-| `tools` | All scripts and setup live here. |
-
----
+| `basis-plugin` | Your main or base plugin project |
+| `mein-plugin` | Additional plugin projects |
+| `plugins-integrieren` | External or reference plugins in the workspace |
+| `woltlab-core` | WoltLab Core files after setup download |
+| `woltlab-docs` | WoltLab documentation (optional Git clone) |
+| `woltlab-github` | WCF source (optional Git clone) |
+| `woltlab-d-ts` | WoltLab TypeScript typings for your plugin |
+| `tools` | All scripts and setup |
 
 ## Tools at a glance
 
-| Tool | What it does | Command |
-|------|----------------|--------|
-| **Main menu** | Starts the interactive menu; `./tools.sh help` lists CLI commands. | `./tools.sh` or `./tools/tools.sh` |
-| **Setup** | Downloads Core, docs, typings; sets paths. | `./tools/setup-minimal.sh` |
-| **Build** | Builds your plugin and can bump version (patch/minor/major). | `./tools/build.sh patch` |
-| **Git Push** | Commits, pushes, and creates a GitHub release for your plugin. | `./tools/gitpush.sh` |
-| **TypeScript** | Compiles TypeScript to JavaScript (and optional watch mode). | `./tools/typescript.sh` |
-| **Unpack** | Unpacks a plugin package into `temp_edit/`. | `./tools/unpack.sh` |
-| **Validation** | Checks your plugin for security issues and store compliance. | `./tools/validate-plugin.sh` |
-| **Help** | Opens the tools documentation. | `./tools/help.sh` |
+| Tool | Purpose | Command |
+|------|---------|---------|
+| **Main menu** | Interactive menu + CLI | `./tools.sh` |
+| **Setup** | Core, docs, typings, paths | `./tools/setup-minimal.sh` |
+| **Build** | Package + version bump | `./tools/build.sh patch` |
+| **Git Push** | Commit, push, GitHub release | `./tools/gitpush.sh` |
+| **TypeScript** | Compile TS → JS | `./tools/typescript.sh` |
+| **Unpack** | Extract package to `temp_edit/` | `./tools/unpack.sh` |
+| **Validation** | Security and store checks | `./tools/validate-plugin.sh` |
+| **Help** | Open tools documentation | `./tools/help.sh` |
 
-Full description of each tool: **[tools/README.md](tools/README.md)**.
+Details: **[tools/README.md](tools/README.md)**
 
----
+## Documentation
 
-## Optional: TypeScript and WoltLab typings
+| Resource | English | Deutsch |
+|----------|---------|---------|
+| Tools reference | [tools/README.md](tools/README.md) | [tools/README.de.md](tools/README.de.md) |
+| All guides (index) | [tools/docs/README.md](tools/docs/README.md) | [tools/docs/README.de.md](tools/docs/README.de.md) |
+| Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) | [CONTRIBUTING.de.md](CONTRIBUTING.de.md) |
 
-If you use TypeScript in your plugin, run setup and accept **"d.ts klonen"** (default: yes). That clones the [WoltLab d.ts](https://github.com/WoltLab/d.ts) typings into `woltlab-d-ts`. In your plugin’s `temp_edit/tsconfig.json` you can then point to them, for example:
+## Configuration
+
+Settings (local WoltLab path, GitHub URL, …) live in **`tools/.env`** (not committed). Copy **`tools/.env.example`** and fill in values. Setup can create or update the file.
+
+### Optional: TypeScript typings
+
+After setup with **“clone d.ts”**, point your plugin `tsconfig.json` at the workspace typings:
 
 ```json
 "typeRoots": ["../../woltlab-d-ts"]
 ```
 
-Details and other options are in [tools/README.md](tools/README.md).
+### Optional: editor workspace
 
----
+`simple-woltlab-plugin-manager.code-workspace` is an optional VS Code multi-root layout. **Not required** — all tools work from the terminal.
 
-## Optional: editor workspace
-
-`simple-woltlab-plugin-manager.code-workspace` is an optional multi-root layout for VS Code (or compatible editors). **Not required** — all tools work from the terminal.
-
----
-
-## Configuration
-
-Settings like the path to your local WoltLab installation or your GitHub repo URL are stored in **`tools/.env`**. That file is not committed to Git (it may contain secrets). Use **`tools/.env.example`** as a template: copy it to `tools/.env` and fill in the values. The setup script can create or update `tools/.env` for you.
-
----
-
-## Links
+## External links
 
 - [WoltLab Suite Download](https://www.woltlab.com/de/woltlab-suite-download/)
 - [WoltLab Docs (GitHub)](https://github.com/WoltLab/docs.woltlab.com)
 - [WoltLab WCF (GitHub)](https://github.com/WoltLab/WCF)
-- [WoltLab Plugin Store Guidelines](https://www.woltlab.com/pluginstore/de/richtlinien/)
+- [WoltLab Plugin Store Guidelines](https://www.woltlab.com/pluginstore/en/guidelines/)

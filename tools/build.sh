@@ -578,7 +578,7 @@ print_info "[1/5] Packe TARs aus temp_edit..."
 PACKAGE_DIR="$(pwd)"
 cd temp_edit
 
-# files.tar — wspackager: Ordner files/ ODER lib/,acp/,style/ (siehe tools/docs/WSPACKAGER-PARITY.md)
+# files.tar — wspackager: Ordner files/ ODER lib/,acp/,style/ (siehe tools/docs/WSPACKAGER-PARITY.de.md)
 FILES_TO_PACK=""
 if [ -d "files" ]; then
     tar -cf "${PACKAGE_DIR}/files.tar" --exclude="app.config.inc.php" -C files .

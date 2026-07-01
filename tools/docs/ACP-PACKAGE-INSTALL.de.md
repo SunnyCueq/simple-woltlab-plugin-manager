@@ -1,5 +1,7 @@
 # Paket-Update via ACP (lokal)
 
+**[English version](ACP-PACKAGE-INSTALL.en.md)**
+
 Standardweg zum Testen gebauter Plugins in der lokalen WoltLab-Installation.
 
 ## ACP-URL
@@ -58,4 +60,3 @@ Lokal: `basis-plugin/de.vendor.myapp_v*.tar.gz` (oder dein Plugin-Ordner)
 ## Dev-Fallback (nur wenn ACP-Upload nicht möglich)
 
 `tools/install-package-once.php` – non-interaktives CLI-Update mit Admin-Session.
-Ersetzt **nicht** den ACP-Test; nur für Notfälle / CI.

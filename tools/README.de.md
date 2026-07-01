@@ -1,6 +1,6 @@
 # Tools – WoltLab Plugin Manager
 
-**[English version](README.md)**
+**[English version](README.md)** · **[Documentation index](docs/README.de.md)**
 
 ---
 
@@ -62,7 +62,7 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 ./tools/build.sh --dry-run patch     # Nur geplanter Paketinhalt
 ```
 
-**Layouts:** Klassisch (`lib/`, `js/`, …) oder wspackager (`files/`, `files_wcf/`, `style/style.xml`). Details: [docs/WSPACKAGER-PARITY.md](docs/WSPACKAGER-PARITY.md).
+**Layouts:** Klassisch (`lib/`, `js/`, …) oder wspackager (`files/`, `files_wcf/`, `style/style.xml`). Details: [docs/WSPACKAGER-PARITY.de.md](docs/WSPACKAGER-PARITY.de.md).
 
 ---
 
@@ -123,7 +123,7 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 
 ### validate-plugin.sh – Sicherheit und Store-Compliance
 
-**Was es macht:** Prüft dein Plugin vor Release oder Store-Einreichung auf typische Probleme. Geprüft werden: **PHP- und XML-Syntax**; **Übersetzungen** (DE und EN vorhanden und konsistent); **PIP-Quellen** (DevTools-Parität: sync-fähig vs. nur Paket-Update); **Plugin-Sprach-Keys** im Code vs. `language/*.xml` mit **Datei:Zeile**; **Mindestversion WoltLab**; dass keine externen Paket-Server genutzt werden; **Sicherheit** (z. B. SQL-Injection, XSS); **Debug- und Entwicklungs-Code**, der nicht ausgeliefert werden darf; sowie **Cloud-/Kompatibilitäts-** und weitere Store-Regeln. Die Prüfungen sind an die [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.md) angelehnt, die auch manuelle Schritte aufführt, die das Skript nicht abdeckt.
+**Was es macht:** Prüft dein Plugin vor Release oder Store-Einreichung auf typische Probleme. Geprüft werden: **PHP- und XML-Syntax**; **Übersetzungen** (DE und EN vorhanden und konsistent); **PIP-Quellen** (DevTools-Parität: sync-fähig vs. nur Paket-Update); **Plugin-Sprach-Keys** im Code vs. `language/*.xml` mit **Datei:Zeile**; **Mindestversion WoltLab**; dass keine externen Paket-Server genutzt werden; **Sicherheit** (z. B. SQL-Injection, XSS); **Debug- und Entwicklungs-Code**, der nicht ausgeliefert werden darf; sowie **Cloud-/Kompatibilitäts-** und weitere Store-Regeln. Die Prüfungen sind an die [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.de.md) angelehnt, die auch manuelle Schritte aufführt, die das Skript nicht abdeckt.
 
 **Wann nutzen:** Vor dem Release oder der Einreichung im Store, um Probleme früh zu finden.
 
@@ -246,7 +246,7 @@ Danach können Editor und TypeScript-Compiler die WoltLab-API-Typen nutzen. Sieh
 Dokumente in `tools/docs/`:
 
 - **[docs/CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md)** — Linux, macOS, Windows (WSL2, Git Bash), `tools.cmd`.
-- **[docs/PLUGIN-STORE-CHECKLIST.md](docs/PLUGIN-STORE-CHECKLIST.md)** — Checkliste vor der Einreichung eines Plugins im WoltLab-Store: Was `validate-plugin.sh` abdeckt und was du zusätzlich manuell prüfen solltest. Englische Version: [docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
+- **[docs/PLUGIN-STORE-CHECKLIST.de.md](docs/PLUGIN-STORE-CHECKLIST.de.md)** — Checkliste vor Store-Einreichung. Englisch: [PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
 - **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL-Heuristiken der Validierung (WoltLab 6.2.x).
 - **[docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md)** — Sprach-PIP: Item/Kategorie-Zuordnung (verhindert ACP-Update-Fehler).
 
@@ -254,6 +254,6 @@ Dokumente in `tools/docs/`:
 
 ## Sonstiges
 
-- **Logging:** Es wird eine zentrale Debug-Log-Datei verwendet (`tools/docs/logs/woltlab-dev-debug.log`). Level und Pfade sind über `DEBUG_LEVEL`, `DEBUG_LOG_FILE` konfigurierbar. Konvention und Level stehen in [tools/docs/LOGGING.md](docs/LOGGING.md).
+- **Logging:** Zentrales Debug-Log unter `tools/docs/logs/woltlab-dev-debug.log`. Siehe [LOGGING.de.md](docs/LOGGING.de.md) / [LOGGING.en.md](docs/LOGGING.en.md).
 - **Sprache:** Die Menüsprache lässt sich über `WOLTLAB_LANG` in `tools/.env` oder die Menüoption „Sprache wechseln“ (L) auf DE oder EN stellen. Übersetzungen liegen in `tools/language/de.txt` und `tools/language/en.txt` (Schlüssel=Wert). Die Funktion `tr "key"` in `common.sh` liefert den Text für die aktuelle Sprache; Skripte können schrittweise darauf umgestellt werden.
 - **Repo-Root:** Alle Befehle setzen voraus, dass du dich im Repository-Root (der Ordner, der `tools/` enthält) befindest, sofern nicht anders angegeben.

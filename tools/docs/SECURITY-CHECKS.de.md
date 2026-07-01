@@ -1,5 +1,7 @@
 # Security-Checks (Plugin-Validierung)
 
+**[English version](SECURITY-CHECKS.en.md)**
+
 Erkenntnisse aus Plugin-Reviews und WoltLab 6.2.5, umgesetzt als wiederverwendbare Tools.
 
 ## Tools

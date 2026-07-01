@@ -1,5 +1,7 @@
 # WoltLab Template-Regeln (Plugins)
 
+**[English version](WOLTLAB-TEMPLATE-RULES.en.md)**
+
 Kurzreferenz für `.tpl`-Dateien in WoltLab-Suite-Plugins. Der Build (`build.sh`) bricht bei Verstößen gegen **ungültige Modifier** ab (`check-template-xss.py`).
 
 ## HTML-Ausgabe

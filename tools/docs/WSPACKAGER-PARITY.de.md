@@ -1,5 +1,7 @@
 # wspackager-Parität (SWPM)
 
+**[English version](WSPACKAGER-PARITY.en.md)**
+
 SWPM übernimmt die **Pack-Logik** von [wspackager](https://github.com/wbbaddons/wspackager), ohne npm/Node zu verlangen. Zusätzlich bleiben SWPM-Validierung, TypeScript-Build und Store-Checks erhalten.
 
 ## Layout-Ordner

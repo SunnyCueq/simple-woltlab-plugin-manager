@@ -7,7 +7,7 @@
 # Prüft Plugin-Struktur, Security (SQL-Injection, XSS), 
 # Code-Qualität und Plugin-Store-Compliance
 #
-# Store-Mapping: tools/docs/PLUGIN-STORE-CHECKLIST.md (Stand 2026-06-26)
+# Store-Mapping: tools/docs/PLUGIN-STORE-CHECKLIST.de.md (Stand 2026-06-26)
 #
 # Usage:
 #   ./tools/validate-plugin.sh [PLUGIN_DIR]

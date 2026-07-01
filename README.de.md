@@ -2,56 +2,69 @@
   <img src="docs/assets/swpm-logo.jpg" alt="SWPM — Simple WoltLab Plugin Manager" width="360">
 </p>
 
-# Simple WoltLab Plugin Manager
+<h1 align="center">Simple WoltLab Plugin Manager</h1>
 
-**[English version](README.md)**
+<p align="center">
+  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager"><img src="https://img.shields.io/github/stars/benjarogit/simple-woltlab-plugin-manager?style=flat-square" alt="GitHub stars"></a>
+  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20WSL2%20%7C%20Git%20Bash-2d6a4f?style=flat-square" alt="Plattformen">
+  <img src="https://img.shields.io/badge/WoltLab%20Suite-6.x-1a5fb4?style=flat-square" alt="WoltLab Suite">
+  <img src="https://img.shields.io/badge/Doku-DE%20%7C%20EN-555?style=flat-square" alt="Zweisprachige Doku">
+</p>
 
----
-
-## Was ist das?
-
-Der **Simple WoltLab Plugin Manager** ist ein **plattformübergreifendes** Kommandozeilen-Toolkit für den kompletten **WoltLab Suite**-Plugin-Lebenszyklus: Setup, Entwicklung, Build, Validierung und Release. Ein zentrales Textmenü startet alles im Terminal.
-
-- **Umgebungs-Setup** — Lädt WoltLab Core, klont offizielle Doku und WCF-Quellcode, richtet TypeScript-Typings (d.ts) ein, setzt Pfade zu deiner lokalen WoltLab-Installation.
-- **Entwicklung** — TypeScript-Kompilierung (inkl. Watch), Pakete entpacken zur Inspektion, zentrale Debug-Logs.
-- **Build** — Erstellt verteilbare `.tar.gz`-Pakete mit semantischer Versionserhöhung (patch/minor/major).
-- **Qualitätssicherung** — Validiert Plugins: Sicherheit (SQL, XSS), Übersetzungen (DE/EN), **offline DevTools-Parität** (PIP-Quellen, fehlende Sprach-Keys mit Datei:Zeile), Minversion, WoltLab-Cloud-Kompatibilität, Store-Vorgaben.
-- **Release** — Git-Commit, Push, Version-Tags, GitHub-Release inkl. Asset-Upload.
-- **Optional** — DDEV-Anbindung für lokalen WoltLab-Server.
-
-Ausgerichtet an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/). Die TypeScript-Typings stammen vom offiziellen [WoltLab-d.ts](https://github.com/WoltLab/d.ts)-Repo und werden beim Setup geklont.
+<p align="center"><strong><a href="README.md">English version</a></strong></p>
 
 ---
 
-## Was brauche ich?
+## Inhaltsverzeichnis
 
-- **Bash-Umgebung** — Linux, macOS, **Windows WSL2** oder **Git Bash** (siehe [Plattformen](tools/docs/CROSS-PLATFORM.de.md)).
-- **Git** und **tar** — Pflicht für Klonen, Bauen und Paketieren.
-- **Python 3** (empfohlen) — Validierungs- und Sprach-Checks.
-- **Node.js und npm** (optional) — TypeScript im Plugin.
-
-Du musst kein Vorwissen zur WoltLab-Plugin-Struktur mitbringen. Das Menü und die [Tools-Dokumentation](tools/README.de.md) führen dich Schritt für Schritt.
+- [Überblick](#überblick)
+- [Funktionen](#funktionen)
+- [Voraussetzungen](#voraussetzungen)
+- [Schnellstart](#schnellstart)
+- [Plattformen](#plattformen)
+- [Ordnerstruktur](#ordnerstruktur)
+- [Tools im Überblick](#tools-im-überblick)
+- [Dokumentation](#dokumentation)
+- [Konfiguration](#konfiguration)
+- [Externe Links](#externe-links)
 
 ---
+
+## Überblick
+
+Der **Simple WoltLab Plugin Manager (SWPM)** ist ein plattformübergreifendes Kommandozeilen-Toolkit für den kompletten **WoltLab Suite**-Plugin-Lebenszyklus: Setup, Entwicklung, Build, Validierung und Release. Ein zentrales Textmenü steuert alles im Terminal.
+
+## Funktionen
+
+- **Umgebungs-Setup** — WoltLab Core, offizielle Doku und WCF-Quellcode, TypeScript-Typings (d.ts), Pfade zur lokalen Installation.
+- **Entwicklung** — TypeScript-Kompilierung (inkl. Watch), Pakete entpacken, zentrales Debug-Log.
+- **Build** — Verteilbare `.tar.gz`-Pakete mit Versionserhöhung; [wspackager-Parität](tools/docs/WSPACKAGER-PARITY.de.md) (`files/`, `files_wcf/`, `--json`).
+- **Qualitätssicherung** — Sicherheit (SQL, XSS), Übersetzungen (DE/EN), offline DevTools-Parität (PIP-Quellen, Sprach-Keys mit Datei:Zeile), Minversion, WoltLab-Cloud, Store-Vorgaben.
+- **Release** — Git-Commit, Push, Tags, GitHub-Release inkl. Assets.
+- **Optional** — Docker-Helfer für lokale ACP-Tests; DDEV-Anbindung.
+
+Ausgerichtet an den [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/). Typings von [WoltLab d.ts](https://github.com/WoltLab/d.ts).
+
+## Voraussetzungen
+
+- **Bash** — Linux, macOS, **Windows WSL2** oder **Git Bash** ([Details](tools/docs/CROSS-PLATFORM.de.md))
+- **Git** und **tar**
+- **Python 3** (empfohlen) — Validierungsskripte
+- **Node.js** (optional) — TypeScript im Plugin
+
+Kein Vorwissen nötig. Menü und [Tools-Dokumentation](tools/README.de.md) führen Schritt für Schritt.
 
 ## Schnellstart
 
-1. **Repo klonen** und im Repo-Root (Ordner mit `tools.sh`) ein Terminal öffnen.
+1. Repo klonen, Terminal im Root öffnen (Ordner mit `tools.sh`).
 
-2. **Tools starten**
+2. Toolkit starten:
    ```bash
    ./tools.sh
    ```
-   Unter Windows ohne Unix-Shell: **`tools.cmd`** (benötigt [Git for Windows](https://git-scm.com/download/win)).
+   Windows ohne Unix-Shell: **`tools.cmd`** ([Git for Windows](https://git-scm.com/download/win)).
 
-   Ohne Argumente startet das **interaktive Menü**. Alle CLI-Befehle: `./tools.sh help`. Core, Doku, Typings und Pfade: **`./tools.sh setup`** — wann du willst, nicht automatisch beim ersten Start.
-
-3. **Menü nutzen**  
-   Nummer der Option eingeben (z. B. `1` Build, `2` Git Push), mit `0` beenden. Details in [tools/README.de.md](tools/README.de.md).
-
-> **Tipp:** Setup jederzeit mit **`./tools.sh setup`** oder `./tools/setup-minimal.sh`. Bei Angabe eines lokalen WoltLab-Pfads können optionale Editor-Workspace-Pfade angepasst werden.
-
----
+3. Interaktives Menü nutzen (Build, Git Push, Validierung, …). CLI: `./tools.sh help`. **`./tools.sh setup`** für Core, Doku, Typings und Pfade — nicht beim ersten Start.
 
 ## Plattformen
 
@@ -63,65 +76,59 @@ Du musst kein Vorwissen zur WoltLab-Plugin-Struktur mitbringen. Das Menü und di
 
 Details: **[tools/docs/CROSS-PLATFORM.de.md](tools/docs/CROSS-PLATFORM.de.md)**
 
----
-
 ## Ordnerstruktur
 
 | Ordner | Zweck |
 |--------|--------|
-| `basis-plugin` | Dein Haupt- oder Basis-Plugin-Projekt. |
-| `mein-plugin` | Weitere Plugin-Projekte (z. B. abhängig vom Basis-Plugin). |
-| `plugins-integrieren` | Externe oder Referenz-Plugins, die du im Workspace behalten willst. |
-| `woltlab-core` | Hier legt das Setup WoltLab-Core-Dateien (z. B. WCFSetup) nach dem Download ab. |
-| `woltlab-docs` | WoltLab-Dokumentation (Git-Klon, optional im Setup). |
-| `woltlab-github` | WoltLab-WCF-Quellcode (Git-Klon, optional im Setup). |
-| `woltlab-d-ts` | WoltLab-TypeScript-Typings (d.ts) für die Nutzung in deinem Plugin-TypeScript. |
-| `tools` | Alle Skripte und das Setup liegen hier. |
-
----
+| `basis-plugin` | Haupt- oder Basis-Plugin |
+| `mein-plugin` | Weitere Plugin-Projekte |
+| `plugins-integrieren` | Externe/Referenz-Plugins im Workspace |
+| `woltlab-core` | WoltLab-Core nach Setup-Download |
+| `woltlab-docs` | WoltLab-Doku (optional) |
+| `woltlab-github` | WCF-Quellcode (optional) |
+| `woltlab-d-ts` | TypeScript-Typings für dein Plugin |
+| `tools` | Skripte und Setup |
 
 ## Tools im Überblick
 
-| Tool | Was es macht | Befehl |
-|------|----------------|--------|
-| **Hauptmenü** | Interaktives Menü; `./tools.sh help` listet CLI-Befehle. | `./tools.sh` oder `./tools/tools.sh` |
-| **Setup** | Lädt Core, Doku, Typings; setzt Pfade. | `./tools/setup-minimal.sh` |
-| **Build** | Baut dein Plugin und kann die Version erhöhen (patch/minor/major). | `./tools/build.sh patch` |
-| **Git Push** | Committet, pusht und erstellt ein GitHub-Release für dein Plugin. | `./tools/gitpush.sh` |
-| **TypeScript** | Kompiliert TypeScript zu JavaScript (optional Watch-Modus). | `./tools/typescript.sh` |
-| **Unpack** | Entpackt ein Plugin-Paket nach `temp_edit/`. | `./tools/unpack.sh` |
-| **Validierung** | Prüft dein Plugin auf Sicherheit und Store-Compliance. | `./tools/validate-plugin.sh` |
-| **Hilfe** | Öffnet die Tools-Dokumentation. | `./tools/help.sh` |
+| Tool | Zweck | Befehl |
+|------|--------|--------|
+| **Hauptmenü** | Menü + CLI | `./tools.sh` |
+| **Setup** | Core, Doku, Typings, Pfade | `./tools/setup-minimal.sh` |
+| **Build** | Paket + Version | `./tools/build.sh patch` |
+| **Git Push** | Commit, Push, GitHub-Release | `./tools/gitpush.sh` |
+| **TypeScript** | TS → JS | `./tools/typescript.sh` |
+| **Unpack** | Paket nach `temp_edit/` | `./tools/unpack.sh` |
+| **Validierung** | Sicherheit und Store | `./tools/validate-plugin.sh` |
+| **Hilfe** | Tools-Doku öffnen | `./tools/help.sh` |
 
-Vollständige Beschreibung: **[tools/README.de.md](tools/README.de.md)**.
+Details: **[tools/README.de.md](tools/README.de.md)**
 
----
+## Dokumentation
 
-## Optional: TypeScript und WoltLab-Typings
+| Ressource | English | Deutsch |
+|-----------|---------|---------|
+| Tools-Referenz | [tools/README.md](tools/README.md) | [tools/README.de.md](tools/README.de.md) |
+| Alle Anleitungen | [tools/docs/README.md](tools/docs/README.md) | [tools/docs/README.de.md](tools/docs/README.de.md) |
+| Mitwirken | [CONTRIBUTING.md](CONTRIBUTING.md) | [CONTRIBUTING.de.md](CONTRIBUTING.de.md) |
 
-Setup ausführen und **„d.ts klonen“** bestätigen (Standard: ja). [WoltLab d.ts](https://github.com/WoltLab/d.ts) landet in `woltlab-d-ts`. In `temp_edit/tsconfig.json` z. B.:
+## Konfiguration
+
+Einstellungen (WoltLab-Pfad, GitHub-URL, …) in **`tools/.env`** (nicht im Git). Vorlage: **`tools/.env.example`**. Setup kann die Datei anlegen.
+
+### Optional: TypeScript-Typings
+
+Nach Setup mit **„d.ts klonen“** im Plugin-`tsconfig.json`:
 
 ```json
 "typeRoots": ["../../woltlab-d-ts"]
 ```
 
-Details in [tools/README.de.md](tools/README.de.md).
+### Optional: Editor-Workspace
 
----
+`simple-woltlab-plugin-manager.code-workspace` — optionales VS-Code-Multiroot-Layout. **Nicht Pflicht** — alles läuft im Terminal.
 
-## Optional: Editor-Workspace
-
-`simple-woltlab-plugin-manager.code-workspace` ist ein optionales Multi-Root-Layout für VS Code (o. Ä.). **Nicht erforderlich** — alle Tools laufen im Terminal.
-
----
-
-## Konfiguration
-
-Einstellungen stehen in **`tools/.env`** (nicht in Git). Vorlage: **`tools/.env.example`**. Setup kann `tools/.env` anlegen oder aktualisieren.
-
----
-
-## Links
+## Externe Links
 
 - [WoltLab Suite Download](https://www.woltlab.com/de/woltlab-suite-download/)
 - [WoltLab Docs (GitHub)](https://github.com/WoltLab/docs.woltlab.com)
