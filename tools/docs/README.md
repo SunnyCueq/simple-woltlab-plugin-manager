@@ -30,7 +30,3 @@ Central index for guides shipped with the Simple WoltLab Plugin Manager. Every t
 | Language XML | [LANGUAGE-XML.en.md](LANGUAGE-XML.en.md) | [LANGUAGE-XML.de.md](LANGUAGE-XML.de.md) |
 | Template rules | [WOLTLAB-TEMPLATE-RULES.en.md](WOLTLAB-TEMPLATE-RULES.en.md) | [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.de.md) |
 | Debug logging | [LOGGING.en.md](LOGGING.en.md) | [LOGGING.de.md](LOGGING.de.md) |
-
-## Regenerating README drafts (optional)
-
-See [README-AI.md](README-AI.md) for using [readme-ai](https://github.com/eli64s/readme-ai) to generate **draft** README files. Final docs in this repo are reviewed manually for accuracy.

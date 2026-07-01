@@ -35,10 +35,6 @@ tools/copywriting/.venv/
 tools/copywriting/**/__pycache__/
 tools/**/__pycache__/
 
-# readme-ai drafts (optional doc generator)
-.venv-readmeai/
-docs/drafts/
-
 # Portable Runtimes (PHP, MariaDB, Node – werden von download-runtimes.sh befüllt)
 tools/runtime/php/
 tools/runtime/mariadb/

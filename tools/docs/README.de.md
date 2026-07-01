@@ -30,7 +30,3 @@ Zentraler Index der Anleitungen im Simple WoltLab Plugin Manager. Jedes Thema gi
 | Language-XML | [LANGUAGE-XML.en.md](LANGUAGE-XML.en.md) | [LANGUAGE-XML.de.md](LANGUAGE-XML.de.md) |
 | Template-Regeln | [WOLTLAB-TEMPLATE-RULES.en.md](WOLTLAB-TEMPLATE-RULES.en.md) | [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.de.md) |
 | Debug-Logging | [LOGGING.en.md](LOGGING.en.md) | [LOGGING.de.md](LOGGING.de.md) |
-
-## README-Entwürfe neu erzeugen (optional)
-
-Siehe [README-AI.de.md](README-AI.de.md) für [readme-ai](https://github.com/eli64s/readme-ai) — erzeugt **Entwürfe**, die wir manuell gegen die echten Tools prüfen.

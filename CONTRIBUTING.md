@@ -16,5 +16,4 @@ See `.cursor/rules/swpm-generic-only.mdc` for the full policy.
 
 - Every guide in **English and German** (`*.en.md` / `*.de.md` or `README.md` / `README.de.md`).
 - Index: [tools/docs/README.md](tools/docs/README.md)
-- Optional README drafts via [readme-ai](tools/docs/README-AI.md) — always review manually.
 

@@ -31,19 +31,42 @@ source "$TOOLS_DIR/common.sh"
 
 check_swpm_requirements || exit 1
 
-# ── Optik (CSRetro-ähnlich) ─────────────────────────────────────────────────
-
-tools_divider() {
-	echo -e "\033[0;90m ────────────────────────────────────────────\033[0m"
-}
+# ── Optik (ui.sh) ─────────────────────────────────────────────────────────────
 
 tools_header() {
-	clear 2>/dev/null || true
+	[ -t 0 ] && clear 2>/dev/null || true
+	if declare -f ui_header &>/dev/null; then
+		ui_header "Simple WoltLab Plugin Manager"
+	else
+		echo ""
+		echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════╗${RESET}"
+		echo -e "${BOLD}${CYAN}║  Simple WoltLab Plugin Manager               ║${RESET}"
+		echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════╝${RESET}"
+		echo ""
+	fi
+	local plat
+	plat=$(platform_label 2>/dev/null || echo "?")
+	echo -e "  ${DIM}Plattform:${RESET} ${plat}  ${DIM}│${RESET}  ${DIM}CLI:${RESET} ./tools.sh help"
 	echo ""
-	echo -e "${BOLD}${MAGENTA} ╔══════════════════════════════════════════════╗${RESET}"
-	echo -e "${BOLD}${MAGENTA} ║  WoltLab Plugin Manager – Tools              ║${RESET}"
-	echo -e "${BOLD}${MAGENTA} ╚══════════════════════════════════════════════╝${RESET}"
-	echo ""
+}
+
+tools_divider() {
+	if declare -f ui_divider &>/dev/null; then
+		ui_divider 52
+	else
+		echo -e "${DIM}────────────────────────────────────────────${RESET}"
+	fi
+}
+
+plugin_xml_dir() {
+	local root="$1"
+	if [ -f "$root/temp_edit/package.xml" ]; then
+		echo "$root/temp_edit"
+	elif [ -f "$root/package.xml" ]; then
+		echo "$root"
+	else
+		return 1
+	fi
 }
 
 # Plugin-Stamm für build.sh (Ordnername unter MAIN_DIR, z. B. basis-plugin)
@@ -60,26 +83,32 @@ plugin_slug_for_build() {
 print_plugins_summary() {
 	local plugins=()
 	mapfile -t plugins < <(find_plugin_directories "$MAIN_DIR" 2>/dev/null || true)
-	local n="${#plugins[@]}"
+	local n=0
+	for p in "${plugins[@]}"; do
+		[ -n "$p" ] || continue
+		n=$((n + 1))
+	done
 	if [ "$n" -eq 0 ]; then
-		echo -e " ${YELLOW}○${RESET} Kein Plugin mit package.xml gefunden."
+		echo -e "  ${YELLOW}${WARN:-○}${RESET} Kein Plugin mit package.xml gefunden."
+		echo -e "  ${DIM}→ Plugin-Ordner mit package.xml oder temp_edit/package.xml anlegen${RESET}"
+		echo -e "  ${DIM}→ oder: Menü 3 Unpack / ./tools.sh unpack${RESET}"
 		return
 	fi
 	local i=0
 	for p in "${plugins[@]}"; do
+		[ -n "$p" ] || continue
 		[ "$i" -ge 5 ] && {
-			echo -e " \033[0;90m… und weitere\033[0m"
+			echo -e "  ${DIM}… und weitere${RESET}"
 			break
 		}
 		local ver name rel root xml_dir
 		root="$p"
 		[ "$(basename "$p")" = "temp_edit" ] && root="$(dirname "$p")"
-		xml_dir="$root"
-		[ -f "$root/temp_edit/package.xml" ] && xml_dir="$root/temp_edit"
+		xml_dir=$(plugin_xml_dir "$root" 2>/dev/null) || continue
 		ver=$(get_plugin_version "$xml_dir" 2>/dev/null || echo "?")
-		name=$(get_plugin_name "$xml_dir" 2>/dev/null || echo "?")
+		name=$(get_plugin_name "$xml_dir" 2>/dev/null || echo "$(basename "$root")")
 		rel="${root#$MAIN_DIR/}"
-		echo -e " ${GREEN}●${RESET} ${BOLD}${name}${RESET} ${YELLOW}v${ver}${RESET} ${BLUE}[${rel}]${RESET}"
+		printf "  ${GREEN}${OK:-●}${RESET} %-28s ${YELLOW}v%s${RESET} ${BLUE}[%s]${RESET}\n" "$name" "$ver" "$rel"
 		i=$((i + 1))
 	done
 }
@@ -104,34 +133,38 @@ run_tool() {
 
 cmd_help() {
 	echo ""
-	echo -e " ${BOLD}WoltLab Plugin Manager${RESET} (${MAIN_DIR})"
+	if declare -f ui_header &>/dev/null; then
+		ui_header "SWPM — CLI"
+	else
+		echo -e " ${BOLD}WoltLab Plugin Manager${RESET}"
+	fi
+	echo -e "  ${DIM}${MAIN_DIR}${RESET}"
 	echo ""
-	echo -e " ${BOLD}Build & Assets${RESET}"
-	echo "  build | build:patch [args…]   → tools/build.sh patch"
-	echo "  build:same | build:dev [args…] → Build ohne Versionserhoehung (Entwicklung)"
-	echo "  build:update | update-paket | update  → Update-Paket (Patch; Store-Update)"
-	echo "  build:minor | build:major"
-	echo "  build:dry-run                 → Paketinhalt ohne Build"
-	echo "  typescript | ts [args…]       → tools/typescript.sh"
-	echo "  unpack [args…]              → tools/unpack.sh"
+	echo -e "  ${BOLD}Build & Assets${RESET}"
+	echo "    build | build:patch [args…]     → tools/build.sh patch"
+	echo "    build:same | build:dev [args…]  → Build ohne Versionserhöhung"
+	echo "    build:update | update-paket     → Update-Paket (Patch)"
+	echo "    build:minor | build:major | build:dry-run"
+	echo "    typescript | ts [args…]         → tools/typescript.sh"
+	echo "    unpack [args…]                  → tools/unpack.sh"
 	echo ""
-	echo -e " ${BOLD}Qualität & Setup${RESET}"
-	echo "  validate [pfad]               → tools/validate-plugin.sh"
-	echo "  setup                         → tools/setup-minimal.sh"
+	echo -e "  ${BOLD}Qualität & Setup${RESET}"
+	echo "    validate [pfad]                 → tools/validate-plugin.sh"
+	echo "    setup                           → tools/setup-minimal.sh"
 	echo ""
-	echo -e " ${BOLD}Git & Repo${RESET}"
-	echo "  push | gitpush [args…]        → tools/gitpush.sh"
-	echo "  repo                          → origin anzeigen / setzen"
+	echo -e "  ${BOLD}Git & Repo${RESET}"
+	echo "    push | gitpush [args…]          → tools/gitpush.sh"
+	echo "    repo                            → origin anzeigen / setzen"
 	echo ""
-	echo -e " ${BOLD}Sonstiges${RESET}"
-	echo "  docs                          → Hilfe / README (help.sh)"
-	echo "  wcf-version                   → Core/Docs/GitHub-Version (update-woltlab-version.sh)"
-	echo "  sync-woltlab-refs [6.2]       → Nur Git-Spiegel (docs, github, d.ts) aktualisieren"
-	echo "  lang                          → Menü-Sprache de/en (.env)"
-	echo "  manager-push                  → Maintainer: Manager-Repo (falls vorhanden)"
-	echo "  menu                          → Interaktives Menü"
+	echo -e "  ${BOLD}Sonstiges${RESET}"
+	echo "    docs                            → Hilfe / README (help.sh)"
+	echo "    wcf-version                     → Core/Docs/GitHub-Version"
+	echo "    sync-woltlab-refs [6.2]         → Git-Spiegel aktualisieren"
+	echo "    lang                            → Menü-Sprache de/en"
+	echo "    manager-push                    → Maintainer (falls vorhanden)"
+	echo "    menu                            → Interaktives Menü"
 	echo ""
-	echo -e " ${DIM}Ohne Argumente: interaktives Menü. Siehe README im Repo.${RESET}"
+	echo -e "  ${DIM}Ohne Argumente: interaktives Menü · Doku: tools/docs/README.md${RESET}"
 	echo ""
 }
 
@@ -257,32 +290,32 @@ run_validate_interactive() {
 show_interactive_menu() {
 	tools_header
 	show_system_overview 2>/dev/null || true
-	echo -e " ${BOLD}Plugins${RESET}"
+	echo -e "  ${BOLD}Plugins${RESET}"
 	print_plugins_summary
 	echo ""
 	tools_divider
-	echo -e " ${BOLD}ENTWICKLUNG${RESET}"
-	echo -e " ${CYAN}1${RESET} Build / Update-Paket ${DIM}→ patch/minor/major/same (build.sh)${RESET}"
-	echo -e " ${CYAN}2${RESET} TypeScript         ${DIM}→ tools/typescript.sh${RESET}"
-	echo -e " ${CYAN}3${RESET} Unpack             ${DIM}→ Paket nach temp_edit/${RESET}"
+	echo -e "  ${BOLD}ENTWICKLUNG${RESET}"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "1" "Build / Update-Paket" "patch · minor · major · same"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "2" "TypeScript" "typescript.sh"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "3" "Unpack" "→ temp_edit/"
 	tools_divider
-	echo -e " ${BOLD}QUALITÄT & DOKU${RESET}"
-	echo -e " ${CYAN}4${RESET} Plugin validieren  ${DIM}→ Store-Kriterien${RESET}"
-	echo -e " ${CYAN}5${RESET} Hilfe / Doku       ${DIM}→ help.sh${RESET}"
+	echo -e "  ${BOLD}QUALITÄT & DOKU${RESET}"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "4" "Plugin validieren" "Store-Kriterien"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "5" "Hilfe / Doku" "help.sh"
 	tools_divider
-	echo -e " ${BOLD}REPO & UMGEBUNG${RESET}"
-	echo -e " ${CYAN}6${RESET} Git Push           ${DIM}→ gitpush.sh${RESET}"
-	echo -e " ${CYAN}7${RESET} Setup              ${DIM}→ Core, Docs, Pfade${RESET}"
-	echo -e " ${CYAN}8${RESET} Repo (origin)      ${DIM}→ URL anzeigen/setzen${RESET}"
-	echo -e " ${CYAN}9${RESET} WoltLab-Version    ${DIM}→ Core/Docs sync${RESET}"
-	echo -e " ${CYAN}L${RESET} Sprache DE/EN"
+	echo -e "  ${BOLD}REPO & UMGEBUNG${RESET}"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "6" "Git Push" "gitpush.sh"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "7" "Setup" "Core, Docs, Pfade"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "8" "Repo (origin)" "URL anzeigen/setzen"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "9" "WoltLab-Version" "Core/Docs sync"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "L" "Sprache DE/EN" ".env"
 	if [ -f "$TOOLS_DIR/manager-push.sh" ]; then
-		echo -e " ${CYAN}M${RESET} Manager Push       ${DIM}(Maintainer)${RESET}"
+		printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "M" "Manager Push" "(Maintainer)"
 	fi
 	tools_divider
-	echo -e " ${CYAN}0${RESET} Beenden"
+	printf "  ${CYAN}%-3s${RESET} Beenden\n" "0"
 	echo ""
-	printf " ${BOLD}→${RESET} "
+	printf "  ${BOLD}${ARROW:-→}${RESET} "
 }
 
 run_menu_loop() {

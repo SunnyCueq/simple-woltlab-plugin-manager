@@ -16,4 +16,3 @@ Vollständige Policy: `.cursor/rules/swpm-generic-only.mdc`.
 
 - Alle Anleitungen auf **Deutsch und Englisch** (`*.de.md` / `*.en.md` oder `README.md` / `README.de.md`).
 - Index: [tools/docs/README.de.md](tools/docs/README.de.md)
-- README-Entwürfe optional mit [readme-ai](tools/docs/README-AI.de.md) — Inhalt manuell prüfen.

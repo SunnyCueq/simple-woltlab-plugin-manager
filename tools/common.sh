@@ -302,9 +302,9 @@ if [ -z "${WOLTLAB_LANG:-}" ]; then
 fi
 export WOLTLAB_LANG
 
-# Übersetzung für Zweisprachigkeit (DE/EN): tr "key" gibt den Wert aus tools/language/${WOLTLAB_LANG}.txt zurück.
-# Wenn Schlüssel oder Datei fehlt, wird der Schlüssel zurückgegeben. Skripte können schrittweise auf tr("key") umgestellt werden.
-tr() {
+# Übersetzung für Zweisprachigkeit (DE/EN): swpm_tr "key" liest tools/language/${WOLTLAB_LANG}.txt
+# Wenn Schlüssel oder Datei fehlt, wird der Schlüssel zurückgegeben.
+swpm_tr() {
     local key="${1:-}"
     local lang="${WOLTLAB_LANG:-en}"
     local file="$_TOOLS_DIR_FOR_LOG/language/${lang}.txt"
@@ -815,7 +815,7 @@ show_system_overview() {
         ui_warn "Node: nicht gefunden (optional, für TypeScript)"
     fi
     local woltlab_ver
-    woltlab_ver=$(get_woltlab_version "$(get_public_dir)" 2>/dev/null || echo "unknown")
+    woltlab_ver=$(get_woltlab_version "$(get_public_dir)" 2>/dev/null) || woltlab_ver="unknown"
     if [ -n "$woltlab_ver" ] && [ "$woltlab_ver" != "unknown" ]; then
         ui_kv "WoltLab" "$woltlab_ver" "Core"
     else
@@ -996,13 +996,13 @@ find_plugin_directories() {
     
     for plugin_dir in "${plugin_dirs[@]}"; do
         # Prüfe direktes Verzeichnis
-        if [ -d "$plugin_dir" ] && [ -f "$plugin_dir/package.xml" ]; then
-            plugins+=("$plugin_dir")
-            seen+=("$plugin_dir")
-        fi
-        
-        # Durchsuche Unterverzeichnisse rekursiv (z.B. mein-plugin/extracted_plugin/*)
         if [ -d "$plugin_dir" ]; then
+            if [ -f "$plugin_dir/package.xml" ] || [ -f "$plugin_dir/temp_edit/package.xml" ]; then
+                if ! is_seen "$plugin_dir"; then
+                    plugins+=("$plugin_dir")
+                    seen+=("$plugin_dir")
+                fi
+            fi
             # Rekursive Suche nach package.xml in Unterverzeichnissen (max 3 Ebenen tief)
             while IFS= read -r -d '' subdir; do
                 if [ -d "$subdir" ] && [ -f "$subdir/package.xml" ]; then
@@ -1016,8 +1016,15 @@ find_plugin_directories() {
     done
     
     # Durchsuche Hauptverzeichnis (nur wenn noch nicht gefunden)
+    local skip_names=(woltlab-github woltlab-docs woltlab-core woltlab-d-ts tools maintainer docs)
     for dir in "${main_dir}"/*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.xml" ]; then
+        [ -d "$dir" ] || continue
+        local base
+        base=$(basename "$dir")
+        for skip in "${skip_names[@]}"; do
+            [ "$base" = "$skip" ] && continue 2
+        done
+        if [ -f "$dir/package.xml" ] || [ -f "$dir/temp_edit/package.xml" ]; then
             if ! is_seen "$dir"; then
                 plugins+=("$dir")
                 seen+=("$dir")
@@ -1025,6 +1032,9 @@ find_plugin_directories() {
         fi
     done
     
+    if [ ${#plugins[@]} -eq 0 ]; then
+        return 0
+    fi
     printf '%s\n' "${plugins[@]}"
 }
 
