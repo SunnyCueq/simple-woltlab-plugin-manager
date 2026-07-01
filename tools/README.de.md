@@ -58,7 +58,11 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 ./tools/build.sh patch        # Dasselbe
 ./tools/build.sh basis-plugin minor
 ./tools/build.sh all patch
+./tools/build.sh --json patch        # CI: JSON-Report (wspackager-Parität)
+./tools/build.sh --dry-run patch     # Nur geplanter Paketinhalt
 ```
+
+**Layouts:** Klassisch (`lib/`, `js/`, …) oder wspackager (`files/`, `files_wcf/`, `style/style.xml`). Details: [docs/WSPACKAGER-PARITY.md](docs/WSPACKAGER-PARITY.md).
 
 ---
 

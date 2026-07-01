@@ -13,6 +13,7 @@
 #   ./tools/build.sh major              → Major-Version erhoehen
 #   ./tools/build.sh unpack [plugin] [package.tar.gz] → Plugin entpacken
 #   ./tools/build.sh --dry-run          → Paket-Inhalt anzeigen, ohne zu bauen
+#   ./tools/build.sh --json patch       → CI: JSON-Report wie wspackager --json
 #   ./tools/build.sh --verbose [patch|minor|major|same] → Bauen mit Tree-Output
 #
 # Das Script sucht automatisch nach Plugin-Verzeichnissen
@@ -112,12 +113,23 @@ run_pip_source_check() {
     local base="${1:-temp_edit}"
     local pkg="${2:-$base/package.xml}"
     local check="${SCRIPT_DIR}/check-pip-sources.py"
+    local -a pip_args=(--strict --strict-case)
+    [ "${JSON_MODE:-0}" -eq 1 ] && pip_args+=(--json)
     if command -v python3 &>/dev/null && [ -f "$check" ]; then
-        python3 "$check" --strict "$base" "$pkg"
+        python3 "$check" "${pip_args[@]}" "$base" "$pkg"
         return $?
     fi
     print_error "check-pip-sources.py nicht gefunden — PIP-Validierung übersprungen"
     return 1
+}
+
+build_fail() {
+    local msg="$1"
+    if [ "${JSON_MODE:-0}" -eq 1 ] && command -v python3 &>/dev/null && [ -f "${SCRIPT_DIR}/swpm-package-report.py" ]; then
+        python3 "${SCRIPT_DIR}/swpm-package-report.py" build-err "$msg" "${PACKAGE_NAME:-}" "${NEW_VERSION:-}" >&2 || true
+    fi
+    print_error "$msg"
+    exit 1
 }
 
 # Tree-Output: Zeigt was gepackt wuerde (Quellen in temp_edit)
@@ -126,6 +138,7 @@ output_package_tree() {
     echo ""
     print_info "Paket-Inhalt (Tree):"
     echo "  package.xml"
+    [ -d "$base/files" ] && echo "  files.tar (files/ — wspackager layout)"
     [ -d "$base/lib" ] || [ -d "$base/acp" ] || [ -d "$base/style" ] && echo "  files.tar (lib/, acp/, style/)"
     [ -d "$base/js" ] || [ -d "$base/lib/bootstrap" ] && echo "  files_wcf.tar (js/, lib/bootstrap/)"
     [ -d "$base/templates" ] && echo "  templates.tar (templates/*.tpl)" || { ls "$base"/*.tpl 1>/dev/null 2>&1 && echo "  templates.tar (*.tpl)"; }
@@ -142,13 +155,15 @@ output_package_tree() {
 #=====================================
 DRY_RUN=0
 VERBOSE=0
+JSON_MODE=0
 
-# --dry-run und --verbose aus Parametern extrahieren
+# --dry-run, --verbose, --json aus Parametern extrahieren
 REST=()
 for arg in "$@"; do
     case "$arg" in
         --dry-run)  DRY_RUN=1 ;;
         --verbose)  VERBOSE=1 ;;
+        --json)     JSON_MODE=1 ;;
         *)          REST+=("$arg") ;;
     esac
 done
@@ -563,10 +578,14 @@ print_info "[1/5] Packe TARs aus temp_edit..."
 PACKAGE_DIR="$(pwd)"
 cd temp_edit
 
-# files.tar erstellen (lib/, acp/, style/, PHP-Dateien, aber keine Templates)
-# WICHTIG: app.config.inc.php NICHT packen - wird von WoltLab automatisch erstellt!
-# Vor jeder Installation muss die Datenbank bereinigt werden (alte Plugin-Eintraege loeschen)
+# files.tar — wspackager: Ordner files/ ODER lib/,acp/,style/ (siehe tools/docs/WSPACKAGER-PARITY.md)
 FILES_TO_PACK=""
+if [ -d "files" ]; then
+    tar -cf "${PACKAGE_DIR}/files.tar" --exclude="app.config.inc.php" -C files .
+    print_success "files.tar erstellt [aus files/]"
+    FILE_COUNT=$(tar -tf "${PACKAGE_DIR}/files.tar" 2>/dev/null | wc -l)
+    print_success "files.tar enthaelt ${FILE_COUNT} Datei(en)"
+else
 [ -d "lib" ] && FILES_TO_PACK="${FILES_TO_PACK} lib/"
 [ -d "acp" ] && FILES_TO_PACK="${FILES_TO_PACK} acp/"
 [ -d "style" ] && FILES_TO_PACK="${FILES_TO_PACK} style/"
@@ -603,8 +622,9 @@ if [ -n "$FILES_TO_PACK" ]; then
 else
     print_warning "Keine Dateien fuer files.tar gefunden"
 fi
+fi
 
-# templates.tar erstellen (Dateien direkt im Root, keine Verzeichnisse!)
+# templates.tar erstellen
 if [ -d "templates" ]; then
     cd templates
     if ls *.tpl 1> /dev/null 2>&1; then
@@ -639,8 +659,13 @@ else
     print_warning "Kein acptemplates/ Ordner gefunden"
 fi
 
-# files_wcf.tar erstellen (JavaScript-Dateien und Bootstrap-Dateien für WCF-Verzeichnis)
+# files_wcf.tar (js/, lib/bootstrap/ oder files_wcf/ — wspackager layout)
 WCF_FILES_TO_PACK=""
+if [ -d "files_wcf" ]; then
+    tar -cf "${PACKAGE_DIR}/files_wcf.tar" -C files_wcf .
+    WCF_FILE_COUNT=$(tar -tf "${PACKAGE_DIR}/files_wcf.tar" 2>/dev/null | wc -l)
+    print_success "files_wcf.tar erstellt [aus files_wcf/] (${WCF_FILE_COUNT} Datei(en))"
+elif [ -d "js" ] || [ -d "lib/bootstrap" ]; then
 if [ -d "js" ]; then
     WCF_FILES_TO_PACK="${WCF_FILES_TO_PACK} js/"
 fi
@@ -664,10 +689,21 @@ if [ -n "$WCF_FILES_TO_PACK" ]; then
         print_success "files_wcf.tar erstellt (${WCF_FILE_COUNT} Datei(en))"
     fi
 else
-    log_error_with_context "Keine WCF-Dateien gefunden fuer files_wcf.tar!" "js/ oder lib/bootstrap/ Verzeichnis fehlt"
+    log_error_with_context "Keine WCF-Dateien gefunden fuer files_wcf.tar!" "js/, lib/bootstrap/ oder files_wcf/ fehlt"
     exit 1
 fi
+fi
 
+# style.tar (style PIP — wspackager parity)
+if grep -qE 'type="style"' "$PACKAGE_XML" 2>/dev/null; then
+    PACK_STYLE="${SCRIPT_DIR}/pack-style-tar.sh"
+    if [ -f "style/style.xml" ] && [ -x "$PACK_STYLE" ]; then
+        bash "$PACK_STYLE" "$(pwd)" "${PACKAGE_DIR}/style.tar"
+        print_success "style.tar erstellt"
+    else
+        print_warning "style PIP in package.xml, aber style/style.xml fehlt"
+    fi
+fi
 
 cd "$PACKAGE_DIR"
 
@@ -1060,6 +1096,9 @@ print_section "Build abgeschlossen" "Hauptmenue" "Build"
 print_success "Build abgeschlossen!"
 print_info "Version: ${NEW_VERSION}"
 print_info "Paket: ${TAR_GZ_NAME}"
+if [ "${JSON_MODE:-0}" -eq 1 ] && command -v python3 &>/dev/null && [ -f "${SCRIPT_DIR}/swpm-package-report.py" ]; then
+    python3 "${SCRIPT_DIR}/swpm-package-report.py" build-ok "$PACKAGE_NAME" "$NEW_VERSION" "${PROJECT_ROOT}/${TAR_GZ_NAME}" "${PROJECT_ROOT}"
+fi
 echo ""
 VALIDATE_DIR="${PROJECT_ROOT#$MAIN_DIR/}"
 print_info "Vor Store-Release: ./tools/validate-plugin.sh ${VALIDATE_DIR} ausführen (Plugin-Store & WoltLab-Cloud Kriterien)."
