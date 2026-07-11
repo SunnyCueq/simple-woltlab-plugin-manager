@@ -106,7 +106,7 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 
 ### unpack.sh – Plugin-Paket entpacken
 
-**Was es macht:** Entpackt ein gebautes Plugin-Paket (z. B. `.tar.gz`) in den `temp_edit/`-Ordner des Plugins, damit du den Inhalt prüfen oder anpassen kannst.
+**Was es macht:** Entpackt ein gebautes Plugin-Paket (z. B. `.tar.gz`) in den `temp_edit/`-Ordner des Plugins, damit du den Inhalt prüfen oder anpassen kannst. Frontend-`templates.tar` landet in `templates/` (WoltLab-Layout); ACP-Templates in `acptemplates/`. PIP-XMLs bleiben im Paket-Root.
 
 **Wann nutzen:** Wenn du eine Paketdatei hast und sehen oder bearbeiten willst, was drin ist, ohne es in WoltLab zu installieren.
 
@@ -123,14 +123,14 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 
 ### validate-plugin.sh – Sicherheit und Store-Compliance
 
-**Was es macht:** Prüft dein Plugin vor Release oder Store-Einreichung auf typische Probleme. Geprüft werden: **PHP- und XML-Syntax**; **Übersetzungen** (DE und EN vorhanden und konsistent); **PIP-Quellen** (DevTools-Parität: sync-fähig vs. nur Paket-Update); **Plugin-Sprach-Keys** im Code vs. `language/*.xml` mit **Datei:Zeile**; **Mindestversion WoltLab**; dass keine externen Paket-Server genutzt werden; **Sicherheit** (z. B. SQL-Injection, XSS); **Debug- und Entwicklungs-Code**, der nicht ausgeliefert werden darf; sowie **Cloud-/Kompatibilitäts-** und weitere Store-Regeln. Die Prüfungen sind an die [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.de.md) angelehnt, die auch manuelle Schritte aufführt, die das Skript nicht abdeckt.
+**Was es macht:** Prüft dein Plugin vor Release oder Store-Einreichung auf typische Probleme. Geprüft werden: **PHP- und XML-Syntax**; **Übersetzungen** (DE und EN vorhanden und konsistent); **Template-Layout** (`templates/` kanonisch; Root-`*.tpl` warnt, `--strict` failt); **PIP-Quellen** (DevTools-Parität: sync-fähig vs. nur Paket-Update); **Plugin-Sprach-Keys** im Code vs. `language/*.xml` mit **Datei:Zeile**; **Mindestversion WoltLab**; dass keine externen Paket-Server genutzt werden; **Sicherheit** (z. B. SQL-Injection, XSS); **Debug- und Entwicklungs-Code**, der nicht ausgeliefert werden darf; sowie **Cloud-/Kompatibilitäts-** und weitere Store-Regeln. Die Prüfungen sind an die [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.de.md) angelehnt, die auch manuelle Schritte aufführt, die das Skript nicht abdeckt.
 
 **Wann nutzen:** Vor dem Release oder der Einreichung im Store, um Probleme früh zu finden.
 
 **Befehl:**
 
 ```bash
-./tools/validate-plugin.sh [Plugin-Pfad]
+./tools/validate-plugin.sh [--strict] [Plugin-Pfad]
 ```
 
 - `Plugin-Pfad`: optional; Plugin-Ordner oder Pfad. Ohne Angabe wird das aktuelle Verzeichnis oder das erste erkannte Plugin verwendet.

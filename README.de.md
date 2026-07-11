@@ -176,6 +176,8 @@ Beispiel (gekürzt):
 | `woltlab-core/` | Core nach Setup |
 | `woltlab-d-ts/` | TypeScript-Typings nach Setup |
 
+**Plugin-Quellenlayout:** Frontend-Templates unter `templates/` (werden zu `templates.tar`). ACP-Templates bleiben in `acptemplates/`. PIP-XMLs (`option.xml`, `page.xml`, …) bleiben im Paket-Root. Root-`*.tpl` packt weiter mit Warnung; `--strict-layout` / `validate-plugin.sh --strict` lässt den Check fehlschlagen. Details: [WSPACKAGER-PARITY.de.md](tools/docs/WSPACKAGER-PARITY.de.md).
+
 Tools-Referenz: **[tools/README.de.md](tools/README.de.md)** · Anleitungen: **[tools/docs/README.de.md](tools/docs/README.de.md)**
 
 ---

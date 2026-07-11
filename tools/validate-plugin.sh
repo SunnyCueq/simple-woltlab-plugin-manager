@@ -11,6 +11,7 @@
 #
 # Usage:
 #   ./tools/validate-plugin.sh [PLUGIN_DIR]
+#   ./tools/validate-plugin.sh --strict [PLUGIN_DIR]  → Root-*.tpl als Fehler
 #   Falls PLUGIN_DIR nicht angegeben, wird das aktuelle Verzeichnis verwendet
 #################################################################
 
@@ -62,6 +63,7 @@ fi
 #=====================================
 LOG_FILE="/tmp/validate-plugin-$(date +%Y%m%d-%H%M%S).log"
 VERBOSE=false
+STRICT_LAYOUT=false
 
 # Validierungs-Zähler
 ERRORS=0
@@ -82,9 +84,28 @@ log() {
 
 log "INFO" "Validierung gestartet"
 
-# Plugin-Verzeichnis bestimmen
-if [ $# -ge 1 ]; then
-    PLUGIN_DIR="$1"
+# Flags und Plugin-Verzeichnis
+PLUGIN_DIR=""
+for arg in "$@"; do
+    case "$arg" in
+        --strict|--strict-layout) STRICT_LAYOUT=true ;;
+        --verbose) VERBOSE=true ;;
+        -*)
+            print_error "Unbekanntes Flag: $arg"
+            echo "Verwendung: $0 [--strict] [--verbose] [PLUGIN_DIR]"
+            exit 1
+            ;;
+        *)
+            if [ -n "$PLUGIN_DIR" ]; then
+                print_error "Nur ein PLUGIN_DIR erlaubt (zusätzlich: $arg)"
+                exit 1
+            fi
+            PLUGIN_DIR="$arg"
+            ;;
+    esac
+done
+
+if [ -n "$PLUGIN_DIR" ]; then
     # Erweitere relative Pfade
     if [[ ! "$PLUGIN_DIR" =~ ^/ ]]; then
         PLUGIN_DIR="$MAIN_DIR/$PLUGIN_DIR"
@@ -773,6 +794,45 @@ else
 fi
 
 echo ""
+
+echo ""
+
+# 5b2. Template-Layout (kanonisch: templates/, Legacy: Root-*.tpl)
+LAYOUT_ROOT="${VALIDATE_SOURCE_DIR:-$EXTRACTED_DIR}"
+if [ -n "$LAYOUT_ROOT" ] && [ -d "$LAYOUT_ROOT" ]; then
+    echo -e "${YELLOW}🔍 Template-Layout (templates/)...${NC}"
+    log "INFO" "Template-Layout-Check in $LAYOUT_ROOT"
+    LAYOUT_CHECK="$TOOLS_DIR/check-template-layout.py"
+    if command -v python3 &> /dev/null && [ -f "$LAYOUT_CHECK" ]; then
+        LAYOUT_ARGS=()
+        if [ "$STRICT_LAYOUT" = true ]; then
+            LAYOUT_ARGS+=(--strict)
+        fi
+        LAYOUT_RC=0
+        LAYOUT_OUT=$(python3 "$LAYOUT_CHECK" "${LAYOUT_ARGS[@]}" "$LAYOUT_ROOT" 2>&1) || LAYOUT_RC=$?
+        if echo "$LAYOUT_OUT" | grep -q 'WARN:'; then
+            while IFS= read -r line; do
+                [ -z "$line" ] && continue
+                echo -e "   ${YELLOW}→${NC} $line"
+                log "WARNING" "$line"
+            done <<< "$(echo "$LAYOUT_OUT" | grep 'WARN:')"
+            if [ "$STRICT_LAYOUT" = true ] || [ "$LAYOUT_RC" -eq 2 ]; then
+                print_error "Root-*.tpl — nach templates/ verschieben (WoltLab-Norm)"
+                ERRORS=$((ERRORS + 1))
+            else
+                print_warning "Root-*.tpl — nach templates/ verschieben (WoltLab-Norm); --strict zum Failen"
+                WARNINGS=$((WARNINGS + 1))
+            fi
+        else
+            print_success "Template-Layout OK (templates/ oder keine Root-*.tpl)"
+            log "INFO" "Template layout OK"
+        fi
+    else
+        print_warning "check-template-layout.py nicht verfügbar"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+    echo ""
+fi
 
 # 5c. PIP-Quellen (WoltLab DevTools-Parität)
 if [ -n "$VALIDATE_SOURCE_DIR" ] && [ -f "${VALIDATE_SOURCE_DIR}/package.xml" ]; then

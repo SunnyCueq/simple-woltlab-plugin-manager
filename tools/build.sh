@@ -15,6 +15,7 @@
 #   ./tools/build.sh --dry-run          → Paket-Inhalt anzeigen, ohne zu bauen
 #   ./tools/build.sh --json patch       → CI: JSON-Report wie wspackager --json
 #   ./tools/build.sh --verbose [patch|minor|major|same] → Bauen mit Tree-Output
+#   ./tools/build.sh --strict-layout    → Root-*.tpl als Fehler (sonst nur Warnung)
 #
 # Das Script sucht automatisch nach Plugin-Verzeichnissen
 # im Projekt-Root (Verzeichnisse mit package.xml)
@@ -141,10 +142,10 @@ output_package_tree() {
     [ -d "$base/files" ] && echo "  files.tar (files/ — wspackager layout)"
     [ -d "$base/lib" ] || [ -d "$base/acp" ] || [ -d "$base/style" ] && echo "  files.tar (lib/, acp/, style/)"
     [ -d "$base/js" ] || [ -d "$base/lib/bootstrap" ] && echo "  files_wcf.tar (js/, lib/bootstrap/)"
-    [ -d "$base/templates" ] && echo "  templates.tar (templates/*.tpl)" || { ls "$base"/*.tpl 1>/dev/null 2>&1 && echo "  templates.tar (*.tpl)"; }
+    [ -d "$base/templates" ] && echo "  templates.tar (templates/*.tpl — kanonisch)" || { ls "$base"/*.tpl 1>/dev/null 2>&1 && echo "  templates.tar (*.tpl — Legacy, nach templates/ verschieben)"; }
     [ -d "$base/acptemplates" ] && echo "  acptemplates.tar (acptemplates/*.tpl)"
     for f in "$base"/*.xml; do
-        [ -f "$f" ] && [ "$(basename "$f")" != "package.xml" ] && echo "  $(basename "$f")"
+        [ -f "$f" ] && [ "$(basename "$f")" != "package.xml" ] && echo "  $(basename "$f")  (PIP-XML, Root)"
     done
     [ -d "$base/language" ] && echo "  language/"
     echo ""
@@ -156,14 +157,16 @@ output_package_tree() {
 DRY_RUN=0
 VERBOSE=0
 JSON_MODE=0
+STRICT_LAYOUT=0
 
-# --dry-run, --verbose, --json aus Parametern extrahieren
+# --dry-run, --verbose, --json, --strict-layout aus Parametern extrahieren
 REST=()
 for arg in "$@"; do
     case "$arg" in
         --dry-run)  DRY_RUN=1 ;;
         --verbose)  VERBOSE=1 ;;
         --json)     JSON_MODE=1 ;;
+        --strict-layout) STRICT_LAYOUT=1 ;;
         *)          REST+=("$arg") ;;
     esac
 done
@@ -357,8 +360,8 @@ if [ ! -d "temp_edit" ]; then
     print_warning "Bitte entpacke zuerst die TARs:"
     print_list_item "•" "rm -rf temp_edit && mkdir temp_edit"
     print_list_item "•" "tar -xf files.tar -C temp_edit"
-    print_list_item "•" "tar -xf templates.tar -C temp_edit"
-    print_list_item "•" "tar -xf acptemplates.tar -C temp_edit"
+    print_list_item "•" "mkdir -p temp_edit/templates && tar -xf templates.tar -C temp_edit/templates"
+    print_list_item "•" "mkdir -p temp_edit/acptemplates && tar -xf acptemplates.tar -C temp_edit/acptemplates"
     exit 1
 fi
 
@@ -624,7 +627,7 @@ else
 fi
 fi
 
-# templates.tar erstellen
+# templates.tar erstellen (kanonisch: templates/; Legacy: Root-*.tpl)
 if [ -d "templates" ]; then
     cd templates
     if ls *.tpl 1> /dev/null 2>&1; then
@@ -635,11 +638,26 @@ if [ -d "templates" ]; then
         print_warning "Keine .tpl Dateien in templates/ gefunden"
     fi
     cd ..
+    # Root-*.tpl neben templates/ → Warnung (nicht mitpacken; templates/ hat Vorrang)
+    if ls *.tpl 1> /dev/null 2>&1; then
+        ROOT_TPL_LIST=$(ls -1 *.tpl 2>/dev/null | tr '\n' ' ')
+        print_warning "Root-*.tpl ignoriert (templates/ hat Vorrang) — nach templates/ verschieben: ${ROOT_TPL_LIST}"
+        if [ "${STRICT_LAYOUT:-0}" -eq 1 ]; then
+            log_error_with_context "Root-*.tpl bei --strict-layout" "Verschiebe Frontend-Templates nach templates/"
+            exit 1
+        fi
+    fi
 elif ls *.tpl 1> /dev/null 2>&1; then
-    # Templates liegen direkt im temp_edit
+    # Legacy-Fallback: Templates liegen direkt im temp_edit-Root
+    ROOT_TPL_LIST=$(ls -1 *.tpl 2>/dev/null | tr '\n' ' ')
+    print_warning "Root-*.tpl → bitte nach templates/ verschieben (WoltLab-Norm): ${ROOT_TPL_LIST}"
+    if [ "${STRICT_LAYOUT:-0}" -eq 1 ]; then
+        log_error_with_context "Root-*.tpl bei --strict-layout" "Verschiebe Frontend-Templates nach templates/"
+        exit 1
+    fi
     tar -cf "${PACKAGE_DIR}/templates.tar" *.tpl
     TEMPLATE_COUNT=$(tar -tf "${PACKAGE_DIR}/templates.tar" 2>/dev/null | wc -l)
-    print_success "templates.tar erstellt (aus *.tpl) (${TEMPLATE_COUNT} Datei(en))"
+    print_success "templates.tar erstellt (Legacy aus *.tpl) (${TEMPLATE_COUNT} Datei(en))"
 else
     print_warning "Keine Templates gefunden"
 fi

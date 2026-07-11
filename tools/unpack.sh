@@ -158,12 +158,13 @@ else
     print_warning "files.tar nicht gefunden"
 fi
 
-# templates.tar entpacken (Frontend-Templates ins Root)
+# templates.tar entpacken (WoltLab-Norm: nach templates/, nicht lose ins Root)
 if [ -f "templates.tar" ]; then
-    print_info "[3/5] Entpacke templates.tar..."
+    print_info "[3/5] Entpacke templates.tar → templates/..."
     TEMPLATE_COUNT=$(tar -tf templates.tar 2>/dev/null | wc -l)
-    tar -xf templates.tar
-    print_success "templates.tar entpackt (${TEMPLATE_COUNT} Datei(en))"
+    mkdir -p templates
+    tar -xf templates.tar -C templates
+    print_success "templates.tar entpackt nach templates/ (${TEMPLATE_COUNT} Datei(en))"
 else
     print_warning "templates.tar nicht gefunden"
 fi
@@ -221,10 +222,16 @@ try:
         if not template_file.endswith('.tpl'):
             template_file = template_file + '.tpl'
         
-        # Prüfe ob Template im Root existiert aber nicht in acptemplates/
+        # Frontend-Quelle: templates/ (kanonisch) oder Root (Legacy)
         import os
-        if os.path.exists(template_file) and not os.path.exists(f'acptemplates/{template_file}'):
-            print(template_file)
+        candidates = [
+            template_file,
+            f'templates/{template_file}',
+        ]
+        for src in candidates:
+            if os.path.exists(src) and not os.path.exists(f'acptemplates/{template_file}'):
+                print(src)
+                break
 except Exception as e:
     pass
 PYTHON_SCRIPT
@@ -245,18 +252,21 @@ try:
         if not template_file.endswith('.tpl'):
             template_file = template_file + '.tpl'
         
-        if os.path.exists(template_file) and not os.path.exists(f'acptemplates/{template_file}'):
-            print(template_file)
+        for src in (template_file, f'templates/{template_file}'):
+            if os.path.exists(src) and not os.path.exists(f'acptemplates/{template_file}'):
+                print(src)
+                break
 except:
     pass
 PYTHON_SCRIPT
 )
     
     if [ -n "$ACP_TEMPLATES" ]; then
-        while IFS= read -r template_file; do
-            if [ -f "$template_file" ] && [ ! -f "acptemplates/$template_file" ]; then
-                print_info "Kopiere $template_file nach acptemplates/ (wird für ACP benötigt)"
-                cp "$template_file" "acptemplates/$template_file"
+        while IFS= read -r src_path; do
+            template_file=$(basename "$src_path")
+            if [ -f "$src_path" ] && [ ! -f "acptemplates/$template_file" ]; then
+                print_info "Kopiere $src_path nach acptemplates/ (wird für ACP benötigt)"
+                cp "$src_path" "acptemplates/$template_file"
             fi
         done <<< "$ACP_TEMPLATES"
     fi
@@ -291,10 +301,18 @@ else
     print_warning "Keine Plugin-Verzeichnisse (lib/ oder acp/) gefunden [kann optional sein]"
 fi
 
-# Prüfe ob XML-Dateien vorhanden sind
+# Frontend-Templates: kanonisch templates/, Legacy Root-*.tpl
+if [ -d "temp_edit/templates" ]; then
+    TPL_COUNT=$(find temp_edit/templates -maxdepth 1 -name "*.tpl" 2>/dev/null | wc -l)
+    print_success "templates/ vorhanden (${TPL_COUNT} Datei(en))"
+elif ls temp_edit/*.tpl 1>/dev/null 2>&1; then
+    print_warning "Root-*.tpl gefunden — nach templates/ verschieben (WoltLab-Norm)"
+fi
+
+# Prüfe ob XML-Dateien vorhanden sind (PIP-XMLs bleiben im Root)
 XML_COUNT=$(find temp_edit -maxdepth 1 -name "*.xml" 2>/dev/null | wc -l)
 if [ "$XML_COUNT" -gt 0 ]; then
-    print_success "${XML_COUNT} XML-Datei(en) gefunden"
+    print_success "${XML_COUNT} XML-Datei(en) im Root gefunden (PIP-XMLs)"
 else
     print_warning "Keine XML-Dateien im Root gefunden [kann optional sein]"
 fi

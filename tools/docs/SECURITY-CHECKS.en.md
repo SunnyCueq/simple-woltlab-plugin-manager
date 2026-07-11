@@ -9,10 +9,11 @@ Findings from plugin reviews and WoltLab 6.2.5, implemented as reusable tools.
 | Script | Purpose |
 |--------|---------|
 | `check-template-xss.py` | XSS heuristics for `.tpl` (without false positives from `{lang}`, `{unsafe:}`, comments) |
+| `check-template-layout.py` | Root `*.tpl` → warning “move to templates/” (`--strict` fails) |
 | `check-like-escaping.py` | LIKE without `escapeLikeValue()` (WoltLab 6.2.5 pattern) |
 | `fix-template-xss-escaping.py` | Semi-automatic fix for attributes and `<script>` |
 
-All three are used or recommended by `validate-plugin.sh`.
+Used or recommended by `validate-plugin.sh`.
 
 ## XSS check (WoltLab-specific)
 

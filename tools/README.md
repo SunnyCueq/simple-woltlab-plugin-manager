@@ -106,7 +106,7 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 
 ### unpack.sh – Unpack a plugin package
 
-**What it does:** Unpacks a built plugin package (e.g. `.tar.gz`) into the plugin’s `temp_edit/` folder so you can inspect or modify the packed contents.
+**What it does:** Unpacks a built plugin package (e.g. `.tar.gz`) into the plugin’s `temp_edit/` folder so you can inspect or modify the packed contents. Frontend `templates.tar` is extracted into `templates/` (WoltLab layout); ACP templates into `acptemplates/`. PIP XMLs stay in the package root.
 
 **When to use it:** When you have a package file and want to see or edit what’s inside without installing it in WoltLab.
 
@@ -123,16 +123,15 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 
 ### validate-plugin.sh – Security and store compliance
 
-**What it does:** Checks your plugin for common issues before release or store submission. It validates: **PHP and XML syntax**; **translations** (DE and EN present and consistent); **PIP sources** (DevTools parity: syncable vs package-only instructions); **plugin language keys** used in code vs `language/*.xml` with **file:line** locations; **minimum WoltLab version**; that no external package servers are used; **security** (e.g. SQL injection, XSS); **debug and development code** that should not ship; and **cloud/compatibility** and other store-related rules. The checks align with the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.en.md), which also lists manual steps the script does not cover.
+**What it does:** Checks your plugin for common issues before release or store submission. It validates: **PHP and XML syntax**; **translations** (DE and EN present and consistent); **template layout** (`templates/` canonical; root `*.tpl` warns, `--strict` fails); **PIP sources** (DevTools parity: syncable vs package-only instructions); **plugin language keys** used in code vs `language/*.xml` with **file:line** locations; **minimum WoltLab version**; that no external package servers are used; **security** (e.g. SQL injection, XSS); **debug and development code** that should not ship; and **cloud/compatibility** and other store-related rules. The checks align with the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.en.md), which also lists manual steps the script does not cover.
 
 **When to use it:** Before releasing or submitting to the store, to catch problems early.
 
 **Command:**
 
 ```bash
-./tools/validate-plugin.sh [plugin_path]
+./tools/validate-plugin.sh [--strict] [plugin_path]
 ```
-
 - `plugin_path`: optional; plugin directory or path. If omitted, the current directory or the first detected plugin is used.
 
 Results and details are shown in the terminal; logs may be written under `/tmp/` (see script output).

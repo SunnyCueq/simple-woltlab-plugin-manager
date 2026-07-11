@@ -176,6 +176,8 @@ Example menu (abbreviated):
 | `woltlab-core/` | Core files after setup |
 | `woltlab-d-ts/` | TypeScript typings after setup |
 
+**Plugin source layout:** Put frontend templates in `templates/` (packed as `templates.tar`). ACP templates stay in `acptemplates/`. PIP XMLs (`option.xml`, `page.xml`, …) remain in the package root. Root-level `*.tpl` still packs with a warning; use `--strict-layout` / `validate-plugin.sh --strict` to fail. Details: [WSPACKAGER-PARITY.en.md](tools/docs/WSPACKAGER-PARITY.en.md).
+
 Full tools reference: **[tools/README.md](tools/README.md)** · Guides index: **[tools/docs/README.md](tools/docs/README.md)**
 
 ---

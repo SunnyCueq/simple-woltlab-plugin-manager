@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Plugin-Manager
+
+- **Template-Layout:** `templates/` ist kanonischer Quellort für Frontend-`.tpl`; Root-`*.tpl` warnt (Legacy-Fallback), `--strict-layout` / `validate-plugin.sh --strict` failt. Unpack entpackt `templates.tar` nach `templates/`. Docs: `WSPACKAGER-PARITY`, README, `check-template-layout.py`.
+
 ## Version 1.1.0 – 2026-07-01
 
 ### Plugin-Manager

@@ -227,7 +227,7 @@ def resolve_target(
         return TargetResult(inst, label, ok, syncable)
 
     if pip == "template":
-        label = "templates.tar ← templates/ or *.tpl"
+        label = "templates.tar ← templates/ (Legacy: Root-*.tpl)"
         return TargetResult(inst, label, has_template_sources(root), syncable)
 
     if pip == "acpTemplate":
