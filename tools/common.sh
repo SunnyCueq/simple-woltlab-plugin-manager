@@ -969,16 +969,25 @@ press_zero_to_back() {
     [ "$choice" = "0" ]
 }
 
-# Funktion: Plugin-Verzeichnisse finden
+# Funktion: Plugin-Verzeichnisse finden (kanonisch: check-family-deps.py --scan-workspace)
 find_plugin_directories() {
     local main_dir="$1"
+    local tools_dir
+    tools_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local scanner="${tools_dir}/check-family-deps.py"
+
+    if command -v python3 &>/dev/null && [ -f "$scanner" ]; then
+        python3 "$scanner" --scan-workspace "$main_dir" 2>/dev/null || true
+        return 0
+    fi
+
+    # Fallback ohne Python
     local plugins=()
     local seen=()
-    
-    # Funktion: Prüfe ob Verzeichnis bereits gesehen wurde
     is_seen() {
         local check_path="$1"
-        local check_name=$(basename "$check_path")
+        local check_name
+        check_name=$(basename "$check_path")
         for seen_path in "${seen[@]}"; do
             if [ "$(basename "$seen_path")" = "$check_name" ]; then
                 return 0
@@ -986,16 +995,12 @@ find_plugin_directories() {
         done
         return 1
     }
-    
-    # Durchsuche spezifische Plugin-Verzeichnisse zuerst (höhere Priorität)
     local plugin_dirs=(
         "${main_dir}/basis-plugin"
         "${main_dir}/mein-plugin"
         "${main_dir}/plugins-integrieren"
     )
-    
     for plugin_dir in "${plugin_dirs[@]}"; do
-        # Prüfe direktes Verzeichnis
         if [ -d "$plugin_dir" ]; then
             if [ -f "$plugin_dir/package.xml" ] || [ -f "$plugin_dir/temp_edit/package.xml" ]; then
                 if ! is_seen "$plugin_dir"; then
@@ -1003,19 +1008,8 @@ find_plugin_directories() {
                     seen+=("$plugin_dir")
                 fi
             fi
-            # Rekursive Suche nach package.xml in Unterverzeichnissen (max 3 Ebenen tief)
-            while IFS= read -r -d '' subdir; do
-                if [ -d "$subdir" ] && [ -f "$subdir/package.xml" ]; then
-                    if ! is_seen "$subdir"; then
-                        plugins+=("$subdir")
-                        seen+=("$subdir")
-                    fi
-                fi
-            done < <(find "$plugin_dir" -mindepth 1 -maxdepth 3 -type d -print0 2>/dev/null)
         fi
     done
-    
-    # Durchsuche Hauptverzeichnis (nur wenn noch nicht gefunden)
     local skip_names=(woltlab-github woltlab-docs woltlab-core woltlab-d-ts tools maintainer docs)
     for dir in "${main_dir}"/*; do
         [ -d "$dir" ] || continue
@@ -1031,7 +1025,6 @@ find_plugin_directories() {
             fi
         fi
     done
-    
     if [ ${#plugins[@]} -eq 0 ]; then
         return 0
     fi

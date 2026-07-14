@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="com.example.demo.addon" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/package.xsd">
+	<packageinformation>
+		<packagename>Example Demo Add-on</packagename>
+		<version>1.0.0</version>
+		<date>2026-07-11</date>
+	</packageinformation>
+	<authorinformation>
+		<author>SWPM Fixture</author>
+	</authorinformation>
+	<requiredpackages>
+		<requiredpackage minversion="6.1.0">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="1.0.0">com.example.demo</requiredpackage>
+	</requiredpackages>
+	<instructions type="install">
+		<instruction type="file">files.tar</instruction>
+	</instructions>
+</package>

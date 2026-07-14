@@ -26,6 +26,8 @@ Or in the main menu: **Option 6) Plugin Validation**
 | Archive contains all files declared in `package.xml` | `validate-plugin.sh` → file completeness |
 | No junk files (`.DS_Store`, `Thumbs.db`, …) | `validate-plugin.sh` + `build.sh` |
 | Compatibility metadata complete and valid | `validate-plugin.sh` → `requiredpackages`, version |
+
+**Add-ons:** State clearly in the store listing that the **base app** is required. Product-line builds: [PRODUCT-LINE.en.md](PRODUCT-LINE.en.md).
 | Minimum `com.woltlab.wcf` version with security support | `validate-plugin.sh` → min version (6.0+; use current 6.2.x at release) |
 
 ---

@@ -2,7 +2,6 @@
 # ═══════════════════════════════════════════
 #  ui.sh — Shell UI Bibliothek
 #  Einbinden: source "$(dirname "$0")/ui.sh"  bzw.  source "${TOOLS_DIR}/ui.sh"
-#  Angelehnt an Video Whisper scripts/ui.sh
 # ═══════════════════════════════════════════
 
 # ── TTY-Check: Farben nur bei Terminal, sonst leer (für Pipes/Logs) ──

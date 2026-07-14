@@ -30,6 +30,12 @@ Thumbs.db
 *.backup
 *.old
 
+# Produktlinie: lokale Staging-/Manifest-Dateien (nicht committen)
+_family-stage/
+/swpm-family.shrinkr.json
+/swpm-family.local.json
+tools/.woltlab-setup-done
+
 # Copywriting tool (Python venv + cache)
 tools/copywriting/.venv/
 tools/copywriting/**/__pycache__/

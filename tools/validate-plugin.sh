@@ -8,6 +8,7 @@
 # Code-Qualität und Plugin-Store-Compliance
 #
 # Store-Mapping: tools/docs/PLUGIN-STORE-CHECKLIST.de.md (Stand 2026-06-26)
+# Build-Fail-Checks: tools/swpm-check-registry.txt (+ swpm-run-checks.sh in build.sh)
 #
 # Usage:
 #   ./tools/validate-plugin.sh [PLUGIN_DIR]
@@ -131,21 +132,27 @@ echo ""
 echo -e "${YELLOW}🔍 Prüfe package.xml...${NC}"
 log "INFO" "Prüfe package.xml"
 
-if [ ! -f "package.xml" ]; then
-    print_error "package.xml nicht gefunden!"
-    log "ERROR" "package.xml nicht gefunden"
+# Im Quell-Layout liegt package.xml unter temp_edit/ (Symlink auf das Plugin-Repo)
+PACKAGE_XML="package.xml"
+if [ ! -f "$PACKAGE_XML" ] && [ -f "temp_edit/package.xml" ]; then
+    PACKAGE_XML="temp_edit/package.xml"
+fi
+
+if [ ! -f "$PACKAGE_XML" ]; then
+    print_error "$PACKAGE_XML nicht gefunden!"
+    log "ERROR" "$PACKAGE_XML nicht gefunden"
     ERRORS=$((ERRORS + 1))
 else
-    print_success "package.xml gefunden"
-    log "INFO" "package.xml gefunden"
+    print_success "$PACKAGE_XML gefunden"
+    log "INFO" "$PACKAGE_XML gefunden"
 
     # XML-Syntax prüfen (falls xmllint verfügbar)
     if command -v xmllint &> /dev/null; then
-        if xmllint --noout package.xml 2>/dev/null; then
+        if xmllint --noout $PACKAGE_XML 2>/dev/null; then
             print_success "XML-Syntax ist korrekt"
             log "INFO" "XML-Syntax ist korrekt"
         else
-            print_error "XML-Syntax-Fehler in package.xml!"
+            print_error "XML-Syntax-Fehler in $PACKAGE_XML!"
             log "ERROR" "XML-Syntax-Fehler in package.xml"
             ERRORS=$((ERRORS + 1))
         fi
@@ -156,9 +163,9 @@ else
     fi
 
     # Package-Name prüfen
-    PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' package.xml 2>/dev/null | head -1)
+    PACKAGE_NAME=$(grep -oP 'name="\K[^"]+' $PACKAGE_XML 2>/dev/null | head -1)
     if [ -z "$PACKAGE_NAME" ]; then
-        print_error "Konnte Package-Name nicht aus package.xml extrahieren!"
+        print_error "Konnte Package-Name nicht aus $PACKAGE_XML extrahieren!"
         log "ERROR" "Konnte Package-Name nicht extrahieren"
         ERRORS=$((ERRORS + 1))
     else
@@ -179,9 +186,9 @@ else
     fi
 
     # Version prüfen
-    VERSION=$(grep -oP '<version>\K[^<]+' package.xml 2>/dev/null | head -1)
+    VERSION=$(grep -oP '<version>\K[^<]+' $PACKAGE_XML 2>/dev/null | head -1)
     if [ -z "$VERSION" ]; then
-        print_warning "Konnte Version nicht aus package.xml extrahieren"
+        print_warning "Konnte Version nicht aus $PACKAGE_XML extrahieren"
         log "WARNING" "Konnte Version nicht extrahieren"
         WARNINGS=$((WARNINGS + 1))
     else
@@ -190,7 +197,7 @@ else
     fi
 
     # Minversion-Validierung (Plugin Store Requirement)
-    MINVERSION=$(grep -oP '<requiredpackage minversion="\K[^"]+' package.xml 2>/dev/null | head -1) || MINVERSION=""
+    MINVERSION=$(grep -oP '<requiredpackage minversion="\K[^"]+' $PACKAGE_XML 2>/dev/null | head -1) || MINVERSION=""
 
     if [ -n "$MINVERSION" ]; then
         echo -e "   ${CYAN}Minversion:${NC} $MINVERSION"
@@ -215,13 +222,13 @@ else
             WARNINGS=$((WARNINGS + 1))
         fi
     else
-        print_warning "Keine Minversion in package.xml gefunden"
+        print_warning "Keine Minversion in $PACKAGE_XML gefunden"
         log "WARNING" "Keine Minversion gefunden"
         WARNINGS=$((WARNINGS + 1))
     fi
 
     # Package-Server Verbot (Plugin Store Regel)
-    if grep -q '<instruction type="packageUpdateServer"' package.xml; then
+    if grep -q '<instruction type="packageUpdateServer"' $PACKAGE_XML; then
         print_error "Package-Server Installation ist im Plugin Store VERBOTEN!"
         echo -e "   ${YELLOW}Entferne${NC} <instruction type=\"packageUpdateServer\"> aus package.xml"
         log "ERROR" "packageUpdateServer instruction gefunden (Plugin Store verboten)"
@@ -229,7 +236,7 @@ else
     fi
 
     # Excludedpackages Empfehlung
-    HAS_EXCLUDED=$(grep -c '<excludedpackages>' package.xml 2>/dev/null || echo "0")
+    HAS_EXCLUDED=$(grep -c '<excludedpackages>' $PACKAGE_XML 2>/dev/null || echo "0")
     if [ "$HAS_EXCLUDED" -eq 0 ] && [[ "$MINVERSION" =~ ^6\. ]]; then
         print_warning "Empfehlung: Füge <excludedpackages> hinzu für WoltLab 7.0 Alpha/Beta"
         echo -e "   ${YELLOW}Beispiel:${NC}"
@@ -256,8 +263,12 @@ while IFS= read -r -d '' tar_file; do
     echo -e "   ${CYAN}Gefunden:${NC} $(basename "$tar_file")"
     log "INFO" "$(basename "$tar_file") gefunden"
 
-    # TAR-Integrität prüfen
-    if tar -tzf "$tar_file" &>/dev/null; then
+    # TAR-Integrität prüfen (-z nur für .tar.gz; plain .tar würde damit fälschlich als beschädigt gelten)
+    case "$tar_file" in
+        *.tar.gz) TAR_FLAGS="-tzf" ;;
+        *)        TAR_FLAGS="-tf" ;;
+    esac
+    if tar $TAR_FLAGS "$tar_file" &>/dev/null; then
         print_success "$(basename "$tar_file") ist gültig"
         log "INFO" "$(basename "$tar_file") ist gültig"
     else
@@ -452,6 +463,172 @@ if [ -n "$EXTRACTED_DIR" ]; then
         print_warning "$XSS_ISSUES potenzielle XSS-Probleme gefunden"
         echo -e "   ${YELLOW}Hinweis:${NC} Plugin Store lehnt unsichere Templates ab!"
         log "WARNING" "$XSS_ISSUES XSS Warnungen"
+    fi
+
+    echo ""
+
+    # Funktions-Check: RPC-Endpoint-Registrierung (ControllerCollecting)
+    # Befund Shr1nkr 2026-07-02: Controller-Klassen ohne Bootstrap-Registrierung
+    # → jede Grid-Aktion endet mit 404 unknown_endpoint.
+    echo -e "${YELLOW}🔌 Funktions-Check: RPC-Endpoint-Registrierung...${NC}"
+    log "INFO" "Prüfe Endpoint-Controller gegen Bootstrap-Registrierung"
+    ENDPOINT_ISSUES=0
+
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-endpoint-registration.py" ]; then
+        while IFS= read -r ep_line; do
+            [ -z "$ep_line" ] && continue
+            print_error "$(echo "$ep_line" | cut -d: -f3-)"
+            echo -e "   ${YELLOW}→${NC} $(echo "$ep_line" | cut -d: -f1)"
+            log "ERROR" "Endpoint-Registrierung: $ep_line"
+            ERRORS=$((ERRORS + 1))
+            ENDPOINT_ISSUES=$((ENDPOINT_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-endpoint-registration.py" "$EXTRACTED_DIR" 2>/dev/null || true)
+
+        if [ $ENDPOINT_ISSUES -eq 0 ]; then
+            print_success "Alle RPC-Endpoint-Controller sind im Bootstrap registriert"
+            log "INFO" "Endpoint-Registrierung: Keine Probleme"
+        fi
+    else
+        print_warning "check-endpoint-registration.py nicht verfügbar, überspringe Endpoint-Check"
+        log "WARNING" "Endpoint-Check übersprungen"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    echo ""
+
+    # Asset-Check: CSS url(...)-Referenzen auf fehlende Dateien
+    # Befund Shr1nkr 2026-07-02: @font-face auf nicht mitgelieferte TTF → 500er.
+    echo -e "${YELLOW}🎨 Asset-Check: CSS-Referenzen (url(...))...${NC}"
+    log "INFO" "Prüfe CSS-url()-Referenzen auf fehlende Dateien"
+    CSS_ASSET_ISSUES=0
+
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-style-assets.py" ]; then
+        while IFS= read -r css_line; do
+            [ -z "$css_line" ] && continue
+            print_warning "Fehlendes CSS-Asset: $(echo "$css_line" | cut -d: -f3-) (referenziert in $(echo "$css_line" | cut -d: -f1) Zeile $(echo "$css_line" | cut -d: -f2))"
+            log "WARNING" "CSS-Asset: $css_line"
+            WARNINGS=$((WARNINGS + 1))
+            CSS_ASSET_ISSUES=$((CSS_ASSET_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-style-assets.py" "$EXTRACTED_DIR" 2>/dev/null || true)
+
+        if [ $CSS_ASSET_ISSUES -eq 0 ]; then
+            print_success "Alle CSS-Asset-Referenzen auflösbar"
+            log "INFO" "CSS-Assets: Keine Probleme"
+        fi
+    else
+        print_warning "check-style-assets.py nicht verfügbar, überspringe Asset-Check"
+        log "WARNING" "Asset-Check übersprungen"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    echo ""
+
+    # Template-Check: Hinweis-Boxen (woltlab-core-notice-Typen, Legacy <p class="info">)
+    # Befund Shr1nkr 2026-07-02: type="danger" ist ungültig (nur error|info|success|warning).
+    echo -e "${YELLOW}📋 Template-Check: Hinweis-Boxen (notices)...${NC}"
+    log "INFO" "Prüfe Templates auf ungültige/veraltete Notices"
+    NOTICE_ISSUES=0
+
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-template-notices.py" ]; then
+        while IFS= read -r notice_line; do
+            [ -z "$notice_line" ] && continue
+            print_warning "Notice: $(echo "$notice_line" | cut -d: -f3-) ($(echo "$notice_line" | cut -d: -f1) Zeile $(echo "$notice_line" | cut -d: -f2))"
+            log "WARNING" "Notice: $notice_line"
+            WARNINGS=$((WARNINGS + 1))
+            NOTICE_ISSUES=$((NOTICE_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-template-notices.py" "$EXTRACTED_DIR" 2>/dev/null || true)
+
+        if [ $NOTICE_ISSUES -eq 0 ]; then
+            print_success "Alle Hinweis-Boxen valide (woltlab-core-notice)"
+            log "INFO" "Notices: Keine Probleme"
+        fi
+    else
+        print_warning "check-template-notices.py nicht verfügbar, überspringe Notice-Check"
+        log "WARNING" "Notice-Check übersprungen"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    echo ""
+
+    # Template-Check: Unbekannte Modifier (kompilieren erst zur Laufzeit mit Fatal Error)
+    # Befund Shr1nkr 2026-07-02: {$var|formatNumeric} existiert nicht — richtig ist {#$var}.
+    echo -e "${YELLOW}📋 Template-Check: Template-Modifier...${NC}"
+    log "INFO" "Prüfe Templates auf unbekannte Modifier"
+    MODIFIER_ISSUES=0
+
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-template-modifiers.py" ]; then
+        while IFS= read -r modifier_line; do
+            [ -z "$modifier_line" ] && continue
+            print_error "Modifier: $(echo "$modifier_line" | cut -d: -f3-) ($(echo "$modifier_line" | cut -d: -f1) Zeile $(echo "$modifier_line" | cut -d: -f2))"
+            log "ERROR" "Modifier: $modifier_line"
+            ERRORS=$((ERRORS + 1))
+            MODIFIER_ISSUES=$((MODIFIER_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-template-modifiers.py" "$EXTRACTED_DIR" 2>/dev/null || true)
+
+        if [ $MODIFIER_ISSUES -eq 0 ]; then
+            print_success "Alle Template-Modifier bekannt (Whitelist + Plugins)"
+            log "INFO" "Modifier: Keine Probleme"
+        fi
+    else
+        print_warning "check-template-modifiers.py nicht verfügbar, überspringe Modifier-Check"
+        log "WARNING" "Modifier-Check übersprungen"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    echo ""
+
+    # Template-Check: Ungültige Foreach-Loop-Variablen ($fooLoop.last — WoltLab-Dialekt)
+    echo -e "${YELLOW}📋 Template-Check: Foreach-Loop-Variablen...${NC}"
+    log "INFO" "Prüfe Templates auf ungültige \$nameLoop.* Muster"
+    FOREACH_ISSUES=0
+
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-template-foreach.py" ]; then
+        while IFS= read -r foreach_line; do
+            [ -z "$foreach_line" ] && continue
+            print_error "Foreach: $(echo "$foreach_line" | cut -d: -f3-) ($(echo "$foreach_line" | cut -d: -f1) Zeile $(echo "$foreach_line" | cut -d: -f2))"
+            log "ERROR" "Foreach: $foreach_line"
+            ERRORS=$((ERRORS + 1))
+            FOREACH_ISSUES=$((FOREACH_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-template-foreach.py" "$EXTRACTED_DIR" 2>/dev/null || true)
+
+        if [ $FOREACH_ISSUES -eq 0 ]; then
+            print_success "Keine ungültigen Foreach-Loop-Variablen"
+            log "INFO" "Foreach: Keine Probleme"
+        fi
+    else
+        print_warning "check-template-foreach.py nicht verfügbar, überspringe Foreach-Check"
+        log "WARNING" "Foreach-Check übersprungen"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    echo ""
+
+    # Store-Check: Überflüssige Dateien im Paket (Richtlinie: keine Dev-Artefakte)
+    # Befund Shr1nkr 2026-07-02: language/ enthielt .py/.md-Dev-Dateien im Release-Tar.
+    echo -e "${YELLOW}📦 Store-Check: Überflüssige Dateien...${NC}"
+    log "INFO" "Prüfe auf Dev-Artefakte, die mit ins Paket wandern"
+    SUPERFLUOUS_ISSUES=0
+
+    if [ -d "$EXTRACTED_DIR/language" ]; then
+        while IFS= read -r -d '' extra_file; do
+            print_warning "Nicht-XML-Datei in language/: $(basename "$extra_file") — wandert mit ins Store-Paket"
+            echo -e "   ${YELLOW}→${NC} Dev-Dateien nach maintainer/ verschieben (Store: keine überflüssigen Dateien)"
+            log "WARNING" "Überflüssige Datei: $extra_file"
+            WARNINGS=$((WARNINGS + 1))
+            SUPERFLUOUS_ISSUES=$((SUPERFLUOUS_ISSUES + 1))
+        done < <(find "$EXTRACTED_DIR/language" -type f ! -name "*.xml" -print0 2>/dev/null)
+    fi
+
+    while IFS= read -r -d '' backup_file; do
+        print_warning "Backup-/Editor-Datei im Quellbaum: $backup_file"
+        log "WARNING" "Backup-Datei: $backup_file"
+        WARNINGS=$((WARNINGS + 1))
+        SUPERFLUOUS_ISSUES=$((SUPERFLUOUS_ISSUES + 1))
+    done < <(find "$EXTRACTED_DIR/lib" "$EXTRACTED_DIR/acp" "$EXTRACTED_DIR/templates" "$EXTRACTED_DIR/acptemplates" \( -name "*.backup" -o -name "*.bak" -o -name "*.orig" -o -name "*~" \) -type f -print0 2>/dev/null)
+
+    if [ $SUPERFLUOUS_ISSUES -eq 0 ]; then
+        print_success "Keine überflüssigen Dateien in Paket-Verzeichnissen"
+        log "INFO" "Überflüssige Dateien: Keine Probleme"
     fi
 
     echo ""
@@ -672,17 +849,27 @@ echo ""
 echo -e "${YELLOW}🔍 Prüfe Übersetzungen (DE/EN Pflicht für Plugin Store)...${NC}"
 log "INFO" "Prüfe Übersetzungen"
 
-if [ -d "language" ]; then
+# Im Quell-Layout liegt language/ unter temp_edit/ bzw. im Extraktionsverzeichnis
+LANG_BASE="."
+if [ ! -d "language" ]; then
+    if [ -n "$VALIDATE_SOURCE_DIR" ] && [ -d "$VALIDATE_SOURCE_DIR/language" ]; then
+        LANG_BASE="$VALIDATE_SOURCE_DIR"
+    elif [ -n "$EXTRACTED_DIR" ] && [ -d "$EXTRACTED_DIR/language" ]; then
+        LANG_BASE="$EXTRACTED_DIR"
+    fi
+fi
+
+if [ -d "$LANG_BASE/language" ]; then
     DE_FOUND=false
     EN_FOUND=false
 
-    if [ -f "language/de.xml" ]; then
+    if [ -f "$LANG_BASE/language/de.xml" ]; then
         DE_FOUND=true
         print_success "Deutsch (de.xml) gefunden"
         log "INFO" "Deutsch (de.xml) gefunden"
     fi
 
-    if [ -f "language/en.xml" ]; then
+    if [ -f "$LANG_BASE/language/en.xml" ]; then
         EN_FOUND=true
         print_success "Englisch (en.xml) gefunden"
         log "INFO" "Englisch (en.xml) gefunden"
@@ -709,7 +896,7 @@ if [ -d "language" ]; then
             log "ERROR" "Language category mismatch: $lang_line"
             ERRORS=$((ERRORS + 1))
             LANG_CAT_ISSUES=$((LANG_CAT_ISSUES + 1))
-        done < <(python3 "$TOOLS_DIR/check-language-categories.py" "$PLUGIN_DIR" 2>/dev/null || true)
+        done < <(python3 "$TOOLS_DIR/check-language-categories.py" "$LANG_BASE" 2>/dev/null || true)
         if [ $LANG_CAT_ISSUES -eq 0 ]; then
             print_success "Sprach-XML: Item/Kategorie-Zuordnung OK"
             log "INFO" "Language category check OK"
@@ -717,6 +904,49 @@ if [ -d "language" ]; then
     else
         print_warning "check-language-categories.py nicht verfügbar, überspringe Sprach-Kategorie-Check"
         log "WARNING" "check-language-categories.py nicht verfügbar"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    # JS AMD named exports for ACP require().setup()
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-js-amd-exports.py" ]; then
+        JS_AMD_ISSUES=0
+        while IFS= read -r js_line; do
+            [ -z "$js_line" ] && continue
+            print_error "JavaScript AMD: $js_line"
+            log "ERROR" "JS AMD export: $js_line"
+            ERRORS=$((ERRORS + 1))
+            JS_AMD_ISSUES=$((JS_AMD_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-js-amd-exports.py" "$LANG_BASE" 2>/dev/null || true)
+        if [ $JS_AMD_ISSUES -eq 0 ]; then
+            print_success "JavaScript: AMD Named Exports OK"
+            log "INFO" "JS AMD export check OK"
+        fi
+    else
+        print_warning "check-js-amd-exports.py nicht verfügbar, überspringe JS-Export-Check"
+        log "WARNING" "check-js-amd-exports.py nicht verfügbar"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    # Struktur-Integrität: ungültige Attribute (variant), doppelte Keys, {if} in wcf.global
+    # variant="informal" existiert in WoltLab nicht (XSD-invalide);
+    # doppelte Keys werden beim Import still überschrieben (letzter gewinnt).
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-language-integrity.py" ]; then
+        LANG_INT_ISSUES=0
+        while IFS= read -r int_line; do
+            [ -z "$int_line" ] && continue
+            print_error "Sprach-XML: $(echo "$int_line" | cut -d: -f3-)"
+            echo -e "   ${YELLOW}→${NC} $(echo "$int_line" | cut -d: -f1) Zeile $(echo "$int_line" | cut -d: -f2)"
+            log "ERROR" "Language integrity: $int_line"
+            ERRORS=$((ERRORS + 1))
+            LANG_INT_ISSUES=$((LANG_INT_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-language-integrity.py" "$LANG_BASE" 2>/dev/null || true)
+        if [ $LANG_INT_ISSUES -eq 0 ]; then
+            print_success "Sprach-XML: keine ungültigen Attribute / doppelten Keys"
+            log "INFO" "Language integrity check OK"
+        fi
+    else
+        print_warning "check-language-integrity.py nicht verfügbar, überspringe Integritäts-Check"
+        log "WARNING" "check-language-integrity.py nicht verfügbar"
         WARNINGS=$((WARNINGS + 1))
     fi
 

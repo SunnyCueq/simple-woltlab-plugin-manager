@@ -333,12 +333,12 @@ def main() -> int:
     parser.add_argument(
         "--strict-case",
         action="store_true",
-        help="Fail when path exists with wrong letter case (wspackager parity)",
+        help="Fail when path exists with wrong letter case (Linux/server parity)",
     )
     parser.add_argument(
         "--json",
         action="store_true",
-        help="Machine-readable JSON on stdout (wspackager --json parity)",
+        help="Machine-readable JSON on stdout",
     )
     parser.add_argument(
         "--pip",
@@ -495,7 +495,7 @@ def main() -> int:
 
     if case_errors:
         print()
-        print("Groß-/Kleinschreibung (wspackager: Pfade sind case-sensitive):")
+        print("Groß-/Kleinschreibung (Pfade sind case-sensitive):")
         for m in case_errors:
             print(f"  - {m.instruction.pip_type}: {m.expected}")
 

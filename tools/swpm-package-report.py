@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Machine-readable build / PIP check reports (wspackager --json parity)."""
+"""Machine-readable build / PIP check reports (JSON for CI)."""
 from __future__ import annotations
 
 import json

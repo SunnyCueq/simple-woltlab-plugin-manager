@@ -13,7 +13,7 @@ Findings from plugin reviews and WoltLab 6.2.5, implemented as reusable tools.
 | `check-like-escaping.py` | LIKE without `escapeLikeValue()` (WoltLab 6.2.5 pattern) |
 | `fix-template-xss-escaping.py` | Semi-automatic fix for attributes and `<script>` |
 
-Used or recommended by `validate-plugin.sh`.
+Used by `validate-plugin.sh` and (via `swpm-check-registry.txt` / `swpm-run-checks.sh`) by `build.sh`. Add new fail checks to the registry so the build picks them up automatically.
 
 ## XSS check (WoltLab-specific)
 

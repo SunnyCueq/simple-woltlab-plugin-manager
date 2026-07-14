@@ -150,6 +150,11 @@ cmd_help() {
 	echo ""
 	echo -e "  ${BOLD}Qualität & Setup${RESET}"
 	echo "    validate [pfad]                 → tools/validate-plugin.sh"
+	echo "    family:list | family:order | family:check"
+	echo "    family:build [patch|…]          → Produktlinie (Manifest)"
+	echo "    family:validate [--strict]"
+	echo "    family:init [--scaffold]        → Manifest (+ optionale Stubs)"
+	echo "    family:add-addon <slug>"
 	echo "    setup                           → tools/setup-minimal.sh"
 	echo ""
 	echo -e "  ${BOLD}Git & Repo${RESET}"
@@ -164,7 +169,7 @@ cmd_help() {
 	echo "    manager-push                    → Maintainer (falls vorhanden)"
 	echo "    menu                            → Interaktives Menü"
 	echo ""
-	echo -e "  ${DIM}Ohne Argumente: interaktives Menü · Doku: tools/docs/README.md${RESET}"
+	echo -e "  ${DIM}Ohne Argumente: interaktives Menü · Doku: tools/docs/README.md · Produktlinie: tools/docs/PRODUCT-LINE.de.md${RESET}"
 	echo ""
 }
 
@@ -285,6 +290,42 @@ run_validate_interactive() {
 	fi
 }
 
+run_family_interactive() {
+	print_header 2>/dev/null || tools_header
+	print_section "Produktlinie" "Tools" "Family"
+	echo "  1 list   2 order/check   3 build   4 validate   5 init   6 init --scaffold   0 Zurück"
+	read -r -p "Wahl: " fc
+	case "${fc:-0}" in
+		1) run_tool "$TOOLS_DIR/swpm-family.sh" list ;;
+		2) run_tool "$TOOLS_DIR/swpm-family.sh" check ;;
+		3)
+			read -r -p "Version-Typ [patch]: " vt
+			vt="${vt:-patch}"
+			run_tool "$TOOLS_DIR/swpm-family.sh" build "$vt"
+			;;
+		4)
+			read -r -p "Strict? (j/N): " st
+			if [[ "${st:-n}" =~ ^[jJyY] ]]; then
+				run_tool "$TOOLS_DIR/swpm-family.sh" --strict validate
+			else
+				run_tool "$TOOLS_DIR/swpm-family.sh" validate
+			fi
+			;;
+		5) run_tool "$TOOLS_DIR/swpm-family.sh" init ;;
+		6)
+			read -r -p "base-id [com.vendor.myapp]: " bid
+			read -r -p "base-dir [myapp]: " bdir
+			read -r -p "addons (komma, z.B. myapp-specials): " adds
+			bid="${bid:-com.vendor.myapp}"
+			bdir="${bdir:-myapp}"
+			args=(--scaffold --base-id "$bid" --base-dir "$bdir")
+			[ -n "$adds" ] && args+=(--addons "$adds")
+			run_tool "$TOOLS_DIR/swpm-family.sh" "${args[@]}" init
+			;;
+		*) return 0 ;;
+	esac
+}
+
 # ── Menü ────────────────────────────────────────────────────────────────────
 
 show_interactive_menu() {
@@ -298,6 +339,7 @@ show_interactive_menu() {
 	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "1" "Build / Update-Paket" "patch · minor · major · same"
 	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "2" "TypeScript" "typescript.sh"
 	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "3" "Unpack" "→ temp_edit/"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "F" "Produktlinie" "family:* · Manifest"
 	tools_divider
 	echo -e "  ${BOLD}QUALITÄT & DOKU${RESET}"
 	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "4" "Plugin validieren" "Store-Kriterien"
@@ -352,6 +394,7 @@ run_menu_loop() {
 				fi
 				;;
 			4) run_validate_interactive ;;
+			f | F) run_family_interactive ;;
 			5)
 				print_header 2>/dev/null || tools_header
 				run_tool "$TOOLS_DIR/help.sh"
@@ -442,6 +485,41 @@ if [ "$#" -gt 0 ]; then
 	validate | check)
 		shift
 		run_tool "$TOOLS_DIR/validate-plugin.sh" "$@"
+		exit $?
+		;;
+	family | family:list)
+		shift
+		run_tool "$TOOLS_DIR/swpm-family.sh" list "$@"
+		exit $?
+		;;
+	family:order)
+		shift
+		run_tool "$TOOLS_DIR/swpm-family.sh" order "$@"
+		exit $?
+		;;
+	family:check)
+		shift
+		run_tool "$TOOLS_DIR/swpm-family.sh" check "$@"
+		exit $?
+		;;
+	family:build)
+		shift
+		run_tool "$TOOLS_DIR/swpm-family.sh" build "$@"
+		exit $?
+		;;
+	family:validate)
+		shift
+		run_tool "$TOOLS_DIR/swpm-family.sh" validate "$@"
+		exit $?
+		;;
+	family:init)
+		shift
+		run_tool "$TOOLS_DIR/swpm-family.sh" init "$@"
+		exit $?
+		;;
+	family:add-addon)
+		shift
+		run_tool "$TOOLS_DIR/swpm-family.sh" add-addon "$@"
 		exit $?
 		;;
 	setup)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Warn when frontend .tpl files sit in the plugin root instead of templates/.
 
-WoltLab / wspackager canonical layout:
+WoltLab canonical layout:
   templates/*.tpl  → templates.tar
   acptemplates/*.tpl → acptemplates.tar
   option.xml, page.xml, … stay in the package root (PIP XMLs)

@@ -10,6 +10,8 @@ Der Ordner `tools/` enthält alle Skripte für die **WoltLab-Plugin-Entwicklung*
 
 **Plattformen:** Linux, macOS, **Windows (WSL2)** und **Windows (Git Bash)**. Unter Windows aus cmd/Explorer: `tools.cmd`. Reines cmd/PowerShell wird nicht unterstützt. Details: [docs/CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md).
 
+**Hinweis:** `tools/woltlab-plugin-recovery/` ist ein separates Recovery-Hilfsmittel (nicht Teil des generischen Build-/Validate-Menüs). Als optional/außerhalb des Kern-Workflows behandeln; die SWPM-Kernskripte bleiben plugin-agnostisch.
+
 ---
 
 ## Hauptmenü (tools.sh)
@@ -58,11 +60,11 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 ./tools/build.sh patch        # Dasselbe
 ./tools/build.sh basis-plugin minor
 ./tools/build.sh all patch
-./tools/build.sh --json patch        # CI: JSON-Report (wspackager-Parität)
+./tools/build.sh --json patch        # CI: JSON-Report
 ./tools/build.sh --dry-run patch     # Nur geplanter Paketinhalt
 ```
 
-**Layouts:** Klassisch (`lib/`, `js/`, …) oder wspackager (`files/`, `files_wcf/`, `style/style.xml`). Details: [docs/WSPACKAGER-PARITY.de.md](docs/WSPACKAGER-PARITY.de.md).
+**Layouts:** Klassisch (`lib/`, `js/`, …) oder `files/` / `files_wcf/` / `style/style.xml`. Details: [docs/PACKAGE-LAYOUT.de.md](docs/PACKAGE-LAYOUT.de.md).
 
 ---
 
@@ -137,6 +139,13 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 
 Ergebnisse und Details erscheinen im Terminal; Logs können unter `/tmp/` geschrieben werden (siehe Skript-Ausgabe).
 
+**Gemeinsame Check-Registry (Build ↔ Validate):** Fail-/Warn-Checks stehen in `swpm-check-registry.txt` und laufen über `swpm-run-checks.sh` (in `build.sh` eingebunden). Liste:
+
+```bash
+./tools/swpm-run-checks.sh --mode list
+./tools/swpm-run-checks.sh --mode build [--strict-layout] [--amd-prefix MyApp] /pfad/zu/temp_edit
+```
+
 **Einzelchecks (ohne vollständige Validierung):**
 
 ```bash
@@ -148,10 +157,27 @@ python3 tools/check-language-categories.py /pfad/zum/plugin
 python3 tools/fix-template-xss-escaping.py /pfad/zum/plugin --dry-run
 ```
 
-`check-pip-sources.py` spiegelt WoltLab-DevTools-PIP-Ziele offline (ohne ACP-Abgleich). `check-language-keys.py` meldet fehlende **App-Keys** (Präfix aus `package.xml`) mit Fundstelle; Core-`wcf.*`-Texte werden ignoriert.
+`check-pip-sources.py` bleibt außerhalb der Registry (braucht `package.xml` / `--strict`). `check-language-keys.py` meldet fehlende **App-Keys** (Präfix aus `package.xml`) mit Fundstelle; Core-`wcf.*`-Texte werden ignoriert.
 
 Details zu Heuristiken und False Positives: [docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)  
 Sprach-XML (Kategorie/Item): [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md)
+
+---
+
+### Produktlinie (Basis + Zusatzpakete)
+
+**Was es macht:** Mehrere zusammengehörige Pakete über `swpm-family.json` in der richtigen Reihenfolge prüfen und bauen (`family:check`, `family:build`, `family:validate`). Optional: Scaffold mit `family:init --scaffold`.
+
+**Befehl:**
+
+```bash
+./tools.sh family:list
+./tools.sh family:check
+./tools.sh family:build patch
+./tools/swpm-family.sh --manifest /pfad/swpm-family.json check
+```
+
+Details und Ablage: [docs/PRODUCT-LINE.de.md](docs/PRODUCT-LINE.de.md).
 
 ---
 

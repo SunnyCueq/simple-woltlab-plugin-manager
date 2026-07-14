@@ -84,14 +84,27 @@ swpm_load_plugin_context() {
 
     SWPM_PLUGIN_DIR="$plugin_dir"
     SWPM_PACKAGE_XML=""
-    SWPM_PACKAGE_ID="${WOLTLAB_PACKAGE_ID:-}"
-    SWPM_APP_ABBREV="${WOLTLAB_APP_ABBREV:-}"
+    SWPM_PACKAGE_ID=""
+    SWPM_APP_ABBREV=""
 
-    if [ -z "$SWPM_PACKAGE_ID" ] || [ -z "$SWPM_APP_ABBREV" ]; then
+    # Family runs / xml-only: never prefer global .env package identity
+    local from_xml_only=0
+    if [ "${SWPM_FAMILY_RUN:-0}" = "1" ] || [ "${SWPM_FROM_XML_ONLY:-0}" = "1" ]; then
+        from_xml_only=1
+    else
+        SWPM_PACKAGE_ID="${WOLTLAB_PACKAGE_ID:-}"
+        SWPM_APP_ABBREV="${WOLTLAB_APP_ABBREV:-}"
+    fi
+
+    if [ "$from_xml_only" -eq 1 ] || [ -z "$SWPM_PACKAGE_ID" ] || [ -z "$SWPM_APP_ABBREV" ]; then
         SWPM_PACKAGE_XML=$(swpm_find_package_xml "$plugin_dir") || true
         if [ -n "$SWPM_PACKAGE_XML" ]; then
-            [ -z "$SWPM_PACKAGE_ID" ] && SWPM_PACKAGE_ID=$(swpm_read_package_id "$SWPM_PACKAGE_XML")
-            [ -z "$SWPM_APP_ABBREV" ] && SWPM_APP_ABBREV=$(swpm_read_app_abbrev "$SWPM_PACKAGE_XML" "$SWPM_PACKAGE_ID")
+            if [ "$from_xml_only" -eq 1 ] || [ -z "$SWPM_PACKAGE_ID" ]; then
+                SWPM_PACKAGE_ID=$(swpm_read_package_id "$SWPM_PACKAGE_XML")
+            fi
+            if [ "$from_xml_only" -eq 1 ] || [ -z "$SWPM_APP_ABBREV" ]; then
+                SWPM_APP_ABBREV=$(swpm_read_app_abbrev "$SWPM_PACKAGE_XML" "$SWPM_PACKAGE_ID")
+            fi
         fi
     fi
 

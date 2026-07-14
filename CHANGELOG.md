@@ -4,13 +4,21 @@
 
 ### Plugin-Manager
 
-- **Template-Layout:** `templates/` ist kanonischer Quellort für Frontend-`.tpl`; Root-`*.tpl` warnt (Legacy-Fallback), `--strict-layout` / `validate-plugin.sh --strict` failt. Unpack entpackt `templates.tar` nach `templates/`. Docs: `WSPACKAGER-PARITY`, README, `check-template-layout.py`.
+- **Produktlinie:** `swpm-family.json` + `check-family-deps.py` / `swpm-family.sh` — Multi-Paket Build/Validate in Dep-Reihenfolge (genau eine Graph-Komponente); optional Scaffold (`family:init --scaffold`). Discovery überspringt u. a. `examples/`/`fixtures/`; leere Basis-`<version>` bei `minversion` = Fehler; `add-addon` leitet Basis-ID aus Topo-Root ab (`--json`, nur bei gültigem Graph). Scaffold legt `lib/.gitkeep` an; Workspace-Discovery über `--scan-workspace`; `SWPM_FAMILY_RUN=1` ignoriert `.env`-Package-IDs. Fixture: `tools/fixtures/family-demo/`.
+- **Doku Produktlinie:** `PRODUCT-LINE.de.md` / `.en.md` — Ordnerlayouts (Geschwister vs. SWPM-Root), Scaffold vs. echte `package.xml`, Schritt-für-Schritt, Manifest-Felder, Checkliste, Anti-Patterns, Glossar (laienverständlich, technisch präzise).
+- **Build:** Plugin-/Add-on-Pakete ohne `<applicationdirectory>` sind gültig (nur Apps brauchen das Feld). `family:build` staged Root-Layout-Pakete (`package.xml` im Root) automatisch über `_family-stage/` und kopiert Archive nach `releases/`.
+- **Build:** Absolute Plugin-Roots; `TOOLS_DIR` immer SWPM-`tools/` (externe Pakete).
+- **Checks:** Gemeinsame Registry `swpm-check-registry.txt` + Runner `swpm-run-checks.sh` — Build führt dieselben Fail-Checks wie Validate (Sprache, Templates, LIKE, Endpoints, AMD). PIP-Quellen bleiben separat in `build.sh`.
+- **Template-Layout:** `templates/` ist kanonischer Quellort für Frontend-`.tpl`; Root-`*.tpl` warnt (Legacy-Fallback), `--strict-layout` / `validate-plugin.sh --strict` failt. **Beide Layouts gleichzeitig** → Build-Fehler. Unpack entpackt `templates.tar` nach `templates/`. Docs: `PACKAGE-LAYOUT`, README, `check-template-layout.py`.
+- **Doku:** Fremdtool-Vergleiche entfernt; Layout-Guide heißt `PACKAGE-LAYOUT`.
+- **Generisch:** AMD-Export-Check ohne festes App-Präfix (`check-js-amd-exports.py` + Prefix aus `package.xml`); Sprach-XML-Beispiele nur noch `myapp.*`.
+- **Schreibstil:** Rule `schreibstil-docs.mdc` für Doku/Nutzertexte.
 
 ## Version 1.1.0 – 2026-07-01
 
 ### Plugin-Manager
 
-- **wspackager-Parität:** `files/`, `files_wcf/`, `style.tar`, `--json`-Build-Reports, strengere PIP-Checks (`--strict-case`, `--json`).
+- **Paket-Layouts:** `files/`, `files_wcf/`, `style.tar`, `--json`-Build-Reports, strengere PIP-Checks (`--strict-case`, `--json`).
 - **Dokumentation:** Alle Guides zweisprachig (DE/EN), Index unter `tools/docs/README.md`, überarbeitete Root-READMEs mit Badges und Inhaltsverzeichnis.
 - **tools.sh:** Menü-Optik (`ui.sh`), Plugin-Erkennung (`temp_edit/package.xml`), Bugfix `tr()` vs. System-`tr` (Versionsanzeige), keine Phantom-Plugins mehr.
 - **Generisch:** Keine Shr1nkr-Hardcodings; Pfade aus `package.xml` / `tools/.env` (`swpm-package-resolve.sh`).

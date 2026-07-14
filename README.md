@@ -40,7 +40,8 @@ It stays aligned with the official [WoltLab Plugin Store guidelines](https://www
 ## Features
 
 - **Interactive menu** — `./tools.sh` for build, validate, TypeScript, Git push, and setup.
-- **Package build** — Creates installable `.tar.gz` archives with patch/minor/major/same versioning; [wspackager-compatible layouts](tools/docs/WSPACKAGER-PARITY.en.md) (`files/`, `files_wcf/`, `--json` for CI).
+- **Package build** — Creates installable `.tar.gz` archives with patch/minor/major/same versioning; [source layouts](tools/docs/PACKAGE-LAYOUT.en.md) (`files/`, `files_wcf/`, `templates/`, `--json` for CI).
+- **Product line** — Optional core + add-ons via `swpm-family.json` (`family:build` / `family:validate`); see [PRODUCT-LINE.en.md](tools/docs/PRODUCT-LINE.en.md).
 - **Validation** — PHP/XML syntax, XSS/SQL heuristics, DE/EN language keys, PIP source checks (DevTools parity), store checklist mapping.
 - **Workspace setup** — Optional download of WoltLab Core, clone of official docs, WCF source, and [WoltLab d.ts](https://github.com/WoltLab/d.ts) typings.
 - **Release workflow** — Commit, push, tag, and GitHub release via `gitpush.sh`.
@@ -176,7 +177,7 @@ Example menu (abbreviated):
 | `woltlab-core/` | Core files after setup |
 | `woltlab-d-ts/` | TypeScript typings after setup |
 
-**Plugin source layout:** Put frontend templates in `templates/` (packed as `templates.tar`). ACP templates stay in `acptemplates/`. PIP XMLs (`option.xml`, `page.xml`, …) remain in the package root. Root-level `*.tpl` still packs with a warning; use `--strict-layout` / `validate-plugin.sh --strict` to fail. Details: [WSPACKAGER-PARITY.en.md](tools/docs/WSPACKAGER-PARITY.en.md).
+**Plugin source layout:** Put frontend templates in `templates/` (they become `templates.tar`). ACP templates stay in `acptemplates/`. PIP XMLs such as `option.xml` and `page.xml` remain in the package root. Root-level `*.tpl` still packs, but you get a warning; use `--strict-layout` or `validate-plugin.sh --strict` to fail instead. Details: [PACKAGE-LAYOUT.en.md](tools/docs/PACKAGE-LAYOUT.en.md).
 
 Full tools reference: **[tools/README.md](tools/README.md)** · Guides index: **[tools/docs/README.md](tools/docs/README.md)**
 

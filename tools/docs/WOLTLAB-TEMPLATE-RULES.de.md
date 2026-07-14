@@ -12,7 +12,7 @@ Kurzreferenz für `.tpl`-Dateien in WoltLab-Suite-Plugins. Der Build (`build.sh`
 | `acptemplates/*.tpl` | ACP-Templates → `acptemplates.tar` |
 | Root-`*.tpl` | Legacy-Fallback (Warnung; `--strict` / `--strict-layout` failt) |
 
-PIP-XMLs (`option.xml`, `page.xml`, …) bleiben im Paket-Root. Siehe `WSPACKAGER-PARITY.de.md`.
+PIP-XMLs (`option.xml`, `page.xml`, …) bleiben im Paket-Root. Siehe `PACKAGE-LAYOUT.de.md`.
 
 ## HTML-Ausgabe
 
@@ -40,8 +40,10 @@ PIP-XMLs (`option.xml`, `page.xml`, …) bleiben im Paket-Root. Siehe `WSPACKAGE
 
 1. HTML: plain `{$var}` — **niemals** `|encodeHTML` oder `|escape` anhängen (Modifier existieren nicht).
 2. JS: `{unsafe:$var|encodeJS}` oder Daten per `data-*` + DOM.
-3. Nach Template-Änderung: `python3 tools/check-template-xss.py /pfad/zum/plugin`
-4. Build: `./tools/build.sh same` (oder patch/minor) — Template-Fehler stoppen den Build.
-5. Cleanup falscher Modifier: `python3 tools/fix-template-xss-escaping.py /pfad/zum/plugin --dry-run`
+3. **JS-Array aus PHP-Liste:** `{implode from=$items item=item}'{unsafe:$item|encodeJS}'{/implode}` — **nicht** `{foreach name=…}` mit `$…Loop.last` (WoltLab speichert Loop-State unter `$tpl.foreach`, nicht `$fooLoop` → Laufzeit-Fatal „Undefined array key").
+4. Referenz im Core: `shared_itemListFormField.tpl` (ItemList-Init).
+5. Nach Template-Änderung: `python3 tools/check-template-xss.py /pfad/zum/plugin` und `python3 tools/check-template-foreach.py /pfad/zum/plugin`
+6. Build: `./tools/build.sh same` (oder patch/minor) — Template-Fehler stoppen den Build.
+7. Cleanup falscher Modifier: `python3 tools/fix-template-xss-escaping.py /pfad/zum/plugin --dry-run`
 
 Siehe auch: `tools/docs/SECURITY-CHECKS.de.md`, `check-template-xss.py`.

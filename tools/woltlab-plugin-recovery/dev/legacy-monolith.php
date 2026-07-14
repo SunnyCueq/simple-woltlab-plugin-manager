@@ -6550,7 +6550,7 @@ function recoveryRepairMissingPluginFilesFromPayload(
 // ============================================================================
 
 /**
- * Ermittelt file-Instructions aus package.xml (angelehnt an wspackager / build.sh parse_package_instructions).
+ * Ermittelt file-Instructions aus package.xml (wie build.sh parse_package_instructions).
  *
  * @return list<array{tar: string, target: string}>
  */

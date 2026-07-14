@@ -40,7 +40,8 @@ Orientierung an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.w
 ## Funktionen
 
 - **Interaktives Menü** — `./tools.sh` für Build, Validierung, TypeScript, Git-Push und Setup.
-- **Paket-Build** — Installierbare `.tar.gz`-Archive mit patch/minor/major/same; [wspackager-kompatible Layouts](tools/docs/WSPACKAGER-PARITY.de.md) (`files/`, `files_wcf/`, `--json` für CI).
+- **Paket-Build** — Installierbare `.tar.gz`-Archive mit patch/minor/major/same; [Quellenlayouts](tools/docs/PACKAGE-LAYOUT.de.md) (`files/`, `files_wcf/`, `templates/`, `--json` für CI).
+- **Produktlinie** — Optional Basis + Zusatzpakete über `swpm-family.json` (`family:build` / `family:validate`); siehe [PRODUCT-LINE.de.md](tools/docs/PRODUCT-LINE.de.md).
 - **Validierung** — PHP/XML, XSS/SQL-Heuristiken, DE/EN-Sprachkeys, PIP-Quellen (DevTools-Parität), Store-Checkliste.
 - **Workspace-Setup** — Optional WoltLab Core, offizielle Doku, WCF-Quellcode und [WoltLab d.ts](https://github.com/WoltLab/d.ts).
 - **Release** — Commit, Push, Tag und GitHub-Release über `gitpush.sh`.
@@ -176,7 +177,7 @@ Beispiel (gekürzt):
 | `woltlab-core/` | Core nach Setup |
 | `woltlab-d-ts/` | TypeScript-Typings nach Setup |
 
-**Plugin-Quellenlayout:** Frontend-Templates unter `templates/` (werden zu `templates.tar`). ACP-Templates bleiben in `acptemplates/`. PIP-XMLs (`option.xml`, `page.xml`, …) bleiben im Paket-Root. Root-`*.tpl` packt weiter mit Warnung; `--strict-layout` / `validate-plugin.sh --strict` lässt den Check fehlschlagen. Details: [WSPACKAGER-PARITY.de.md](tools/docs/WSPACKAGER-PARITY.de.md).
+**Plugin-Quellenlayout:** Frontend-Templates gehören nach `templates/` (daraus wird `templates.tar`). ACP-Templates bleiben in `acptemplates/`. PIP-XMLs wie `option.xml` und `page.xml` bleiben im Paket-Root. Root-`*.tpl` wird weiter gepackt, aber mit Warnung; mit `--strict-layout` bzw. `validate-plugin.sh --strict` wird daraus ein Fehler. Details: [PACKAGE-LAYOUT.de.md](tools/docs/PACKAGE-LAYOUT.de.md).
 
 Tools-Referenz: **[tools/README.de.md](tools/README.de.md)** · Anleitungen: **[tools/docs/README.de.md](tools/docs/README.de.md)**
 

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "com.example.demo.line",
+  "versionStrategy": "independent",
+  "paths": [
+    "demo-core",
+    "demo-addon"
+  ],
+  "packages": []
+}

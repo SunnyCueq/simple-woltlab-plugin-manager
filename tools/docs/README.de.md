@@ -17,7 +17,8 @@ Zentraler Index der Anleitungen im Simple WoltLab Plugin Manager. Jedes Thema gi
 
 | Thema | English | Deutsch |
 |-------|---------|---------|
-| wspackager-Parität | [WSPACKAGER-PARITY.en.md](WSPACKAGER-PARITY.en.md) | [WSPACKAGER-PARITY.de.md](WSPACKAGER-PARITY.de.md) |
+| Paket-Quellenlayout | [PACKAGE-LAYOUT.en.md](PACKAGE-LAYOUT.en.md) | [PACKAGE-LAYOUT.de.md](PACKAGE-LAYOUT.de.md) |
+| Produktlinie (Basis + Add-ons) | [PRODUCT-LINE.en.md](PRODUCT-LINE.en.md) | [PRODUCT-LINE.de.md](PRODUCT-LINE.de.md) |
 | ACP-Paketinstallation (Docker, optional) | [ACP-PACKAGE-INSTALL.en.md](ACP-PACKAGE-INSTALL.en.md) | [ACP-PACKAGE-INSTALL.de.md](ACP-PACKAGE-INSTALL.de.md) |
 | Docker-App-Berechtigungen | [DOCKER-APP-PERMISSIONS.en.md](DOCKER-APP-PERMISSIONS.en.md) | [DOCKER-APP-PERMISSIONS.de.md](DOCKER-APP-PERMISSIONS.de.md) |
 

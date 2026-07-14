@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "com.example.negative.missing",
+  "paths": ["negative-missing-dep"],
+  "packages": []
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Pack style.tar from style/style.xml (wspackager parity for style PIP).
+# Pack style.tar from style/style.xml (style PIP).
 # Usage: pack-style-tar.sh <temp_edit_dir> <output_style.tar>
 
 set -euo pipefail

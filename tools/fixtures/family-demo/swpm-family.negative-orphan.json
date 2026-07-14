@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "com.example.negative.orphan",
+  "paths": ["demo-core", "negative-orphan"],
+  "packages": []
+}

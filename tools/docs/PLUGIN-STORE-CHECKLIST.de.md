@@ -26,6 +26,8 @@ Oder im Hauptmenü: **Option 6) Plugin Validierung**
 | Archiv enthält alle in `package.xml` deklarierten Dateien | `validate-plugin.sh` → Datei-Vollständigkeit |
 | Keine überflüssigen Dateien (`.DS_Store`, `Thumbs.db`, …) | `validate-plugin.sh` + `build.sh` (Archiv-Check) |
 | Kompatibilitätsangaben vollständig und formal korrekt | `validate-plugin.sh` → `requiredpackages`, Version |
+
+**Zusatzpakete:** Im Store-Listing klar machen, dass die **Basis-App** Voraussetzung ist. Produktlinien-Build: [PRODUCT-LINE.de.md](PRODUCT-LINE.de.md).
 | Mindestversion `com.woltlab.wcf` mit Sicherheits-Support | `validate-plugin.sh` → Minversion (aktuell 6.0+; bei Release aktuelle 6.2.x setzen) |
 
 ---
@@ -74,6 +76,16 @@ Beispiele (typische Fehler):
 - [ ] **WoltLab Cloud:** kein `exec()`, `shell_exec()`, `system()`, `passthru()`
 - [ ] **Event-Listener:** keine dynamischen Properties auf `$eventObj` (PHP 8.2+)
 - [ ] **Archiv:** keine Müll-Dateien im Paket
+- [ ] **RPC-Endpoints:** jeder `#[Get|Post|DeleteRequest]`-Controller im Bootstrap via `ControllerCollecting` registriert (`check-endpoint-registration.py`) — sonst 404 `unknown_endpoint` bei Grid-Aktionen
+- [ ] **CSS-Assets:** alle `url(...)`-Referenzen in `style/` auflösbar (`check-style-assets.py`) — fehlende Fonts/Bilder können 500er auslösen
+- [ ] **language/:** nur `*.xml` — Dev-Dateien (Skripte, Reports) nach `maintainer/`, sonst landen sie im Store-Paket
+- [ ] **Sprach-XML-Integrität:** keine erfundenen Attribute (`variant` existiert nicht — Sie/du per `{if LANGUAGE_USE_INFORMAL_VARIANT}` im Wert), keine doppelten Keys (letzter gewinnt still beim Import), kein `{if}` in `wcf.global` (`check-language-integrity.py`)
+- [ ] **Hinweis-Boxen:** `<woltlab-core-notice>` nur mit `type="error|info|success|warning"` (`danger` existiert nicht); kein Legacy-Markup `<p class="info">` (`check-template-notices.py`)
+- [ ] **Template-Modifier:** Nur Whitelist-Funktionen und Modifier-Plugins verwenden — erfundene Modifier wie `|formatNumeric` schlagen erst beim ersten Rendern als Fatal Error fehl; Zahlformatierung ist `{#$var}` (`check-template-modifiers.py`)
+- [ ] **Foreach in `<script>`:** Kein `{foreach name=fooLoop}` mit `$fooLoop.last` — WoltLab nutzt `$tpl.foreach`; für JS-Arrays `{implode from=$arr item=item}'{unsafe:$item|encodeJS}'{/implode}` wie `shared_itemListFormField.tpl` (`check-template-foreach.py`)
+- [ ] **Box-additionalData:** In Box-Controllern nicht `$this->box->{$key} ?? …` lesen — `DatabaseObject::__isset()` kennt den additionalData-Fallback von `Box::__get()` nicht, `??` liefert dadurch immer den Default. Stattdessen `$box->additionalData[$key] ?? …`; typisierte Controller-Properties brauchen non-null-Defaults
+- [ ] **XML-Kommentare:** keine Maintainer-Blöcke („Datei-Zweck“, @author-Header, Changelog-Notizen) in Paket-XMLs — WoltLab-Reviewer lesen die Dateien; nur knappe englische Kommentare für nicht-offensichtliche Entscheidungen (z. B. warum ein `<delete>`-Block nötig ist)
+- [ ] **Cronjobs:** jede in `cronjob.xml` referenzierte Klasse existiert und läuft fehlerfrei durch (manuell via `(new Klasse())->execute($cronjob)` im Container testen); Laufzeit-Gating (`<options>`) gesetzt, wo der Job von Optionen abhängt
 
 Weitere Details: [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md), [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.de.md), [LANGUAGE-XML.de.md](LANGUAGE-XML.de.md)
 

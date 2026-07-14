@@ -13,7 +13,7 @@
 #   ./tools/build.sh major              → Major-Version erhoehen
 #   ./tools/build.sh unpack [plugin] [package.tar.gz] → Plugin entpacken
 #   ./tools/build.sh --dry-run          → Paket-Inhalt anzeigen, ohne zu bauen
-#   ./tools/build.sh --json patch       → CI: JSON-Report wie wspackager --json
+#   ./tools/build.sh --json patch       → CI: JSON-Report
 #   ./tools/build.sh --verbose [patch|minor|major|same] → Bauen mit Tree-Output
 #   ./tools/build.sh --strict-layout    → Root-*.tpl als Fehler (sonst nur Warnung)
 #
@@ -66,7 +66,7 @@ fi
 #=====================================
 # PIP-PARSING (package.xml Instructions)
 #=====================================
-# Leitet aus package.xml die benoetigten Dateien/TARs ab (wspackager-Logik).
+# Leitet aus package.xml die benoetigten Dateien/TARs ab.
 # Liefert eine Liste von Pfaden, die in temp_edit/ existieren muessen.
 parse_package_instructions() {
     local pkg="$1"
@@ -139,7 +139,7 @@ output_package_tree() {
     echo ""
     print_info "Paket-Inhalt (Tree):"
     echo "  package.xml"
-    [ -d "$base/files" ] && echo "  files.tar (files/ — wspackager layout)"
+    [ -d "$base/files" ] && echo "  files.tar (files/)"
     [ -d "$base/lib" ] || [ -d "$base/acp" ] || [ -d "$base/style" ] && echo "  files.tar (lib/, acp/, style/)"
     [ -d "$base/js" ] || [ -d "$base/lib/bootstrap" ] && echo "  files_wcf.tar (js/, lib/bootstrap/)"
     [ -d "$base/templates" ] && echo "  templates.tar (templates/*.tpl — kanonisch)" || { ls "$base"/*.tpl 1>/dev/null 2>&1 && echo "  templates.tar (*.tpl — Legacy, nach templates/ verschieben)"; }
@@ -214,24 +214,42 @@ esac
 
 # Suche nach Plugin-Verzeichnissen
 # Prüfe zuerst auf temp_edit/package.xml, dann auf Root-package.xml (optional)
+# PLUGIN_TARGET: relativ zu MAIN_DIR ODER absoluter Pfad (Produktlinien / externe Roots)
 if [ -n "$PLUGIN_TARGET" ]; then
-    # Spezifisches Plugin-Verzeichnis
-    PROJECT_ROOT="$(cd "${MAIN_DIR}/${PLUGIN_TARGET}" && pwd)"
+    if [[ "$PLUGIN_TARGET" = /* ]]; then
+        PROJECT_ROOT="$(cd "$PLUGIN_TARGET" && pwd)"
+    elif [ -d "${MAIN_DIR}/${PLUGIN_TARGET}" ]; then
+        PROJECT_ROOT="$(cd "${MAIN_DIR}/${PLUGIN_TARGET}" && pwd)"
+    elif [ -d "$PLUGIN_TARGET" ]; then
+        PROJECT_ROOT="$(cd "$PLUGIN_TARGET" && pwd)"
+    else
+        print_error "Plugin-Verzeichnis nicht gefunden: ${PLUGIN_TARGET}"
+        exit 1
+    fi
     if [ ! -f "$PROJECT_ROOT/temp_edit/package.xml" ] && [ ! -f "$PROJECT_ROOT/package.xml" ]; then
         print_error "${PLUGIN_TARGET} ist kein gueltiges Plugin-Verzeichnis (weder temp_edit/package.xml noch package.xml gefunden)"
         exit 1
     fi
 else
-    # Erstes Plugin-Verzeichnis mit temp_edit/package.xml oder package.xml finden
+    # Erstes Plugin über gemeinsame Discovery (find_plugin_directories / scan-workspace)
     PROJECT_ROOT=""
-    for plugin_dir in "${MAIN_DIR}"/*; do
-        if [ -d "$plugin_dir" ]; then
-            if [ -f "$plugin_dir/temp_edit/package.xml" ] || [ -f "$plugin_dir/package.xml" ]; then
-                PROJECT_ROOT="$(cd "$plugin_dir" && pwd)"
-                break
+    if declare -f find_plugin_directories &>/dev/null; then
+        while IFS= read -r plugin_dir; do
+            [ -z "$plugin_dir" ] && continue
+            PROJECT_ROOT="$(cd "$plugin_dir" && pwd)"
+            break
+        done < <(find_plugin_directories "$MAIN_DIR" 2>/dev/null || true)
+    fi
+    if [ -z "$PROJECT_ROOT" ]; then
+        for plugin_dir in "${MAIN_DIR}"/*; do
+            if [ -d "$plugin_dir" ]; then
+                if [ -f "$plugin_dir/temp_edit/package.xml" ] || [ -f "$plugin_dir/package.xml" ]; then
+                    PROJECT_ROOT="$(cd "$plugin_dir" && pwd)"
+                    break
+                fi
             fi
-        fi
-    done
+        done
+    fi
     
     if [ -z "$PROJECT_ROOT" ]; then
         print_error "Kein Plugin-Verzeichnis mit temp_edit/package.xml oder package.xml gefunden"
@@ -513,54 +531,28 @@ fi
 print_success "Alle XML-Dateien sind wohlgeformt"
 echo ""
 
-# Language: item name must match parent category (LanguageEditor::validateItemName)
-LANG_CAT_CHECK="${SCRIPT_DIR}/check-language-categories.py"
-if [ -d "temp_edit/language" ] && command -v python3 &> /dev/null && [ -f "$LANG_CAT_CHECK" ]; then
-    print_info "Sprach-XML: Pruefe Item/Kategorie-Zuordnung..."
-    LANG_CAT_ISSUES=0
-    while IFS= read -r lang_line; do
-        [ -z "$lang_line" ] && continue
-        print_error "Sprach-XML: $lang_line"
-        LANG_CAT_ISSUES=$((LANG_CAT_ISSUES + 1))
-    done < <(python3 "$LANG_CAT_CHECK" "temp_edit" 2>/dev/null || true)
-    if [ "$LANG_CAT_ISSUES" -gt 0 ]; then
-        print_error "Sprach-XML: ${LANG_CAT_ISSUES} Item(s) passen nicht zur Kategorie (siehe tools/docs/LANGUAGE-XML.de.md)"
-        exit 1
+# Shared fail/warn checks (registry = build ↔ validate alignment)
+# See tools/swpm-check-registry.txt — PIP-Quellen bleiben separat darunter.
+print_info "Plugin-Checks (Registry)..."
+JS_AMD_PREFIX=""
+if [ -f "${SCRIPT_DIR}/swpm-package-resolve.sh" ]; then
+    # shellcheck source=swpm-package-resolve.sh
+    source "${SCRIPT_DIR}/swpm-package-resolve.sh"
+    if swpm_load_plugin_context "$PROJECT_ROOT" "$SCRIPT_DIR" "$MAIN_DIR" 2>/dev/null; then
+        JS_AMD_PREFIX=$(swpm_app_pascal_case "$SWPM_APP_ABBREV" 2>/dev/null || true)
     fi
-    print_success "Sprach-XML: Item/Kategorie-Zuordnung OK"
-    echo ""
 fi
-
-# Template: ungültige Modifier (|encodeHTML|, |escape|) — Build bricht ab
-TPL_XSS_CHECK="${SCRIPT_DIR}/check-template-xss.py"
-if command -v python3 &> /dev/null && [ -f "$TPL_XSS_CHECK" ]; then
-    print_info "Templates: Pruefe ungueltige Modifier und Script-Escaping..."
-    TPL_XSS_ISSUES=0
-    while IFS= read -r tpl_line; do
-        [ -z "$tpl_line" ] && continue
-        print_error "Template: $tpl_line"
-        TPL_XSS_ISSUES=$((TPL_XSS_ISSUES + 1))
-    done < <(python3 "$TPL_XSS_CHECK" "temp_edit" 2>/dev/null || true)
-    if [ "$TPL_XSS_ISSUES" -gt 0 ]; then
-        print_error "Templates: ${TPL_XSS_ISSUES} Problem(e) — siehe tools/docs/WOLTLAB-TEMPLATE-RULES.de.md"
-        exit 1
-    fi
-    print_success "Templates: Modifier/Escaping OK"
-    echo ""
+CHECK_RUNNER_ARGS=(--mode build)
+[ "${STRICT_LAYOUT:-0}" -eq 1 ] && CHECK_RUNNER_ARGS+=(--strict-layout)
+if [ -n "$JS_AMD_PREFIX" ] && [ -d "temp_edit/js/$JS_AMD_PREFIX" ]; then
+    CHECK_RUNNER_ARGS+=(--amd-prefix "$JS_AMD_PREFIX")
 fi
-
-# Sprach-Keys DE/EN vs. Code — optional Warnung (kein Build-Abbruch)
-LANG_KEYS_CHECK="${SCRIPT_DIR}/check-language-keys.py"
-if [ -d "temp_edit/language" ] && command -v python3 &> /dev/null && [ -f "$LANG_KEYS_CHECK" ]; then
-    print_info "Sprach-Keys: Pruefe DE/EN-Abdeckung (optional)..."
-    if ! python3 "$LANG_KEYS_CHECK" "temp_edit" >/dev/null 2>&1; then
-        print_warning "Sprach-Keys: Abweichungen gefunden — Details:"
-        python3 "$LANG_KEYS_CHECK" "temp_edit" 2>/dev/null | head -40 || true
-    else
-        print_success "Sprach-Keys: DE/EN vs. Code OK"
-    fi
-    echo ""
+CHECK_RUNNER_ARGS+=("temp_edit")
+if ! bash "${SCRIPT_DIR}/swpm-run-checks.sh" "${CHECK_RUNNER_ARGS[@]}"; then
+    print_error "Plugin-Checks fehlgeschlagen — siehe tools/swpm-check-registry.txt"
+    exit 1
 fi
+echo ""
 
 # Strikte Pfadpruefung: Alle in package.xml referenzierten Quellen muessen existieren
 print_info "PIP-Validierung: Pruefe Quellen (DevTools-Paritaet) in temp_edit..."
@@ -581,7 +573,7 @@ print_info "[1/5] Packe TARs aus temp_edit..."
 PACKAGE_DIR="$(pwd)"
 cd temp_edit
 
-# files.tar — wspackager: Ordner files/ ODER lib/,acp/,style/ (siehe tools/docs/WSPACKAGER-PARITY.de.md)
+# files.tar — Ordner files/ ODER lib/,acp/,style/ (siehe tools/docs/PACKAGE-LAYOUT.de.md)
 FILES_TO_PACK=""
 if [ -d "files" ]; then
     tar -cf "${PACKAGE_DIR}/files.tar" --exclude="app.config.inc.php" -C files .
@@ -600,7 +592,8 @@ if [ -n "$FILES_TO_PACK" ]; then
     # Erstelle files.tar und schließe app.config.inc.php und lib/bootstrap/ explizit aus
     # app.config.inc.php wird von WoltLab automatisch erstellt und darf nicht im Paket sein
     # lib/bootstrap/ muss ins WCF-Verzeichnis (wird in files_wcf.tar gepackt)
-    tar -cf "${PACKAGE_DIR}/files.tar" --exclude="app.config.inc.php" --exclude="lib/bootstrap" $FILES_TO_PACK
+    # acp/uninstall/ muss ebenfalls ins WCF-Verzeichnis (PackageUninstallationDispatcher)
+    tar -cf "${PACKAGE_DIR}/files.tar" --exclude="app.config.inc.php" --exclude="lib/bootstrap" --exclude="acp/uninstall" $FILES_TO_PACK
     print_success "files.tar erstellt"
     
     # Pruefe ob app.config.inc.php versehentlich enthalten ist
@@ -612,6 +605,12 @@ if [ -n "$FILES_TO_PACK" ]; then
     # Pruefe ob lib/bootstrap/ versehentlich enthalten ist (muss in files_wcf.tar sein)
     if tar -tf "${PACKAGE_DIR}/files.tar" 2>/dev/null | grep -q "^lib/bootstrap/"; then
         log_error_with_context "lib/bootstrap/ ist in files.tar enthalten!" "Bootstrap-Dateien müssen in files_wcf.tar sein, damit sie ins WCF-Verzeichnis kopiert werden!"
+        exit 1
+    fi
+
+    # Uninstall-Skript darf nicht nur im App-Verzeichnis landen
+    if tar -tf "${PACKAGE_DIR}/files.tar" 2>/dev/null | grep -q "^acp/uninstall/"; then
+        log_error_with_context "acp/uninstall/ ist in files.tar enthalten!" "Uninstall-Skripte müssen in files_wcf.tar (WCF_DIR/acp/uninstall/) liegen!"
         exit 1
     fi
     
@@ -628,6 +627,15 @@ fi
 fi
 
 # templates.tar erstellen (kanonisch: templates/; Legacy: Root-*.tpl)
+# Beide Layouts gleichzeitig = unklarer Vertrag → Fehler (nicht nur Warnung)
+if [ -d "templates" ] && ls templates/*.tpl 1> /dev/null 2>&1 && ls *.tpl 1> /dev/null 2>&1; then
+    ROOT_TPL_LIST=$(ls -1 *.tpl 2>/dev/null | tr '\n' ' ')
+    log_error_with_context \
+        "Frontend-Templates in templates/ und als Root-*.tpl" \
+        "Nur eines nutzen — Root nach templates/ verschieben: ${ROOT_TPL_LIST}"
+    exit 1
+fi
+
 if [ -d "templates" ]; then
     cd templates
     if ls *.tpl 1> /dev/null 2>&1; then
@@ -638,15 +646,6 @@ if [ -d "templates" ]; then
         print_warning "Keine .tpl Dateien in templates/ gefunden"
     fi
     cd ..
-    # Root-*.tpl neben templates/ → Warnung (nicht mitpacken; templates/ hat Vorrang)
-    if ls *.tpl 1> /dev/null 2>&1; then
-        ROOT_TPL_LIST=$(ls -1 *.tpl 2>/dev/null | tr '\n' ' ')
-        print_warning "Root-*.tpl ignoriert (templates/ hat Vorrang) — nach templates/ verschieben: ${ROOT_TPL_LIST}"
-        if [ "${STRICT_LAYOUT:-0}" -eq 1 ]; then
-            log_error_with_context "Root-*.tpl bei --strict-layout" "Verschiebe Frontend-Templates nach templates/"
-            exit 1
-        fi
-    fi
 elif ls *.tpl 1> /dev/null 2>&1; then
     # Legacy-Fallback: Templates liegen direkt im temp_edit-Root
     ROOT_TPL_LIST=$(ls -1 *.tpl 2>/dev/null | tr '\n' ' ')
@@ -677,18 +676,23 @@ else
     print_warning "Kein acptemplates/ Ordner gefunden"
 fi
 
-# files_wcf.tar (js/, lib/bootstrap/ oder files_wcf/ — wspackager layout)
+# files_wcf.tar (js/, lib/bootstrap/, acp/uninstall/ oder files_wcf/)
+# acp/uninstall/{package}.php MUST land in WCF_DIR (PackageUninstallationDispatcher),
+# not in the application directory — otherwise the uninstall script never runs.
 WCF_FILES_TO_PACK=""
 if [ -d "files_wcf" ]; then
     tar -cf "${PACKAGE_DIR}/files_wcf.tar" -C files_wcf .
     WCF_FILE_COUNT=$(tar -tf "${PACKAGE_DIR}/files_wcf.tar" 2>/dev/null | wc -l)
     print_success "files_wcf.tar erstellt [aus files_wcf/] (${WCF_FILE_COUNT} Datei(en))"
-elif [ -d "js" ] || [ -d "lib/bootstrap" ]; then
+elif [ -d "js" ] || [ -d "lib/bootstrap" ] || [ -d "acp/uninstall" ]; then
 if [ -d "js" ]; then
     WCF_FILES_TO_PACK="${WCF_FILES_TO_PACK} js/"
 fi
 if [ -d "lib/bootstrap" ]; then
     WCF_FILES_TO_PACK="${WCF_FILES_TO_PACK} lib/bootstrap/"
+fi
+if [ -d "acp/uninstall" ]; then
+    WCF_FILES_TO_PACK="${WCF_FILES_TO_PACK} acp/uninstall/"
 fi
 
 if [ -n "$WCF_FILES_TO_PACK" ]; then
@@ -706,13 +710,19 @@ if [ -n "$WCF_FILES_TO_PACK" ]; then
     else
         print_success "files_wcf.tar erstellt (${WCF_FILE_COUNT} Datei(en))"
     fi
+    if tar -tf "${PACKAGE_DIR}/files_wcf.tar" 2>/dev/null | grep -q "^acp/uninstall/"; then
+        print_success "files_wcf.tar enthaelt acp/uninstall/ (WCF-Uninstall-Skript)"
+    elif [ -d "acp/uninstall" ]; then
+        log_error_with_context "acp/uninstall/ existiert im Quellbaum, fehlt aber in files_wcf.tar!" "PackageUninstallationDispatcher liest nur WCF_DIR/acp/uninstall/"
+        exit 1
+    fi
 else
     log_error_with_context "Keine WCF-Dateien gefunden fuer files_wcf.tar!" "js/, lib/bootstrap/ oder files_wcf/ fehlt"
     exit 1
 fi
 fi
 
-# style.tar (style PIP — wspackager parity)
+# style.tar (style PIP)
 if grep -qE 'type="style"' "$PACKAGE_XML" 2>/dev/null; then
     PACK_STYLE="${SCRIPT_DIR}/pack-style-tar.sh"
     if [ -f "style/style.xml" ] && [ -x "$PACK_STYLE" ]; then
@@ -867,8 +877,8 @@ if [ -n "$PACKAGE_XML_FILES" ]; then
 fi
 
 # 9. KRITISCH: Pruefe dass keine alten build.sh oder typescript.sh im Root oder temp_edit existieren
-# TOOLS_DIR muss vor dieser Pruefung definiert werden
-TOOLS_DIR="$(cd "${PROJECT_ROOT}/../tools" && pwd)"
+# TOOLS_DIR = immer SWPM tools/ (SCRIPT_DIR), nie PROJECT_ROOT/../tools (externe Pakete!)
+TOOLS_DIR="$(cd "${SCRIPT_DIR}" && pwd)"
 print_info "Pruefe auf redundante Script-Dateien..."
 if [ -f "build.sh" ]; then
     log_error_with_context "KRITISCHER FEHLER: build.sh existiert noch im Root-Verzeichnis!" "Sollte nur in ${TOOLS_DIR}/build.sh existieren! Bitte loeschen: rm build.sh"
@@ -901,10 +911,10 @@ fi
 
 # 11. Pruefe package.xml Struktur: Erforderliche Felder
 print_info "Pruefe package.xml Struktur..."
+# applicationdirectory nur bei Apps Pflicht — Plugin-/Add-on-Pakete haben keins
 APPLICATION_DIR=$(grep -oP '<applicationdirectory>\K[^<]+' "$PACKAGE_XML" | head -1)
 if [ -z "$APPLICATION_DIR" ]; then
-    log_error_with_context "applicationdirectory fehlt in $PACKAGE_XML!" "package.xml Struktur-Fehler"
-    VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+    print_success "Kein applicationdirectory (Plugin/Add-on — OK)"
 else
     print_success "applicationdirectory gefunden: ${APPLICATION_DIR}"
 fi
@@ -1118,7 +1128,10 @@ if [ "${JSON_MODE:-0}" -eq 1 ] && command -v python3 &>/dev/null && [ -f "${SCRI
     python3 "${SCRIPT_DIR}/swpm-package-report.py" build-ok "$PACKAGE_NAME" "$NEW_VERSION" "${PROJECT_ROOT}/${TAR_GZ_NAME}" "${PROJECT_ROOT}"
 fi
 echo ""
-VALIDATE_DIR="${PROJECT_ROOT#$MAIN_DIR/}"
+VALIDATE_DIR="${PROJECT_ROOT}"
+case "$PROJECT_ROOT" in
+    "$MAIN_DIR"/*) VALIDATE_DIR="${PROJECT_ROOT#$MAIN_DIR/}" ;;
+esac
 print_info "Vor Store-Release: ./tools/validate-plugin.sh ${VALIDATE_DIR} ausführen (Plugin-Store & WoltLab-Cloud Kriterien)."
 echo ""
 

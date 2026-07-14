@@ -12,7 +12,7 @@ Quick reference for `.tpl` files in WoltLab Suite plugins. The build (`build.sh`
 | `acptemplates/*.tpl` | ACP templates → `acptemplates.tar` |
 | Root `*.tpl` | Legacy fallback (warning; `--strict` / `--strict-layout` fails) |
 
-PIP XMLs (`option.xml`, `page.xml`, …) stay in the package root. See `WSPACKAGER-PARITY.en.md`.
+PIP XMLs (`option.xml`, `page.xml`, …) stay in the package root. See `PACKAGE-LAYOUT.en.md`.
 
 ## HTML output
 
@@ -40,8 +40,10 @@ PIP XMLs (`option.xml`, `page.xml`, …) stay in the package root. See `WSPACKAG
 
 1. HTML: plain `{$var}` — **never** append `|encodeHTML` or `|escape` (modifiers do not exist).
 2. JS: `{unsafe:$var|encodeJS}` or pass data via `data-*` + DOM.
-3. After template changes: `python3 tools/check-template-xss.py /path/to/plugin`
-4. Build: `./tools/build.sh same` (or patch/minor) — template errors stop the build.
-5. Clean up wrong modifiers: `python3 tools/fix-template-xss-escaping.py /path/to/plugin --dry-run`
+3. **JS array from PHP list:** `{implode from=$items item=item}'{unsafe:$item|encodeJS}'{/implode}` — **not** `{foreach name=…}` with `$…Loop.last` (WoltLab stores loop state under `$tpl.foreach`, not `$fooLoop` → runtime fatal “Undefined array key”).
+4. Core reference: `shared_itemListFormField.tpl` (ItemList init).
+5. After template changes: `python3 tools/check-template-xss.py` and `python3 tools/check-template-foreach.py`
+6. Build: `./tools/build.sh same` (or patch/minor) — template errors stop the build.
+7. Clean up wrong modifiers: `python3 tools/fix-template-xss-escaping.py /path/to/plugin --dry-run`
 
 See also: `tools/docs/SECURITY-CHECKS.en.md`, `check-template-xss.py`.

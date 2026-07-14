@@ -17,7 +17,8 @@ Central index for guides shipped with the Simple WoltLab Plugin Manager. Every t
 
 | Topic | English | Deutsch |
 |-------|---------|---------|
-| wspackager parity | [WSPACKAGER-PARITY.en.md](WSPACKAGER-PARITY.en.md) | [WSPACKAGER-PARITY.de.md](WSPACKAGER-PARITY.de.md) |
+| Package source layout | [PACKAGE-LAYOUT.en.md](PACKAGE-LAYOUT.en.md) | [PACKAGE-LAYOUT.de.md](PACKAGE-LAYOUT.de.md) |
+| Product line (core + add-ons) | [PRODUCT-LINE.en.md](PRODUCT-LINE.en.md) | [PRODUCT-LINE.de.md](PRODUCT-LINE.de.md) |
 | ACP package install (Docker, optional) | [ACP-PACKAGE-INSTALL.en.md](ACP-PACKAGE-INSTALL.en.md) | [ACP-PACKAGE-INSTALL.de.md](ACP-PACKAGE-INSTALL.de.md) |
 | Docker app permissions | [DOCKER-APP-PERMISSIONS.en.md](DOCKER-APP-PERMISSIONS.en.md) | [DOCKER-APP-PERMISSIONS.de.md](DOCKER-APP-PERMISSIONS.de.md) |
 
