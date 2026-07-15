@@ -1,7 +1,5 @@
 # Cross-platform usage (SWPM)
 
-**[Deutsche Version](CROSS-PLATFORM.de.md)**
-
 SWPM is a **Bash** toolkit. It runs on:
 
 | Environment | How to start |

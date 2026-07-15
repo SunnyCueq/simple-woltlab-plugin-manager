@@ -33,6 +33,8 @@
 
 Heute ist es ein **generisches** CLI-Toolkit für Setup, Build, Validierung und GitHub-Release — ohne Bindung an ein bestimmtes Produkt-Plugin. Orientiert an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/).
 
+**Handbuch:** [MkDocs-Dokumentation](https://benjarogit.github.io/simple-woltlab-plugin-manager/) (Navigation DE/EN; Quelle `tools/docs/`).
+
 ---
 
 ## Funktionen
@@ -186,7 +188,7 @@ Beispiel (gekürzt):
 
 **Plugin-Quellenlayout:** Frontend-Templates gehören nach `templates/` (daraus wird `templates.tar`). ACP-Templates bleiben in `acptemplates/`. PIP-XMLs wie `option.xml` und `page.xml` bleiben im Paket-Root. Root-`*.tpl` wird weiter gepackt, aber mit Warnung; mit `--strict-layout` bzw. `validate-plugin.sh --strict` wird daraus ein Fehler. Style-Pakete: Quellen unter `style/` → Archivname laut `package.xml`. Details: [PACKAGE-LAYOUT.de.md](tools/docs/PACKAGE-LAYOUT.de.md).
 
-Tools-Referenz: **[tools/README.de.md](tools/README.de.md)** · Tool-Liste: **[tools/docs/TOOLS-OVERVIEW.de.md](tools/docs/TOOLS-OVERVIEW.de.md)** · Anleitungen: **[tools/docs/README.de.md](tools/docs/README.de.md)**
+Tools-Referenz: **[tools/README.de.md](tools/README.de.md)** · Tool-Liste: **[tools/docs/TOOLS-OVERVIEW.de.md](tools/docs/TOOLS-OVERVIEW.de.md)** · **Dokumentation (MkDocs):** [https://benjarogit.github.io/simple-woltlab-plugin-manager/](https://benjarogit.github.io/simple-woltlab-plugin-manager/)
 
 ---
 

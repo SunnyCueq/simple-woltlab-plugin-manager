@@ -1,7 +1,5 @@
 # Product line: base + add-ons
 
-**[Deutsche Version](PRODUCT-LINE.de.md)**
-
 This guide explains **how to place, check, and build several related WoltLab packages** (a base app plus optional add-ons) with SWPM — in the right order, with mistakes caught early.
 
 You do not need graph theory. You need folders, a small JSON file, and clear dependencies in each `package.xml`.
@@ -113,7 +111,7 @@ Build a single package (no family):
 ./tools/build.sh myapp patch
 ```
 
-Internals of one package (`lib/`, templates/, …): [PACKAGE-LAYOUT.en.md](PACKAGE-LAYOUT.en.md).
+Internals of one package (`lib/`, templates/, …): [PACKAGE-LAYOUT.en.md](PACKAGE-LAYOUT.md).
 
 ---
 
@@ -217,7 +215,7 @@ Then:
 ./tools.sh family:order
 ```
 
-**Scaffold ≠ store-ready plugin.** You still add real files (`lib`, templates, …) per [PACKAGE-LAYOUT.en.md](PACKAGE-LAYOUT.en.md). Graph checks (`family:check`) only verify dependencies, not store quality.
+**Scaffold ≠ store-ready plugin.** You still add real files (`lib`, templates, …) per [PACKAGE-LAYOUT.en.md](PACKAGE-LAYOUT.md). Graph checks (`family:check`) only verify dependencies, not store quality.
 
 Another add-on:
 
@@ -327,20 +325,21 @@ Until the line is **publicly** released (store / announced release), treat devel
 2. **`package.xml`:** only `<instructions type="install">` — **no** historical `fromversion` update blocks and no old `post_update_*` / `database/update_*` scripts.
 3. **Add-on `minversion`:** points at base `1.0.0` (not internal dev numbers).
 4. **Descriptions:** base and each add-on have their **own** `packagedescription` (default + `language="de"`). The base must not describe add-on features as included — only as clearly optional. `family:check` warns on missing texts and on add-on terms in the base description without optional context.
-5. **Runtime (product lines with optional features):** UI/SQL/classes only behind capability checks (`class_exists` / feature flags); soft-deps between add-ons, no add-on→add-on `requiredpackage`.
-6. **After the first public release:** add update blocks and migration scripts only from `1.0.1` onward — no fake backward compatibility for never-shipped dev versions.
-7. **Local test instance:** do not “downgrade” from dev versions to `1.0.0` — **uninstall** packages and install fresh.
+5. **Templates (family):** no same-named templates in two SKUs of the same line (ownership); no static `{include file='…'}` of templates that only exist in an optional sibling. `family:check` warns generically.
+6. **Runtime (product lines with optional features):** UI/SQL/classes only behind capability checks (`class_exists` / feature flags); soft-deps between add-ons, no add-on→add-on `requiredpackage`.
+7. **After the first public release:** add update blocks and migration scripts only from `1.0.1` onward — no fake backward compatibility for never-shipped dev versions.
+8. **Local test instance:** do not “downgrade” from dev versions to `1.0.0` — **uninstall** packages and install fresh.
 
 SWPM checks:
 
 - per package: `first-release-hygiene`, `package-descriptions` (build registry, warn)
-- family: `family:check` — lockstep, base↔add-on description hygiene
+- family: `family:check` — lockstep, base↔add-on description hygiene, **template ownership / compile-time includes** (warn)
 
 Further product-line practice (layout-agnostic):
 
 - Root-layout packages (no `temp_edit/`): family build stages via `_family-stage/` + symlink to the source tree.
 - File hotfixes in a running instance ≠ ACP package update — always build releases from source.
-- WCF: optional add-on templates included by core via `{include}` must **not** ship as same-named core stubs (ownership conflict on add-on install). Gate the include behind feature flags (add-on present) or use a differently named core fallback.
+- WCF: `{include file='X'}` is resolved at **compile time** — missing templates crash even inside unused `{if}` branches. Same template basename in two family packages (same ACP/front slot) blocks the second install (ownership). Use different names plus dynamic `{include file=$var}` and a base-package fallback template. `family:check` warns generically (no app hardcoding) on ownership collisions and on static includes of templates that exist only in a sibling package.
 
 ---
 
@@ -374,6 +373,6 @@ python3 tools/check-family-deps.py --manifest tools/fixtures/family-demo/swpm-fa
 
 ## See also
 
-- [PACKAGE-LAYOUT.en.md](PACKAGE-LAYOUT.en.md) — layout of **one** package (files, templates/, files/)
-- [PLUGIN-STORE-CHECKLIST.en.md](PLUGIN-STORE-CHECKLIST.en.md) — store; add-ons need the core listed
-- [ACP-PACKAGE-INSTALL.en.md](ACP-PACKAGE-INSTALL.en.md) — local ACP install (optional, Docker)
+- [PACKAGE-LAYOUT.en.md](PACKAGE-LAYOUT.md) — layout of **one** package (files, templates/, files/)
+- [PLUGIN-STORE-CHECKLIST.en.md](PLUGIN-STORE-CHECKLIST.md) — store; add-ons need the core listed
+- [ACP-PACKAGE-INSTALL.en.md](ACP-PACKAGE-INSTALL.md) — local ACP install (optional, Docker)

@@ -1,6 +1,6 @@
 # Tools – WoltLab Plugin Manager
 
-**[English version](README.md)** · **[Documentation index](docs/README.de.md)**
+**[English version](README.md)** · **[Dokumentation (MkDocs)](https://benjarogit.github.io/simple-woltlab-plugin-manager/)**
 
 ---
 
@@ -280,9 +280,9 @@ Danach können Editor und TypeScript-Compiler die WoltLab-API-Typen nutzen. Sieh
 
 ## Weitere Dokumentation
 
-Vollständiger Index: **[docs/README.de.md](docs/README.de.md)**
+Vollständiger Index / Navigation: **[MkDocs-Site](https://benjarogit.github.io/simple-woltlab-plugin-manager/)** (Quelle: `tools/docs/`)
 
-| Thema | Link |
+| Thema | Link (Repo) |
 |-------|------|
 | Tools-Übersicht | [TOOLS-OVERVIEW.de.md](docs/TOOLS-OVERVIEW.de.md) |
 | Plattformen | [CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md) |

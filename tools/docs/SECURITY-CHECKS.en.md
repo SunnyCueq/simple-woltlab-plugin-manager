@@ -1,7 +1,5 @@
 # Security checks (plugin validation)
 
-**[Deutsche Version](SECURITY-CHECKS.de.md)**
-
 Recurring issues from reviews and WoltLab 6.2.x — as runnable scripts.
 
 ## How checks run

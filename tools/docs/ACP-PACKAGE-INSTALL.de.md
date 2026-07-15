@@ -1,7 +1,5 @@
 # Paket-Update via ACP (lokal)
 
-**[English version](ACP-PACKAGE-INSTALL.en.md)**
-
 So testest du gebaute Plugins in deiner lokalen WoltLab-Installation über das ACP (Admin Control Panel).
 
 ## ACP-URL
@@ -41,7 +39,7 @@ Der ACP-Installer schreibt als **`www-data`**. Dateien von `docker cp` gehören 
 ```
 
 `prepare-acp-install.sh` führt den Fix nach dem Kopieren des Pakets automatisch aus.  
-Details: [`DOCKER-APP-PERMISSIONS.de.md`](DOCKER-APP-PERMISSIONS.de.md)
+Details: [`DOCKER-APP-PERMISSIONS.de.md`](DOCKER-APP-PERMISSIONS.md)
 
 ## Manueller ACP-Upload
 

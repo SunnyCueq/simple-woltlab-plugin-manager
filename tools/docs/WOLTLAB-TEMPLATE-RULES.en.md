@@ -1,7 +1,5 @@
 # WoltLab template rules (plugins)
 
-**[Deutsche Version](WOLTLAB-TEMPLATE-RULES.de.md)**
-
 Quick reference for `.tpl` files in WoltLab Suite plugins. The build (`build.sh`) stops when invalid modifiers are found (`check-template-xss.py`).
 
 ## Source location

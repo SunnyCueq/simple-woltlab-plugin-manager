@@ -1,7 +1,5 @@
 # Plugin Store Submission Checkliste
 
-**[English version](PLUGIN-STORE-CHECKLIST.en.md)**
-
 **Letzte Aktualisierung:** 2026-06-26 (abgestimmt mit [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/))  
 **Version:** 1.1.0
 
@@ -27,7 +25,7 @@ Oder im Hauptmenü: **Option 4) Plugin validieren** (bzw. `./tools.sh validate`)
 | Keine überflüssigen Dateien (`.DS_Store`, `Thumbs.db`, …) | `validate-plugin.sh` + `build.sh` (Archiv-Check) |
 | Kompatibilitätsangaben vollständig und formal korrekt | `validate-plugin.sh` → `requiredpackages`, Version |
 
-**Zusatzpakete:** Im Store-Listing klar machen, dass die **Basis-App** Voraussetzung ist. Produktlinien-Build: [PRODUCT-LINE.de.md](PRODUCT-LINE.de.md).
+**Zusatzpakete:** Im Store-Listing klar machen, dass die **Basis-App** Voraussetzung ist. Produktlinien-Build: [PRODUCT-LINE.de.md](PRODUCT-LINE.md).
 | Mindestversion `com.woltlab.wcf` mit Sicherheits-Support | `validate-plugin.sh` → Minversion (aktuell 6.0+; bei Release aktuelle 6.2.x setzen) |
 
 ---
@@ -88,7 +86,7 @@ Beispiele (typische Fehler):
 - [ ] **XML-Kommentare:** keine Maintainer-Blöcke („Datei-Zweck“, @author-Header, Changelog-Notizen) in Paket-XMLs — WoltLab-Reviewer lesen die Dateien; nur knappe englische Kommentare für nicht-offensichtliche Entscheidungen (z. B. warum ein `<delete>`-Block nötig ist)
 - [ ] **Cronjobs:** jede in `cronjob.xml` referenzierte Klasse existiert und läuft fehlerfrei durch (manuell via `(new Klasse())->execute($cronjob)` im Container testen); Laufzeit-Gating (`<options>`) gesetzt, wo der Job von Optionen abhängt
 
-Weitere Details: [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md), [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.de.md), [LANGUAGE-XML.de.md](LANGUAGE-XML.de.md)
+Weitere Details: [SECURITY-CHECKS.de.md](SECURITY-CHECKS.md), [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.md), [LANGUAGE-XML.de.md](LANGUAGE-XML.md)
 
 ---
 
@@ -197,7 +195,7 @@ cd /path/to/mein-plugin
 - **WoltLab Docs:** https://docs.woltlab.com/6.2/
 - **Security (DB):** https://docs.woltlab.com/6.0/php/database-access/
 - **Templates:** https://docs.woltlab.com/6.0/view/templates/
-- **Security-Checks (dieses Repo):** [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md)
+- **Security-Checks (dieses Repo):** [SECURITY-CHECKS.de.md](SECURITY-CHECKS.md)
 - **Dokumentation:** `tools/docs/` (Template-Regeln, Sicherheits-Checks, Store-Checkliste)
 
 ---

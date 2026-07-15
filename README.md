@@ -33,6 +33,8 @@
 
 Today it is a **generic** CLI toolkit for setup, build, validation, and GitHub release — not tied to a single product plugin. It stays aligned with the official [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/).
 
+**Handbook:** [MkDocs documentation](https://benjarogit.github.io/simple-woltlab-plugin-manager/en/) (DE/EN navigation; source `tools/docs/`).
+
 ---
 
 ## Features
@@ -186,7 +188,7 @@ Example menu (abbreviated):
 
 **Plugin source layout:** Put frontend templates in `templates/` (they become `templates.tar`). ACP templates stay in `acptemplates/`. PIP XMLs such as `option.xml` and `page.xml` remain in the package root. Root-level `*.tpl` still packs, but you get a warning; use `--strict-layout` or `validate-plugin.sh --strict` to fail instead. Style packages: sources under `style/` → archive name from `package.xml`. Details: [PACKAGE-LAYOUT.en.md](tools/docs/PACKAGE-LAYOUT.en.md).
 
-Full tools reference: **[tools/README.md](tools/README.md)** · Tool list: **[tools/docs/TOOLS-OVERVIEW.en.md](tools/docs/TOOLS-OVERVIEW.en.md)** · Guides index: **[tools/docs/README.md](tools/docs/README.md)**
+Full tools reference: **[tools/README.md](tools/README.md)** · Tool list: **[tools/docs/TOOLS-OVERVIEW.en.md](tools/docs/TOOLS-OVERVIEW.en.md)** · **Documentation (MkDocs):** [https://benjarogit.github.io/simple-woltlab-plugin-manager/en/](https://benjarogit.github.io/simple-woltlab-plugin-manager/en/)
 
 ---
 

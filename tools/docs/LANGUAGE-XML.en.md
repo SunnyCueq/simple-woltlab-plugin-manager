@@ -1,7 +1,5 @@
 # Language XML (`language/*.xml`)
 
-**[Deutsche Version](LANGUAGE-XML.de.md)**
-
 So translations work on package update and at runtime. Common pitfalls from reviews and WoltLab 6.2.x.
 
 ## Category ↔ item name (required)
@@ -67,4 +65,4 @@ Runs automatically in:
 - Item: at least 3 segments
 - Text in `<![CDATA[…]]>`, no `{lang}` inside items
 
-See also [language PIP](../woltlab-docs/docs/package/pip/language.md) in the plugin manager workspace.
+See also the official [language PIP](https://docs.woltlab.com/6.2/package/pip/language/) documentation.

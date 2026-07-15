@@ -1,7 +1,5 @@
 # Sprach-XML (language/*.xml)
 
-**[English version](LANGUAGE-XML.en.md)**
-
 Damit Übersetzungen beim Paket-Update und zur Laufzeit greifen. Typische Stolperfallen aus Reviews und WoltLab 6.2.x.
 
 ## Kategorie ↔ Item-Name (Pflicht)
@@ -73,4 +71,4 @@ Automatisch in:
 - Item: mindestens 3 Segmente
 - Text in `<![CDATA[…]]>`, kein `{lang}` innerhalb von Items
 
-Siehe auch [language PIP](../woltlab-docs/docs/package/pip/language.md) im Plugin-Manager.
+Siehe auch die offizielle [language PIP](https://docs.woltlab.com/6.2/package/pip/language/)-Dokumentation.

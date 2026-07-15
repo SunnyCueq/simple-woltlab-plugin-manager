@@ -15,6 +15,6 @@ See `.cursor/rules/swpm-generic-only.mdc` for the full policy.
 ## Documentation
 
 - Every guide in **English and German** (`*.en.md` / `*.de.md` or `README.md` / `README.de.md`).
-- Index: [tools/docs/README.md](tools/docs/README.md)
+- Index / handbook: [MkDocs site](https://benjarogit.github.io/simple-woltlab-plugin-manager/en/) (source `tools/docs/`)
 - New build fail checks: add a line in `tools/swpm-check-registry.txt` plus a script under `tools/` (see [SECURITY-CHECKS.en.md](tools/docs/SECURITY-CHECKS.en.md)).
 

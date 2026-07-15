@@ -9,6 +9,9 @@ tools/manager-push.sh
 tools/manager-push.env
 tools/docs/logs/
 
+# MkDocs build output
+site/
+
 # IDE
 .vscode/
 .idea/
@@ -92,3 +95,4 @@ plugins-integrieren/*
 !plugins-integrieren/.gitignore
 !plugins-integrieren/README*.md
 !plugins-integrieren/CHANGELOG*.md
+.venv-docs/

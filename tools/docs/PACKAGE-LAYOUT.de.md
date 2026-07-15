@@ -1,7 +1,5 @@
 # Paket-Quellenlayout (SWPM)
 
-**[English version](PACKAGE-LAYOUT.en.md)**
-
 Kurz: In welchen Ordnern liegen die Dateien, und was landet im fertigen `.tar.gz`?
 
 SWPM packt aus `temp_edit/` (oder dem Plugin-Root). Build, TypeScript und Validate gehören zum normalen Ablauf dazu.

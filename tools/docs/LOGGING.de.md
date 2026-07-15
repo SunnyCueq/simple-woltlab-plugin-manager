@@ -1,7 +1,5 @@
 # Log-System der Tools
 
-**[English version](LOGGING.en.md)**
-
 Die Skripte unter `tools/` schreiben in **eine** zentrale Debug-Log-Datei. Wenn die Standard-Datei nicht beschreibbar ist, fällt die Ausgabe auf `/tmp/woltlab-dev-debug.log` zurück.
 
 ## Konvention

@@ -1,7 +1,5 @@
 # Security-Checks (Plugin-Validierung)
 
-**[English version](SECURITY-CHECKS.en.md)**
-
 Wiederkehrende Fehler aus Reviews und WoltLab 6.2.x — als prüfbare Skripte.
 
 ## Wie die Checks laufen

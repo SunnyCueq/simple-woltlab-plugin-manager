@@ -1,0 +1,121 @@
+# MkDocs — Simple WoltLab Plugin Manager
+# Docs source: tools/docs/ (single source of truth; no Wiki duplicate)
+# Build: pip install -r requirements-docs.txt && mkdocs serve
+# Site:  https://benjarogit.github.io/simple-woltlab-plugin-manager/
+
+site_name: SWPM
+site_description: Simple WoltLab Plugin Manager — Build, Validate, Product Line
+site_url: https://benjarogit.github.io/simple-woltlab-plugin-manager/
+site_author: SunnyCueq
+repo_url: https://github.com/benjarogit/simple-woltlab-plugin-manager
+repo_name: benjarogit/simple-woltlab-plugin-manager
+edit_uri: edit/main/tools/docs/
+docs_dir: tools/docs
+site_dir: site
+copyright: Copyright &copy; SWPM contributors — MIT License
+
+theme:
+  name: material
+  language: de
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Light mode
+  features:
+    # navigation.instant breaks mkdocs-static-i18n language switcher (strict warn)
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+    - toc.follow
+
+plugins:
+  - search:
+      lang:
+        - de
+        - en
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      languages:
+        - locale: de
+          name: Deutsch
+          default: true
+          build: true
+          site_name: SWPM Dokumentation
+        - locale: en
+          name: English
+          build: true
+          site_name: SWPM Documentation
+          nav_translations:
+            Start: Home
+            Einstieg: Getting started
+            Tools-Übersicht: Tools overview
+            Plattformen: Platforms
+            Build & Paket: Build & packaging
+            Paket-Layout: Package layout
+            Produktlinie: Product line
+            ACP-Install: ACP install
+            Docker-Rechte: Docker permissions
+            Qualität & Store: Quality & store
+            Store-Checkliste: Store checklist
+            Security-Checks: Security checks
+            Language-XML: Language XML
+            Template-Regeln: Template rules
+            Logging: Logging
+
+nav:
+  - Start: index.md
+  - Einstieg:
+    - Tools-Übersicht: TOOLS-OVERVIEW.md
+    - Plattformen: CROSS-PLATFORM.md
+  - Build & Paket:
+    - Paket-Layout: PACKAGE-LAYOUT.md
+    - Produktlinie: PRODUCT-LINE.md
+    - ACP-Install: ACP-PACKAGE-INSTALL.md
+    - Docker-Rechte: DOCKER-APP-PERMISSIONS.md
+  - Qualität & Store:
+    - Store-Checkliste: PLUGIN-STORE-CHECKLIST.md
+    - Security-Checks: SECURITY-CHECKS.md
+    - Language-XML: LANGUAGE-XML.md
+    - Template-Regeln: WOLTLAB-TEMPLATE-RULES.md
+    - Logging: LOGGING.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/benjarogit/simple-woltlab-plugin-manager
+
+exclude_docs: |
+  logs/**

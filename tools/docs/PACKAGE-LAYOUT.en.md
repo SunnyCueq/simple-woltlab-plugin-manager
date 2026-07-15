@@ -1,7 +1,5 @@
 # Package source layout (SWPM)
 
-**[Deutsche Version](PACKAGE-LAYOUT.de.md)**
-
 Short version: which folders hold your files, and what ends up in the installable `.tar.gz`?
 
 SWPM packs from `temp_edit/` (or the plugin root). Build, TypeScript, and validate are part of the normal flow.

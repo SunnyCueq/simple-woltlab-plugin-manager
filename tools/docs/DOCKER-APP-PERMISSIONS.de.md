@@ -1,7 +1,5 @@
 # Docker: App-Berechtigungen nach `docker cp`
 
-**[English version](DOCKER-APP-PERMISSIONS.en.md)**
-
 ## Problem
 
 Nach `docker cp` (Paket oder App-Dateien) gehören die Dateien oft **root**, der ACP-Installer läuft aber als **www-data**:

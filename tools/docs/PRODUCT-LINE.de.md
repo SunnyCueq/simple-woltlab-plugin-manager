@@ -1,7 +1,5 @@
 # Produktlinie: Basis + Zusatzpakete
 
-**[English version](PRODUCT-LINE.en.md)**
-
 Diese Anleitung erklärt, **wie du mehrere zusammengehörige WoltLab-Pakete** (eine Basis-App und optionale Zusatzpakete) mit SWPM ablegst, prüfst und baust — so, dass die Reihenfolge stimmt und Fehler früh auffallen.
 
 Du brauchst kein Vorwissen über „Graphen“. Du brauchst nur: Ordner, eine kleine JSON-Datei und klare Abhängigkeiten in der `package.xml`.
@@ -113,7 +111,7 @@ Einzelnes Paket bauen (ohne Familie):
 ./tools/build.sh myapp patch
 ```
 
-Details zum Innenleben eines Pakets (lib/, templates/, …): [PACKAGE-LAYOUT.de.md](PACKAGE-LAYOUT.de.md).
+Details zum Innenleben eines Pakets (lib/, templates/, …): [PACKAGE-LAYOUT.de.md](PACKAGE-LAYOUT.md).
 
 ---
 
@@ -217,7 +215,7 @@ Danach:
 ./tools.sh family:order
 ```
 
-**Scaffold ≠ fertiges Store-Plugin.** Du füllst danach echte Dateien (lib, Templates, …) nach [PACKAGE-LAYOUT.de.md](PACKAGE-LAYOUT.de.md). Graph-Checks (`family:check`) prüfen nur Abhängigkeiten, nicht die Store-Qualität.
+**Scaffold ≠ fertiges Store-Plugin.** Du füllst danach echte Dateien (lib, Templates, …) nach [PACKAGE-LAYOUT.de.md](PACKAGE-LAYOUT.md). Graph-Checks (`family:check`) prüfen nur Abhängigkeiten, nicht die Store-Qualität.
 
 Weiteres Add-on:
 
@@ -327,20 +325,21 @@ Solange die Linie **noch nicht öffentlich** im Store/als Release liegt, gilt En
 2. **`package.xml`:** nur `<instructions type="install">` — **keine** historischen `fromversion`-Update-Blöcke und keine alten `post_update_*` / `database/update_*`-Skripte.
 3. **Add-on-`minversion`:** zeigt auf die Basis-`1.0.0` (nicht auf interne Dev-Nummern).
 4. **Beschreibungen:** Basis und jedes Zusatzpaket haben **eigene** `packagedescription` (Default + `language="de"`). Die Basis darf Add-on-Features nicht als fest enthalten beschreiben — nur klar als optional/Zusatz. `family:check` warnt bei fehlenden Texten und bei Add-on-Begriffen in der Basis-Beschreibung ohne Optional-Kontext.
-5. **Runtime (Produktlinien mit optionalen Features):** UI/SQL/Klassen nur hinter Capability-Checks (`class_exists` / Feature-Flags); Soft-Deps zwischen Add-ons, kein `requiredpackage` Add-on→Add-on.
-6. **Nach erstem öffentlichem Release:** Update-Blöcke und Migrationsskripte erst ab `1.0.1` / Folgereleases — keine Schein-Abwärtskompatibilität für nie ausgelieferte Dev-Versionen.
-7. **Lokale Test-Instanz:** von Dev-Versionen auf `1.0.0` nicht „downgraden“ — Pakete **deinstallieren** und frisch installieren.
+5. **Templates (Family):** keine gleichnamigen Templates in zwei SKUs derselben Linie (Ownership); keine statischen `{include file='…'}` auf Templates, die nur in einem optionalen Sibling liegen. `family:check` warnt generisch.
+6. **Runtime (Produktlinien mit optionalen Features):** UI/SQL/Klassen nur hinter Capability-Checks (`class_exists` / Feature-Flags); Soft-Deps zwischen Add-ons, kein `requiredpackage` Add-on→Add-on.
+7. **Nach erstem öffentlichem Release:** Update-Blöcke und Migrationsskripte erst ab `1.0.1` / Folgereleases — keine Schein-Abwärtskompatibilität für nie ausgelieferte Dev-Versionen.
+8. **Lokale Test-Instanz:** von Dev-Versionen auf `1.0.0` nicht „downgraden“ — Pakete **deinstallieren** und frisch installieren.
 
 SWPM-Checks:
 
 - pro Paket: `first-release-hygiene`, `package-descriptions` (Build-Registry, Warn)
-- Familie: `family:check` — Lockstep, Description-Hygiene Basis↔Add-on
+- Familie: `family:check` — Lockstep, Description-Hygiene Basis↔Add-on, **Template-Ownership / Compile-Includes** (Warn)
 
 Weitere Produktlinien-Praxis (layout-unabhängig):
 
 - Root-Layout-Pakete (kein `temp_edit/`): Family-Build staged über `_family-stage/` + Symlink auf den Quellbaum.
 - Datei-Hotfix in einer laufenden Instanz ≠ ACP-Paket-Update — Releases immer aus der Quelle bauen.
-- WCF: optionale Add-on-Templates, die der Core per `{include}` einbindet, dürfen **nicht** als gleichnamige Core-Stubs liegen (Ownership-Konflikt bei Add-on-Install). Include nur hinter Feature-Gates (Add-on vorhanden) oder mit anderem Core-Fallback-Namen.
+- WCF: `{include file='X'}` wird zur **Compile-Zeit** aufgelöst — fehlende Templates crashen auch in ungenutzten `{if}`-Zweigen. Gleichnamige Templates in zwei Family-Paketen (gleicher Slot ACP/Frontend) blockieren die zweite Installation (Ownership). Lösung: unterschiedliche Namen + dynamischer `{include file=$var}` und eigenes Fallback-Template im Basispaket. `family:check` warnt generisch (keine App-Hardcodierung) bei Ownership-Kollisionen und bei statischen Includes auf Templates, die nur in einem Sibling-Paket liegen.
 
 ---
 
@@ -374,6 +373,6 @@ python3 tools/check-family-deps.py --manifest tools/fixtures/family-demo/swpm-fa
 
 ## Siehe auch
 
-- [PACKAGE-LAYOUT.de.md](PACKAGE-LAYOUT.de.md) — Aufbau **eines** Pakets (Dateien, templates/, files/)
-- [PLUGIN-STORE-CHECKLIST.de.md](PLUGIN-STORE-CHECKLIST.de.md) — Store; Zusatzpakete brauchen die Basis im Listing
-- [ACP-PACKAGE-INSTALL.de.md](ACP-PACKAGE-INSTALL.de.md) — lokale ACP-Installation (optional, Docker)
+- [PACKAGE-LAYOUT.de.md](PACKAGE-LAYOUT.md) — Aufbau **eines** Pakets (Dateien, templates/, files/)
+- [PLUGIN-STORE-CHECKLIST.de.md](PLUGIN-STORE-CHECKLIST.md) — Store; Zusatzpakete brauchen die Basis im Listing
+- [ACP-PACKAGE-INSTALL.de.md](ACP-PACKAGE-INSTALL.md) — lokale ACP-Installation (optional, Docker)

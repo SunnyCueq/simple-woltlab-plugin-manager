@@ -1,8 +1,6 @@
 # Tools-Übersicht (SWPM)
 
-**[English version](TOOLS-OVERVIEW.en.md)**
-
-Welche Skripte gibt es, und wofür? Kurze Transparenzliste — Details und Befehle stehen in der [Tools-Referenz](../README.de.md).
+Welche Skripte gibt es, und wofür? Kurze Transparenzliste — Details und Befehle stehen in der [Tools-Referenz](https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/tools/README.de.md).
 
 ## Alltagsweg (kurz)
 
@@ -11,7 +9,7 @@ Welche Skripte gibt es, und wofür? Kurze Transparenzliste — Details und Befeh
 3. `./tools.sh validate …` — vor Store/Release prüfen
 4. Optional: `./tools.sh push` — Commit, Tag, GitHub-Release
 
-Produktlinie (mehrere Pakete): `./tools.sh family:check` / `family:build` — siehe [PRODUCT-LINE.de.md](PRODUCT-LINE.de.md).
+Produktlinie (mehrere Pakete): `./tools.sh family:check` / `family:build` — siehe [PRODUCT-LINE.de.md](PRODUCT-LINE.md).
 
 ```bash
 ./tools.sh help                          # alle CLI-Befehle
@@ -62,7 +60,7 @@ Laufen beim **Build** über `swpm-run-checks.sh`. Quelle: `swpm-check-registry.t
 
 **Außerhalb der Registry (aber wichtig):** `check-pip-sources.py` — PIP-Quellen vs. `package.xml` (Build/Validate).
 
-Weitere Themen und Heuristiken: [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md).
+Weitere Themen und Heuristiken: [SECURITY-CHECKS.de.md](SECURITY-CHECKS.md).
 
 ---
 
@@ -86,7 +84,7 @@ Weitere Themen und Heuristiken: [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md).
 | `fix-woltlab-app-permissions.sh` | Rechte nach `docker cp` korrigieren |
 | `reset-app-for-acp-install.sh` | Halbfertige App-Installation bereinigen |
 
-Siehe [ACP-PACKAGE-INSTALL.de.md](ACP-PACKAGE-INSTALL.de.md).
+Siehe [ACP-PACKAGE-INSTALL.de.md](ACP-PACKAGE-INSTALL.md).
 
 ---
 

@@ -1,6 +1,6 @@
 # Tools – WoltLab Plugin Manager
 
-**[Deutsche Version](README.de.md)** · **[Documentation index](docs/README.md)**
+**[Deutsche Version](README.de.md)** · **[Documentation (MkDocs)](https://benjarogit.github.io/simple-woltlab-plugin-manager/en/)**
 
 ---
 
@@ -10,7 +10,7 @@ The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, c
 
 **Full list:** [docs/TOOLS-OVERVIEW.en.md](docs/TOOLS-OVERVIEW.en.md) — core, build checks, optional, Docker, internal.
 
-**Platforms:** Linux, macOS, Windows (WSL2 or Git Bash). From cmd/Explorer on Windows: `tools.cmd`. Details: [docs/CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md).
+**Platforms:** Linux, macOS, Windows (WSL2 or Git Bash). From cmd/Explorer on Windows: `tools.cmd`. Details: [docs/CROSS-PLATFORM.en.md](docs/CROSS-PLATFORM.en.md).
 
 **Note:** `tools/woltlab-plugin-recovery/` is a separate recovery helper — not part of the normal build/validate menu.
 
@@ -278,12 +278,12 @@ After that, your editor and the TypeScript compiler can use WoltLab API types. S
 
 ## Further documentation
 
-Full index: **[docs/README.md](docs/README.md)**
+Full index / navigation: **[MkDocs site](https://benjarogit.github.io/simple-woltlab-plugin-manager/en/)** (source: `tools/docs/`)
 
-| Topic | Link |
+| Topic | Link (repo) |
 |-------|------|
 | Tools overview | [TOOLS-OVERVIEW.en.md](docs/TOOLS-OVERVIEW.en.md) |
-| Platforms | [CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md) |
+| Platforms | [CROSS-PLATFORM.en.md](docs/CROSS-PLATFORM.en.md) |
 | Package layout / styles | [PACKAGE-LAYOUT.en.md](docs/PACKAGE-LAYOUT.en.md) |
 | Product line | [PRODUCT-LINE.en.md](docs/PRODUCT-LINE.en.md) |
 | Store checklist | [PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md) |
