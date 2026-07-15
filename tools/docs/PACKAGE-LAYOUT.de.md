@@ -12,7 +12,24 @@ SWPM baut aus dem Quellbaum deines Plugins (`temp_edit/` bzw. Plugin-Root) ein i
 | `acptemplates/` | `acptemplates.tar` | Templates für das Admin Control Panel (ACP) |
 | `files/` | `files.tar` | Inhalt von `files/` statt `lib/`, `acp/`, `style/` im Root |
 | `files_wcf/` | `files_wcf.tar` | Dateien für das WCF-Verzeichnis statt `js/` + `lib/bootstrap/` im Root |
-| `style/style.xml` | `style.tar` | Style-Paketinstallation (PIP) über `pack-style-tar.sh` |
+| `style/style.xml` | `style.tar` / `style.tgz` / `style.tar.gz` | Style-PIP — Archivname kommt aus `package.xml` (`pack-style-tar.sh`) |
+
+### Style-Pakete (reiner Stil, z. B. Theme)
+
+Quellen unter `style/`:
+
+| Datei / Ordner | Rolle |
+|----------------|--------|
+| `style/style.xml` | Metadaten, Referenzen auf Variablen/Bilder/Templates |
+| `style/variables.xml` | Style-Variablen (WoltLab erzeugt daraus CSS) |
+| `style/variables_dark.xml` | optional Dark Mode |
+| `style/images/` | wird zu `images.tar` |
+| `style/templates/` | wird zu `templates.tar` |
+| Preview-/Cover-Bilder | wie in `<image>` / `<coverPhoto>` benannt |
+
+In `package.xml` z. B. `<instruction type="style">style.tgz</instruction>` — SWPM packt dann **genau diesen** Dateinamen.
+
+**scssphp:** Nicht Teil von SWPM. Die Suite kompiliert SCSS aus den Variablen zur Installations-/Laufzeit. Lokale `.scss` in `style/` sind Quellnotizen — der Checker warnt, kompiliert aber nicht. Für App-Plugins mit eigenem CSS reicht `style/` + `check-style-assets.py` (auflösbare `url(...)`).
 
 **Frontend-Templates:** Die Quelle ist `templates/*.tpl`. Liegen `.tpl`-Dateien noch im Root, packt SWPM sie weiter (Legacy-Fallback) und warnt. Existieren **beide** Layouts gleichzeitig, bricht der Build ab — bitte Root-Dateien nach `templates/` verschieben. Mit `build.sh --strict-layout` bzw. `validate-plugin.sh --strict` sind auch reine Root-`*.tpl` ein Fehler. Beim Entpacken landet `templates.tar` in `templates/` — nicht als lose Dateien im Root. PIP-XMLs (`option.xml`, `page.xml`, …) bleiben im Paket-Root.
 

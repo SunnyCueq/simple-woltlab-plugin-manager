@@ -147,6 +147,8 @@ cmd_help() {
 	echo "    build:minor | build:major | build:dry-run"
 	echo "    typescript | ts [args…]         → tools/typescript.sh"
 	echo "    unpack [args…]                  → tools/unpack.sh"
+	echo "    lint:python [--fix]           → ruff auf tools/*.py (optional)"
+	echo "    phpstan [plugin]                → PHPStan wenn phpstan.neon vorhanden"
 	echo ""
 	echo -e "  ${BOLD}Qualität & Setup${RESET}"
 	echo "    validate [pfad]                 → tools/validate-plugin.sh"
@@ -475,6 +477,18 @@ if [ "$#" -gt 0 ]; then
 	typescript | ts)
 		shift
 		run_tool "$TOOLS_DIR/typescript.sh" "$@"
+		exit $?
+		;;
+	lint:python | ruff)
+		shift
+		run_tool "$TOOLS_DIR/lint-manager-python.sh" "$@"
+		exit $?
+		;;
+	phpstan)
+		shift
+		_plugin="${1:-.}"
+		[ $# -gt 0 ] && shift
+		run_tool "$TOOLS_DIR/run-phpstan.sh" "$_plugin" "$@"
 		exit $?
 		;;
 	unpack)

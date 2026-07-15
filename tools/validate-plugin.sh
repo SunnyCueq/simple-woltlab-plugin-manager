@@ -1085,6 +1085,36 @@ if [ -n "$VALIDATE_SOURCE_DIR" ] && [ -f "${VALIDATE_SOURCE_DIR}/package.xml" ];
     echo ""
 fi
 
+# 5d. TypeScript (wenn tsconfig / .ts vorhanden) — nur Typecheck
+if [ -n "${VALIDATE_SOURCE_DIR:-}" ] && [ -f "$TOOLS_DIR/check-typescript.sh" ]; then
+    echo -e "${YELLOW}📘 TypeScript (tsc --noEmit, falls vorhanden)...${NC}"
+    log "INFO" "TypeScript-Check"
+    if bash "$TOOLS_DIR/check-typescript.sh" --no-emit "$VALIDATE_SOURCE_DIR"; then
+        print_success "TypeScript-Check OK oder übersprungen"
+        log "INFO" "TypeScript check OK/skip"
+    else
+        print_error "TypeScript-Check fehlgeschlagen"
+        log "ERROR" "TypeScript check failed"
+        ERRORS=$((ERRORS + 1))
+    fi
+    echo ""
+fi
+
+# 5e. PHPStan (nur wenn phpstan.neon(.dist) im Plugin liegt)
+if [ -n "${VALIDATE_SOURCE_DIR:-}" ] && [ -f "$TOOLS_DIR/run-phpstan.sh" ]; then
+    echo -e "${YELLOW}🔬 PHPStan (optional, nur mit Plugin-Config)...${NC}"
+    log "INFO" "PHPStan optional"
+    if bash "$TOOLS_DIR/run-phpstan.sh" "$VALIDATE_SOURCE_DIR"; then
+        print_success "PHPStan OK oder übersprungen"
+        log "INFO" "PHPStan OK/skip"
+    else
+        print_error "PHPStan meldete Fehler"
+        log "ERROR" "PHPStan failed"
+        ERRORS=$((ERRORS + 1))
+    fi
+    echo ""
+fi
+
 # 6. Ergebnis
 print_section "Validierungs-Ergebnis" "Hauptmenü" "Validierung"
 

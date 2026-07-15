@@ -123,6 +123,17 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 
 ---
 
+### Optional checks (TypeScript, PHPStan, ruff)
+
+```bash
+./tools/check-typescript.sh [--no-emit] [plugin]   # when tsconfig / ts/ exist — also in build + validate
+./tools/run-phpstan.sh [plugin]                    # only if phpstan.neon(.dist) exists
+./tools.sh lint:python                             # ruff on tools/*.py (manager); skips if ruff missing
+./tools.sh phpstan [plugin]
+```
+
+PHPStan and ruff are **opt-in** (binary + plugin config where needed). TypeScript fails build/validate when sources exist and `tsc` fails.
+
 ### validate-plugin.sh – Security and store compliance
 
 **What it does:** Checks your plugin for common issues before release or store submission. It validates: **PHP and XML syntax**; **translations** (DE and EN present and consistent); **template layout** (`templates/` canonical; root `*.tpl` warns, `--strict` fails); **PIP sources** (DevTools parity: syncable vs package-only instructions); **plugin language keys** used in code vs `language/*.xml` with **file:line** locations; **minimum WoltLab version**; that no external package servers are used; **security** (e.g. SQL injection, XSS); **debug and development code** that should not ship; and **cloud/compatibility** and other store-related rules. The checks align with the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.en.md), which also lists manual steps the script does not cover.

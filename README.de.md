@@ -40,9 +40,9 @@ Orientierung an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.w
 ## Funktionen
 
 - **Interaktives Menü** — `./tools.sh` für Build, Validierung, TypeScript, Git-Push und Setup.
-- **Paket-Build** — Installierbare `.tar.gz`-Archive mit patch/minor/major/same; [Quellenlayouts](tools/docs/PACKAGE-LAYOUT.de.md) (`files/`, `files_wcf/`, `templates/`, `--json` für CI).
+- **Paket-Build** — Installierbare `.tar.gz`-Archive mit patch/minor/major/same; [Quellenlayouts](tools/docs/PACKAGE-LAYOUT.de.md) (`files/`, `files_wcf/`, `templates/`, Style-Pakete als `style.tar`/`style.tgz`, `--json` für CI).
 - **Produktlinie** — Optional Basis + Zusatzpakete über `swpm-family.json` (`family:build` / `family:validate`); siehe [PRODUCT-LINE.de.md](tools/docs/PRODUCT-LINE.de.md).
-- **Validierung** — PHP/XML, XSS/SQL-Heuristiken, DE/EN-Sprachkeys, PIP-Quellen (DevTools-Parität), Store-Checkliste.
+- **Validierung** — PHP/XML, XSS/SQL-Heuristiken, DE/EN-Sprachkeys, PIP-Quellen (DevTools-Parität), Store-Checkliste; TypeScript-Check bei vorhandenen Quellen; optional PHPStan (`phpstan.neon`) und `./tools.sh lint:python` (ruff).
 - **Workspace-Setup** — Optional WoltLab Core, offizielle Doku, WCF-Quellcode und [WoltLab d.ts](https://github.com/WoltLab/d.ts).
 - **Release** — Commit, Push, Tag und GitHub-Release über `gitpush.sh`.
 - **Plattformen** — Linux, macOS, Windows (WSL2 oder Git Bash); unter Windows `tools.cmd`.
@@ -177,7 +177,7 @@ Beispiel (gekürzt):
 | `woltlab-core/` | Core nach Setup |
 | `woltlab-d-ts/` | TypeScript-Typings nach Setup |
 
-**Plugin-Quellenlayout:** Frontend-Templates gehören nach `templates/` (daraus wird `templates.tar`). ACP-Templates bleiben in `acptemplates/`. PIP-XMLs wie `option.xml` und `page.xml` bleiben im Paket-Root. Root-`*.tpl` wird weiter gepackt, aber mit Warnung; mit `--strict-layout` bzw. `validate-plugin.sh --strict` wird daraus ein Fehler. Details: [PACKAGE-LAYOUT.de.md](tools/docs/PACKAGE-LAYOUT.de.md).
+**Plugin-Quellenlayout:** Frontend-Templates gehören nach `templates/` (daraus wird `templates.tar`). ACP-Templates bleiben in `acptemplates/`. PIP-XMLs wie `option.xml` und `page.xml` bleiben im Paket-Root. Root-`*.tpl` wird weiter gepackt, aber mit Warnung; mit `--strict-layout` bzw. `validate-plugin.sh --strict` wird daraus ein Fehler. Style-Pakete: Quellen unter `style/` → Archivname laut `package.xml`. Details: [PACKAGE-LAYOUT.de.md](tools/docs/PACKAGE-LAYOUT.de.md).
 
 Tools-Referenz: **[tools/README.de.md](tools/README.de.md)** · Anleitungen: **[tools/docs/README.de.md](tools/docs/README.de.md)**
 

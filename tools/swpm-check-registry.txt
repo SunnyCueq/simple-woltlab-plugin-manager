@@ -16,4 +16,7 @@ js-amd-exports|fail|check-js-amd-exports.py|js_acp|AMD Named Exports (setup)
 template-layout|warn|check-template-layout.py|always|Template-Layout (templates/)
 template-notices|warn|check-template-notices.py|templates|Hinweis-Boxen
 style-assets|warn|check-style-assets.py|style|CSS url()-Assets
+style-package|fail|check-style-package.py|style|Style-Paket style.xml / Variablen
 language-keys|warn|check-language-keys.py|language|Sprach-Keys DE/EN
+first-release-hygiene|warn|check-first-release-hygiene.py|always|First-Release 1.0.0 Hygiene (keine Update-Altlasten)
+package-descriptions|warn|check-package-descriptions.py|always|package.xml packagedescription (Default+de)

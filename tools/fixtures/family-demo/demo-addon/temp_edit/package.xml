@@ -2,6 +2,8 @@
 <package name="com.example.demo.addon" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/package.xsd">
 	<packageinformation>
 		<packagename>Example Demo Add-on</packagename>
+		<packagedescription>Optional demo add-on for SWPM family tests. Requires the demo base package.</packagedescription>
+		<packagedescription language="de">Optionales Demo-Zusatzpaket für SWPM-Familientests. Setzt das Demo-Basispaket voraus.</packagedescription>
 		<version>1.0.0</version>
 		<date>2026-07-11</date>
 	</packageinformation>

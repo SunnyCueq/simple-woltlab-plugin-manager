@@ -96,11 +96,20 @@ def path_exists_case_sensitive(root: Path, rel: str) -> tuple[bool, bool]:
     return current.exists(), True
 
 
-def resolve_style_assets(root: Path, style_xml_rel: str) -> list[tuple[str, bool, str]]:
-    """Returns list of (label, found, detail)."""
-    style_xml = root / (style_xml_rel or "style.xml")
+def resolve_style_assets(root: Path, style_instruction_value: str) -> list[tuple[str, bool, str]]:
+    """Resolve style PIP sources.
+
+    package.xml value is the *archive* name (style.tar / style.tgz), not style.xml.
+    Sources live under style/style.xml (+ variables, images/, templates/).
+    """
+    style_xml = root / "style" / "style.xml"
     if not style_xml.is_file():
-        return [(style_xml_rel or "style.xml", False, "style.xml fehlt")]
+        # Legacy: instruction points at style.xml path
+        legacy = root / (style_instruction_value or "style.xml")
+        if legacy.is_file() and legacy.suffix == ".xml":
+            style_xml = legacy
+        else:
+            return [("style/style.xml", False, "style/style.xml fehlt (style PIP)")]
 
     out: list[tuple[str, bool, str]] = [(str(style_xml.relative_to(root)), True, "")]
     try:
@@ -114,19 +123,28 @@ def resolve_style_assets(root: Path, style_xml_rel: str) -> list[tuple[str, bool
             return out
         for child in files_node:
             tag = child.tag.split("}")[-1]
+            name = (child.text or "").strip()
+            if not name:
+                continue
+            if tag in ("variables", "variablesDarkMode"):
+                path = style_xml.parent / name
+                label = f"style/{name}"
+                out.append((label, path.is_file(), str(path)))
+                continue
             if tag not in ("templates", "images"):
                 continue
-            archive = (child.text or "").strip()
-            if not archive:
-                continue
-            folder = archive.replace(".tar", "").replace(".tgz", "").replace(".tar.gz", "")
+            folder = name
+            for suf in (".tar.gz", ".tgz", ".tar"):
+                if folder.endswith(suf):
+                    folder = folder[: -len(suf)]
+                    break
             candidates = [
                 style_xml.parent / folder,
                 root / folder,
                 root / "style" / folder,
             ]
             found_dir = next((c for c in candidates if c.is_dir()), None)
-            label = f"style/{archive} ← {folder}/"
+            label = f"style/{name} ← {folder}/"
             out.append((label, found_dir is not None, str(found_dir or candidates[0])))
     except ET.ParseError as exc:
         out.append(("style.xml parse", False, str(exc)))
@@ -239,10 +257,10 @@ def resolve_target(
         return TargetResult(inst, label, has_language_sources(root), syncable)
 
     if pip == "style":
-        style_xml = inst.value or "style.xml"
-        assets = resolve_style_assets(root, style_xml)
+        archive = inst.value or "style.tar"
+        assets = resolve_style_assets(root, archive)
         missing = [a for a in assets if not a[1]]
-        label = f"style PIP ← {style_xml}" + (
+        label = f"style PIP ← {archive} (Quellen style/)" + (
             "" if not missing else f" (+ {len(missing)} fehlend)"
         )
         return TargetResult(inst, label, not missing, syncable)
@@ -265,6 +283,19 @@ def resolve_target(
     if pip in PACKAGE_ONLY_TYPES:
         if inst.value:
             found, case_ok = check_file(inst.value)
+            # WCF scripts run as WCF_DIR + path after files_wcf.tar extract.
+            # Sources usually live under files_wcf/<path> in the package tree.
+            if not found and inst.application in (None, "", "wcf"):
+                alt = f"files_wcf/{inst.value.lstrip('/')}"
+                found_alt, case_ok_alt = check_file(alt)
+                if found_alt:
+                    return TargetResult(
+                        inst,
+                        f"{inst.value} ← {alt}",
+                        True,
+                        False,
+                        case_mismatch=not case_ok_alt,
+                    )
             return TargetResult(
                 inst,
                 inst.value,

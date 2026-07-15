@@ -27,6 +27,12 @@ if ($argc < 2 || !\is_readable($argv[1])) {
 
 $archivePath = $argv[1];
 
+$_SERVER['HTTP_HOST'] ??= \getenv('HTTP_HOST') ?: 'wsc.local';
+$_SERVER['HTTPS'] ??= \getenv('HTTPS') ?: 'on';
+$_SERVER['SERVER_PORT'] ??= \getenv('SERVER_PORT') ?: '443';
+$_SERVER['REQUEST_URI'] ??= '/';
+$_SERVER['REMOTE_ADDR'] ??= '127.0.0.1';
+
 \define('PACKAGE_ID', 1);
 \define('ENABLE_BENCHMARK', 0);
 
@@ -80,6 +86,11 @@ final class PackageInstallBootstrap extends WCF
 }
 
 new PackageInstallBootstrap();
+
+// Application installs prompt for packageDir in ACP; for CLI use the default path under WCF_DIR.
+WCF::getSession()->register('__wcfSetup_developerMode', true);
+\putenv('WCFSETUP_USEDEFAULTWCFDIR=1');
+$_ENV['WCFSETUP_USEDEFAULTWCFDIR'] = '1';
 
 $session = WCF::getSession();
 if (
@@ -140,10 +151,14 @@ $dispatcher->nodeBuilder->buildNodes();
 
 $node = $dispatcher->nodeBuilder->getNextNode();
 $steps = 0;
+$packageProp = new \ReflectionProperty(PackageInstallationDispatcher::class, 'package');
 
 while ($node !== '') {
     $step = $dispatcher->install($node);
     $node = $step->getNode();
+    // ACP runs one HTTP request per node and reloads Package; CLI must drop the cache
+    // or application packageDir prompts loop forever on the stale empty packageDir.
+    $packageProp->setValue($dispatcher, null);
     $steps++;
 
     if ($steps > 10000) {

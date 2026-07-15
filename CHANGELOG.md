@@ -4,6 +4,8 @@
 
 ### Plugin-Manager
 
+- **Optional Qualitätshooks:** `check-typescript.sh` (Build/Validate bei `tsconfig`/`.ts`); `run-phpstan.sh` (nur mit `phpstan.neon(.dist)` im Plugin); `./tools.sh lint:python` (ruff für Manager-`tools/*.py`, Skip ohne Binary).
+- **Style-Pakete:** `pack-style-tar.sh` packt Variablen, Previews, `images/`/`templates/` und schreibt `style.tar` oder `style.tgz` laut `package.xml`; `check-style-package.py` in der Registry. scssphp bewusst nicht eingebunden (Suite kompiliert aus Variablen). Doku: `PACKAGE-LAYOUT`.
 - **Produktlinie:** `swpm-family.json` + `check-family-deps.py` / `swpm-family.sh` — Multi-Paket Build/Validate in Dep-Reihenfolge (genau eine Graph-Komponente); optional Scaffold (`family:init --scaffold`). Discovery überspringt u. a. `examples/`/`fixtures/`; leere Basis-`<version>` bei `minversion` = Fehler; `add-addon` leitet Basis-ID aus Topo-Root ab (`--json`, nur bei gültigem Graph). Scaffold legt `lib/.gitkeep` an; Workspace-Discovery über `--scan-workspace`; `SWPM_FAMILY_RUN=1` ignoriert `.env`-Package-IDs. Fixture: `tools/fixtures/family-demo/`.
 - **Doku Produktlinie:** `PRODUCT-LINE.de.md` / `.en.md` — Ordnerlayouts (Geschwister vs. SWPM-Root), Scaffold vs. echte `package.xml`, Schritt-für-Schritt, Manifest-Felder, Checkliste, Anti-Patterns, Glossar (laienverständlich, technisch präzise).
 - **Build:** Plugin-/Add-on-Pakete ohne `<applicationdirectory>` sind gültig (nur Apps brauchen das Feld). `family:build` staged Root-Layout-Pakete (`package.xml` im Root) automatisch über `_family-stage/` und kopiert Archive nach `releases/`.

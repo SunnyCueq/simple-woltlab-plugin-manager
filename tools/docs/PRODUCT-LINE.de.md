@@ -150,7 +150,7 @@ Kleine Landkarte: **wo** SWPM suchen soll. Die **Wahrheit** über IDs und Abhän
 |------|---------|-----------|
 | `schemaVersion` | ja | Formatversion, aktuell `1` |
 | `id` | empfohlen | Name der **Linie** (frei), z. B. `com.vendor.myapp.line` — muss **nicht** einem Paket-`name` entsprechen |
-| `versionStrategy` | nein | z. B. `independent` (für späteres Lockstep vorgesehen; P0 speichert nur) |
+| `versionStrategy` | nein | `independent` (Default) oder `lockstep` (alle SKUs gleiche `<version>` — sonst `family:check` Fehler) |
 | `paths` | ja | Liste der Suchorte (Ordner). Relativ zum Manifest oder absolut |
 | `packages` | nein | Leer `[]` = alle gefundenen Pakete unter `paths`. Nicht leer = **Whitelist** nur dieser IDs |
 
@@ -316,6 +316,31 @@ Unter einem App-Root überspringt die Suche bewusst u. a. `examples/`, `fixtur
 - [ ] `family:check` endet mit OK
 - [ ] `family:order` zeigt die Basis **vor** den Add-ons
 - [ ] Du weißt, welches Manifest du meinst (`--manifest` oder `.env`)
+
+---
+
+## First Release (SemVer 1.0.0) — Paket-Hygiene
+
+Solange die Linie **noch nicht öffentlich** im Store/als Release liegt, gilt Entwicklung = First Release:
+
+1. **Version:** alle SKUs der Linie auf `1.0.0` (oder bewusst gleiches SemVer), Datum aktuell. Mit `versionStrategy: "lockstep"` erzwingt `family:check` gleiche Versionsnummern.
+2. **`package.xml`:** nur `<instructions type="install">` — **keine** historischen `fromversion`-Update-Blöcke und keine alten `post_update_*` / `database/update_*`-Skripte.
+3. **Add-on-`minversion`:** zeigt auf die Basis-`1.0.0` (nicht auf interne Dev-Nummern).
+4. **Beschreibungen:** Basis und jedes Zusatzpaket haben **eigene** `packagedescription` (Default + `language="de"`). Die Basis darf Add-on-Features nicht als fest enthalten beschreiben — nur klar als optional/Zusatz. `family:check` warnt bei fehlenden Texten und bei Add-on-Begriffen in der Basis-Beschreibung ohne Optional-Kontext.
+5. **Runtime (Produktlinien mit optionalen Features):** UI/SQL/Klassen nur hinter Capability-Checks (`class_exists` / Feature-Flags); Soft-Deps zwischen Add-ons, kein `requiredpackage` Add-on→Add-on.
+6. **Nach erstem öffentlichem Release:** Update-Blöcke und Migrationsskripte erst ab `1.0.1` / Folgereleases — keine Schein-Abwärtskompatibilität für nie ausgelieferte Dev-Versionen.
+7. **Lokale Test-Instanz:** von Dev-Versionen auf `1.0.0` nicht „downgraden“ — Pakete **deinstallieren** und frisch installieren.
+
+SWPM-Checks:
+
+- pro Paket: `first-release-hygiene`, `package-descriptions` (Build-Registry, Warn)
+- Familie: `family:check` — Lockstep, Description-Hygiene Basis↔Add-on
+
+Weitere Produktlinien-Praxis (layout-unabhängig):
+
+- Root-Layout-Pakete (kein `temp_edit/`): Family-Build staged über `_family-stage/` + Symlink auf den Quellbaum.
+- Datei-Hotfix in einer laufenden Instanz ≠ ACP-Paket-Update — Releases immer aus der Quelle bauen.
+- WCF: optionale Add-on-Templates, die der Core per `{include}` einbindet, dürfen **nicht** als gleichnamige Core-Stubs liegen (Ownership-Konflikt bei Add-on-Install). Include nur hinter Feature-Gates (Add-on vorhanden) oder mit anderem Core-Fallback-Namen.
 
 ---
 

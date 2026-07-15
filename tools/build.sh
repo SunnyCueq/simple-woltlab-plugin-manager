@@ -273,70 +273,59 @@ print_info "Plugin: ${PLUGIN_NAME}"
 print_info "Version-Typ: $VERSION_TYPE"
 echo ""
 
-# TypeScript IMMER neu kompilieren (vor jedem Build) – bei --dry-run ueberspringen
-if [ "$DRY_RUN" -eq 0 ] && [ -d "temp_edit" ] && [ -d "temp_edit/ts" ]; then
+# TypeScript: bei tsconfig.json und/oder .ts-Quellen — Build bricht bei Fehler ab
+if [ "$DRY_RUN" -eq 0 ] && [ -d "temp_edit" ]; then
     TS_COUNT=$(find temp_edit/ts -name "*.ts" 2>/dev/null | wc -l)
-    if [ "$TS_COUNT" -gt 0 ]; then
-        print_info "[0/5] TypeScript kompilieren (via typescript.sh)..."
-        print_info "${TS_COUNT} TypeScript-Dateien gefunden"
-        
-        # Rufe typescript.sh auf (kompiliert TypeScript, erstellt .min.js, kopiert 3rdParty)
+    HAS_TSCONFIG=0
+    [ -f "temp_edit/tsconfig.json" ] && HAS_TSCONFIG=1
+
+    if [ "$TS_COUNT" -gt 0 ] || [ "$HAS_TSCONFIG" -eq 1 ]; then
+        print_info "[0/5] TypeScript kompilieren / prüfen..."
         TOOLS_DIR="$(cd "${SCRIPT_DIR}" && pwd)"
         TYPESCRIPT_SCRIPT="${TOOLS_DIR}/typescript.sh"
-        
-        if [ ! -f "$TYPESCRIPT_SCRIPT" ]; then
-            log_error_with_context "typescript.sh nicht gefunden in ${TYPESCRIPT_SCRIPT}" "TypeScript-Kompilierung"
-            exit 1
-        fi
-        
-        # Fuehre typescript.sh aus (ohne watch-Mode)
-        bash "$TYPESCRIPT_SCRIPT"
-        TSC_EXIT=$?
-        
-        if [ $TSC_EXIT -eq 0 ]; then
+        CHECK_TS="${TOOLS_DIR}/check-typescript.sh"
+
+        if [ "$TS_COUNT" -gt 0 ]; then
+            print_info "${TS_COUNT} TypeScript-Datei(en) in temp_edit/ts/"
+            if [ ! -f "$TYPESCRIPT_SCRIPT" ]; then
+                log_error_with_context "typescript.sh nicht gefunden in ${TYPESCRIPT_SCRIPT}" "TypeScript-Kompilierung"
+                exit 1
+            fi
+            bash "$TYPESCRIPT_SCRIPT"
+            TSC_EXIT=$?
+            if [ $TSC_EXIT -ne 0 ]; then
+                log_error_with_context "TypeScript-Kompilierung fehlgeschlagen" "typescript.sh Exit-Code: ${TSC_EXIT}"
+                exit 1
+            fi
             print_success "TypeScript kompiliert (via typescript.sh)"
-            
-            # Pruefe ob JavaScript-Dateien nach Kompilierung existieren
+
             JS_COUNT=$(find temp_edit/js -name "*.js" ! -name "*.min.js" 2>/dev/null | wc -l)
-            if [ "$JS_COUNT" -eq 0 ] && [ "$TS_COUNT" -gt 0 ]; then
+            if [ "$JS_COUNT" -eq 0 ]; then
                 log_error_with_context "Keine JavaScript-Dateien nach Kompilierung gefunden!" "TypeScript-Kompilierung: ${TS_COUNT} TypeScript-Dateien gefunden, aber 0 JavaScript-Dateien erstellt"
                 exit 1
-            else
-                print_success "${JS_COUNT} JavaScript-Dateien erstellt"
             fi
-            
-            # ZUSÄTZLICHE VALIDIERUNG: Pruefe ob .js Dateien neuer sind als .ts Dateien
-            # Wenn eine .ts Datei neuer ist als die entsprechende .js Datei, wurde nicht neu kompiliert!
+            print_success "${JS_COUNT} JavaScript-Dateien erstellt"
+
             print_info "Pruefe Synchronisation von .ts und .js Dateien..."
             UNSYNCED_TS_JS=()
             mapfile -t ts_files < <(find temp_edit/ts -name "*.ts" -type f 2>/dev/null)
             for ts_file in "${ts_files[@]}"; do
-                # Konvertiere ts/.../file.ts zu js/.../file.js
                 js_file="${ts_file#temp_edit/ts/}"
                 js_file="${js_file%.ts}.js"
                 js_path="temp_edit/js/${js_file}"
-                
-                if [ -f "$js_path" ]; then
-                    # Pruefe ob .ts Datei neuer ist als .js Datei
-                    if [ "$ts_file" -nt "$js_path" ]; then
-                        UNSYNCED_TS_JS+=("$ts_file (neuer als $js_path)")
-                    fi
+                if [ -f "$js_path" ] && [ "$ts_file" -nt "$js_path" ]; then
+                    UNSYNCED_TS_JS+=("$ts_file (neuer als $js_path)")
                 fi
             done
-            
             if [ ${#UNSYNCED_TS_JS[@]} -gt 0 ]; then
                 print_error "FEHLER: ${#UNSYNCED_TS_JS[@]} TypeScript-Datei(en) sind neuer als ihre .js Dateien!"
-                print_error "TypeScript wurde nicht korrekt neu kompiliert!"
                 for unsynced in "${UNSYNCED_TS_JS[@]}"; do
                     echo -e "   - ${RED}${unsynced}${NC}"
                 done
-                print_warning "Fuehre typescript.sh manuell aus, um zu synchronisieren"
                 exit 1
-            else
-                print_success "Alle .ts und .js Dateien sind synchronisiert"
             fi
-            
-            # KRITISCHE VALIDIERUNG: Pruefe ob .js und .min.js Dateien identisch sind
+            print_success "Alle .ts und .js Dateien sind synchronisiert"
+
             print_info "Pruefe dass alle .js und .min.js Dateien identisch sind..."
             JS_MIN_JS_ERRORS=0
             mapfile -t all_js_files < <(find temp_edit/js -name "*.js" ! -name "*.min.js" ! -path "*/3rdParty/*" -type f 2>/dev/null)
@@ -350,22 +339,22 @@ if [ "$DRY_RUN" -eq 0 ] && [ -d "temp_edit" ] && [ -d "temp_edit/ts" ]; then
                     JS_MIN_JS_ERRORS=$((JS_MIN_JS_ERRORS + 1))
                 fi
             done
-            
             if [ "$JS_MIN_JS_ERRORS" -gt 0 ]; then
                 log_error_with_context "KRITISCHER FEHLER: ${JS_MIN_JS_ERRORS} .js/.min.js Synchronisationsfehler gefunden!" ".js und .min.js Dateien MÜSSEN identisch sein!"
-                print_error "Build wird abgebrochen!"
                 exit 1
-            else
-                print_success "Alle .js und .min.js Dateien sind identisch"
             fi
-            
-            echo ""
-        else
-            log_error_with_context "TypeScript-Kompilierung fehlgeschlagen" "typescript.sh Exit-Code: ${TSC_EXIT}"
-            exit 1
+            print_success "Alle .js und .min.js Dateien sind identisch"
+        elif [ -f "$CHECK_TS" ]; then
+            # tsconfig without classic temp_edit/ts layout — still typecheck
+            if ! bash "$CHECK_TS" "$(pwd)"; then
+                log_error_with_context "TypeScript-Check fehlgeschlagen" "check-typescript.sh"
+                exit 1
+            fi
+            print_success "TypeScript-Check (tsconfig) OK"
         fi
+        echo ""
     else
-        print_success "Keine TypeScript-Dateien gefunden, ueberspringe Kompilierung"
+        print_success "Kein TypeScript (keine tsconfig / keine .ts) — uebersprungen"
         echo ""
     fi
 elif [ "$DRY_RUN" -eq 1 ]; then
@@ -722,14 +711,19 @@ else
 fi
 fi
 
-# style.tar (style PIP)
+# style.tar / style.tgz (style PIP) — Name aus package.xml-Instruction
 if grep -qE 'type="style"' "$PACKAGE_XML" 2>/dev/null; then
     PACK_STYLE="${SCRIPT_DIR}/pack-style-tar.sh"
-    if [ -f "style/style.xml" ] && [ -x "$PACK_STYLE" ]; then
-        bash "$PACK_STYLE" "$(pwd)" "${PACKAGE_DIR}/style.tar"
-        print_success "style.tar erstellt"
+    STYLE_OUT="style.tar"
+    STYLE_FROM_XML=$(grep -oE 'type="style"[^>]*>[^<]+' "$PACKAGE_XML" 2>/dev/null | head -1 | sed 's/.*>//' | tr -d '[:space:]' || true)
+    if [ -n "${STYLE_FROM_XML:-}" ]; then
+        STYLE_OUT="$STYLE_FROM_XML"
+    fi
+    if [ -f "style/style.xml" ] && [ -f "$PACK_STYLE" ]; then
+        bash "$PACK_STYLE" "$(pwd)" "${PACKAGE_DIR}/${STYLE_OUT}"
+        print_success "${STYLE_OUT} erstellt"
     else
-        print_warning "style PIP in package.xml, aber style/style.xml fehlt"
+        print_warning "style PIP in package.xml, aber style/style.xml fehlt (erwartet Archiv: ${STYLE_OUT})"
     fi
 fi
 

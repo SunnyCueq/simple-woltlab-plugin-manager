@@ -2,6 +2,8 @@
 <package name="com.example.demo" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/package.xsd">
 	<packageinformation>
 		<packagename>Example Demo Core</packagename>
+		<packagedescription>Demo base package for SWPM family tests.</packagedescription>
+		<packagedescription language="de">Demo-Basispaket für SWPM-Familientests.</packagedescription>
 		<version>1.0.0</version>
 		<date>2026-07-11</date>
 	</packageinformation>

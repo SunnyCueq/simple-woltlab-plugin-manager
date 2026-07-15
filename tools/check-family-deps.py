@@ -71,13 +71,24 @@ def read_package_meta(xml_path: Path) -> dict[str, Any]:
     pkg_id = root.attrib.get("name", "").strip()
     version = ""
     requires: list[tuple[str, str]] = []  # (id, minversion)
+    packagenames: list[tuple[str | None, str]] = []  # (lang, text)
+    descriptions: list[tuple[str | None, str]] = []  # (lang, text)
 
     for child in root:
         tag = local_tag(child.tag)
         if tag == "packageinformation":
             for sub in child:
-                if local_tag(sub.tag) == "version" and sub.text:
-                    version = sub.text.strip()
+                sub_tag = local_tag(sub.tag)
+                text = (sub.text or "").strip()
+                lang = sub.attrib.get("language") or sub.attrib.get(
+                    "{http://www.w3.org/XML/1998/namespace}lang"
+                )
+                if sub_tag == "version" and text:
+                    version = text
+                elif sub_tag == "packagename" and text:
+                    packagenames.append((lang, text))
+                elif sub_tag == "packagedescription" and text:
+                    descriptions.append((lang, text))
         elif tag == "requiredpackages":
             for req in child:
                 if local_tag(req.tag) != "requiredpackage":
@@ -88,7 +99,14 @@ def read_package_meta(xml_path: Path) -> dict[str, Any]:
                 minv = req.attrib.get("minversion", "").strip()
                 requires.append((rid, minv))
 
-    return {"id": pkg_id, "version": version, "requires": requires, "xml": str(xml_path)}
+    return {
+        "id": pkg_id,
+        "version": version,
+        "requires": requires,
+        "packagenames": packagenames,
+        "descriptions": descriptions,
+        "xml": str(xml_path),
+    }
 
 
 def package_root_from_xml(xml_path: Path) -> Path:
@@ -243,6 +261,8 @@ def build_family(manifest_path: Path) -> tuple[dict[str, Any], list[str]]:
             "path": str(root),
             "version": meta["version"],
             "requires": meta["requires"],
+            "packagenames": meta.get("packagenames", []),
+            "descriptions": meta.get("descriptions", []),
             "xml": meta["xml"],
         }
 
@@ -268,6 +288,8 @@ def build_family(manifest_path: Path) -> tuple[dict[str, Any], list[str]]:
                                 "path": str(root.resolve()),
                                 "version": meta["version"],
                                 "requires": meta["requires"],
+                                "packagenames": meta.get("packagenames", []),
+                                "descriptions": meta.get("descriptions", []),
                                 "xml": meta["xml"],
                             }
                     else:
@@ -447,17 +469,130 @@ def build_family(manifest_path: Path) -> tuple[dict[str, Any], list[str]]:
 
     ordered_pkgs = [packages[i] for i in order if i in packages]
 
+    strategy = (manifest.get("versionStrategy") or "independent").strip().lower()
+    if strategy not in ("independent", "lockstep"):
+        warnings.append(
+            f"Unbekannte versionStrategy '{strategy}' — erwartet independent|lockstep"
+        )
+    elif strategy == "lockstep":
+        versions = sorted({(packages[i]["version"] or "").strip() for i in ids})
+        versions = [v for v in versions if v]
+        if len(versions) > 1:
+            errors.append(
+                "versionStrategy=lockstep, aber Paketversionen unterscheiden sich: "
+                + ", ".join(
+                    f"{packages[i]['id']}={packages[i]['version'] or '?'}"
+                    for i in sorted(ids)
+                )
+            )
+        elif not versions:
+            errors.append("versionStrategy=lockstep, aber keine <version> in den Paketen")
+
+    # packagedescription hygiene (warn) + base must not claim add-on features as included
+    _apply_description_hygiene(packages, directed, warnings)
+
     ok = len(errors) == 0
     result = {
         "ok": ok,
         "line_id": line_id,
-        "versionStrategy": manifest.get("versionStrategy", "independent"),
+        "versionStrategy": strategy,
         "packages": ordered_pkgs,
         "components": components,
         "errors": errors,
         "warnings": warnings,
     }
     return result, errors
+
+
+_OPTIONAL_HINT = re.compile(
+    r"optional|add-?ons?|zusatz|erweiter(?:bar|ung)|optionalerweise|"
+    r"requires?\s+the\s+.+\s+base|depending\s+on\s+installed",
+    re.I,
+)
+
+
+def _apply_description_hygiene(
+    packages: dict[str, dict[str, Any]],
+    directed: dict[str, set[str]],
+    warnings: list[str],
+) -> None:
+    """Warn on missing descriptions; warn if a base package claims add-on features as included."""
+    for pid, pkg in packages.items():
+        descs = pkg.get("descriptions") or []
+        if not descs:
+            warnings.append(f"{pid}: keine <packagedescription> in package.xml")
+            continue
+        langs = {lang for lang, _ in descs}
+        if None not in langs and "" not in langs:
+            # default (no language attr) missing — only localized entries
+            warnings.append(
+                f"{pid}: packagedescription ohne Default-Sprache (language-Attribut fehlt)"
+            )
+        has_de = any(lang == "de" for lang, _ in descs)
+        has_en = any(lang in (None, "", "en") for lang, _ in descs)
+        if not has_de:
+            warnings.append(f"{pid}: packagedescription language=\"de\" fehlt")
+        if not has_en:
+            warnings.append(f"{pid}: packagedescription (Default oder en) fehlt")
+        for lang, text in descs:
+            if len(text) > 255:
+                label = lang or "default"
+                warnings.append(
+                    f"{pid}: packagedescription ({label}) zu lang: {len(text)} > 255 "
+                    "(wcf1_package.packageDescription)"
+                )
+
+    # Bases = packages that nothing in the family depends on as dep... 
+    # Actually base = topo roots = packages with no family deps (directed empty)
+    bases = [pid for pid, deps in directed.items() if not deps]
+    # isolated packages also have directed[pid] default empty - all ids need covering
+    for pid in packages:
+        if pid not in directed:
+            bases.append(pid)
+    bases = sorted(set(bases))
+    addons = [pid for pid in packages if pid not in bases]
+
+    for base_id in bases:
+        base_pkg = packages[base_id]
+        base_text = " ".join(t for _, t in (base_pkg.get("descriptions") or []))
+        if not base_text:
+            continue
+        base_names = {t.lower() for _, t in (base_pkg.get("packagenames") or [])}
+        for addon_id in addons:
+            addon = packages[addon_id]
+            terms: list[str] = []
+            # last segment of package id (e.g. com.vendor.app.specials → specials)
+            segment = addon_id.rsplit(".", 1)[-1]
+            if len(segment) >= 4:
+                terms.append(segment)
+            for _, name in addon.get("packagenames") or []:
+                if name.lower() in base_names:
+                    continue
+                terms.append(name)
+                # trailing distinctive word(s), e.g. "MyApp Specials" → "Specials"
+                parts = name.split()
+                if len(parts) >= 2 and len(parts[-1]) >= 4:
+                    terms.append(parts[-1])
+            for term in terms:
+                if _description_claims_term_as_included(base_text, term):
+                    warnings.append(
+                        f"{base_id}: packagedescription erwähnt Add-on-Begriff "
+                        f"'{term}' ohne klaren Optional-/Zusatzpaket-Kontext "
+                        f"(Add-on {addon_id})"
+                    )
+
+
+def _description_claims_term_as_included(text: str, term: str) -> bool:
+    if not term or len(term) < 4:
+        return False
+    for m in re.finditer(re.escape(term), text, re.I):
+        # Large window: optional wording often appears early in the same sentence.
+        start = max(0, m.start() - 160)
+        window = text[start : m.end() + 40]
+        if _OPTIONAL_HINT.search(window):
+            continue
+        return True
+    return False
 
 
 def discover_workspace(main_dir: Path) -> list[Path]:

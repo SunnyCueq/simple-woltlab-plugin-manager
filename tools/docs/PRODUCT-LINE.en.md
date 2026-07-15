@@ -150,7 +150,7 @@ A small map of **where** SWPM should search. The **truth** about IDs and depende
 |-------|----------|---------|
 | `schemaVersion` | yes | Format version, currently `1` |
 | `id` | recommended | Name of the **line** (free), e.g. `com.vendor.myapp.line` — does **not** need to match any package `name` |
-| `versionStrategy` | no | e.g. `independent` (lockstep planned later; P0 stores only) |
+| `versionStrategy` | no | `independent` (default) or `lockstep` (all SKUs same `<version>` — otherwise `family:check` fails) |
 | `paths` | yes | Search locations (folders). Relative to the manifest or absolute |
 | `packages` | no | Empty `[]` = all packages found under `paths`. Non-empty = **whitelist** of those IDs only |
 
@@ -316,6 +316,31 @@ Under an app root, search deliberately skips e.g. `examples/`, `fixtures/`, `nod
 - [ ] `family:check` ends with OK
 - [ ] `family:order` shows the base **before** the add-ons
 - [ ] You know which manifest you mean (`--manifest` or `.env`)
+
+---
+
+## First release (SemVer 1.0.0) — package hygiene
+
+Until the line is **publicly** released (store / announced release), treat development as a first release:
+
+1. **Version:** all SKUs on `1.0.0` (or the same intentional SemVer), date current. With `versionStrategy: "lockstep"`, `family:check` requires identical version numbers.
+2. **`package.xml`:** only `<instructions type="install">` — **no** historical `fromversion` update blocks and no old `post_update_*` / `database/update_*` scripts.
+3. **Add-on `minversion`:** points at base `1.0.0` (not internal dev numbers).
+4. **Descriptions:** base and each add-on have their **own** `packagedescription` (default + `language="de"`). The base must not describe add-on features as included — only as clearly optional. `family:check` warns on missing texts and on add-on terms in the base description without optional context.
+5. **Runtime (product lines with optional features):** UI/SQL/classes only behind capability checks (`class_exists` / feature flags); soft-deps between add-ons, no add-on→add-on `requiredpackage`.
+6. **After the first public release:** add update blocks and migration scripts only from `1.0.1` onward — no fake backward compatibility for never-shipped dev versions.
+7. **Local test instance:** do not “downgrade” from dev versions to `1.0.0` — **uninstall** packages and install fresh.
+
+SWPM checks:
+
+- per package: `first-release-hygiene`, `package-descriptions` (build registry, warn)
+- family: `family:check` — lockstep, base↔add-on description hygiene
+
+Further product-line practice (layout-agnostic):
+
+- Root-layout packages (no `temp_edit/`): family build stages via `_family-stage/` + symlink to the source tree.
+- File hotfixes in a running instance ≠ ACP package update — always build releases from source.
+- WCF: optional add-on templates included by core via `{include}` must **not** ship as same-named core stubs (ownership conflict on add-on install). Gate the include behind feature flags (add-on present) or use a differently named core fallback.
 
 ---
 
