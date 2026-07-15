@@ -75,3 +75,45 @@
 .md-typeset .grid.cards > ul > li:hover {
   border-color: var(--md-accent-fg-color);
 }
+
+/* Card icons — accent so they stand out */
+.md-typeset .grid.cards .lg {
+  color: var(--md-accent-fg-color);
+}
+
+.md-typeset .grid.cards .twemoji,
+.md-typeset .grid.cards svg {
+  color: var(--md-accent-fg-color);
+  fill: currentColor;
+}
+
+/* Task-list checkboxes (Store checklist) — accent when checked */
+.md-typeset .task-list-control [type="checkbox"]:checked + .task-list-indicator::before {
+  background: var(--md-accent-fg-color) !important;
+}
+
+/* Admonitions — tip/info aligned with brand */
+.md-typeset .admonition.tip,
+.md-typeset details.tip {
+  border-color: var(--md-accent-fg-color);
+}
+
+.md-typeset .admonition.tip > .admonition-title,
+.md-typeset details.tip > summary {
+  background-color: var(--md-accent-fg-color--transparent);
+}
+
+.md-typeset .admonition.info,
+.md-typeset details.info {
+  border-color: var(--md-primary-fg-color);
+}
+
+.md-typeset .admonition.info > .admonition-title,
+.md-typeset details.info > summary {
+  background-color: color-mix(in srgb, var(--md-primary-fg-color) 12%, transparent);
+}
+
+/* Emoji/icons alignment */
+.md-typeset :is(.emojione, .twemoji, .gemoji) svg {
+  vertical-align: -0.125em;
+}

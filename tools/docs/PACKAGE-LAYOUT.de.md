@@ -2,7 +2,9 @@
 
 Kurz: In welchen Ordnern liegen die Dateien, und was landet im fertigen `.tar.gz`?
 
-SWPM packt aus `temp_edit/` (oder dem Plugin-Root). Build, TypeScript und Validate gehören zum normalen Ablauf dazu.
+SWPM packt aus `temp_edit/` (oder dem Plugin-Root — die **Arbeitskopie** mit `package.xml`). Build, TypeScript und Validate gehören zum normalen Ablauf dazu.
+
+**PIP** = Package Installation Plugin: Installationsschritte in `package.xml` (Dateien, Templates, Optionen, …). Template-Details: [Template-Regeln](WOLTLAB-TEMPLATE-RULES.md). Mehrere Pakete: [Produktlinie](PRODUCT-LINE.md).
 
 ## Layout-Ordner
 

@@ -8,6 +8,7 @@
 - **README:** auf Einstieg + dominantem Handbuch-Link gekürzt; Site-Titel klar als Dokumentation erkennbar.
 - **gitpush.sh:** Release-Notes hängen Compare-Link (`vPREV...vNEW`) und kurze Commit-Liste an den CHANGELOG-Abschnitt an (kein Auto-Changelog).
 - **MkDocs UI:** Material-Layout wie Referenzseite (Tabs, Cards, Logo/Favicon); Farben an SWPM-Logo (Teal/Orange).
+- **Doku-Pass:** Laien-Klarstellung Build/Validate ≠ Store-Upload; Tools-Übersicht mit CLI/Registry; Links und Store-Tabelle repariert; Check-Icons/Admonitions farblich betont.
 
 ## Version 1.2.0 – 2026-07-15
 

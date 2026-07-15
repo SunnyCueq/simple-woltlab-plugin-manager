@@ -171,7 +171,7 @@ cmd_help() {
 	echo "    manager-push                    → Maintainer (falls vorhanden)"
 	echo "    menu                            → Interaktives Menü"
 	echo ""
-	echo -e "  ${DIM}Ohne Argumente: interaktives Menü · Doku: tools/docs/README.md · Produktlinie: tools/docs/PRODUCT-LINE.de.md${RESET}"
+	echo -e "  ${DIM}Ohne Argumente: interaktives Menü · Doku: tools/docs/TOOLS-OVERVIEW.de.md · Produktlinie: tools/docs/PRODUCT-LINE.de.md${RESET}"
 	echo ""
 }
 
@@ -344,7 +344,7 @@ show_interactive_menu() {
 	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "F" "Produktlinie" "family:* · Manifest"
 	tools_divider
 	echo -e "  ${BOLD}QUALITÄT & DOKU${RESET}"
-	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "4" "Plugin validieren" "Store-Kriterien"
+	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "4" "Plugin validieren" "lokale Qualitätschecks"
 	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "5" "Hilfe / Doku" "help.sh"
 	tools_divider
 	echo -e "  ${BOLD}REPO & UMGEBUNG${RESET}"

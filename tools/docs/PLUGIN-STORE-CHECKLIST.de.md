@@ -1,11 +1,16 @@
 # Plugin Store Submission Checkliste
 
-**Letzte Aktualisierung:** 2026-06-26 (abgestimmt mit [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/))  
-**Version:** 1.1.0
+**Letzte Aktualisierung:** 2026-07-15 (abgestimmt mit [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/))  
+**Version:** 1.1.1
 
-WoltLab prüft in **zwei Stufen**: zuerst automatisch beim Upload, danach manuell. Unsere Tools decken Stufe 1 weitgehend ab; Stufe 2 braucht zusätzliche manuelle Tests (Funktion, UX, Berechtigungen).
+WoltLab prüft eingereichte Pakete in **zwei Stufen**:
 
-**Pflicht vor jedem Store-Upload:**
+1. **Automatisch** — beim echten Upload im Plugin-Store (Syntax, Archiv, Kompatibilität, …)
+2. **Manuell** — durch Mitarbeiter (Sicherheit, Lauffähigkeit, UX, Übersetzungen, …)
+
+SWPM spiegelt **Stufe 1 weitgehend lokal** mit `build` / `validate` — das ist eine **Vorabprüfung auf deinem Rechner**, kein Upload. Stufe 2 bleibt manuell (Funktion, UX, Berechtigungen).
+
+**Pflicht vor dem echten Store-Upload auf woltlab.com:**
 
 ```bash
 ./tools/build.sh [PLUGIN_DIR]          # bricht bei Template-/Build-Fehlern ab
@@ -16,7 +21,9 @@ Oder im Hauptmenü: **Option 4) Plugin validieren** (bzw. `./tools.sh validate`)
 
 ---
 
-## 1. WoltLab Vorabprüfung (automatisch beim Upload)
+## 1. WoltLab Vorabprüfung (automatisch beim Store-Upload)
+
+Was WoltLab beim Upload prüft — und womit du es **vorher lokal** abdeckst:
 
 | WoltLab-Kriterium | Unser Tool / Aktion |
 |-------------------|---------------------|
@@ -24,9 +31,9 @@ Oder im Hauptmenü: **Option 4) Plugin validieren** (bzw. `./tools.sh validate`)
 | Archiv enthält alle in `package.xml` deklarierten Dateien | `validate-plugin.sh` → Datei-Vollständigkeit |
 | Keine überflüssigen Dateien (`.DS_Store`, `Thumbs.db`, …) | `validate-plugin.sh` + `build.sh` (Archiv-Check) |
 | Kompatibilitätsangaben vollständig und formal korrekt | `validate-plugin.sh` → `requiredpackages`, Version |
-
-**Zusatzpakete:** Im Store-Listing klar machen, dass die **Basis-App** Voraussetzung ist. Produktlinien-Build: [PRODUCT-LINE.de.md](PRODUCT-LINE.md).
 | Mindestversion `com.woltlab.wcf` mit Sicherheits-Support | `validate-plugin.sh` → Minversion (aktuell 6.0+; bei Release aktuelle 6.2.x setzen) |
+
+**Zusatzpakete:** Im Store-Listing klar machen, dass die **Basis-App** Voraussetzung ist. Produktlinien-Build: [Produktlinie](PRODUCT-LINE.md).
 
 ---
 
@@ -86,7 +93,8 @@ Beispiele (typische Fehler):
 - [ ] **XML-Kommentare:** keine Maintainer-Blöcke („Datei-Zweck“, @author-Header, Changelog-Notizen) in Paket-XMLs — WoltLab-Reviewer lesen die Dateien; nur knappe englische Kommentare für nicht-offensichtliche Entscheidungen (z. B. warum ein `<delete>`-Block nötig ist)
 - [ ] **Cronjobs:** jede in `cronjob.xml` referenzierte Klasse existiert und läuft fehlerfrei durch (manuell via `(new Klasse())->execute($cronjob)` im Container testen); Laufzeit-Gating (`<options>`) gesetzt, wo der Job von Optionen abhängt
 
-Weitere Details: [SECURITY-CHECKS.de.md](SECURITY-CHECKS.md), [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.md), [LANGUAGE-XML.de.md](LANGUAGE-XML.md)
+Weitere Details: [Security-Checks](SECURITY-CHECKS.md), [Template-Regeln](WOLTLAB-TEMPLATE-RULES.md), [Language-XML](LANGUAGE-XML.md)
+
 
 ---
 
@@ -100,7 +108,7 @@ WoltLab erlaubt KI **nur unterstützend**. Der Anbieter muss Code **eigenständi
 - Keine ungeprüften SQL-Spalten, Template-Modifier oder API-Annahmen aus Modell-Antworten übernehmen
 - Store-Upload nur nach menschlichem Review + grünem Validator
 
-**Community-Thread 318738 (#48–#51, Alexander Ebert):** Lauffähig ≠ Store-Qualität. Reviewer erkennen „AI slop“ u. a. an falschen Option-Namen (`enable_seo_urls` statt `url_omit_index_php`), fehlenden Lang-Keys (`wcf.global.status`), Dialog-Templates als Vollseiten, Legacy-Notices (`<p class="success">`), leeren Grid-Menü-Einträgen (`ToggleInteraction` im Dropdown), Custom-Nav statt `tabMenuContainer`. Siehe auch `tools/docs/WOLTLAB-TEMPLATE-RULES.de.md` und `tools/docs/SECURITY-CHECKS.de.md`.
+**Community-Thread 318738 (#48–#51, Alexander Ebert):** Lauffähig ≠ Store-Qualität. Reviewer erkennen „AI slop“ u. a. an falschen Option-Namen (`enable_seo_urls` statt `url_omit_index_php`), fehlenden Lang-Keys (`wcf.global.status`), Dialog-Templates als Vollseiten, Legacy-Notices (`<p class="success">`), leeren Grid-Menü-Einträgen (`ToggleInteraction` im Dropdown), Custom-Nav statt `tabMenuContainer`. Siehe auch [Template-Regeln](WOLTLAB-TEMPLATE-RULES.md) und [Security-Checks](SECURITY-CHECKS.md).
 
 **Anti-Pattern-Check vor Upload:** Option-Namen + Lang-Keys gegen Core grep-en; ACP-Templates gegen `woltlab-docs/view/templates.md`; Notices nur `woltlab-core-notice`.
 

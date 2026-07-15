@@ -2,7 +2,9 @@
 
 Short version: which folders hold your files, and what ends up in the installable `.tar.gz`?
 
-SWPM packs from `temp_edit/` (or the plugin root). Build, TypeScript, and validate are part of the normal flow.
+SWPM packs from `temp_edit/` (or the plugin root — the **working copy** with `package.xml`). Build, TypeScript, and validate are part of the normal flow.
+
+**PIP** = Package Installation Plugin: install steps in `package.xml` (files, templates, options, …). Template details: [Template rules](WOLTLAB-TEMPLATE-RULES.md). Multiple packages: [Product line](PRODUCT-LINE.md).
 
 ## Layout folders
 

@@ -6,7 +6,7 @@
 
 ## Overview
 
-The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, compile TypeScript, unpack packages, run setup, and push to Git. Most people start with `./tools.sh` (menu or CLI). Goal: from development to the **Plugin Store**, without requiring Docker.
+The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, compile TypeScript, unpack packages, run setup, and push to Git. Most people start with `./tools.sh` (menu or CLI). Goal: from development to **local quality checks** and an optional store upload (manual on woltlab.com) — without requiring Docker.
 
 **Full list:** [docs/TOOLS-OVERVIEW.en.md](docs/TOOLS-OVERVIEW.en.md) — core, build checks, optional, Docker, internal.
 
@@ -29,7 +29,7 @@ The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, c
 | 2 | TypeScript | compile / watch |
 | 3 | Unpack | package → `temp_edit/` |
 | F | Product line | core + add-ons (`family:*`) |
-| 4 | Validate plugin | store / security checks |
+| 4 | Validate plugin | local quality checks |
 | 5 | Help / docs | this documentation |
 | 6 | Git Push | commit, push, release (plugin) |
 | 7 | Setup | Core, docs, typings, paths |
@@ -144,9 +144,9 @@ Only when that tech is part of the project:
 
 ### validate-plugin.sh – Security and store compliance
 
-**What it does:** Checks the plugin before release/store: PHP/XML syntax, languages (DE/EN), templates, PIP sources, security heuristics (XSS/SQL), store rules, and more. Some items stay manual — see the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.en.md).
+**What it does:** Checks the plugin locally before release/store: PHP/XML syntax, languages (DE/EN), templates, PIP sources, security heuristics (XSS/SQL), guideline rules, and more. Does **not** upload anything. Some items stay manual — see the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.en.md).
 
-**When:** Before every release or store upload.
+**When:** Before every release or before a real store upload.
 
 ```bash
 ./tools/validate-plugin.sh [--strict] [plugin_path]

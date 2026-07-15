@@ -12,17 +12,21 @@ hide:
 
 # SWPM Documentation
 
-Official **handbook** for the Simple WoltLab Plugin Manager — guides, tools overview, and store/quality rules from one source (`tools/docs/`), without a separate Wiki.
+Official **handbook** for the Simple WoltLab Plugin Manager — guides, tools overview, and quality rules from one source (`tools/docs/`), without a separate Wiki.
 
 </div>
 
 </div>
+
+!!! info "Important for beginners"
+
+    **Build** and **validate** check your plugin **locally only**. They do not upload anything to the WoltLab Plugin Store — they help you meet the same automated rules *beforehand*. Real upload to woltlab.com comes later and stays manual ([Store checklist](PLUGIN-STORE-CHECKLIST.md)).
 
 !!! tip "Quick start"
 
     1. `./tools.sh` — menu or `./tools.sh help`
     2. Build a plugin → `./tools.sh build`
-    3. Validate → `./tools.sh validate …`
+    3. Check locally → `./tools.sh validate …`
     4. Overview → [Tools overview](TOOLS-OVERVIEW.md)
 
     Switch language: top right (**DE / EN**).
@@ -35,7 +39,7 @@ Official **handbook** for the Simple WoltLab Plugin Manager — guides, tools ov
 
     ---
 
-    All scripts, checks, and optional quality hooks at a glance.
+    All scripts, checks, CLI commands, and optional hooks.
 
     [:octicons-arrow-right-24: Open overview](TOOLS-OVERVIEW.md)
 
@@ -43,7 +47,7 @@ Official **handbook** for the Simple WoltLab Plugin Manager — guides, tools ov
 
     ---
 
-    Folders, archives, and `package.xml` — how SWPM builds installable packages.
+    Folders, archives, and `package.xml` — how SWPM builds packages.
 
     [:octicons-arrow-right-24: Layout guide](PACKAGE-LAYOUT.md)
 
@@ -51,33 +55,57 @@ Official **handbook** for the Simple WoltLab Plugin Manager — guides, tools ov
 
     ---
 
-    Core + add-ons: dependencies, build order, family checks.
+    Core + add-ons: dependencies and build order.
 
     [:octicons-arrow-right-24: Product line](PRODUCT-LINE.md)
-
--   :material-store-check:{ .lg .middle } __Plugin Store__
-
-    ---
-
-    Checklist before upload — security, languages, readiness.
-
-    [:octicons-arrow-right-24: Store checklist](PLUGIN-STORE-CHECKLIST.md)
 
 -   :material-shield-check:{ .lg .middle } __Security checks__
 
     ---
 
-    What the validators look for (XSS, SQL, templates, …).
+    What validators check locally (XSS, SQL, templates, …).
 
     [:octicons-arrow-right-24: Security](SECURITY-CHECKS.md)
+
+-   :material-store-check:{ .lg .middle } __Plugin Store__
+
+    ---
+
+    Before a **real** upload: stage-1 checklist + manual stage 2.
+
+    [:octicons-arrow-right-24: Store checklist](PLUGIN-STORE-CHECKLIST.md)
 
 -   :material-laptop:{ .lg .middle } __Platforms__
 
     ---
 
-    Linux, macOS, Windows (WSL2 / Git Bash) — what you need.
+    Linux, macOS, Windows (WSL2 / Git Bash).
 
     [:octicons-arrow-right-24: Platforms](CROSS-PLATFORM.md)
+
+-   :material-translate:{ .lg .middle } __Language XML__
+
+    ---
+
+    Categories, keys, DE/EN — without update failures.
+
+    [:octicons-arrow-right-24: Language XML](LANGUAGE-XML.md)
+
+-   :material-file-code:{ .lg .middle } __Template rules__
+
+    ---
+
+    No `|encodeHTML`, scripts with `encodeJS`, layout under `templates/`.
+
+    [:octicons-arrow-right-24: Templates](WOLTLAB-TEMPLATE-RULES.md)
+
+-   :material-docker:{ .lg .middle } __ACP & Docker__
+
+    ---
+
+    Optional local install and permissions after `docker cp`.
+
+    [:octicons-arrow-right-24: ACP install](ACP-PACKAGE-INSTALL.md) · [Permissions](DOCKER-APP-PERMISSIONS.md)
 
 </div>
 
@@ -86,12 +114,13 @@ Official **handbook** for the Simple WoltLab Plugin Manager — guides, tools ov
 | Topic | Link |
 |-------|------|
 | Project README | [README.md](https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/README.md) |
-| Tools reference (details) | [tools/README.md](https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/tools/README.md) |
+| Tools reference (details) | [tools/README.md](https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/tools/README.md) · [Tools overview](TOOLS-OVERVIEW.md) |
 | Contributing | [CONTRIBUTING.md](https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/CONTRIBUTING.md) |
 | Changelog | [CHANGELOG.md](https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/CHANGELOG.md) |
+| When something fails | [Logging](LOGGING.md) |
 
 ```bash
-./tools/swpm-run-checks.sh --mode list
+./tools/swpm-run-checks.sh --mode list   # which build checks exist
 ```
 
 !!! note "Preview the site locally"

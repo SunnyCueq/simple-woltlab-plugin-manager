@@ -1,11 +1,16 @@
 # Plugin Store Submission Checklist
 
-**Last updated:** 2026-06-26 (aligned with [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/))  
-**Version:** 1.1.0
+**Last updated:** 2026-07-15 (aligned with [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/))  
+**Version:** 1.1.1
 
-WoltLab reviews in **two stages**: automated checks on upload first, then a manual review. Our tools cover stage 1 extensively; stage 2 still needs manual testing (functionality, UX, permissions).
+WoltLab reviews submitted packages in **two stages**:
 
-**Required before every store upload:**
+1. **Automated** — on the real Plugin Store upload (syntax, archive, compatibility, …)
+2. **Manual** — by staff (security, operability, UX, translations, …)
+
+SWPM mirrors **stage 1 extensively on your machine** with `build` / `validate` — that is a **local pre-check**, not an upload. Stage 2 stays manual (functionality, UX, permissions).
+
+**Required before a real store upload on woltlab.com:**
 
 ```bash
 ./tools/build.sh [PLUGIN_DIR]          # fails on template/build errors
@@ -16,7 +21,9 @@ Or in the main menu: **Option 4) Validate plugin** (or `./tools.sh validate`)
 
 ---
 
-## 1. WoltLab pre-check (automatic on upload)
+## 1. WoltLab pre-check (automatic on store upload)
+
+What WoltLab checks on upload — and how you cover it **locally beforehand**:
 
 | WoltLab criterion | Our tool / action |
 |-------------------|-------------------|
@@ -24,9 +31,9 @@ Or in the main menu: **Option 4) Validate plugin** (or `./tools.sh validate`)
 | Archive contains all files declared in `package.xml` | `validate-plugin.sh` → file completeness |
 | No junk files (`.DS_Store`, `Thumbs.db`, …) | `validate-plugin.sh` + `build.sh` |
 | Compatibility metadata complete and valid | `validate-plugin.sh` → `requiredpackages`, version |
-
-**Add-ons:** State clearly in the store listing that the **base app** is required. Product-line builds: [PRODUCT-LINE.en.md](PRODUCT-LINE.md).
 | Minimum `com.woltlab.wcf` version with security support | `validate-plugin.sh` → min version (6.0+; use current 6.2.x at release) |
+
+**Add-ons:** State clearly in the store listing that the **base app** is required. Product-line builds: [Product line](PRODUCT-LINE.md).
 
 ---
 
@@ -76,7 +83,7 @@ Typical mistakes:
 - [ ] **Event listeners:** no dynamic properties on `$eventObj` (PHP 8.2+)
 - [ ] **Archive:** no junk files in package
 
-See also: [SECURITY-CHECKS.en.md](SECURITY-CHECKS.md), [WOLTLAB-TEMPLATE-RULES.en.md](WOLTLAB-TEMPLATE-RULES.md), [LANGUAGE-XML.en.md](LANGUAGE-XML.md)
+See also: [Security checks](SECURITY-CHECKS.md), [Template rules](WOLTLAB-TEMPLATE-RULES.md), [Language XML](LANGUAGE-XML.md)
 
 ---
 

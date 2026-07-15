@@ -1,6 +1,10 @@
 # Package update via ACP (local)
 
-How to test built plugins in your local WoltLab installation via the ACP (Admin Control Panel).
+How to test built plugins in your **local** WoltLab installation via the ACP (Admin Control Panel).
+
+!!! note "Optional — only with a local test instance"
+
+    This guide applies when you use Docker (or a similar local suite). **Build and validate do not need ACP.** You can set the container name and ACP URL in `tools/.env` (`WOLTLAB_DOCKER_CONTAINER`, `WOLTLAB_ACP_INSTALL_URL`).
 
 ## ACP URL
 

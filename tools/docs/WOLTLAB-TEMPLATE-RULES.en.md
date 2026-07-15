@@ -10,7 +10,7 @@ Quick reference for `.tpl` files in WoltLab Suite plugins. The build (`build.sh`
 | `acptemplates/*.tpl` | ACP templates (admin area) → `acptemplates.tar` |
 | Root `*.tpl` | Older fallback (warning; `--strict` / `--strict-layout` fails) |
 
-PIP XMLs (`option.xml`, `page.xml`, …) stay in the package root. See `PACKAGE-LAYOUT.en.md`.
+PIP XMLs (`option.xml`, `page.xml`, …) stay in the package root. See [Package layout](PACKAGE-LAYOUT.md).
 
 ## HTML output
 
@@ -44,4 +44,4 @@ PIP XMLs (`option.xml`, `page.xml`, …) stay in the package root. See `PACKAGE-
 6. Build: `./tools/build.sh same` (or patch/minor) — template errors stop the build.
 7. Clean up wrong modifiers: `python3 tools/fix-template-xss-escaping.py /path/to/plugin --dry-run`
 
-See also: `tools/docs/SECURITY-CHECKS.en.md`, `check-template-xss.py`.
+See also: [Security checks](SECURITY-CHECKS.md), `check-template-xss.py`.

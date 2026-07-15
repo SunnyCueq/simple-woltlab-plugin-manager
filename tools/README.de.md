@@ -6,7 +6,7 @@
 
 ## Überblick
 
-Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, TypeScript kompilieren, entpacken, Setup und Git-Push. Einstieg meist über `./tools.sh` (Menü oder CLI). Ziel: von der Entwicklung bis zum **Plugin-Store**, ohne Docker-Pflicht.
+Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, TypeScript kompilieren, entpacken, Setup und Git-Push. Einstieg meist über `./tools.sh` (Menü oder CLI). Ziel: von der Entwicklung bis zur **lokalen Qualitätsprüfung** und zum optionalen Store-Upload (manuell auf woltlab.com) — ohne Docker-Pflicht.
 
 **Komplette Liste:** [docs/TOOLS-OVERVIEW.de.md](docs/TOOLS-OVERVIEW.de.md) — Kern, Build-Checks, optional, Docker, Intern.
 
@@ -29,7 +29,7 @@ Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, T
 | 2 | TypeScript | kompilieren / Watch |
 | 3 | Unpack | Paket → `temp_edit/` |
 | F | Produktlinie | Basis + Add-ons (`family:*`) |
-| 4 | Plugin validieren | Store-/Sicherheitschecks |
+| 4 | Plugin validieren | lokale Qualitätschecks |
 | 5 | Hilfe / Doku | diese Dokumentation |
 | 6 | Git Push | Commit, Push, Release (Plugin) |
 | 7 | Setup | Core, Docs, Typings, Pfade |
@@ -142,11 +142,11 @@ Nur relevant, wenn die jeweilige Technik im Projekt vorkommt:
 - **TypeScript:** Wenn Quellen da sind und `tsc` fehlschlägt → Build/Validate abbrechen.
 - **PHPStan / ruff:** Freiwillig; ohne Binary oder Config wird übersprungen.
 
-### validate-plugin.sh – Sicherheit und Store-Compliance
+### validate-plugin.sh – Sicherheit und Richtlinien
 
-**Was es macht:** Prüft das Plugin vor Release/Store: PHP/XML-Syntax, Sprachen (DE/EN), Templates, PIP-Quellen, Sicherheit (XSS/SQL-Heuristiken), Store-Regeln und mehr. Manche Punkte bleiben manuell — siehe [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.de.md).
+**Was es macht:** Prüft das Plugin **lokal** vor Release/Store: PHP/XML-Syntax, Sprachen (DE/EN), Templates, PIP-Quellen, Sicherheit (XSS/SQL-Heuristiken), Richtlinien und mehr. Lädt **nichts** hoch. Manche Punkte bleiben manuell — siehe [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.de.md).
 
-**Wann:** Vor jedem Release oder Store-Upload.
+**Wann:** Vor jedem Release oder vor dem echten Store-Upload.
 
 ```bash
 ./tools/validate-plugin.sh [--strict] [Plugin-Pfad]

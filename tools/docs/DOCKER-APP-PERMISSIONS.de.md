@@ -1,8 +1,12 @@
 # Docker: App-Berechtigungen nach `docker cp`
 
+!!! note "Wann brauche ich das?"
+
+    Nur bei **Docker-Hotfixes** oder nach `prepare-acp-install` / `docker cp` in App-Verzeichnisse. Reiner Build/Validate auf dem Host braucht das nicht. Ablauf mit ACP: [ACP-Install](ACP-PACKAGE-INSTALL.md).
+
 ## Problem
 
-Nach `docker cp` (Paket oder App-Dateien) gehören die Dateien oft **root**, der ACP-Installer läuft aber als **www-data**:
+Nach `docker cp` (Paket oder App-Dateien) gehören die Dateien oft dem **Host-User** (oder root), der ACP-Installer läuft aber als **www-data**:
 
 ```
 fopen(/var/www/html/myapp/lib/...): Failed to open stream: Permission denied

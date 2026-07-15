@@ -9,6 +9,8 @@ SWPM ist ein **Bash**-Toolkit. Unterstützt werden:
 | **Windows (WSL2)** | Repo in WSL klonen, `./tools.sh` im WSL-Terminal |
 | **Windows (Git Bash)** | `./tools.sh` oder `tools.cmd` aus Explorer/cmd |
 
+Einstieg in die Skripte: [Tools-Übersicht](TOOLS-OVERVIEW.md). Docker-Helfer sind optional und eher unter Linux/macOS/WSL sinnvoll.
+
 ## Voraussetzungen
 
 - **bash**, **git**, **tar** — Pflicht (werden beim Start geprüft)

@@ -2,19 +2,52 @@
 
 Which scripts exist, and what are they for? A short transparency list — details and commands live in the [tools reference](https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/tools/README.md).
 
+!!! info "Build & Validate do not upload anything"
+
+    `./tools.sh build` and `./tools.sh validate` check your plugin **locally only** — similar to the automated rules WoltLab applies later on store upload. **Nothing** is sent to woltlab.com. Real store upload is a later, manual step (see [Plugin Store checklist](PLUGIN-STORE-CHECKLIST.md)).
+
 ## Everyday path (short)
 
-1. Plugin sources in a folder with `package.xml` (often `temp_edit/`)
+1. Plugin sources in a folder with `package.xml` (often `temp_edit/` = unpacked working copy)
 2. `./tools.sh build` — build the package (includes build checks)
-3. `./tools.sh validate …` — check before store/release
-4. Optional: `./tools.sh push` — commit, tag, GitHub release
+3. `./tools.sh validate …` — local quality and guideline checks
+4. Optional: `./tools.sh push` — commit, tag, GitHub release (your repo)
 
-Product line (multiple packages): `./tools.sh family:check` / `family:build` — see [PRODUCT-LINE.en.md](PRODUCT-LINE.md).
+Product line (multiple packages): `./tools.sh family:check` / `family:build` — see [Product line](PRODUCT-LINE.md).
+
+### Short glossary
+
+| Term | Meaning |
+|------|---------|
+| **ACP** | Admin Control Panel — WoltLab Suite admin area |
+| **PIP** | Package Installation Plugin — install step in `package.xml` (files, templates, options, …) |
+| **temp_edit/** | Typical folder for the unpacked plugin working copy |
+| **fail** | Check aborts build/validate |
+| **warn** | Hint only; with `--strict-layout`, layout can become a hard error |
 
 ```bash
 ./tools.sh help                          # all CLI commands
-./tools/swpm-run-checks.sh --mode list   # build check registry
+./tools/swpm-run-checks.sh --mode list   # show build check registry
 ```
+
+---
+
+## Common CLI commands
+
+| Command | Purpose |
+|---------|---------|
+| `./tools.sh` / `./tools.sh help` | Menu or command list |
+| `./tools.sh build` / `build:same` / `build:dry-run` | Build package (version bump / unchanged / dry run) |
+| `./tools.sh validate [plugin]` | Local quality checks (broader than build registry alone) |
+| `./tools.sh family:list` / `order` / `check` | Show product line / order / graph check |
+| `./tools.sh family:build` / `validate` | All packages in dependency order |
+| `./tools.sh family:init` / `add-addon` | Create manifest / add an add-on |
+| `./tools.sh typescript` | Compile TypeScript (when present) |
+| `./tools.sh phpstan [plugin]` | PHPStan only with `phpstan.neon(.dist)` |
+| `./tools.sh lint:python [--fix]` | ruff for manager `tools/*.py` |
+| `./tools.sh push` | Commit, tag, GitHub release |
+| `./tools.sh setup` | Optionally load Core/docs/d.ts |
+| `./tools.sh sync-woltlab-refs` | Refresh reference mirrors (maintainers) |
 
 ---
 
@@ -24,14 +57,14 @@ Product line (multiple packages): `./tools.sh family:check` / `family:build` —
 |------------------|------|
 | `tools.sh` | Entry: menu and CLI |
 | `build.sh` | Build installable `.tar.gz`, version bump/same |
-| `validate-plugin.sh` | Store, security, and structure checks |
+| `validate-plugin.sh` | Local quality, structure, and guideline checks |
 | `typescript.sh` | TypeScript → JavaScript |
 | `unpack.sh` | Unpack package into `temp_edit/` |
-| `gitpush.sh` | Commit, push, tag, release (plugin); notes = changelog + Compare/commits |
+| `gitpush.sh` | Commit, push, tag, release; notes = changelog + Compare/commits |
 | `setup-minimal.sh` | Core, docs, d.ts, paths |
 | `help.sh` | Open documentation |
 | `swpm-family.sh` | Product line (core + add-ons) |
-| `pack-style-tar.sh` | Style archive (`style.tar` / `style.tgz`) |
+| `pack-style-tar.sh` | Style archive (`style.tar` / `style.tgz`) from `package.xml` |
 
 ---
 
@@ -39,11 +72,26 @@ Product line (multiple packages): `./tools.sh family:check` / `family:build` —
 
 Run on **build** via `swpm-run-checks.sh`. Source: `swpm-check-registry.txt`.
 
-| ID | Level | Script | Short |
-|----|-------|--------|-------|
-| language-categories | fail | `check-language-categories.py` | Language XML: category ↔ item |
+**Build vs validate:** Build runs the registry (fail aborts, warn logs). Validate covers the same topics and adds PHP/XML syntax, PIP sources, HTTP APIs, debug code, cloud bans — still **local only**.
+
+### Runner flags
+
+```bash
+./tools/swpm-run-checks.sh --mode list              # list registry
+./tools/swpm-run-checks.sh --mode build [plugin]    # run checks
+./tools/swpm-run-checks.sh --mode build --strict-layout [plugin]
+./tools/swpm-run-checks.sh --mode build --amd-prefix=MyApp [plugin]
+```
+
+- **`needs`:** Checks tagged `language` / `templates` / `lib` / `style` / `js_acp` run only when matching files exist — otherwise skip (not an error).
+- **`--amd-prefix`:** Prefix for AMD/JS checks when it cannot be derived from `package.xml`.
+- **Exit:** `0` ok, `1` fail check failed, `2` runner/argument error.
+
+| ID | Level | Script | Summary |
+|----|-------|--------|---------|
+| language-categories | fail | `check-language-categories.py` | Language XML: category ↔ item → [Language XML](LANGUAGE-XML.md) |
 | language-integrity | fail | `check-language-integrity.py` | Language XML integrity |
-| template-xss | fail | `check-template-xss.py` | Invalid modifiers / script escaping |
+| template-xss | fail | `check-template-xss.py` | Invalid modifiers / script escaping → [Template rules](WOLTLAB-TEMPLATE-RULES.md) |
 | template-modifiers | fail | `check-template-modifiers.py` | Modifier whitelist |
 | template-foreach | fail | `check-template-foreach.py` | Foreach loop variables |
 | endpoint-registration | fail | `check-endpoint-registration.py` | RPC endpoints registered |
@@ -60,7 +108,7 @@ Run on **build** via `swpm-run-checks.sh`. Source: `swpm-check-registry.txt`.
 
 **Outside the registry (but important):** `check-pip-sources.py` — PIP sources vs `package.xml` (build/validate).
 
-More topics and heuristics: [SECURITY-CHECKS.en.md](SECURITY-CHECKS.md).
+Deeper explanations: [Security checks](SECURITY-CHECKS.md). More guides: [Language XML](LANGUAGE-XML.md), [Template rules](WOLTLAB-TEMPLATE-RULES.md), [ACP install](ACP-PACKAGE-INSTALL.md), [Docker permissions](DOCKER-APP-PERMISSIONS.md), [Logging](LOGGING.md).
 
 ---
 
@@ -68,29 +116,31 @@ More topics and heuristics: [SECURITY-CHECKS.en.md](SECURITY-CHECKS.md).
 
 | Script / command | Role |
 |------------------|------|
-| `check-typescript.sh` | `tsc` when `tsconfig` / `ts/` exist |
-| `run-phpstan.sh` | PHPStan only with `phpstan.neon(.dist)` |
-| `lint-manager-python.sh` / `./tools.sh lint:python` | ruff on manager `tools/*.py` |
-| `fix-template-xss-escaping.py` | Semi-automatic template fix (no `\|encodeHTML`) |
+| `check-typescript.sh` | `tsc` when `tsconfig` / `ts/` exists |
+| `run-phpstan.sh` | PHPStan only with `phpstan.neon(.dist)` — otherwise skip |
+| `lint-manager-python.sh` / `./tools.sh lint:python` | ruff for manager `tools/*.py` (not your plugin PHP) |
+| `fix-template-xss-escaping.py` | Semi-automatic template fix (never adds `\|encodeHTML`) |
 
 ---
 
 ## Docker (optional, local)
 
+Only needed if you have a **local WoltLab test instance** in Docker. Core build/validate do not require Docker.
+
 | Script | Role |
 |--------|------|
-| `prepare-acp-install.sh` | Copy package into the web container |
+| `prepare-acp-install.sh` | Place package in the web container |
 | `check-woltlab-app-permissions.sh` | Check permissions |
 | `fix-woltlab-app-permissions.sh` | Fix permissions after `docker cp` |
 | `reset-app-for-acp-install.sh` | Clean up a half-finished app install |
 
-See [ACP-PACKAGE-INSTALL.en.md](ACP-PACKAGE-INSTALL.md).
+See [ACP install](ACP-PACKAGE-INSTALL.md) and [Docker permissions](DOCKER-APP-PERMISSIONS.md).
 
 ---
 
 ## Internal / support
 
-Rarely needed day to day; used by the core scripts:
+Rarely needed day to day; used by core scripts:
 
 | Script | Role |
 |--------|------|
@@ -100,9 +150,13 @@ Rarely needed day to day; used by the core scripts:
 | `swpm-run-checks.sh` | Registry runner |
 | `swpm-family-resolve.sh` | Resolve family manifest |
 | `check-family-deps.py` | Product-line dependency graph |
-| `download-woltlab-core.sh` | Fetch Core (setup) |
+| `download-woltlab-core.sh` | Load Core (setup) |
 | `sync-woltlab-references.sh` | Refresh docs/WCF mirrors |
 | `update-woltlab-version.sh` | Version info |
-| `manager-push.sh` | maintainer only (if present) |
+| `manager-push.sh` | maintainers only (if present) |
 
 `tools/woltlab-plugin-recovery/` is a separate recovery helper — not part of the normal build/validate menu.
+
+### When something fails
+
+Log path and context: [Logging](LOGGING.md).

@@ -1,5 +1,9 @@
 # Log-System der Tools
 
+!!! tip "Bei Build-/Validate-Fehlern"
+
+    Wenn ein Skript scheitert und du mehr Kontext brauchst: hier liegt das zentrale Debug-Log. Übersicht der Skripte: [Tools-Übersicht](TOOLS-OVERVIEW.md).
+
 Die Skripte unter `tools/` schreiben in **eine** zentrale Debug-Log-Datei. Wenn die Standard-Datei nicht beschreibbar ist, fällt die Ausgabe auf `/tmp/woltlab-dev-debug.log` zurück.
 
 ## Konvention

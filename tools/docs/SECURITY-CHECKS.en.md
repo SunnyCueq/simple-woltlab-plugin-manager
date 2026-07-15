@@ -2,22 +2,40 @@
 
 Recurring issues from reviews and WoltLab 6.2.x — as runnable scripts.
 
+!!! info "Local only — no store upload"
+
+    Build and validate **do not upload** anything. They mirror many automated store rules on your machine. Uploading to woltlab.com remains a separate, manual step.
+
 ## How checks run
 
 | Path | What happens |
 |------|----------------|
 | **Build** | Reads `swpm-check-registry.txt` and runs entries via `swpm-run-checks.sh` |
-| **Validate** | Same topics (templates, language, LIKE, …) plus extra store checks |
+| **Validate** | Same topics (templates, language, LIKE, …) plus more guideline checks (syntax, HTTP, debug code, …) — still local |
 
-List all registry entries:
+Full registry including fail/warn and runner flags: [Tools overview](TOOLS-OVERVIEW.md).
 
 ```bash
 ./tools/swpm-run-checks.sh --mode list
+./tools/swpm-run-checks.sh --mode build /path/to/plugin
 ```
 
 New **build** fail checks: add a line in `swpm-check-registry.txt` plus a script under `tools/`.
 
-## Key scripts
+## Registry topics (overview)
+
+The full table is in the [Tools overview](TOOLS-OVERVIEW.md). Deep-dives and related guides:
+
+| Topic | Details |
+|-------|---------|
+| Templates / XSS / modifiers / foreach | Sections below + [Template rules](WOLTLAB-TEMPLATE-RULES.md) |
+| Language (category, integrity, address) | [Language XML](LANGUAGE-XML.md) |
+| LIKE / SQL heuristics / event listeners | Sections below |
+| Style packages / CSS assets | `check-style-package.py`, `check-style-assets.py` |
+| RPC endpoints / AMD `setup` | Registry IDs `endpoint-registration`, `js-amd-exports` |
+| Full store list | [Plugin Store checklist](PLUGIN-STORE-CHECKLIST.md) |
+
+## Key scripts (deep-dive focus)
 
 | Script | Purpose |
 |--------|---------|
@@ -27,6 +45,9 @@ New **build** fail checks: add a line in `swpm-check-registry.txt` plus a script
 | `check-like-escaping.py` | LIKE without `escapeLikeValue()` |
 | `check-style-package.py` | Style package: `style.xml` / variables / folders |
 | `check-style-assets.py` | CSS `url(...)` pointing at missing files |
+| `check-language-address.py` | DE Sie/Du address tone (warning) |
+| `check-js-amd-exports.py` | AMD named export `setup` |
+| `check-endpoint-registration.py` | RPC controllers registered |
 | `fix-template-xss-escaping.py` | Semi-automatic fix (**never** adds `\|encodeHTML`) |
 
 ---
