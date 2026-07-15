@@ -18,7 +18,7 @@ SWPM is a **Bash** toolkit. It runs on:
 - **php** — optional (PHP syntax check in `validate-plugin.sh`)
 - **Node.js / npm** — optional (TypeScript in your plugin)
 
-Plain **cmd.exe** and **PowerShell** are not supported directly; use **Git Bash** or **WSL2**.
+Plain **cmd.exe** and **PowerShell** are not supported directly — please use **Git Bash** or **WSL2**.
 
 ## Windows tips
 

@@ -2,13 +2,13 @@
 
 **[English version](CONTRIBUTING.md)**
 
-SWPM ist ein **generisches** Toolkit für beliebige WoltLab-Plugin-Projekte. Es darf keine fest verdrahteten Referenzen auf ein einzelnes Produkt-Plugin enthalten.
+SWPM ist ein **generisches** Toolkit für beliebige WoltLab-Plugin-Projekte. Es darf keine fest verdrahteten Bezüge auf ein einzelnes Produkt-Plugin enthalten.
 
 ## Harte Regeln
 
-1. Paket-Metadaten aus der `package.xml` des Nutzers (`tools/swpm-package-resolve.sh`) oder `tools/.env` auflösen — niemals Vendor-/Package-/App-Pfade hardcoden.
+1. Paket-Metadaten aus der `package.xml` des Nutzers (`tools/swpm-package-resolve.sh`) oder aus `tools/.env` lesen — keine fest eingetragenen Vendor-/Package-/App-Pfade.
 2. Produktspezifische Skripte, Testdaten und Doku gehören ins **Plugin-Repository**, nicht hierher.
-3. Docker-Helfer sind **optionale** Shortcuts für lokale Entwicklung; Kern-Tools (`build.sh`, `validate-plugin.sh`, `tools.sh`) müssen ohne Docker funktionieren.
+3. Docker-Helfer sind **optional** für die lokale Entwicklung; die Kern-Tools (`build.sh`, `validate-plugin.sh`, `tools.sh`) müssen ohne Docker laufen.
 
 Vollständige Policy: `.cursor/rules/swpm-generic-only.mdc`.
 
@@ -16,3 +16,4 @@ Vollständige Policy: `.cursor/rules/swpm-generic-only.mdc`.
 
 - Alle Anleitungen auf **Deutsch und Englisch** (`*.de.md` / `*.en.md` oder `README.md` / `README.de.md`).
 - Index: [tools/docs/README.de.md](tools/docs/README.de.md)
+- Neue Build-Fail-Checks: Eintrag in `tools/swpm-check-registry.txt` + Skript unter `tools/` (siehe [SECURITY-CHECKS.de.md](tools/docs/SECURITY-CHECKS.de.md)).

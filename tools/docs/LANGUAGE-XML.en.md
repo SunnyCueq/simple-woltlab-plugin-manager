@@ -2,11 +2,11 @@
 
 **[Deutsche Version](LANGUAGE-XML.de.md)**
 
-Findings from plugin reviews / WoltLab 6.2.5 — prevents ACP errors during package updates.
+So translations work on package update and at runtime. Common pitfalls from reviews and WoltLab 6.2.x.
 
 ## Category ↔ item name (required)
 
-WoltLab validates each `<item>` against its parent `<category>` on import (`LanguageEditor::validateItemName`).
+On import, WoltLab checks each `<item>` against its parent `<category>` (`LanguageEditor::validateItemName`).
 
 **Rule:** An item’s `name` must
 

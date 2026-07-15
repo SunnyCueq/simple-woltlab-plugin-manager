@@ -2,7 +2,7 @@
 
 **[English version](README.md)**
 
-Zentraler Index der Anleitungen im Simple WoltLab Plugin Manager. Jedes Thema gibt es auf **Deutsch** und **Englisch**.
+Index der Anleitungen im Simple WoltLab Plugin Manager — jedes Thema auf **Deutsch** und **Englisch**.
 
 ## Einstieg
 
@@ -31,3 +31,5 @@ Zentraler Index der Anleitungen im Simple WoltLab Plugin Manager. Jedes Thema gi
 | Language-XML | [LANGUAGE-XML.en.md](LANGUAGE-XML.en.md) | [LANGUAGE-XML.de.md](LANGUAGE-XML.de.md) |
 | Template-Regeln | [WOLTLAB-TEMPLATE-RULES.en.md](WOLTLAB-TEMPLATE-RULES.en.md) | [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.de.md) |
 | Debug-Logging | [LOGGING.en.md](LOGGING.en.md) | [LOGGING.de.md](LOGGING.de.md) |
+
+**Check-Registry & optionale Hooks:** Die Build-Prüfungen stehen in `tools/swpm-check-registry.txt` (Liste: `./tools/swpm-run-checks.sh --mode list`). TypeScript/PHPStan/ruff: Abschnitt in [tools/README.de.md](../README.de.md).

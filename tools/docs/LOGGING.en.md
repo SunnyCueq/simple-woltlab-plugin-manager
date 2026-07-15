@@ -2,7 +2,7 @@
 
 **[Deutsche Version](LOGGING.de.md)**
 
-All scripts in `tools/` use a **central debug log**. There is exactly **one** log file; output goes there and optionally (on errors) to the fallback `/tmp/woltlab-dev-debug.log` if the default file is not writable.
+Scripts under `tools/` write to **one** central debug log file. If the default file is not writable, output falls back to `/tmp/woltlab-dev-debug.log`.
 
 ## Convention
 

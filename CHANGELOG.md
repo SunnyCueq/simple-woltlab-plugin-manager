@@ -4,13 +4,14 @@
 
 ### Plugin-Manager
 
+- **Doku:** Menü/CLI und Guides an aktuellen Stand angeglichen; Schreibstil-Pass (verständlicher, ohne Rewrite) über Nutzer-READMEs und `tools/docs/`.
 - **Optional Qualitätshooks:** `check-typescript.sh` (Build/Validate bei `tsconfig`/`.ts`); `run-phpstan.sh` (nur mit `phpstan.neon(.dist)` im Plugin); `./tools.sh lint:python` (ruff für Manager-`tools/*.py`, Skip ohne Binary).
 - **Style-Pakete:** `pack-style-tar.sh` packt Variablen, Previews, `images/`/`templates/` und schreibt `style.tar` oder `style.tgz` laut `package.xml`; `check-style-package.py` in der Registry. scssphp bewusst nicht eingebunden (Suite kompiliert aus Variablen). Doku: `PACKAGE-LAYOUT`.
 - **Produktlinie:** `swpm-family.json` + `check-family-deps.py` / `swpm-family.sh` — Multi-Paket Build/Validate in Dep-Reihenfolge (genau eine Graph-Komponente); optional Scaffold (`family:init --scaffold`). Discovery überspringt u. a. `examples/`/`fixtures/`; leere Basis-`<version>` bei `minversion` = Fehler; `add-addon` leitet Basis-ID aus Topo-Root ab (`--json`, nur bei gültigem Graph). Scaffold legt `lib/.gitkeep` an; Workspace-Discovery über `--scan-workspace`; `SWPM_FAMILY_RUN=1` ignoriert `.env`-Package-IDs. Fixture: `tools/fixtures/family-demo/`.
 - **Doku Produktlinie:** `PRODUCT-LINE.de.md` / `.en.md` — Ordnerlayouts (Geschwister vs. SWPM-Root), Scaffold vs. echte `package.xml`, Schritt-für-Schritt, Manifest-Felder, Checkliste, Anti-Patterns, Glossar (laienverständlich, technisch präzise).
 - **Build:** Plugin-/Add-on-Pakete ohne `<applicationdirectory>` sind gültig (nur Apps brauchen das Feld). `family:build` staged Root-Layout-Pakete (`package.xml` im Root) automatisch über `_family-stage/` und kopiert Archive nach `releases/`.
 - **Build:** Absolute Plugin-Roots; `TOOLS_DIR` immer SWPM-`tools/` (externe Pakete).
-- **Checks:** Gemeinsame Registry `swpm-check-registry.txt` + Runner `swpm-run-checks.sh` — Build führt dieselben Fail-Checks wie Validate (Sprache, Templates, LIKE, Endpoints, AMD). PIP-Quellen bleiben separat in `build.sh`.
+- **Checks:** Registry `swpm-check-registry.txt` + Runner `swpm-run-checks.sh` — der **Build** führt die Fail-Checks darüber aus. Validate deckt dieselben Themen (plus Store) ab, aber nicht 1:1 über denselben Runner. PIP-Quellen bleiben separat in `build.sh`.
 - **Template-Layout:** `templates/` ist kanonischer Quellort für Frontend-`.tpl`; Root-`*.tpl` warnt (Legacy-Fallback), `--strict-layout` / `validate-plugin.sh --strict` failt. **Beide Layouts gleichzeitig** → Build-Fehler. Unpack entpackt `templates.tar` nach `templates/`. Docs: `PACKAGE-LAYOUT`, README, `check-template-layout.py`.
 - **Doku:** Fremdtool-Vergleiche entfernt; Layout-Guide heißt `PACKAGE-LAYOUT`.
 - **Generisch:** AMD-Export-Check ohne festes App-Präfix (`check-js-amd-exports.py` + Prefix aus `package.xml`); Sprach-XML-Beispiele nur noch `myapp.*`.

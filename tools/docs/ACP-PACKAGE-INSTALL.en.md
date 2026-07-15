@@ -2,7 +2,7 @@
 
 **[Deutsche Version](ACP-PACKAGE-INSTALL.de.md)**
 
-Standard workflow for testing built plugins in a local WoltLab installation.
+How to test built plugins in your local WoltLab installation via the ACP (Admin Control Panel).
 
 ## ACP URL
 
@@ -26,7 +26,7 @@ Alternatively: **Configuration → Packages → Install package**
 
 ## Permissions (Docker — required)
 
-The ACP installer runs as **`www-data`**. Files copied with `docker cp` often belong to the host user (UID 1000) → updates fail with *Permission denied*.
+The ACP installer runs as **`www-data`**. Files from `docker cp` often belong to the host user (e.g. UID 1000) — the update then fails with *Permission denied*.
 
 **Check before ACP upload:**
 

@@ -5,7 +5,7 @@
 <h1 align="center">Simple WoltLab Plugin Manager</h1>
 
 <p align="center">
-  <strong>Plattformübergreifende CLI-Workbench für WoltLab-Plugins — entstanden beim eigenen Plugin-Bau, semi-automatisiert mit Checks und Validierung.</strong>
+  <strong>CLI-Workbench für WoltLab-Plugins auf Linux, macOS und Windows — aus der Praxis entstanden, mit Checks und Validierung im Terminal.</strong>
 </p>
 
 <p align="center">
@@ -29,11 +29,9 @@
 
 ## Über das Projekt
 
-**SWPM** ist aus der Praxis entstanden: Beim Entwickeln eigener WoltLab-Suite-Plugins musste ich immer wieder dieselben Schritte manuell erledigen — `package.xml` packen, Checks fahren, Store-Regeln prüfen, Übersetzungen abgleichen. SWPM semi-automatisiert genau diesen Workflow in einem Terminal-Menü, damit der Fokus auf dem Plugin bleibt.
+**SWPM** kommt aus dem Alltag: Beim Bau eigener WoltLab-Suite-Plugins wiederholen sich dieselben Schritte — Paket schnüren (`package.xml`), Checks laufen lassen, Store-Regeln und Übersetzungen prüfen. SWPM nimmt genau diesen Workflow ins Terminal-Menü, damit der Fokus beim Plugin bleibt.
 
-Heute ist es ein **generisches**, plattformübergreifendes CLI-Toolkit für den kompletten Lebenszyklus: Setup, Build, Validierung und GitHub-Release — ohne Bindung an ein bestimmtes Produkt-Plugin.
-
-Orientierung an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/).
+Heute ist es ein **generisches** CLI-Toolkit für Setup, Build, Validierung und GitHub-Release — ohne Bindung an ein bestimmtes Produkt-Plugin. Orientiert an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/).
 
 ---
 
@@ -42,11 +40,11 @@ Orientierung an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.w
 - **Interaktives Menü** — `./tools.sh` für Build, Validierung, TypeScript, Git-Push und Setup.
 - **Paket-Build** — Installierbare `.tar.gz`-Archive mit patch/minor/major/same; [Quellenlayouts](tools/docs/PACKAGE-LAYOUT.de.md) (`files/`, `files_wcf/`, `templates/`, Style-Pakete als `style.tar`/`style.tgz`, `--json` für CI).
 - **Produktlinie** — Optional Basis + Zusatzpakete über `swpm-family.json` (`family:build` / `family:validate`); siehe [PRODUCT-LINE.de.md](tools/docs/PRODUCT-LINE.de.md).
-- **Validierung** — PHP/XML, XSS/SQL-Heuristiken, DE/EN-Sprachkeys, PIP-Quellen (DevTools-Parität), Store-Checkliste; TypeScript-Check bei vorhandenen Quellen; optional PHPStan (`phpstan.neon`) und `./tools.sh lint:python` (ruff).
-- **Workspace-Setup** — Optional WoltLab Core, offizielle Doku, WCF-Quellcode und [WoltLab d.ts](https://github.com/WoltLab/d.ts).
+- **Validierung** — PHP/XML, XSS/SQL-Heuristiken, DE/EN-Sprachkeys, PIP-Quellen, Store-Checkliste; TypeScript-Check wenn Quellen vorhanden; optional PHPStan (`phpstan.neon`) und `./tools.sh lint:python` (ruff).
+- **Workspace-Setup** — Optional: WoltLab Core, offizielle Doku, WCF-Quellcode und [WoltLab d.ts](https://github.com/WoltLab/d.ts).
 - **Release** — Commit, Push, Tag und GitHub-Release über `gitpush.sh`.
 - **Plattformen** — Linux, macOS, Windows (WSL2 oder Git Bash); unter Windows `tools.cmd`.
-- **Docker optional** — Lokale ACP-Installation und Berechtigungen; **Kern-Tools laufen ohne Docker**.
+- **Docker optional** — Helfer für lokale ACP-Installation und Berechtigungen; die **Kern-Tools laufen ohne Docker**.
 
 ---
 
@@ -60,7 +58,7 @@ Orientierung an den offiziellen [WoltLab Plugin-Store-Richtlinien](https://www.w
 | Paketierung | `tar`, `package.xml`, WoltLab-PIP-Archive |
 | Lokaler Test (optional) | Docker, DDEV |
 
-Pflicht für den Kern: **Bash + Git + tar**. Python 3 wird für Validierung dringend empfohlen.
+Pflicht für den Kern: **Bash + Git + tar**. Für die Validierung ist **Python 3** stark empfohlen.
 
 ---
 
@@ -136,6 +134,7 @@ Beispiel (gekürzt):
   1   Build / Update-Paket
   2   TypeScript
   3   Unpack
+  F   Produktlinie
   4   Plugin validieren
   …
 ```
@@ -152,8 +151,16 @@ Beispiel (gekürzt):
 # Validierung vor Store-Einreichung
 ./tools.sh validate basis-plugin
 
+# Produktlinie (Basis + Add-ons)
+./tools.sh family:check
+./tools.sh family:build patch
+
 # TypeScript kompilieren
 ./tools.sh typescript
+
+# Optional: PHPStan (nur mit phpstan.neon) / ruff für Manager-Python
+./tools.sh phpstan basis-plugin
+./tools.sh lint:python
 
 # Commit, Push, GitHub-Release
 ./tools.sh push
@@ -200,7 +207,7 @@ Details: **[CONTRIBUTING.de.md](CONTRIBUTING.de.md)** (EN: [CONTRIBUTING.md](CON
 
 Dieses Projekt steht unter der **[MIT-Lizenz](LICENSE)**.
 
-Du darfst SWPM frei nutzen, ändern und weitergeben. Den Copyright-Hinweis bitte beibehalten. Mitwirken ist ausdrücklich erwünscht; die Software als eigenes proprietäres Produkt ohne Namensnennung auszugeben, entspricht nicht der Idee dieser Lizenz.
+Du darfst SWPM frei nutzen, ändern und weitergeben. Bitte den Copyright-Hinweis belassen. Mitwirken ist willkommen; die Software als eigenes proprietäres Produkt ohne Namensnennung auszugeben, entspricht nicht der Idee dieser Lizenz.
 
 ---
 

@@ -5,7 +5,7 @@
 <h1 align="center">Simple WoltLab Plugin Manager</h1>
 
 <p align="center">
-  <strong>Cross-platform CLI workbench for WoltLab Suite plugin development — born from building real plugins, semi-automated with checks and validation.</strong>
+  <strong>Cross-platform CLI workbench for WoltLab plugins — built from real plugin work, with checks and validation in the terminal.</strong>
 </p>
 
 <p align="center">
@@ -29,11 +29,9 @@
 
 ## About the project
 
-**SWPM** started as a personal workbench: while building my own WoltLab Suite plugins, I kept hitting the same manual steps — packaging `package.xml`, running sanity checks, validating store rules, keeping translations in sync. SWPM semi-automates that workflow in one terminal menu so I can focus on the plugin itself.
+**SWPM** comes from day-to-day work: building WoltLab Suite plugins means repeating the same steps — packaging (`package.xml`), running checks, watching store rules and translations. SWPM puts that workflow into one terminal menu so you can stay focused on the plugin.
 
-Today it is a **generic**, cross-platform CLI toolkit for the full plugin lifecycle: setup, build, validation, and GitHub release — without tying you to a single product plugin.
-
-It stays aligned with the official [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/).
+Today it is a **generic** CLI toolkit for setup, build, validation, and GitHub release — not tied to a single product plugin. It stays aligned with the official [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/).
 
 ---
 
@@ -42,11 +40,11 @@ It stays aligned with the official [WoltLab Plugin Store guidelines](https://www
 - **Interactive menu** — `./tools.sh` for build, validate, TypeScript, Git push, and setup.
 - **Package build** — Creates installable `.tar.gz` archives with patch/minor/major/same versioning; [source layouts](tools/docs/PACKAGE-LAYOUT.en.md) (`files/`, `files_wcf/`, `templates/`, style packages as `style.tar`/`style.tgz`, `--json` for CI).
 - **Product line** — Optional core + add-ons via `swpm-family.json` (`family:build` / `family:validate`); see [PRODUCT-LINE.en.md](tools/docs/PRODUCT-LINE.en.md).
-- **Validation** — PHP/XML syntax, XSS/SQL heuristics, DE/EN language keys, PIP source checks (DevTools parity), store checklist; TypeScript check when sources exist; optional PHPStan (`phpstan.neon`) and `./tools.sh lint:python` (ruff).
-- **Workspace setup** — Optional download of WoltLab Core, clone of official docs, WCF source, and [WoltLab d.ts](https://github.com/WoltLab/d.ts) typings.
+- **Validation** — PHP/XML, XSS/SQL heuristics, DE/EN language keys, PIP sources, store checklist; TypeScript check when sources exist; optional PHPStan (`phpstan.neon`) and `./tools.sh lint:python` (ruff).
+- **Workspace setup** — Optional: WoltLab Core, official docs, WCF source, and [WoltLab d.ts](https://github.com/WoltLab/d.ts) typings.
 - **Release workflow** — Commit, push, tag, and GitHub release via `gitpush.sh`.
-- **Cross-platform** — Linux, macOS, Windows (WSL2 or Git Bash); entry via `tools.cmd` on Windows.
-- **Optional Docker helpers** — Local ACP install and permission fixes; **not required** for core tools.
+- **Cross-platform** — Linux, macOS, Windows (WSL2 or Git Bash); on Windows use `tools.cmd`.
+- **Optional Docker helpers** — Local ACP install and permission fixes; **core tools run without Docker**.
 
 ---
 
@@ -136,6 +134,7 @@ Example menu (abbreviated):
   1   Build / Update-Paket
   2   TypeScript
   3   Unpack
+  F   Product line
   4   Plugin validieren
   …
 ```
@@ -152,8 +151,16 @@ Example menu (abbreviated):
 # Validate before store submission
 ./tools.sh validate basis-plugin
 
+# Product line (core + add-ons)
+./tools.sh family:check
+./tools.sh family:build patch
+
 # TypeScript compile
 ./tools.sh typescript
+
+# Optional: PHPStan (needs phpstan.neon) / ruff for manager Python
+./tools.sh phpstan basis-plugin
+./tools.sh lint:python
 
 # Commit, push, GitHub release
 ./tools.sh push

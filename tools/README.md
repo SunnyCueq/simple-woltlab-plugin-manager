@@ -6,33 +6,36 @@
 
 ## Overview
 
-The `tools/` folder contains all scripts used for **WoltLab plugin development**: building plugins, pushing to Git, creating releases, compiling TypeScript, unpacking packages, validating code, and running a one-time setup. The tools support the path from development to the **WoltLab Plugin Store** and take WoltLab and Store requirements into account. Everything is driven from the main menu (`tools.sh`) or by calling the scripts directly. This page describes each tool so you know when and how to use it.
+The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, compile TypeScript, unpack packages, run setup, and push to Git. Most people start with `./tools.sh` (menu or CLI). Goal: from development to the **Plugin Store**, without requiring Docker.
 
-**Platforms:** Linux, macOS, **Windows (WSL2)** and **Windows (Git Bash)**. Use `tools.cmd` from cmd/Explorer on Windows. Plain cmd/PowerShell are not supported. Details: [docs/CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md).
+**Platforms:** Linux, macOS, Windows (WSL2 or Git Bash). From cmd/Explorer on Windows: `tools.cmd`. Details: [docs/CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md).
 
-**Note:** `tools/woltlab-plugin-recovery/` is a separate recovery helper (not part of the generic build/validate menu). Treat it as optional/out-of-band; core SWPM scripts must stay plugin-agnostic.
+**Note:** `tools/woltlab-plugin-recovery/` is a separate recovery helper — not part of the normal build/validate menu.
 
 ---
 
 ## Main menu (tools.sh)
 
-**What it does:** Starts the interactive menu. From the repo root you can run `./tools.sh` or `./tools/tools.sh`. The menu shows the current state (e.g. detected plugins) and numbered options.
+```bash
+./tools.sh          # interactive menu
+./tools.sh help     # all CLI commands
+```
 
-**Options:**
-
-| Option | Name | Short description |
-|--------|------|-------------------|
-| 1 | Build | Build plugin(s) and bump version (patch/minor/major). |
-| 2 | Git Push | Commit, push, and create a GitHub release for your plugin(s). |
-| 3 | TypeScript | Compile TypeScript to JavaScript (normal or watch mode). |
-| 4 | Unpack | Unpack a plugin package into `temp_edit/`. |
-| 5 | Help & Documentation | Open this documentation. |
-| 6 | Plugin Validation | Run security and store-compliance checks. |
-| 7 | Setup / Preparation | Run the one-time setup (Core, docs, typings, paths). |
-| 8 | Repo | Show or change the Git repository (origin) used for push. |
-| 0 | Exit | Quit the menu. |
-
-If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the Plugin Manager itself.
+| Key | Name | Short |
+|-----|------|-------|
+| 1 | Build / update package | `patch` · `minor` · `major` · `same` |
+| 2 | TypeScript | compile / watch |
+| 3 | Unpack | package → `temp_edit/` |
+| F | Product line | core + add-ons (`family:*`) |
+| 4 | Validate plugin | store / security checks |
+| 5 | Help / docs | this documentation |
+| 6 | Git Push | commit, push, release (plugin) |
+| 7 | Setup | Core, docs, typings, paths |
+| 8 | Repo (origin) | show/set remote |
+| 9 | WoltLab version | Core/docs info |
+| L | Language DE/EN | menu language |
+| M | Manager Push | only if `manager-push.sh` exists |
+| 0 | Exit | |
 
 ---
 
@@ -40,9 +43,9 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 
 ### build.sh – Build plugins
 
-**What it does:** Finds your plugin(s) (folders with `package.xml`), compiles TypeScript if present, and builds an installable plugin archive (e.g. `.tar.gz`). It can also bump the version in `package.xml` (patch, minor, or major).
+**What it does:** Finds your plugin (folder with `package.xml`), compiles TypeScript when needed, and builds an installable `.tar.gz`. It can also bump the version in `package.xml`.
 
-**When to use it:** Whenever you have changed plugin code and want an installable package to test in WoltLab or to ship.
+**When:** After code changes, when you need a package to test or ship.
 
 **Command:**
 
@@ -50,29 +53,29 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 ./tools/build.sh [target] [version_type]
 ```
 
-- `target`: leave empty for “first plugin”, or give a plugin directory name (e.g. `basis-plugin`), or `all` for all plugins.
-- `version_type`: `patch` (default), `minor`, or `major`.
+- `target`: empty = first plugin, folder name (e.g. `basis-plugin`), or `all`
+- `version_type`: `patch` (default), `minor`, `major`, or `same` (keep version)
 
 **Examples:**
 
 ```bash
-./tools/build.sh              # First plugin, patch version
-./tools/build.sh patch        # Same
+./tools/build.sh              # First plugin, patch
+./tools/build.sh patch
 ./tools/build.sh basis-plugin minor
-./tools/build.sh all patch
+./tools/build.sh all same
 ./tools/build.sh --json patch        # CI: JSON report
-./tools/build.sh --dry-run patch     # Show planned package contents only
+./tools/build.sh --dry-run patch     # Show planned contents only
 ```
 
-**Layouts:** Classic (`lib/`, `js/`, …) or `files/` / `files_wcf/` / `style/style.xml`. See [docs/PACKAGE-LAYOUT.en.md](docs/PACKAGE-LAYOUT.en.md).
+**Layouts:** Classic (`lib/`, `js/`, …), `files/` / `files_wcf/`, or style package (`style/style.xml` → `style.tar`/`style.tgz`). See [docs/PACKAGE-LAYOUT.en.md](docs/PACKAGE-LAYOUT.en.md).
 
 ---
 
 ### gitpush.sh – Commit, push, and release (plugins)
 
-**What it does:** Detects which plugin(s) have changes, commits them, pushes to the configured Git remote (origin), creates a version tag, and optionally a GitHub release with notes. This is for **plugin** releases, not for the Plugin Manager repo itself.
+**What it does:** Finds changed plugins, commits, pushes to `origin`, creates a version tag, and can open a GitHub release. For **plugin** releases — not the Plugin Manager repo itself.
 
-**When to use it:** When you are happy with your plugin changes and want to publish them to GitHub (commit + push + tag + release).
+**When:** When plugin changes are ready to go to GitHub (commit + push + tag + release).
 
 **Command:**
 
@@ -80,12 +83,12 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 ./tools/gitpush.sh [target] [commit_message]
 ```
 
-- `target`: leave empty for auto-detect, or a plugin name, or `all`.
-- `commit_message`: optional; otherwise one is generated from the plugin version.
+- `target`: empty = auto-detect, plugin name, or `all`
+- `commit_message`: optional; otherwise derived from the plugin version
 
-**Requirements:** Git remote `origin` must point to your plugin (or workspace) repo. Use SSH or a Personal Access Token for GitHub. You can set `GIT_REPO_URL` in `tools/.env` or use menu option 8 to set the repo.
+**Requirements:** `origin` points at your plugin or workspace repo (SSH or Personal Access Token). Or set `GIT_REPO_URL` in `tools/.env` / menu option 8.
 
-> **Tip:** Run this from the repo root. The script uses the same exclude list as the rest of the tools (e.g. it does not commit the contents of `woltlab-docs`, `woltlab-github`, or `tools/woltlab-dev/public`).
+> **Tip:** Run from the repo root. Known reference folders (e.g. `woltlab-docs`, `woltlab-github`) are not committed.
 
 ---
 
@@ -125,35 +128,33 @@ If `manager-push.sh` exists (maintainer only), option 9 appears for pushing the 
 
 ### Optional checks (TypeScript, PHPStan, ruff)
 
+Only when that tech is part of the project:
+
 ```bash
-./tools/check-typescript.sh [--no-emit] [plugin]   # when tsconfig / ts/ exist — also in build + validate
-./tools/run-phpstan.sh [plugin]                    # only if phpstan.neon(.dist) exists
-./tools.sh lint:python                             # ruff on tools/*.py (manager); skips if ruff missing
+./tools/check-typescript.sh [--no-emit] [plugin]   # when tsconfig / ts/ exist — build + validate
+./tools/run-phpstan.sh [plugin]                    # only with phpstan.neon(.dist)
+./tools.sh lint:python                             # ruff on manager tools/*.py (skips if missing)
 ./tools.sh phpstan [plugin]
 ```
 
-PHPStan and ruff are **opt-in** (binary + plugin config where needed). TypeScript fails build/validate when sources exist and `tsc` fails.
+- **TypeScript:** If sources exist and `tsc` fails → build/validate abort.
+- **PHPStan / ruff:** Optional; skipped without binary or config.
 
 ### validate-plugin.sh – Security and store compliance
 
-**What it does:** Checks your plugin for common issues before release or store submission. It validates: **PHP and XML syntax**; **translations** (DE and EN present and consistent); **template layout** (`templates/` canonical; root `*.tpl` warns, `--strict` fails); **PIP sources** (DevTools parity: syncable vs package-only instructions); **plugin language keys** used in code vs `language/*.xml` with **file:line** locations; **minimum WoltLab version**; that no external package servers are used; **security** (e.g. SQL injection, XSS); **debug and development code** that should not ship; and **cloud/compatibility** and other store-related rules. The checks align with the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.en.md), which also lists manual steps the script does not cover.
+**What it does:** Checks the plugin before release/store: PHP/XML syntax, languages (DE/EN), templates, PIP sources, security heuristics (XSS/SQL), store rules, and more. Some items stay manual — see the [Plugin Store checklist](docs/PLUGIN-STORE-CHECKLIST.en.md).
 
-**When to use it:** Before releasing or submitting to the store, to catch problems early.
-
-**Command:**
+**When:** Before every release or store upload.
 
 ```bash
 ./tools/validate-plugin.sh [--strict] [plugin_path]
 ```
-- `plugin_path`: optional; plugin directory or path. If omitted, the current directory or the first detected plugin is used.
 
-Results and details are shown in the terminal; logs may be written under `/tmp/` (see script output).
-
-**Shared check registry (build ↔ validate):** Fail/warn checks live in `swpm-check-registry.txt` and run via `swpm-run-checks.sh` (wired into `build.sh`). List them with:
+**Check registry (build):** Fail/warn checks for the **build** live in `swpm-check-registry.txt` and run via `swpm-run-checks.sh`. Validate covers the same topics (plus extra store checks) but does not call the runner 1:1. List them:
 
 ```bash
 ./tools/swpm-run-checks.sh --mode list
-./tools/swpm-run-checks.sh --mode build [--strict-layout] [--amd-prefix MyApp] /path/to/temp_edit
+./tools/swpm-run-checks.sh --mode build [--strict-layout] /path/to/temp_edit
 ```
 
 **Individual checks (without full validation):**
@@ -164,13 +165,11 @@ python3 tools/check-language-keys.py /path/to/plugin
 python3 tools/check-template-xss.py /path/to/plugin
 python3 tools/check-like-escaping.py /path/to/plugin
 python3 tools/check-language-categories.py /path/to/plugin
+python3 tools/check-style-package.py /path/to/plugin
 python3 tools/fix-template-xss-escaping.py /path/to/plugin --dry-run
 ```
 
-`check-pip-sources.py` stays outside the registry (needs `package.xml` / `--strict`). `check-language-keys.py` reports missing **app** keys (prefix from `package.xml`) with locations; core `wcf.*` phrases are ignored.
-
-See [docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md) for heuristics and false positives.  
-Language XML category rules: [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md).
+`check-pip-sources.py` stays outside the registry (needs `package.xml`). Details: [docs/SECURITY-CHECKS.en.md](docs/SECURITY-CHECKS.en.md) · languages: [docs/LANGUAGE-XML.en.md](docs/LANGUAGE-XML.en.md)
 
 ---
 
@@ -188,6 +187,20 @@ Language XML category rules: [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md).
 ```
 
 Details: [docs/PRODUCT-LINE.en.md](docs/PRODUCT-LINE.en.md).
+
+---
+
+### prepare-acp-install.sh – Prepare package for ACP upload
+
+**What it does:** Finds the newest `.tar.gz` in the plugin folder, copies it into the local Docker web container (`woltlab-web`), and prints the steps for the manual ACP upload.
+
+**When:** After `./tools/build.sh`, before testing the package in WoltLab. You still pick the file yourself in the ACP dialog.
+
+```bash
+./tools/prepare-acp-install.sh [plugin]
+```
+
+Details: [docs/ACP-PACKAGE-INSTALL.en.md](docs/ACP-PACKAGE-INSTALL.en.md)
 
 ---
 
@@ -263,11 +276,17 @@ After that, your editor and the TypeScript compiler can use WoltLab API types. S
 
 ## Further documentation
 
-Documents in `tools/docs/`:
+Full index: **[docs/README.md](docs/README.md)**
 
-- **[docs/CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md)** — Linux, macOS, Windows (WSL2, Git Bash), `tools.cmd`.
-- **[docs/PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md)** — Checklist before submitting a plugin to the WoltLab store. German: [PLUGIN-STORE-CHECKLIST.de.md](docs/PLUGIN-STORE-CHECKLIST.de.md).
-- **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL validation heuristics (WoltLab 6.2.x).
+| Topic | Link |
+|-------|------|
+| Platforms | [CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md) |
+| Package layout / styles | [PACKAGE-LAYOUT.en.md](docs/PACKAGE-LAYOUT.en.md) |
+| Product line | [PRODUCT-LINE.en.md](docs/PRODUCT-LINE.en.md) |
+| Store checklist | [PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md) |
+| Security checks | [SECURITY-CHECKS.en.md](docs/SECURITY-CHECKS.en.md) |
+| Language XML | [LANGUAGE-XML.en.md](docs/LANGUAGE-XML.en.md) |
+| ACP install (Docker) | [ACP-PACKAGE-INSTALL.en.md](docs/ACP-PACKAGE-INSTALL.en.md) |
 
 ---
 

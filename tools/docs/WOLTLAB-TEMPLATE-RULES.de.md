@@ -2,15 +2,15 @@
 
 **[English version](WOLTLAB-TEMPLATE-RULES.en.md)**
 
-Kurzreferenz für `.tpl`-Dateien in WoltLab-Suite-Plugins. Der Build (`build.sh`) bricht bei Verstößen gegen **ungültige Modifier** ab (`check-template-xss.py`).
+Kurzreferenz für `.tpl`-Dateien in WoltLab-Suite-Plugins. Der Build (`build.sh`) bricht ab, wenn ungültige Modifier gefunden werden (`check-template-xss.py`).
 
 ## Quellort
 
 | Ort | Rolle |
 |-----|--------|
-| `templates/*.tpl` | **Kanonisch** — Frontend-Templates → `templates.tar` |
-| `acptemplates/*.tpl` | ACP-Templates → `acptemplates.tar` |
-| Root-`*.tpl` | Legacy-Fallback (Warnung; `--strict` / `--strict-layout` failt) |
+| `templates/*.tpl` | **Standardort** — Frontend-Templates → `templates.tar` |
+| `acptemplates/*.tpl` | ACP-Templates (Adminbereich) → `acptemplates.tar` |
+| Root-`*.tpl` | Alter Fallback (Warnung; mit `--strict` / `--strict-layout` Fehler) |
 
 PIP-XMLs (`option.xml`, `page.xml`, …) bleiben im Paket-Root. Siehe `PACKAGE-LAYOUT.de.md`.
 

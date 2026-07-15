@@ -2,7 +2,7 @@
 
 **[English version](LOGGING.en.md)**
 
-Alle Skripte im `tools/`-Verzeichnis nutzen ein **zentrales Debug-Log**. Es gibt genau **eine** Log-Datei; die Ausgabe geht dorthin und optional (bei Fehlern) in den Fallback `/tmp/woltlab-dev-debug.log`, wenn die Standard-Datei nicht beschreibbar ist.
+Die Skripte unter `tools/` schreiben in **eine** zentrale Debug-Log-Datei. Wenn die Standard-Datei nicht beschreibbar ist, fällt die Ausgabe auf `/tmp/woltlab-dev-debug.log` zurück.
 
 ## Konvention
 

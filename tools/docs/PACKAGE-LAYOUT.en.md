@@ -2,13 +2,15 @@
 
 **[Deutsche Version](PACKAGE-LAYOUT.de.md)**
 
-SWPM builds an installable archive from your plugin’s source tree (`temp_edit/` or the plugin root). Validation, TypeScript builds, and store checks stay part of the normal workflow.
+Short version: which folders hold your files, and what ends up in the installable `.tar.gz`?
+
+SWPM packs from `temp_edit/` (or the plugin root). Build, TypeScript, and validate are part of the normal flow.
 
 ## Layout folders
 
 | Folder | Produces | Meaning |
 |--------|----------|---------|
-| `templates/` | `templates.tar` | **Canonical** — put frontend templates (`.tpl`) here |
+| `templates/` | `templates.tar` | **Default location** — put frontend templates (`.tpl`) here |
 | `acptemplates/` | `acptemplates.tar` | Templates for the Admin Control Panel (ACP) |
 | `files/` | `files.tar` | Contents of `files/` instead of `lib/`, `acp/`, `style/` in the root |
 | `files_wcf/` | `files_wcf.tar` | Files for the WCF directory instead of `js/` + `lib/bootstrap/` in the root |
@@ -29,7 +31,7 @@ Sources under `style/`:
 
 In `package.xml`, e.g. `<instruction type="style">style.tgz</instruction>` — SWPM writes **that** filename.
 
-**scssphp:** Not part of SWPM. The suite compiles SCSS from variables at install/runtime. Local `.scss` under `style/` is not compiled by SWPM (the checker may warn). App plugins with their own CSS use `style/` plus `check-style-assets.py` (resolvable `url(...)`).
+**scssphp:** Not part of SWPM. WoltLab builds CSS from the variables itself. Local `.scss` under `style/` is not compiled (may warn only). App plugins with ready CSS: `style/` plus `check-style-assets.py`.
 
 **Frontend templates:** The source is `templates/*.tpl`. If `.tpl` files still sit in the root, SWPM keeps packing them (legacy fallback) and warns. If **both** layouts exist at once, the build aborts — move root files into `templates/`. With `build.sh --strict-layout` or `validate-plugin.sh --strict`, root-only `*.tpl` is also an error. Unpack puts `templates.tar` into `templates/` — not as loose files in the root. PIP XMLs (`option.xml`, `page.xml`, …) stay in the package root.
 

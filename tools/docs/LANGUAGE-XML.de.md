@@ -2,11 +2,11 @@
 
 **[English version](LANGUAGE-XML.en.md)**
 
-Erkenntnisse aus Plugin-Reviews / WoltLab 6.2.5 — verhindert ACP-Fehler beim Paket-Update.
+Damit Übersetzungen beim Paket-Update und zur Laufzeit greifen. Typische Stolperfallen aus Reviews und WoltLab 6.2.x.
 
 ## Kategorie ↔ Item-Name (Pflicht)
 
-WoltLab prüft beim Import jedes `<item>` gegen die übergeordnete `<category>` (`LanguageEditor::validateItemName`).
+Beim Import prüft WoltLab jedes `<item>` gegen die übergeordnete `<category>` (`LanguageEditor::validateItemName`).
 
 **Regel:** Der `name` eines Items muss
 

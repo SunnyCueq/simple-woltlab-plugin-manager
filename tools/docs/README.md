@@ -2,7 +2,7 @@
 
 **[Deutsche Version](README.de.md)**
 
-Central index for guides shipped with the Simple WoltLab Plugin Manager. Every topic is available in **English** and **German**.
+Index of guides shipped with the Simple WoltLab Plugin Manager — every topic in **English** and **German**.
 
 ## Getting started
 
@@ -31,3 +31,5 @@ Central index for guides shipped with the Simple WoltLab Plugin Manager. Every t
 | Language XML | [LANGUAGE-XML.en.md](LANGUAGE-XML.en.md) | [LANGUAGE-XML.de.md](LANGUAGE-XML.de.md) |
 | Template rules | [WOLTLAB-TEMPLATE-RULES.en.md](WOLTLAB-TEMPLATE-RULES.en.md) | [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.de.md) |
 | Debug logging | [LOGGING.en.md](LOGGING.en.md) | [LOGGING.de.md](LOGGING.de.md) |
+
+**Check registry & optional hooks:** Build checks live in `tools/swpm-check-registry.txt` (list: `./tools/swpm-run-checks.sh --mode list`). TypeScript/PHPStan/ruff: see [tools/README.md](../README.md).

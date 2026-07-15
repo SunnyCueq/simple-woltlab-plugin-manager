@@ -2,15 +2,15 @@
 
 **[Deutsche Version](WOLTLAB-TEMPLATE-RULES.de.md)**
 
-Quick reference for `.tpl` files in WoltLab Suite plugins. The build (`build.sh`) aborts on **invalid modifiers** (`check-template-xss.py`).
+Quick reference for `.tpl` files in WoltLab Suite plugins. The build (`build.sh`) stops when invalid modifiers are found (`check-template-xss.py`).
 
 ## Source location
 
 | Location | Role |
 |----------|------|
-| `templates/*.tpl` | **Canonical** — frontend templates → `templates.tar` |
-| `acptemplates/*.tpl` | ACP templates → `acptemplates.tar` |
-| Root `*.tpl` | Legacy fallback (warning; `--strict` / `--strict-layout` fails) |
+| `templates/*.tpl` | **Default location** — frontend templates → `templates.tar` |
+| `acptemplates/*.tpl` | ACP templates (admin area) → `acptemplates.tar` |
+| Root `*.tpl` | Older fallback (warning; `--strict` / `--strict-layout` fails) |
 
 PIP XMLs (`option.xml`, `page.xml`, …) stay in the package root. See `PACKAGE-LAYOUT.en.md`.
 

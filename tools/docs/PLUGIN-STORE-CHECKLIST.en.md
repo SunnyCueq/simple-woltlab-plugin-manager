@@ -5,7 +5,7 @@
 **Last updated:** 2026-06-26 (aligned with [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/))  
 **Version:** 1.1.0
 
-WoltLab reviews in **two stages**: automated pre-check on upload, then manual review. Our tools cover stage 1 extensively; stage 2 requires additional manual testing (functionality, UX, permissions).
+WoltLab reviews in **two stages**: automated checks on upload first, then a manual review. Our tools cover stage 1 extensively; stage 2 still needs manual testing (functionality, UX, permissions).
 
 **Required before every store upload:**
 
@@ -14,7 +14,7 @@ WoltLab reviews in **two stages**: automated pre-check on upload, then manual re
 ./tools/validate-plugin.sh [PLUGIN_DIR]
 ```
 
-Or in the main menu: **Option 6) Plugin Validation**
+Or in the main menu: **Option 4) Validate plugin** (or `./tools.sh validate`)
 
 ---
 
@@ -77,7 +77,7 @@ Typical mistakes:
 - [ ] **Event listeners:** no dynamic properties on `$eventObj` (PHP 8.2+)
 - [ ] **Archive:** no junk files in package
 
-See also: [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md), [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.de.md), [LANGUAGE-XML.de.md](LANGUAGE-XML.de.md)
+See also: [SECURITY-CHECKS.en.md](SECURITY-CHECKS.en.md), [WOLTLAB-TEMPLATE-RULES.en.md](WOLTLAB-TEMPLATE-RULES.en.md), [LANGUAGE-XML.en.md](LANGUAGE-XML.en.md)
 
 ---
 
@@ -150,7 +150,7 @@ Same steps as the German checklist: build → validate → manual tests → uplo
 - **WoltLab Docs:** https://docs.woltlab.com/6.2/
 - **Security (DB):** https://docs.woltlab.com/6.0/php/database-access/
 - **Templates:** https://docs.woltlab.com/6.0/view/templates/
-- **Security checks (this repo):** [SECURITY-CHECKS.de.md](SECURITY-CHECKS.de.md)
+- **Security checks (this repo):** [SECURITY-CHECKS.en.md](SECURITY-CHECKS.en.md)
 
 ---
 

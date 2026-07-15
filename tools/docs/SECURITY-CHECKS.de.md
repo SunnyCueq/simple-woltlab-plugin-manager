@@ -2,18 +2,36 @@
 
 **[English version](SECURITY-CHECKS.en.md)**
 
-Erkenntnisse aus Plugin-Reviews und WoltLab 6.2.5, umgesetzt als wiederverwendbare Tools.
+Wiederkehrende Fehler aus Reviews und WoltLab 6.2.x — als prüfbare Skripte.
 
-## Tools
+## Wie die Checks laufen
+
+| Weg | Was passiert |
+|-----|--------------|
+| **Build** | Liest `swpm-check-registry.txt` und führt die Einträge über `swpm-run-checks.sh` aus |
+| **Validate** | Dieselben Themen (Templates, Sprache, LIKE, …) plus weitere Store-Prüfungen |
+
+Liste aller Registry-Einträge:
+
+```bash
+./tools/swpm-run-checks.sh --mode list
+```
+
+Neue **Build**-Fail-Checks: Zeile in `swpm-check-registry.txt` + Skript unter `tools/`.
+
+## Wichtige Skripte
 
 | Skript | Zweck |
 |--------|--------|
-| `check-template-xss.py` | XSS-Heuristik für `.tpl` (ohne False Positives aus `{lang}`, `{unsafe:}`, Kommentaren) |
-| `check-template-layout.py` | Root-`*.tpl` → Warnung „nach templates/ verschieben“ (`--strict` failt) |
-| `check-like-escaping.py` | LIKE ohne `escapeLikeValue()` (WoltLab 6.2.5-Pattern) |
-| `fix-template-xss-escaping.py` | Halbautomatischer Fix für Attribute und `<script>` |
+| `check-template-xss.py` | Ungültige Modifier / Script-Escaping in `.tpl` |
+| `check-template-layout.py` | Root-`*.tpl` → nach `templates/` (`--strict` failt) |
+| `check-template-modifiers.py` | Unbekannte Template-Modifier (z. B. `\|cat`) |
+| `check-like-escaping.py` | LIKE ohne `escapeLikeValue()` |
+| `check-style-package.py` | Style-Paket: `style.xml` / Variablen / Ordner |
+| `check-style-assets.py` | CSS `url(...)` auf fehlende Dateien |
+| `fix-template-xss-escaping.py` | Halbautomatischer Fix (fügt **kein** `\|encodeHTML` hinzu) |
 
-Werden von `validate-plugin.sh` und (über `swpm-check-registry.txt` / `swpm-run-checks.sh`) von `build.sh` genutzt. Neue Fail-Checks in die Registry eintragen — dann greifen sie im Build automatisch.
+---
 
 ## XSS-Check (WoltLab-spezifisch)
 

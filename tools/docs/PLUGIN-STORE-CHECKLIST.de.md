@@ -5,7 +5,7 @@
 **Letzte Aktualisierung:** 2026-06-26 (abgestimmt mit [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/))  
 **Version:** 1.1.0
 
-WoltLab prüft in **zwei Stufen**: automatische Vorabprüfung beim Upload, danach manuelle Sichtung. Unsere Tools decken Stufe 1 weitgehend ab; Stufe 2 erfordert zusätzliche manuelle Tests (Funktion, UX, Berechtigungen).
+WoltLab prüft in **zwei Stufen**: zuerst automatisch beim Upload, danach manuell. Unsere Tools decken Stufe 1 weitgehend ab; Stufe 2 braucht zusätzliche manuelle Tests (Funktion, UX, Berechtigungen).
 
 **Pflicht vor jedem Store-Upload:**
 
@@ -14,7 +14,7 @@ WoltLab prüft in **zwei Stufen**: automatische Vorabprüfung beim Upload, danac
 ./tools/validate-plugin.sh [PLUGIN_DIR]
 ```
 
-Oder im Hauptmenü: **Option 6) Plugin Validierung**
+Oder im Hauptmenü: **Option 4) Plugin validieren** (bzw. `./tools.sh validate`)
 
 ---
 

@@ -4,7 +4,7 @@
 
 ## Problem
 
-Nach `docker cp` eines Plugin-Pakets oder manuellen Kopieren von App-Dateien gehören Dateien oft **root**, der ACP-Installer läuft als **www-data**:
+Nach `docker cp` (Paket oder App-Dateien) gehören die Dateien oft **root**, der ACP-Installer läuft aber als **www-data**:
 
 ```
 fopen(/var/www/html/myapp/lib/...): Failed to open stream: Permission denied

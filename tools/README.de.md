@@ -6,33 +6,36 @@
 
 ## Überblick
 
-Der Ordner `tools/` enthält alle Skripte für die **WoltLab-Plugin-Entwicklung**: Plugins bauen, zu Git pushen, Releases erstellen, TypeScript kompilieren, Pakete entpacken, Code prüfen und ein einmaliges Setup. Die Tools unterstützen den Weg von der Entwicklung bis zum **WoltLab Plugin-Store** und beachten dabei WoltLab- und Store-Anforderungen. Alles wird über das Hauptmenü (`tools.sh`) oder durch direkten Aufruf der Skripte gesteuert. Diese Seite beschreibt jedes Tool, damit du weißt, wann und wie du es nutzt.
+Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, TypeScript kompilieren, entpacken, Setup und Git-Push. Einstieg meist über `./tools.sh` (Menü oder CLI). Ziel: von der Entwicklung bis zum **Plugin-Store**, ohne Docker-Pflicht.
 
-**Plattformen:** Linux, macOS, **Windows (WSL2)** und **Windows (Git Bash)**. Unter Windows aus cmd/Explorer: `tools.cmd`. Reines cmd/PowerShell wird nicht unterstützt. Details: [docs/CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md).
+**Plattformen:** Linux, macOS, Windows (WSL2 oder Git Bash). Unter Windows aus cmd/Explorer: `tools.cmd`. Details: [docs/CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md).
 
-**Hinweis:** `tools/woltlab-plugin-recovery/` ist ein separates Recovery-Hilfsmittel (nicht Teil des generischen Build-/Validate-Menüs). Als optional/außerhalb des Kern-Workflows behandeln; die SWPM-Kernskripte bleiben plugin-agnostisch.
+**Hinweis:** `tools/woltlab-plugin-recovery/` ist ein separates Recovery-Hilfsmittel — nicht Teil des normalen Build-/Validate-Menüs.
 
 ---
 
 ## Hauptmenü (tools.sh)
 
-**Was es macht:** Startet das interaktive Menü. Vom Repo-Root aus kannst du `./tools.sh` oder `./tools/tools.sh` ausführen. Das Menü zeigt den aktuellen Zustand (z. B. erkannte Plugins) und nummerierte Optionen.
+```bash
+./tools.sh          # interaktives Menü
+./tools.sh help     # alle CLI-Befehle
+```
 
-**Optionen:**
-
-| Option | Name | Kurzbeschreibung |
-|--------|------|------------------|
-| 1 | Build | Plugin(s) bauen und Version erhöhen (patch/minor/major). |
-| 2 | Git Push | Committen, pushen und GitHub-Release für dein(e) Plugin(s) erstellen. |
-| 3 | TypeScript | TypeScript nach JavaScript kompilieren (normal oder Watch-Modus). |
-| 4 | Unpack | Plugin-Paket nach `temp_edit/` entpacken. |
-| 5 | Hilfe & Dokumentation | Diese Doku öffnen. |
-| 6 | Plugin-Validierung | Sicherheits- und Store-Compliance-Prüfungen ausführen. |
-| 7 | Setup / Vorbereitung | Einmaliges Setup (Core, Doku, Typings, Pfade). |
-| 8 | Repo | Git-Repository (origin) für Push anzeigen oder ändern. |
-| 0 | Beenden | Menü verlassen. |
-
-Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum Pushen des Plugin-Managers selbst.
+| Taste | Name | Kurz |
+|-------|------|------|
+| 1 | Build / Update-Paket | `patch` · `minor` · `major` · `same` |
+| 2 | TypeScript | kompilieren / Watch |
+| 3 | Unpack | Paket → `temp_edit/` |
+| F | Produktlinie | Basis + Add-ons (`family:*`) |
+| 4 | Plugin validieren | Store-/Sicherheitschecks |
+| 5 | Hilfe / Doku | diese Dokumentation |
+| 6 | Git Push | Commit, Push, Release (Plugin) |
+| 7 | Setup | Core, Docs, Typings, Pfade |
+| 8 | Repo (origin) | Remote anzeigen/setzen |
+| 9 | WoltLab-Version | Core/Docs-Info |
+| L | Sprache DE/EN | Menüsprache |
+| M | Manager Push | nur wenn `manager-push.sh` existiert |
+| 0 | Beenden | |
 
 ---
 
@@ -40,9 +43,9 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 
 ### build.sh – Plugins bauen
 
-**Was es macht:** Findet deine Plugin(s) (Ordner mit `package.xml`), kompiliert bei Bedarf TypeScript und erstellt ein installierbares Plugin-Archiv (z. B. `.tar.gz`). Es kann außerdem die Version in der `package.xml` erhöhen (patch, minor oder major).
+**Was es macht:** Findet dein Plugin (Ordner mit `package.xml`), kompiliert bei Bedarf TypeScript und erzeugt ein installierbares `.tar.gz`. Die Version in der `package.xml` kann erhöht werden.
 
-**Wann nutzen:** Immer wenn du Plugin-Code geändert hast und ein installierbares Paket zum Testen in WoltLab oder zum Ausliefern brauchst.
+**Wann:** Nach Code-Änderungen, wenn du ein Paket zum Testen oder Ausliefern brauchst.
 
 **Befehl:**
 
@@ -50,29 +53,29 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 ./tools/build.sh [Ziel] [Versionstyp]
 ```
 
-- `Ziel`: leer lassen für „erstes Plugin“, oder Plugin-Ordnername (z. B. `basis-plugin`), oder `all` für alle Plugins.
-- `Versionstyp`: `patch` (Standard), `minor` oder `major`.
+- `Ziel`: leer = erstes Plugin, Ordnername (z. B. `basis-plugin`), oder `all`
+- `Versionstyp`: `patch` (Standard), `minor`, `major` oder `same` (Version unverändert)
 
 **Beispiele:**
 
 ```bash
-./tools/build.sh              # Erstes Plugin, Patch-Version
-./tools/build.sh patch        # Dasselbe
+./tools/build.sh              # Erstes Plugin, Patch
+./tools/build.sh patch
 ./tools/build.sh basis-plugin minor
-./tools/build.sh all patch
+./tools/build.sh all same
 ./tools/build.sh --json patch        # CI: JSON-Report
-./tools/build.sh --dry-run patch     # Nur geplanter Paketinhalt
+./tools/build.sh --dry-run patch     # Nur geplanten Inhalt zeigen
 ```
 
-**Layouts:** Klassisch (`lib/`, `js/`, …) oder `files/` / `files_wcf/` / `style/style.xml`. Details: [docs/PACKAGE-LAYOUT.de.md](docs/PACKAGE-LAYOUT.de.md).
+**Layouts:** Klassisch (`lib/`, `js/`, …), `files/` / `files_wcf/`, oder Style-Paket (`style/style.xml` → `style.tar`/`style.tgz`). Details: [docs/PACKAGE-LAYOUT.de.md](docs/PACKAGE-LAYOUT.de.md).
 
 ---
 
 ### gitpush.sh – Committen, pushen, Release (Plugins)
 
-**Was es macht:** Erkennt, welche Plugin(s) geändert wurden, committet sie, pusht zum konfigurierten Git-Remote (origin), erstellt einen Versions-Tag und optional ein GitHub-Release mit Notizen. Gilt für **Plugin-**Releases, nicht für das Plugin-Manager-Repo selbst.
+**Was es macht:** Findet geänderte Plugins, committed, pusht zu `origin`, setzt einen Versions-Tag und kann ein GitHub-Release anlegen. Für **Plugin**-Releases — nicht für das Plugin-Manager-Repo selbst.
 
-**Wann nutzen:** Wenn du mit deinen Plugin-Änderungen zufrieden bist und sie auf GitHub veröffentlichen willst (Commit + Push + Tag + Release).
+**Wann:** Wenn die Plugin-Änderungen fertig sind und auf GitHub sollen (Commit + Push + Tag + Release).
 
 **Befehl:**
 
@@ -80,12 +83,12 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 ./tools/gitpush.sh [Ziel] [Commit-Nachricht]
 ```
 
-- `Ziel`: leer für Auto-Erkennung, oder Plugin-Name, oder `all`.
-- `Commit-Nachricht`: optional; sonst wird eine aus der Plugin-Version erzeugt.
+- `Ziel`: leer = Auto-Erkennung, Plugin-Name oder `all`
+- `Commit-Nachricht`: optional; sonst aus der Plugin-Version
 
-**Voraussetzungen:** Das Git-Remote `origin` muss auf dein Plugin- oder Workspace-Repo zeigen. Für GitHub SSH oder Personal Access Token verwenden. Du kannst `GIT_REPO_URL` in `tools/.env` setzen oder die Menüoption 8 nutzen, um das Repo zu setzen.
+**Voraussetzungen:** `origin` zeigt auf dein Plugin- oder Workspace-Repo (SSH oder Personal Access Token). Alternativ `GIT_REPO_URL` in `tools/.env` oder Menüoption 8.
 
-> **Tipp:** Skript vom Repo-Root aus starten. Es nutzt dieselbe Ausschlussliste wie die übrigen Tools (z. B. Inhalt von `woltlab-docs`, `woltlab-github` oder `tools/woltlab-dev/public` wird nicht committed).
+> **Tipp:** Vom Repo-Root starten. Bekannte Referenzordner (z. B. `woltlab-docs`, `woltlab-github`) werden nicht mitcommitted.
 
 ---
 
@@ -125,36 +128,33 @@ Falls `manager-push.sh` existiert (nur für Maintainer), erscheint Option 9 zum 
 
 ### Optionale Checks (TypeScript, PHPStan, ruff)
 
+Nur relevant, wenn die jeweilige Technik im Projekt vorkommt:
+
 ```bash
-./tools/check-typescript.sh [--no-emit] [plugin]   # bei tsconfig / ts/ — auch in Build + Validate
-./tools/run-phpstan.sh [plugin]                    # nur wenn phpstan.neon(.dist) existiert
-./tools.sh lint:python                             # ruff auf tools/*.py (Manager), Skip ohne ruff
+./tools/check-typescript.sh [--no-emit] [plugin]   # bei tsconfig / ts/ — Build + Validate
+./tools/run-phpstan.sh [plugin]                    # nur mit phpstan.neon(.dist)
+./tools.sh lint:python                             # ruff für Manager-tools/*.py (Skip ohne ruff)
 ./tools.sh phpstan [plugin]
 ```
 
-PHPStan und ruff sind **opt-in** (Binary + ggf. Plugin-Config). TypeScript bricht Build/Validate ab, sobald Quellen da sind und `tsc` fehlschlägt.
+- **TypeScript:** Wenn Quellen da sind und `tsc` fehlschlägt → Build/Validate abbrechen.
+- **PHPStan / ruff:** Freiwillig; ohne Binary oder Config wird übersprungen.
 
 ### validate-plugin.sh – Sicherheit und Store-Compliance
 
-**Was es macht:** Prüft dein Plugin vor Release oder Store-Einreichung auf typische Probleme. Geprüft werden: **PHP- und XML-Syntax**; **Übersetzungen** (DE und EN vorhanden und konsistent); **Template-Layout** (`templates/` kanonisch; Root-`*.tpl` warnt, `--strict` failt); **PIP-Quellen** (DevTools-Parität: sync-fähig vs. nur Paket-Update); **Plugin-Sprach-Keys** im Code vs. `language/*.xml` mit **Datei:Zeile**; **Mindestversion WoltLab**; dass keine externen Paket-Server genutzt werden; **Sicherheit** (z. B. SQL-Injection, XSS); **Debug- und Entwicklungs-Code**, der nicht ausgeliefert werden darf; sowie **Cloud-/Kompatibilitäts-** und weitere Store-Regeln. Die Prüfungen sind an die [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.de.md) angelehnt, die auch manuelle Schritte aufführt, die das Skript nicht abdeckt.
+**Was es macht:** Prüft das Plugin vor Release/Store: PHP/XML-Syntax, Sprachen (DE/EN), Templates, PIP-Quellen, Sicherheit (XSS/SQL-Heuristiken), Store-Regeln und mehr. Manche Punkte bleiben manuell — siehe [Plugin-Store-Checkliste](docs/PLUGIN-STORE-CHECKLIST.de.md).
 
-**Wann nutzen:** Vor dem Release oder der Einreichung im Store, um Probleme früh zu finden.
-
-**Befehl:**
+**Wann:** Vor jedem Release oder Store-Upload.
 
 ```bash
 ./tools/validate-plugin.sh [--strict] [Plugin-Pfad]
 ```
 
-- `Plugin-Pfad`: optional; Plugin-Ordner oder Pfad. Ohne Angabe wird das aktuelle Verzeichnis oder das erste erkannte Plugin verwendet.
-
-Ergebnisse und Details erscheinen im Terminal; Logs können unter `/tmp/` geschrieben werden (siehe Skript-Ausgabe).
-
-**Gemeinsame Check-Registry (Build ↔ Validate):** Fail-/Warn-Checks stehen in `swpm-check-registry.txt` und laufen über `swpm-run-checks.sh` (in `build.sh` eingebunden). Liste:
+**Check-Registry (Build):** Die Fail-/Warn-Checks für den **Build** stehen in `swpm-check-registry.txt` und laufen über `swpm-run-checks.sh`. Validate deckt dieselben Themen (und zusätzliche Store-Prüfungen) ab, ruft den Runner aber nicht 1:1 auf. Liste:
 
 ```bash
 ./tools/swpm-run-checks.sh --mode list
-./tools/swpm-run-checks.sh --mode build [--strict-layout] [--amd-prefix MyApp] /pfad/zu/temp_edit
+./tools/swpm-run-checks.sh --mode build [--strict-layout] /pfad/zu/temp_edit
 ```
 
 **Einzelchecks (ohne vollständige Validierung):**
@@ -165,13 +165,11 @@ python3 tools/check-language-keys.py /pfad/zum/plugin
 python3 tools/check-template-xss.py /pfad/zum/plugin
 python3 tools/check-like-escaping.py /pfad/zum/plugin
 python3 tools/check-language-categories.py /pfad/zum/plugin
+python3 tools/check-style-package.py /pfad/zum/plugin
 python3 tools/fix-template-xss-escaping.py /pfad/zum/plugin --dry-run
 ```
 
-`check-pip-sources.py` bleibt außerhalb der Registry (braucht `package.xml` / `--strict`). `check-language-keys.py` meldet fehlende **App-Keys** (Präfix aus `package.xml`) mit Fundstelle; Core-`wcf.*`-Texte werden ignoriert.
-
-Details zu Heuristiken und False Positives: [docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)  
-Sprach-XML (Kategorie/Item): [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md)
+`check-pip-sources.py` bleibt außerhalb der Registry (braucht `package.xml`). Details: [docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md) · Sprachen: [docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md)
 
 ---
 
@@ -280,12 +278,17 @@ Danach können Editor und TypeScript-Compiler die WoltLab-API-Typen nutzen. Sieh
 
 ## Weitere Dokumentation
 
-Dokumente in `tools/docs/`:
+Vollständiger Index: **[docs/README.de.md](docs/README.de.md)**
 
-- **[docs/CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md)** — Linux, macOS, Windows (WSL2, Git Bash), `tools.cmd`.
-- **[docs/PLUGIN-STORE-CHECKLIST.de.md](docs/PLUGIN-STORE-CHECKLIST.de.md)** — Checkliste vor Store-Einreichung. Englisch: [PLUGIN-STORE-CHECKLIST.en.md](docs/PLUGIN-STORE-CHECKLIST.en.md).
-- **[docs/SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md)** — XSS/LIKE/SQL-Heuristiken der Validierung (WoltLab 6.2.x).
-- **[docs/LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md)** — Sprach-PIP: Item/Kategorie-Zuordnung (verhindert ACP-Update-Fehler).
+| Thema | Link |
+|-------|------|
+| Plattformen | [CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md) |
+| Paket-Layout / Style | [PACKAGE-LAYOUT.de.md](docs/PACKAGE-LAYOUT.de.md) |
+| Produktlinie | [PRODUCT-LINE.de.md](docs/PRODUCT-LINE.de.md) |
+| Store-Checkliste | [PLUGIN-STORE-CHECKLIST.de.md](docs/PLUGIN-STORE-CHECKLIST.de.md) |
+| Security-Checks | [SECURITY-CHECKS.de.md](docs/SECURITY-CHECKS.de.md) |
+| Language-XML | [LANGUAGE-XML.de.md](docs/LANGUAGE-XML.de.md) |
+| ACP-Install (Docker) | [ACP-PACKAGE-INSTALL.de.md](docs/ACP-PACKAGE-INSTALL.de.md) |
 
 ---
 
