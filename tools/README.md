@@ -75,7 +75,7 @@ The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, c
 
 ### gitpush.sh – Commit, push, and release (plugins)
 
-**What it does:** Finds changed plugins, commits, pushes to `origin`, creates a version tag, and can open a GitHub release. For **plugin** releases — not the Plugin Manager repo itself.
+**What it does:** Finds changed plugins, commits, pushes to `origin`, creates a version tag, and can open a GitHub release. Release notes: section from `CHANGELOG.md`, plus a Compare link to the previous `v*` tag and a short commit list (not an auto-changelog). For **plugin** releases — not the Plugin Manager repo itself.
 
 **When:** When plugin changes are ready to go to GitHub (commit + push + tag + release).
 

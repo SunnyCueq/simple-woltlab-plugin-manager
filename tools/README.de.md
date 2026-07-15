@@ -75,7 +75,7 @@ Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, T
 
 ### gitpush.sh – Committen, pushen, Release (Plugins)
 
-**Was es macht:** Findet geänderte Plugins, committed, pusht zu `origin`, setzt einen Versions-Tag und kann ein GitHub-Release anlegen. Für **Plugin**-Releases — nicht für das Plugin-Manager-Repo selbst.
+**Was es macht:** Findet geänderte Plugins, committed, pusht zu `origin`, setzt einen Versions-Tag und kann ein GitHub-Release anlegen. Release-Notes: Abschnitt aus `CHANGELOG.md`, plus Compare-Link zum vorherigen `v*`-Tag und eine kurze Commit-Liste (kein Auto-Changelog). Für **Plugin**-Releases — nicht für das Plugin-Manager-Repo selbst.
 
 **Wann:** Wenn die Plugin-Änderungen fertig sind und auf GitHub sollen (Commit + Push + Tag + Release).
 

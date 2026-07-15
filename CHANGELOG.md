@@ -6,6 +6,7 @@
 
 - **MkDocs Material:** Handbuch unter GitHub Pages (`mkdocs.yml`, Workflow `docs.yml`); Quelle bleibt `tools/docs/` (DE/EN via i18n).
 - **README:** auf Einstieg + dominantem Handbuch-Link gekürzt; Site-Titel klar als Dokumentation erkennbar.
+- **gitpush.sh:** Release-Notes hängen Compare-Link (`vPREV...vNEW`) und kurze Commit-Liste an den CHANGELOG-Abschnitt an (kein Auto-Changelog).
 
 ## Version 1.2.0 – 2026-07-15
 

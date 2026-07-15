@@ -50,6 +50,77 @@ normalize_plugin_path() {
     fi
 }
 
+# Vorheriger Versions-Tag entlang der Historie (nicht nur nach Sortierung —
+# sonst gewinnen CalVer-Tags wie v2026.02.17 fälschlich gegen SemVer).
+# Changelog bleibt die inhaltliche Quelle; Compare/Commits nur als Nachweis.
+find_previous_version_tag() {
+    local current_tag="$1"
+    local prev=""
+
+    if git rev-parse "$current_tag" >/dev/null 2>&1; then
+        prev=$(git describe --tags --abbrev=0 --match 'v[0-9]*' "${current_tag}^" 2>/dev/null || true)
+    else
+        prev=$(git describe --tags --abbrev=0 --match 'v[0-9]*' HEAD 2>/dev/null || true)
+        if [ "$prev" = "$current_tag" ]; then
+            prev=$(git describe --tags --abbrev=0 --match 'v[0-9]*' "${current_tag}^" 2>/dev/null || true)
+        fi
+    fi
+
+    if [ -n "$prev" ] && [ "$prev" != "$current_tag" ]; then
+        echo "$prev"
+        return 0
+    fi
+    return 0
+}
+
+# Hängt Compare-Link + kurze Commit-Liste an Release-Notes an (erfindet keinen Changelog).
+append_release_git_refs() {
+    local notes="$1"
+    local tag_name="$2"
+    local repo_base="$3"
+    local max_commits="${4:-15}"
+    local prev_tag range_end compare_url commit_lines total shown more
+    local appendix=""
+
+    repo_base="${repo_base%.git}"
+    repo_base="${repo_base%/}"
+    if [ -z "$repo_base" ] || [[ "$repo_base" == *"nicht konfiguriert"* ]]; then
+        echo "$notes"
+        return 0
+    fi
+
+    prev_tag=$(find_previous_version_tag "$tag_name")
+    if git rev-parse "$tag_name" >/dev/null 2>&1; then
+        range_end="$tag_name"
+    else
+        range_end="HEAD"
+    fi
+
+    appendix=$'\n\n---\n\n'
+    if [ -n "$prev_tag" ]; then
+        compare_url="${repo_base}/compare/${prev_tag}...${tag_name}"
+        appendix+="## Changes since ${prev_tag}"$'\n\n'
+        appendix+="**Full diff:** ${compare_url}"$'\n'
+        total=$(git rev-list --count "${prev_tag}..${range_end}" 2>/dev/null || echo 0)
+        if [ "${total:-0}" -gt 0 ] 2>/dev/null; then
+            commit_lines=$(git log --oneline --no-decorate "${prev_tag}..${range_end}" 2>/dev/null | head -n "$max_commits" || true)
+            shown=$(printf '%s\n' "$commit_lines" | grep -c . || true)
+            appendix+=$'\n'"Commits (${shown}"
+            if [ "$total" -gt "$max_commits" ]; then
+                more=$((total - max_commits))
+                appendix+="; ${more} more on Compare"
+            fi
+            appendix+="):"$'\n\n'"\`\`\`"$'\n'"${commit_lines}"$'\n'"\`\`\`"$'\n'
+        fi
+    else
+        appendix+="## Changes"$'\n\n'
+        appendix+="**Tag:** ${repo_base}/releases/tag/${tag_name}"$'\n'
+        appendix+=$'\n*(First version tag — no previous tag for Compare.)*\n'
+    fi
+
+    printf '%s%s' "$notes" "$appendix"
+}
+
 #=====================================
 # HAUPTLOGIK
 #=====================================
@@ -477,6 +548,9 @@ if command -v gh &> /dev/null; then
             RELEASE_NOTES="${RELEASE_NOTES}**${name}:** v${version}"$'\n'
         done
     fi
+
+    # Compare + kurze Commit-Liste (Changelog bleibt inhaltliche Quelle)
+    RELEASE_NOTES=$(append_release_git_refs "$RELEASE_NOTES" "$TAG_NAME" "$GIT_REPO_DISPLAY" 15)
     
     # Check if release already exists
     if gh release view "${TAG_NAME}" >/dev/null 2>&1; then

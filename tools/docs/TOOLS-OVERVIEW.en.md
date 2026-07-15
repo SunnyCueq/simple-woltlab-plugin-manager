@@ -27,7 +27,7 @@ Product line (multiple packages): `./tools.sh family:check` / `family:build` —
 | `validate-plugin.sh` | Store, security, and structure checks |
 | `typescript.sh` | TypeScript → JavaScript |
 | `unpack.sh` | Unpack package into `temp_edit/` |
-| `gitpush.sh` | Commit, push, tag, release (plugin) |
+| `gitpush.sh` | Commit, push, tag, release (plugin); notes = changelog + Compare/commits |
 | `setup-minimal.sh` | Core, docs, d.ts, paths |
 | `help.sh` | Open documentation |
 | `swpm-family.sh` | Product line (core + add-ons) |
