@@ -8,6 +8,8 @@
 
 Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, TypeScript kompilieren, entpacken, Setup und Git-Push. Einstieg meist über `./tools.sh` (Menü oder CLI). Ziel: von der Entwicklung bis zum **Plugin-Store**, ohne Docker-Pflicht.
 
+**Komplette Liste:** [docs/TOOLS-OVERVIEW.de.md](docs/TOOLS-OVERVIEW.de.md) — Kern, Build-Checks, optional, Docker, Intern.
+
 **Plattformen:** Linux, macOS, Windows (WSL2 oder Git Bash). Unter Windows aus cmd/Explorer: `tools.cmd`. Details: [docs/CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md).
 
 **Hinweis:** `tools/woltlab-plugin-recovery/` ist ein separates Recovery-Hilfsmittel — nicht Teil des normalen Build-/Validate-Menüs.
@@ -282,6 +284,7 @@ Vollständiger Index: **[docs/README.de.md](docs/README.de.md)**
 
 | Thema | Link |
 |-------|------|
+| Tools-Übersicht | [TOOLS-OVERVIEW.de.md](docs/TOOLS-OVERVIEW.de.md) |
 | Plattformen | [CROSS-PLATFORM.de.md](docs/CROSS-PLATFORM.de.md) |
 | Paket-Layout / Style | [PACKAGE-LAYOUT.de.md](docs/PACKAGE-LAYOUT.de.md) |
 | Produktlinie | [PRODUCT-LINE.de.md](docs/PRODUCT-LINE.de.md) |

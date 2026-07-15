@@ -186,7 +186,7 @@ Example menu (abbreviated):
 
 **Plugin source layout:** Put frontend templates in `templates/` (they become `templates.tar`). ACP templates stay in `acptemplates/`. PIP XMLs such as `option.xml` and `page.xml` remain in the package root. Root-level `*.tpl` still packs, but you get a warning; use `--strict-layout` or `validate-plugin.sh --strict` to fail instead. Style packages: sources under `style/` → archive name from `package.xml`. Details: [PACKAGE-LAYOUT.en.md](tools/docs/PACKAGE-LAYOUT.en.md).
 
-Full tools reference: **[tools/README.md](tools/README.md)** · Guides index: **[tools/docs/README.md](tools/docs/README.md)**
+Full tools reference: **[tools/README.md](tools/README.md)** · Tool list: **[tools/docs/TOOLS-OVERVIEW.en.md](tools/docs/TOOLS-OVERVIEW.en.md)** · Guides index: **[tools/docs/README.md](tools/docs/README.md)**
 
 ---
 

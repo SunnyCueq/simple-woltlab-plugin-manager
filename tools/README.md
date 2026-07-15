@@ -8,6 +8,8 @@
 
 The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, compile TypeScript, unpack packages, run setup, and push to Git. Most people start with `./tools.sh` (menu or CLI). Goal: from development to the **Plugin Store**, without requiring Docker.
 
+**Full list:** [docs/TOOLS-OVERVIEW.en.md](docs/TOOLS-OVERVIEW.en.md) — core, build checks, optional, Docker, internal.
+
 **Platforms:** Linux, macOS, Windows (WSL2 or Git Bash). From cmd/Explorer on Windows: `tools.cmd`. Details: [docs/CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md).
 
 **Note:** `tools/woltlab-plugin-recovery/` is a separate recovery helper — not part of the normal build/validate menu.
@@ -280,6 +282,7 @@ Full index: **[docs/README.md](docs/README.md)**
 
 | Topic | Link |
 |-------|------|
+| Tools overview | [TOOLS-OVERVIEW.en.md](docs/TOOLS-OVERVIEW.en.md) |
 | Platforms | [CROSS-PLATFORM.md](docs/CROSS-PLATFORM.md) |
 | Package layout / styles | [PACKAGE-LAYOUT.en.md](docs/PACKAGE-LAYOUT.en.md) |
 | Product line | [PRODUCT-LINE.en.md](docs/PRODUCT-LINE.en.md) |

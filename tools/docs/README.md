@@ -4,13 +4,21 @@
 
 Index of guides shipped with the Simple WoltLab Plugin Manager — every topic in **English** and **German**.
 
+## Quick start
+
+1. `./tools.sh` — menu or `./tools.sh help`
+2. Build a plugin → `./tools.sh build`
+3. Validate → `./tools.sh validate …`
+4. Which scripts exist → **[Tools overview](TOOLS-OVERVIEW.en.md)**
+
 ## Getting started
 
 | Topic | English | Deutsch |
 |-------|---------|---------|
 | Main project README | [README.md](../../README.md) | [README.de.md](../../README.de.md) |
-| Tools reference | [tools/README.md](../README.md) | [tools/README.de.md](../README.de.md) |
-| Cross-platform | [CROSS-PLATFORM.md](CROSS-PLATFORM.md) | [CROSS-PLATFORM.de.md](CROSS-PLATFORM.de.md) |
+| Tools overview (list) | [TOOLS-OVERVIEW.en.md](TOOLS-OVERVIEW.en.md) | [TOOLS-OVERVIEW.de.md](TOOLS-OVERVIEW.de.md) |
+| Tools reference (details) | [tools/README.md](../README.md) | [tools/README.de.md](../README.de.md) |
+| Platforms | [CROSS-PLATFORM.md](CROSS-PLATFORM.md) | [CROSS-PLATFORM.de.md](CROSS-PLATFORM.de.md) |
 | Contributing | [CONTRIBUTING.md](../../CONTRIBUTING.md) | [CONTRIBUTING.de.md](../../CONTRIBUTING.de.md) |
 
 ## Build and packaging
@@ -32,4 +40,4 @@ Index of guides shipped with the Simple WoltLab Plugin Manager — every topic i
 | Template rules | [WOLTLAB-TEMPLATE-RULES.en.md](WOLTLAB-TEMPLATE-RULES.en.md) | [WOLTLAB-TEMPLATE-RULES.de.md](WOLTLAB-TEMPLATE-RULES.de.md) |
 | Debug logging | [LOGGING.en.md](LOGGING.en.md) | [LOGGING.de.md](LOGGING.de.md) |
 
-**Check registry & optional hooks:** Build checks live in `tools/swpm-check-registry.txt` (list: `./tools/swpm-run-checks.sh --mode list`). TypeScript/PHPStan/ruff: see [tools/README.md](../README.md).
+**Check registry & optional hooks:** List and everyday path: [TOOLS-OVERVIEW.en.md](TOOLS-OVERVIEW.en.md). Live registry: `./tools/swpm-run-checks.sh --mode list`. Details: [tools/README.md](../README.md).
