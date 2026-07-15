@@ -18,5 +18,6 @@ template-notices|warn|check-template-notices.py|templates|Hinweis-Boxen
 style-assets|warn|check-style-assets.py|style|CSS url()-Assets
 style-package|fail|check-style-package.py|style|Style-Paket style.xml / Variablen
 language-keys|warn|check-language-keys.py|language|Sprach-Keys DE/EN
+language-address|warn|check-language-address.py|language|DE Anrede Sie/Du Konsistenz
 first-release-hygiene|warn|check-first-release-hygiene.py|always|First-Release 1.0.0 Hygiene (keine Update-Altlasten)
 package-descriptions|warn|check-package-descriptions.py|always|package.xml packagedescription (Default+de)

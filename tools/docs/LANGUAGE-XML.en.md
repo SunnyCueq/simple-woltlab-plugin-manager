@@ -34,6 +34,22 @@ On import, WoltLab checks each `<item>` against its parent `<category>` (`Langua
 
 Update the key name in templates/PHP accordingly.
 
+## Formal vs informal German (Sie / Du)
+
+WoltLab supports both tones in one string:
+
+```xml
+<item name="myapp.action.save"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Speichere{else}Speichern Sie{/if}]]></item>
+```
+
+Do not use `variant="informal"` on `<item>` — it is not in language.xsd (`check-language-integrity.py`).
+
+**Tone consistency:** `check-language-address.py` warns heuristically when `de.xml` clearly mixes **Sie** and **Du** (without the variant IF). Warning only — not a build failure. Unify the tone or use the IF pattern.
+
+```bash
+python3 tools/check-language-address.py /path/to/plugin
+```
+
 ## Check before build
 
 ```bash

@@ -38,6 +38,22 @@ Beim Import prüft WoltLab jedes `<item>` gegen die übergeordnete `<category>` 
 
 Der Key-Name in Templates/PHP muss dann mitgezogen werden.
 
+## Anrede Sie / Du (Deutsch)
+
+WoltLab kennt **förmlich und informell** in einem String:
+
+```xml
+<item name="myapp.action.save"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Speichere{else}Speichern Sie{/if}]]></item>
+```
+
+Nicht: `variant="informal"` am `<item>` — das gibt es in der language.xsd nicht (`check-language-integrity.py`).
+
+**Ton-Konsistenz:** `check-language-address.py` warnt heuristisch, wenn `de.xml` klar **Sie** und **Du** mischt (ohne Varianten-IF). Kein Build-Abbruch — nur Warnung. Manuell prüfen und vereinheitlichen.
+
+```bash
+python3 tools/check-language-address.py /pfad/zum/plugin
+```
+
 ## Prüfung vor dem Build
 
 ```bash

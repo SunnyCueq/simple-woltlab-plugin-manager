@@ -4,6 +4,7 @@
 
 ### Plugin-Manager
 
+- **Optional Qualitätshooks / Language:** u. a. `check-language-address.py` (Warnung bei gemischter DE-Anrede Sie/Du).
 - **Doku:** Menü/CLI und Guides an aktuellen Stand angeglichen; Schreibstil-Pass; **Tools-Übersicht** DE/EN (`TOOLS-OVERVIEW`) mit Alltagsweg und kompletter Skript-Liste.
 - **Optional Qualitätshooks:** `check-typescript.sh` (Build/Validate bei `tsconfig`/`.ts`); `run-phpstan.sh` (nur mit `phpstan.neon(.dist)` im Plugin); `./tools.sh lint:python` (ruff für Manager-`tools/*.py`, Skip ohne Binary).
 - **Style-Pakete:** `pack-style-tar.sh` packt Variablen, Previews, `images/`/`templates/` und schreibt `style.tar` oder `style.tgz` laut `package.xml`; `check-style-package.py` in der Registry. scssphp bewusst nicht eingebunden (Suite kompiliert aus Variablen). Doku: `PACKAGE-LAYOUT`.

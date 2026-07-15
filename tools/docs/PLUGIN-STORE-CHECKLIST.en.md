@@ -65,6 +65,7 @@ Typical mistakes:
 - [ ] **File completeness:** declared files present
 - [ ] **Translations:** `language/de.xml` **and** `language/en.xml`
 - [ ] **Language XML structure:** item name matches category (`check-language-categories.py`)
+- [ ] **DE address tone:** do not mix Sie and Du casually — or use the variant IF (`check-language-address.py`, warning)
 - [ ] **Min version:** supported WCF version (security support)
 - [ ] **No package servers:** no `packageUpdateServer` PIP
 - [ ] **SQL injection:** no request data in SQL string concatenation

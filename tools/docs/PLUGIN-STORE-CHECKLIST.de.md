@@ -80,6 +80,7 @@ Beispiele (typische Fehler):
 - [ ] **CSS-Assets:** alle `url(...)`-Referenzen in `style/` auflösbar (`check-style-assets.py`) — fehlende Fonts/Bilder können 500er auslösen
 - [ ] **language/:** nur `*.xml` — Dev-Dateien (Skripte, Reports) nach `maintainer/`, sonst landen sie im Store-Paket
 - [ ] **Sprach-XML-Integrität:** keine erfundenen Attribute (`variant` existiert nicht — Sie/du per `{if LANGUAGE_USE_INFORMAL_VARIANT}` im Wert), keine doppelten Keys (letzter gewinnt still beim Import), kein `{if}` in `wcf.global` (`check-language-integrity.py`)
+- [ ] **DE-Anrede:** nicht wild Sie und Du mischen — oder Varianten-IF nutzen (`check-language-address.py`, Warnung)
 - [ ] **Hinweis-Boxen:** `<woltlab-core-notice>` nur mit `type="error|info|success|warning"` (`danger` existiert nicht); kein Legacy-Markup `<p class="info">` (`check-template-notices.py`)
 - [ ] **Template-Modifier:** Nur Whitelist-Funktionen und Modifier-Plugins verwenden — erfundene Modifier wie `|formatNumeric` schlagen erst beim ersten Rendern als Fatal Error fehl; Zahlformatierung ist `{#$var}` (`check-template-modifiers.py`)
 - [ ] **Foreach in `<script>`:** Kein `{foreach name=fooLoop}` mit `$fooLoop.last` — WoltLab nutzt `$tpl.foreach`; für JS-Arrays `{implode from=$arr item=item}'{unsafe:$item|encodeJS}'{/implode}` wie `shared_itemListFormField.tpl` (`check-template-foreach.py`)
