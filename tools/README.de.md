@@ -1,6 +1,6 @@
 # Tools – WoltLab Plugin Manager
 
-**[English version](README.md)** · **[Dokumentation (MkDocs)](https://benjarogit.github.io/simple-woltlab-plugin-manager/)**
+**[English version](README.md)** · **[Handbuch / Dokumentation](https://benjarogit.github.io/simple-woltlab-plugin-manager/)**
 
 ---
 

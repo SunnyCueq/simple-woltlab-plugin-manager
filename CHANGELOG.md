@@ -4,7 +4,8 @@
 
 ### Plugin-Manager
 
-- **MkDocs Material:** Handbuch unter GitHub Pages (`mkdocs.yml`, Workflow `docs.yml`); Quelle bleibt `tools/docs/` (DE/EN via i18n). README verweist auf die Site statt Wiki.
+- **MkDocs Material:** Handbuch unter GitHub Pages (`mkdocs.yml`, Workflow `docs.yml`); Quelle bleibt `tools/docs/` (DE/EN via i18n).
+- **README:** auf Einstieg + dominantem Handbuch-Link gekürzt; Site-Titel klar als Dokumentation erkennbar.
 
 ## Version 1.2.0 – 2026-07-15
 

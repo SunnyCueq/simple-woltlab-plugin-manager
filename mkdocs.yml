@@ -3,8 +3,8 @@
 # Build: pip install -r requirements-docs.txt && mkdocs serve
 # Site:  https://benjarogit.github.io/simple-woltlab-plugin-manager/
 
-site_name: SWPM
-site_description: Simple WoltLab Plugin Manager — Build, Validate, Product Line
+site_name: SWPM · Dokumentation
+site_description: Handbuch für den Simple WoltLab Plugin Manager — Build, Validierung, Produktlinie
 site_url: https://benjarogit.github.io/simple-woltlab-plugin-manager/
 site_author: SunnyCueq
 repo_url: https://github.com/benjarogit/simple-woltlab-plugin-manager
@@ -58,11 +58,13 @@ plugins:
           name: Deutsch
           default: true
           build: true
-          site_name: SWPM Dokumentation
+          site_name: SWPM · Dokumentation
+          site_description: Handbuch für den Simple WoltLab Plugin Manager — Build, Validierung, Produktlinie
         - locale: en
           name: English
           build: true
-          site_name: SWPM Documentation
+          site_name: SWPM · Documentation
+          site_description: Handbook for the Simple WoltLab Plugin Manager — build, validation, product line
           nav_translations:
             Start: Home
             Einstieg: Getting started

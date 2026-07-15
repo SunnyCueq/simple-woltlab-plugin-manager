@@ -1,6 +1,6 @@
-# SWPM documentation
+# SWPM Documentation
 
-Welcome to the **Simple WoltLab Plugin Manager**. This site is the handbook view of the guides in the repo (`tools/docs/`) — one source, no duplicate maintenance.
+Official **handbook** for the Simple WoltLab Plugin Manager. Guides, tools overview, and store/quality rules live here — one source in the repo (`tools/docs/`), no duplicate maintenance and no separate Wiki.
 
 ## Quick start
 
