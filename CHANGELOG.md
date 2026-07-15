@@ -2,21 +2,18 @@
 
 ## Unreleased
 
+## Version 1.2.0 – 2026-07-15
+
 ### Plugin-Manager
 
-- **Optional Qualitätshooks / Language:** u. a. `check-language-address.py` (Warnung bei gemischter DE-Anrede Sie/Du).
-- **Doku:** Menü/CLI und Guides an aktuellen Stand angeglichen; Schreibstil-Pass; **Tools-Übersicht** DE/EN (`TOOLS-OVERVIEW`) mit Alltagsweg und kompletter Skript-Liste.
-- **Optional Qualitätshooks:** `check-typescript.sh` (Build/Validate bei `tsconfig`/`.ts`); `run-phpstan.sh` (nur mit `phpstan.neon(.dist)` im Plugin); `./tools.sh lint:python` (ruff für Manager-`tools/*.py`, Skip ohne Binary).
-- **Style-Pakete:** `pack-style-tar.sh` packt Variablen, Previews, `images/`/`templates/` und schreibt `style.tar` oder `style.tgz` laut `package.xml`; `check-style-package.py` in der Registry. scssphp bewusst nicht eingebunden (Suite kompiliert aus Variablen). Doku: `PACKAGE-LAYOUT`.
-- **Produktlinie:** `swpm-family.json` + `check-family-deps.py` / `swpm-family.sh` — Multi-Paket Build/Validate in Dep-Reihenfolge (genau eine Graph-Komponente); optional Scaffold (`family:init --scaffold`). Discovery überspringt u. a. `examples/`/`fixtures/`; leere Basis-`<version>` bei `minversion` = Fehler; `add-addon` leitet Basis-ID aus Topo-Root ab (`--json`, nur bei gültigem Graph). Scaffold legt `lib/.gitkeep` an; Workspace-Discovery über `--scan-workspace`; `SWPM_FAMILY_RUN=1` ignoriert `.env`-Package-IDs. Fixture: `tools/fixtures/family-demo/`.
-- **Doku Produktlinie:** `PRODUCT-LINE.de.md` / `.en.md` — Ordnerlayouts (Geschwister vs. SWPM-Root), Scaffold vs. echte `package.xml`, Schritt-für-Schritt, Manifest-Felder, Checkliste, Anti-Patterns, Glossar (laienverständlich, technisch präzise).
-- **Build:** Plugin-/Add-on-Pakete ohne `<applicationdirectory>` sind gültig (nur Apps brauchen das Feld). `family:build` staged Root-Layout-Pakete (`package.xml` im Root) automatisch über `_family-stage/` und kopiert Archive nach `releases/`.
-- **Build:** Absolute Plugin-Roots; `TOOLS_DIR` immer SWPM-`tools/` (externe Pakete).
-- **Checks:** Registry `swpm-check-registry.txt` + Runner `swpm-run-checks.sh` — der **Build** führt die Fail-Checks darüber aus. Validate deckt dieselben Themen (plus Store) ab, aber nicht 1:1 über denselben Runner. PIP-Quellen bleiben separat in `build.sh`.
-- **Template-Layout:** `templates/` ist kanonischer Quellort für Frontend-`.tpl`; Root-`*.tpl` warnt (Legacy-Fallback), `--strict-layout` / `validate-plugin.sh --strict` failt. **Beide Layouts gleichzeitig** → Build-Fehler. Unpack entpackt `templates.tar` nach `templates/`. Docs: `PACKAGE-LAYOUT`, README, `check-template-layout.py`.
-- **Doku:** Fremdtool-Vergleiche entfernt; Layout-Guide heißt `PACKAGE-LAYOUT`.
-- **Generisch:** AMD-Export-Check ohne festes App-Präfix (`check-js-amd-exports.py` + Prefix aus `package.xml`); Sprach-XML-Beispiele nur noch `myapp.*`.
-- **Schreibstil:** Rule `schreibstil-docs.mdc` für Doku/Nutzertexte.
+- **Produktlinie:** `swpm-family.json` + `check-family-deps.py` / `swpm-family.sh` — Multi-Paket Build/Validate in Dep-Reihenfolge; optional Scaffold (`family:init --scaffold`). Fixture: `tools/fixtures/family-demo/`. Doku: `PRODUCT-LINE.de.md` / `.en.md`.
+- **Checks:** Registry `swpm-check-registry.txt` + Runner `swpm-run-checks.sh` im Build; Validate deckt dieselben Themen (plus Store) ab.
+- **Style-Pakete:** `pack-style-tar.sh` inkl. Variablen/Previews; `style.tar` oder `style.tgz` laut `package.xml`; `check-style-package.py`.
+- **Template-Layout:** `templates/` kanonisch; Root-`*.tpl` warnt / `--strict` failt.
+- **Optional Qualitätshooks:** TypeScript (`check-typescript.sh`), PHPStan (`run-phpstan.sh`), ruff (`lint:python`), DE-Anrede Sie/Du (`check-language-address.py`, Warnung).
+- **Doku:** Tools-Übersicht (`TOOLS-OVERVIEW`), Schreibstil-Pass, Menü/CLI an aktuellen Stand; Layout-Guide `PACKAGE-LAYOUT`.
+- **Build:** Absolute Plugin-Roots; `TOOLS_DIR` = SWPM-`tools/`; Add-ons ohne `<applicationdirectory>` gültig; `family:build` staged Root-Layout über `_family-stage/`.
+- **Generisch:** AMD-Prefix aus `package.xml`; Sprach-Beispiele `myapp.*`.
 
 ## Version 1.1.0 – 2026-07-01
 
