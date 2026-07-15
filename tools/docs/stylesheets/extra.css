@@ -1,0 +1,77 @@
+/* SWPM brand — colors from docs logo (teal / orange / charcoal) */
+
+:root {
+  /* Primary: deep blue-teal from logo center */
+  --md-primary-fg-color: #1a4f6e;
+  --md-primary-fg-color--light: #2d7a9a;
+  --md-primary-fg-color--dark: #0f3348;
+  /* Accent: warm orange from logo left lobe */
+  --md-accent-fg-color: #e85d04;
+  --md-accent-fg-color--transparent: rgba(232, 93, 4, 0.1);
+  --md-typeset-a-color: #1a6f8f;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-hue: 210;
+  --md-primary-fg-color: #2d7a9a;
+  --md-primary-fg-color--light: #4a9bb8;
+  --md-primary-fg-color--dark: #1a4f6e;
+  --md-accent-fg-color: #fb923c;
+  --md-accent-fg-color--transparent: rgba(251, 146, 60, 0.14);
+  --md-typeset-a-color: #5eb8d4;
+}
+
+/* Header logo sizing (square brand mark) */
+.md-header__button.md-logo img,
+.md-nav__title .md-nav__button.md-logo img {
+  height: 2rem;
+  width: 2rem;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+
+.md-header {
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.08), 0 0.2rem 0.4rem rgba(0, 0, 0, 0.12);
+}
+
+/* Hero on home: logo + intro spacing */
+.md-typeset .swpm-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 0.5rem 0 1.5rem;
+  flex-wrap: wrap;
+}
+
+.md-typeset .swpm-hero img {
+  width: 7.5rem;
+  height: 7.5rem;
+  object-fit: cover;
+  border-radius: 0.6rem;
+  box-shadow: 0 0.25rem 1rem rgba(26, 79, 110, 0.22);
+}
+
+.md-typeset .swpm-hero .swpm-hero__text {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.md-typeset .swpm-hero h1 {
+  margin: 0 0 0.35rem;
+}
+
+.md-typeset .swpm-hero p {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.92;
+}
+
+/* Card grid polish */
+.md-typeset .grid.cards > ul > li {
+  border-radius: 0.4rem;
+  border-color: color-mix(in srgb, var(--md-primary-fg-color) 18%, transparent);
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-accent-fg-color);
+}

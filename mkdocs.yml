@@ -1,7 +1,7 @@
-# MkDocs — Simple WoltLab Plugin Manager
-# Docs source: tools/docs/ (single source of truth; no Wiki duplicate)
-# Build: pip install -r requirements-docs.txt && mkdocs serve
-# Site:  https://benjarogit.github.io/simple-woltlab-plugin-manager/
+# MkDocs Material — Simple WoltLab Plugin Manager
+# Style oriented on https://squidfunk.github.io/mkdocs-material/
+# Source: tools/docs/  ·  Build: pip install -r requirements-docs.txt && mkdocs serve
+# Site: https://benjarogit.github.io/simple-woltlab-plugin-manager/
 
 site_name: SWPM · Dokumentation
 site_description: Handbuch für den Simple WoltLab Plugin Manager — Build, Validierung, Produktlinie
@@ -17,31 +17,58 @@ copyright: Copyright &copy; SWPM contributors — MIT License
 theme:
   name: material
   language: de
+  logo: assets/swpm-logo.jpg
+  favicon: assets/favicon.png
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil-outline
+    view: material/eye-outline
+    admonition:
+      note: material/information-outline
+      tip: material/fire
+      warning: material/alert-outline
   palette:
+    # Auto → light → dark (like Material docs)
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Zum hellen Modus
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
-      accent: indigo
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-7
-        name: Dark mode
+        name: Zum dunklen Modus
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-4
-        name: Light mode
+        name: Systemeinstellung
   features:
-    # navigation.instant breaks mkdocs-static-i18n language switcher (strict warn)
-    - navigation.tracking
+    # navigation.instant incompatible with mkdocs-static-i18n language switcher
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
     - navigation.expand
+    - navigation.path
     - navigation.top
+    - navigation.footer
+    - navigation.tracking
     - search.suggest
     - search.highlight
+    - search.share
     - content.tabs.link
     - content.code.copy
+    - content.code.annotate
+    - content.action.edit
+    - content.action.view
+    - content.tooltips
     - toc.follow
 
 plugins:
@@ -103,21 +130,39 @@ markdown_extensions:
   - admonition
   - attr_list
   - md_in_html
+  - def_list
   - tables
+  - footnotes
   - toc:
       permalink: true
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
   - pymdownx.inlinehilite
+  - pymdownx.snippets
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra_css:
+  - stylesheets/extra.css
 
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/benjarogit/simple-woltlab-plugin-manager
+      name: GitHub
 
 exclude_docs: |
   logs/**
