@@ -4,6 +4,8 @@
 
 ### Plugin-Manager
 
+- **Doku:** ACP-Guide (EN) — DevTools „Projekt abgleichen“ vs. Hotfix vs. Paket-Install; Verweis Community-Thread (kein offizielles CLI).
+
 ## Version 1.2.1 – 2026-07-15
 
 ### Plugin-Manager

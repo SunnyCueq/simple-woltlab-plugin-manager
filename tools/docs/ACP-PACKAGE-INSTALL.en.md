@@ -62,3 +62,19 @@ Locally: `basis-plugin/de.vendor.myapp_v*.tar.gz` (or your plugin directory)
 ## Dev fallback (only if ACP upload is not possible)
 
 `tools/install-package-once.php` — non-interactive CLI update with an admin session.
+
+## Project sync (DevTools) — not the same as package install
+
+| Path | When | SWPM |
+|------|------|------|
+| **Project sync** | Day-to-day development: run PIPs from a DevTools project into the running instance (files, templates, …) | **Not included** — use ACP → Development → Projects |
+| **Hotfix** (`docker cp` + permission fix) | Quickly test PHP/JS/templates in Docker without a PIP run | Optional — see [Docker permissions](DOCKER-APP-PERMISSIONS.md) |
+| **Package install (ACP)** | Full install/update like the store (PIPs, DB, …) | [prepare-acp-install.sh](ACP-PACKAGE-INSTALL.md) + manual upload |
+
+WoltLab provides **no official CLI** for this. Alexander Ebert in the community thread [“Projekt schneller abgleichen”](https://www.woltlab.com/community/thread/305735-projekt-schneller-abgleichen/): package installation does not support CLI calls — a “hard no”. WoltLab’s own practice: usually **sync individual PIPs** (often &lt; 0.1 s), rarely “sync all”.
+
+!!! tip "ACP tip (WoltLab)"
+
+    On the project list, focus is in the filter field — arrow keys + **Enter** open the sync view directly.
+
+A community workaround (AJAX/cURL after ACP login) is described in that thread, but it is **fragile** (session, XSRF, WSC version) and not part of SWPM. For store plugins: **no custom package server** — updates go through the Plugin Store ([guidelines](https://www.woltlab.com/pluginstore/en/guidelines/)).
