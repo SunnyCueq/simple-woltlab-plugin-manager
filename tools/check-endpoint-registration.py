@@ -57,7 +57,8 @@ def main() -> int:
         ):
             aliases.add(m.group(1))
         registered = any(
-            re.search(r"new\s+" + re.escape(a) + r"\s*\(", bootstrap_text)
+            # auch vollqualifiziert: new \wcf\system\endpoint\controller\...\<Name>()
+            re.search(r"new\s+(?:\\?[\w]+(?:\\[\w]+)*\\)?" + re.escape(a) + r"\s*\(", bootstrap_text)
             or re.search(re.escape(a) + r"::class", bootstrap_text)
             for a in aliases
         )

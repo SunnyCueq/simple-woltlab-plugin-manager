@@ -233,8 +233,15 @@ def resolve_target(
 
     def check_file(rel: str) -> tuple[bool, bool]:
         if strict_case:
-            return path_exists_case_sensitive(root, rel)
+            found, case_ok = path_exists_case_sensitive(root, rel)
+            if not found:
+                # Standard-WoltLab-Repo-Layout (DevTools/Doku): file-PIP-Quellen
+                # liegen unter files/ — database-/script-Pfade sind relativ dazu.
+                found, case_ok = path_exists_case_sensitive(root, f"files/{rel.lstrip('/')}")
+            return found, case_ok
         p = root / rel
+        if not p.is_file():
+            p = root / "files" / rel.lstrip("/")
         return p.is_file(), True
 
     if pip == "file":
