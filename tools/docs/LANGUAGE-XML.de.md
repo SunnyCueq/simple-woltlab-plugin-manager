@@ -52,10 +52,32 @@ Nicht: `variant="informal"` am `<item>` — das gibt es in der language.xsd nich
 python3 tools/check-language-address.py /pfad/zum/plugin
 ```
 
+## Implizite PIP-Sprachkeys (Optionen / Gruppenrechte / ACP-Menü)
+
+`option.xml`, `userGroupOption.xml` und `acpMenu.xml` erzeugen Sprachkeys **aus den `name`-Attributen** — sie stehen oft **nirgends im PHP/Template-Code**. `check-language-keys.py` (Code-Nutzung) findet sie deshalb nicht.
+
+Beispiele (laut WoltLab-Doku):
+
+| PIP | Key-Muster |
+|-----|------------|
+| `userGroupOption` Kategorie `user.foo` | `wcf.acp.group.option.category.user.foo` |
+| `userGroupOption` Option `user.foo.canBar` | `wcf.acp.group.option.user.foo.canBar` |
+| `option` Kategorie / Option | `wcf.acp.option.category.…` / `wcf.acp.option.…` |
+| `acpMenu` | Key = `name` des Menüpunkts (z. B. `myapp.acp.menu.link.…`) |
+
+Fehlt der Key, zeigt das ACP den **rohen Key** (z. B. als Tab-Titel in den Gruppenrechten).
+
+```bash
+python3 tools/check-language-pip-keys.py /pfad/zum/plugin
+```
+
+Registry: `language-pip-keys` (**warn**). Wer eine bereits im Core existierende Kategorie erneut deklariert, kann einen False Positive bekommen — Kategorien nur anlegen, wenn das Plugin sie wirklich einführt.
+
 ## Prüfung vor dem Build
 
 ```bash
 python3 tools/check-language-categories.py /pfad/zum/plugin
+python3 tools/check-language-pip-keys.py /pfad/zum/plugin
 ```
 
 Automatisch in:

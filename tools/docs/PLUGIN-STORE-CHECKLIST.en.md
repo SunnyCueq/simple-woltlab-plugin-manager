@@ -3,10 +3,16 @@
 **Last updated:** 2026-07-15 (aligned with [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/))  
 **Version:** 1.1.1
 
-WoltLab reviews submitted packages in **two stages**:
+WoltLab reviews submitted packages in **two stages** (official source):
 
 1. **Automated** — on the real Plugin Store upload (syntax, archive, compatibility, …)
 2. **Manual** — by staff (security, operability, UX, translations, …)
+
+!!! quote "WoltLab Plugin Store guidelines (excerpt)"
+
+    “The submissions are checked in **two steps** before they are released. A first **automatic check** works on purely formal grounds … The second step is a **manual review** by a WoltLab employee …”
+
+    Full text: [Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/) — sections “Automated verification process” and “Manual review by a WoltLab employee”.
 
 SWPM mirrors **stage 1 extensively on your machine** with `build` / `validate` — that is a **local pre-check**, not an upload. Stage 2 stays manual (functionality, UX, permissions).
 
@@ -60,6 +66,7 @@ Typical mistakes:
 
 - App table: use columns only if they exist in the schema
 - `wcf*_box`: **no** SQL column `limit` — read from `unserialize(additionalData)['limit']`
+- FormBuilder: fields with `hasSaveValue()===true` are written via `getData()` — JS-only `id` without a DB column causes UPDATE fatals; use `hasSaveValue()===false` for request-only hiddens (Core pattern: Captcha). Optional passwords: Suite `PasswordFormField`; empty on edit keeps the existing hash
 
 ---
 
@@ -70,6 +77,7 @@ Typical mistakes:
 - [ ] **File completeness:** declared files present
 - [ ] **Translations:** `language/de.xml` **and** `language/en.xml`
 - [ ] **Language XML structure:** item name matches category (`check-language-categories.py`)
+- [ ] **Implicit PIP language keys:** keys from `option.xml` / `userGroupOption.xml` / `acpMenu.xml` present in `language/*.xml` (`check-language-pip-keys.py`, warning) — otherwise raw keys in ACP
 - [ ] **DE address tone:** do not mix Sie and Du casually — or use the variant IF (`check-language-address.py`, warning)
 - [ ] **Min version:** supported WCF version (security support)
 - [ ] **No package servers:** no `packageUpdateServer` PIP

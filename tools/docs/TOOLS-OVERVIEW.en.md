@@ -101,7 +101,8 @@ Run on **build** via `swpm-run-checks.sh`. Source: `swpm-check-registry.txt`.
 | template-layout | warn | `check-template-layout.py` | Templates under `templates/` |
 | template-notices | warn | `check-template-notices.py` | Notice boxes |
 | style-assets | warn | `check-style-assets.py` | CSS `url(...)` files |
-| language-keys | warn | `check-language-keys.py` | DE/EN keys |
+| language-keys | warn | `check-language-keys.py` | DE/EN keys (used in code) |
+| language-pip-keys | warn | `check-language-pip-keys.py` | Implicit PIP keys (options / group permissions / ACP menu) → [Language XML](LANGUAGE-XML.md) |
 | language-address | warn | `check-language-address.py` | DE Sie/Du address tone (heuristic) |
 | first-release-hygiene | warn | `check-first-release-hygiene.py` | 1.0.0 without update leftovers |
 | package-descriptions | warn | `check-package-descriptions.py` | `packagedescription` in `package.xml` |
