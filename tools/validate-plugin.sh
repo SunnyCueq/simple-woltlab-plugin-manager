@@ -966,6 +966,23 @@ if [ -d "$LANG_BASE/language" ]; then
         fi
         rm -f "$LANG_KEY_OUT"
     fi
+
+    # Implizite Keys aus option/userGroupOption/acpMenu (Warnung — Registry language-pip-keys)
+    LANG_PIP_KEYS_CHECK="$TOOLS_DIR/check-language-pip-keys.py"
+    if command -v python3 &> /dev/null && [ -f "$LANG_PIP_KEYS_CHECK" ] && [ -d "$LANG_SRC/language" ]; then
+        echo -e "${YELLOW}  → Implizite PIP-Sprachkeys (Optionen/Gruppenrechte/ACP-Menü)...${NC}"
+        LANG_PIP_OUT="/tmp/validate-lang-pip-keys-$$.txt"
+        if python3 "$LANG_PIP_KEYS_CHECK" "$LANG_SRC" >"$LANG_PIP_OUT" 2>&1; then
+            print_success "Implizite PIP-Sprachkeys OK"
+            log "INFO" "Language PIP keys check OK"
+        else
+            print_warning "Fehlende implizite PIP-Sprachkeys (ACP zeigt sonst rohe Keys)"
+            head -30 "$LANG_PIP_OUT"
+            log "WARNING" "Language PIP keys missing"
+            WARNINGS=$((WARNINGS + 1))
+        fi
+        rm -f "$LANG_PIP_OUT"
+    fi
 else
     print_warning "Kein language/ Verzeichnis - Plugin Store verlangt Übersetzungen!"
     echo -e "   ${YELLOW}Erstelle${NC} language/de.xml und language/en.xml"

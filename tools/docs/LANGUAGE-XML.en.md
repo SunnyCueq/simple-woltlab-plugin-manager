@@ -48,10 +48,32 @@ Do not use `variant="informal"` on `<item>` — it is not in language.xsd (`chec
 python3 tools/check-language-address.py /path/to/plugin
 ```
 
+## Implicit PIP language keys (options / group permissions / ACP menu)
+
+`option.xml`, `userGroupOption.xml`, and `acpMenu.xml` create language keys **from `name` attributes** — they often never appear in PHP/template code. `check-language-keys.py` (code usage) therefore cannot find them.
+
+Examples (per WoltLab docs):
+
+| PIP | Key pattern |
+|-----|-------------|
+| `userGroupOption` category `user.foo` | `wcf.acp.group.option.category.user.foo` |
+| `userGroupOption` option `user.foo.canBar` | `wcf.acp.group.option.user.foo.canBar` |
+| `option` category / option | `wcf.acp.option.category.…` / `wcf.acp.option.…` |
+| `acpMenu` | Key = menu item `name` (e.g. `myapp.acp.menu.link.…`) |
+
+If the key is missing, the ACP shows the **raw key** (e.g. as a tab title in group permissions).
+
+```bash
+python3 tools/check-language-pip-keys.py /path/to/plugin
+```
+
+Registry: `language-pip-keys` (**warn**). Re-declaring a category that already exists in Core can cause a false positive — only declare categories your plugin actually introduces.
+
 ## Check before build
 
 ```bash
 python3 tools/check-language-categories.py /path/to/plugin
+python3 tools/check-language-pip-keys.py /path/to/plugin
 ```
 
 Runs automatically in:

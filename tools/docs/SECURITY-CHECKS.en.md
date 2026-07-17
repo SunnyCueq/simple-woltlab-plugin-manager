@@ -29,7 +29,7 @@ The full table is in the [Tools overview](TOOLS-OVERVIEW.md). Deep-dives and rel
 | Topic | Details |
 |-------|---------|
 | Templates / XSS / modifiers / foreach | Sections below + [Template rules](WOLTLAB-TEMPLATE-RULES.md) |
-| Language (category, integrity, address) | [Language XML](LANGUAGE-XML.md) |
+| Language (category, integrity, address, implicit PIP keys) | [Language XML](LANGUAGE-XML.md) |
 | LIKE / SQL heuristics / event listeners | Sections below |
 | Style packages / CSS assets | `check-style-package.py`, `check-style-assets.py` |
 | RPC endpoints / AMD `setup` | Registry IDs `endpoint-registration`, `js-amd-exports` |
@@ -46,8 +46,9 @@ The full table is in the [Tools overview](TOOLS-OVERVIEW.md). Deep-dives and rel
 | `check-style-package.py` | Style package: `style.xml` / variables / folders |
 | `check-style-assets.py` | CSS `url(...)` pointing at missing files |
 | `check-language-address.py` | DE Sie/Du address tone (warning) |
+| `check-language-pip-keys.py` | Implicit keys from option/userGroupOption/acpMenu (warning) |
 | `check-js-amd-exports.py` | AMD named export `setup` |
-| `check-endpoint-registration.py` | RPC controllers registered |
+| `check-endpoint-registration.py` | RPC controllers registered (FQCN/`use`, not short name only) |
 | `fix-template-xss-escaping.py` | Semi-automatic fix (**never** adds `\|encodeHTML`) |
 
 ---

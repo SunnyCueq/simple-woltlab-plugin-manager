@@ -29,7 +29,7 @@ Die ausführliche Tabelle steht in der [Tools-Übersicht](TOOLS-OVERVIEW.md). Hi
 | Thema | Details |
 |-------|---------|
 | Templates / XSS / Modifier / Foreach | Abschnitte unten + [Template-Regeln](WOLTLAB-TEMPLATE-RULES.md) |
-| Sprache (Kategorie, Integrität, Anrede) | [Language-XML](LANGUAGE-XML.md) |
+| Sprache (Kategorie, Integrität, Anrede, implizite PIP-Keys) | [Language-XML](LANGUAGE-XML.md) |
 | LIKE / SQL-Heuristik / Event-Listener | Abschnitte unten |
 | Style-Pakete / CSS-Assets | `check-style-package.py`, `check-style-assets.py` |
 | RPC-Endpoints / AMD `setup` | Registry-IDs `endpoint-registration`, `js-amd-exports` |
@@ -46,8 +46,9 @@ Die ausführliche Tabelle steht in der [Tools-Übersicht](TOOLS-OVERVIEW.md). Hi
 | `check-style-package.py` | Style-Paket: `style.xml` / Variablen / Ordner |
 | `check-style-assets.py` | CSS `url(...)` auf fehlende Dateien |
 | `check-language-address.py` | DE Anrede Sie/Du (Warnung) |
+| `check-language-pip-keys.py` | Implizite Keys aus option/userGroupOption/acpMenu (Warnung) |
 | `check-js-amd-exports.py` | AMD Named Export `setup` |
-| `check-endpoint-registration.py` | RPC-Controller registriert |
+| `check-endpoint-registration.py` | RPC-Controller registriert (FQCN/`use`, nicht nur Kurzname) |
 | `fix-template-xss-escaping.py` | Halbautomatischer Fix (fügt **kein** `\|encodeHTML` hinzu) |
 
 ---

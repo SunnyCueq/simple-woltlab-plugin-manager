@@ -5,6 +5,7 @@
 ### Plugin-Manager
 
 - **Doku:** ACP-Guide (EN) — DevTools „Projekt abgleichen“ vs. Hotfix vs. Paket-Install; Verweis Community-Thread (kein offizielles CLI).
+- **Checks (PR #4 + Follow-up):** FQCN-sichere Endpoint-Registrierung; `files/`-Fallback für PIP-Quellen; neu `check-language-pip-keys.py` (warn) + Validate/Doku.
 
 ## Version 1.2.1 – 2026-07-15
 

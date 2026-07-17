@@ -3,10 +3,16 @@
 **Letzte Aktualisierung:** 2026-07-15 (abgestimmt mit [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/))  
 **Version:** 1.1.1
 
-WoltLab prüft eingereichte Pakete in **zwei Stufen**:
+WoltLab prüft eingereichte Pakete in **zwei Stufen** (offizielle Quelle):
 
 1. **Automatisch** — beim echten Upload im Plugin-Store (Syntax, Archiv, Kompatibilität, …)
 2. **Manuell** — durch Mitarbeiter (Sicherheit, Lauffähigkeit, UX, Übersetzungen, …)
+
+!!! quote "WoltLab Plugin-Store-Richtlinien (Auszug)"
+
+    „Die Dateien werden vor der Veröffentlichung in **zwei Schritten** überprüft, eine erste **automatische Überprüfung** arbeitet auf rein formalen Gründen … Im zweiten Schritt erfolgt eine **manuelle Sichtung** durch einen WoltLab Mitarbeiter …“
+
+    Vollständiger Text: [Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/) — Abschnitte [„Vorabprüfung auf technische Mängel“](https://www.woltlab.com/pluginstore/de/richtlinien/) und [„Prüfung durch einen Mitarbeiter der WoltLab GmbH“](https://www.woltlab.com/pluginstore/de/richtlinien/).
 
 SWPM spiegelt **Stufe 1 weitgehend lokal** mit `build` / `validate` — das ist eine **Vorabprüfung auf deinem Rechner**, kein Upload. Stufe 2 bleibt manuell (Funktion, UX, Berechtigungen).
 
@@ -60,6 +66,7 @@ Beispiele (typische Fehler):
 
 - App-Tabelle: Spalte nur nutzen, wenn sie im Schema existiert (z. B. kein `isDisabled`, wenn nur Delete vorgesehen ist)
 - `wcf*_box`: **kein** SQL-Feld `limit` — Wert aus `unserialize(additionalData)['limit']`
+- FormBuilder: `HiddenFormField`/`getData()` schreibt alle Felder mit `hasSaveValue()===true` — JS-only `id` ohne DB-Spalte → UPDATE-Fatal; Request-only Hidden mit `hasSaveValue()===false` (Core-Vorbild: Captcha). Optionale Passwörter: Suite-`PasswordFormField`, Edit leer = Hash behalten
 
 ---
 
@@ -85,6 +92,7 @@ Beispiele (typische Fehler):
 - [ ] **CSS-Assets:** alle `url(...)`-Referenzen in `style/` auflösbar (`check-style-assets.py`) — fehlende Fonts/Bilder können 500er auslösen
 - [ ] **language/:** nur `*.xml` — Dev-Dateien (Skripte, Reports) nach `maintainer/`, sonst landen sie im Store-Paket
 - [ ] **Sprach-XML-Integrität:** keine erfundenen Attribute (`variant` existiert nicht — Sie/du per `{if LANGUAGE_USE_INFORMAL_VARIANT}` im Wert), keine doppelten Keys (letzter gewinnt still beim Import), kein `{if}` in `wcf.global` (`check-language-integrity.py`)
+- [ ] **Implizite PIP-Sprachkeys:** Keys aus `option.xml` / `userGroupOption.xml` / `acpMenu.xml` in `language/*.xml` vorhanden (`check-language-pip-keys.py`, Warnung) — sonst rohe Keys im ACP
 - [ ] **DE-Anrede:** nicht wild Sie und Du mischen — oder Varianten-IF nutzen (`check-language-address.py`, Warnung)
 - [ ] **Hinweis-Boxen:** `<woltlab-core-notice>` nur mit `type="error|info|success|warning"` (`danger` existiert nicht); kein Legacy-Markup `<p class="info">` (`check-template-notices.py`)
 - [ ] **Template-Modifier:** Nur Whitelist-Funktionen und Modifier-Plugins verwenden — erfundene Modifier wie `|formatNumeric` schlagen erst beim ersten Rendern als Fatal Error fehl; Zahlformatierung ist `{#$var}` (`check-template-modifiers.py`)
