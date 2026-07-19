@@ -34,6 +34,10 @@ PIP-XMLs (`option.xml`, `page.xml`, …) bleiben im Paket-Root. Siehe [Paket-Lay
 - `{lang}…{/lang}` und `{jslang}…{/jslang}`
 - Bereits kompilierte `{unsafe:…}`-Blöcke
 
+## Kein `{{` in `.tpl`
+
+WoltLab behandelt `{{…` als Template-Tag-Start. JSDoc wie `/** @type {{file: File}} */` oder Mustache/Vue `{{ var }}` in `.tpl` → Compile-Fatal (`unknown tag`) — oft erst beim ersten ACP-Aufruf. Check: `check-template-double-brace.py` (Build/Validate, fail).
+
 ## Praxis
 
 1. HTML: plain `{$var}` — **niemals** `|encodeHTML` oder `|escape` anhängen (Modifier existieren nicht).

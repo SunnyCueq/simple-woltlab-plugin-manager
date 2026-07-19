@@ -603,6 +603,33 @@ if [ -n "$EXTRACTED_DIR" ]; then
 
     echo ""
 
+    # Template-Check: Doppelte {{ … (JSDoc @type {{…}}, Mustache) → unknown tag zur Laufzeit
+    # Praxis: /** @type {{file: File, slot: string}[]} */ in .tpl killt ACP beim Kompilieren
+    echo -e "${YELLOW}📋 Template-Check: Doppelte geschweifte Klammern ({{)...${NC}"
+    log "INFO" "Prüfe Templates auf '{{' (bricht TemplateScriptingCompiler)"
+    DOUBLE_BRACE_ISSUES=0
+
+    if command -v python3 &> /dev/null && [ -f "$TOOLS_DIR/check-template-double-brace.py" ]; then
+        while IFS= read -r brace_line; do
+            [ -z "$brace_line" ] && continue
+            print_error "Template-{{: $(echo "$brace_line" | cut -d: -f3-) ($(echo "$brace_line" | cut -d: -f1) Zeile $(echo "$brace_line" | cut -d: -f2))"
+            log "ERROR" "Template-{{: $brace_line"
+            ERRORS=$((ERRORS + 1))
+            DOUBLE_BRACE_ISSUES=$((DOUBLE_BRACE_ISSUES + 1))
+        done < <(python3 "$TOOLS_DIR/check-template-double-brace.py" "$EXTRACTED_DIR" 2>/dev/null || true)
+
+        if [ $DOUBLE_BRACE_ISSUES -eq 0 ]; then
+            print_success "Keine doppelten '{{' in Templates"
+            log "INFO" "Double-brace: Keine Probleme"
+        fi
+    else
+        print_warning "check-template-double-brace.py nicht verfügbar, überspringe Check"
+        log "WARNING" "Double-brace-Check übersprungen"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+
+    echo ""
+
     # Store-Check: Überflüssige Dateien im Paket (Richtlinie: keine Dev-Artefakte)
     # Befund Shr1nkr 2026-07-02: language/ enthielt .py/.md-Dev-Dateien im Release-Tar.
     echo -e "${YELLOW}📦 Store-Check: Überflüssige Dateien...${NC}"

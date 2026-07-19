@@ -7,9 +7,11 @@
 
 language-categories|fail|check-language-categories.py|language|Sprach-XML Kategorien
 language-integrity|fail|check-language-integrity.py|language|Sprach-XML Integrität
+language-option-placeholders|fail|check-language-option-placeholders.py|language|Option-Hilfe ohne Template-Platzhalter
 template-xss|fail|check-template-xss.py|templates|Template XSS / ungueltige Modifier
 template-modifiers|fail|check-template-modifiers.py|templates|Template-Modifier Whitelist
 template-foreach|fail|check-template-foreach.py|templates|Foreach-Loop-Variablen
+template-double-brace|fail|check-template-double-brace.py|templates|Doppelte {{ in Templates (JSDoc/Mustache)
 endpoint-registration|fail|check-endpoint-registration.py|lib|RPC-Endpoint-Registrierung
 like-escaping|fail|check-like-escaping.py|lib|LIKE escapeLikeValue
 js-amd-exports|fail|check-js-amd-exports.py|js_acp|AMD Named Exports (setup)

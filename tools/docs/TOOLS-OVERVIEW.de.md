@@ -94,6 +94,8 @@ Laufen beim **Build** über `swpm-run-checks.sh`. Quelle: `swpm-check-registry.t
 | template-xss | fail | `check-template-xss.py` | Ungültige Modifier / Script-Escaping → [Template-Regeln](WOLTLAB-TEMPLATE-RULES.md) |
 | template-modifiers | fail | `check-template-modifiers.py` | Modifier-Whitelist |
 | template-foreach | fail | `check-template-foreach.py` | Foreach-Loop-Variablen |
+| template-double-brace | fail | `check-template-double-brace.py` | Doppelte `{{` (JSDoc/Mustache) → Compile-Fatal |
+| language-option-placeholders | fail | `check-language-option-placeholders.py` | Option-Hilfe ohne Template-Platzhalter (`{$url}` o. Ä.) |
 | endpoint-registration | fail | `check-endpoint-registration.py` | RPC-Endpoints registriert |
 | like-escaping | fail | `check-like-escaping.py` | LIKE + `escapeLikeValue` |
 | js-amd-exports | fail | `check-js-amd-exports.py` | AMD Named Exports (`setup`) |
