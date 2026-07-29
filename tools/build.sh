@@ -560,6 +560,13 @@ echo ""
 print_info "[1/5] Packe TARs aus temp_edit..."
 
 PACKAGE_DIR="$(pwd)"
+
+# Slot-Hygiene: Alte PIP-Archive aus vorherigen Builds/anderen Paketen im gleichen
+# Ordner (z. B. basis-plugin/) dürfen nicht in das neue Archiv rutschen.
+rm -f "${PACKAGE_DIR}/files.tar" "${PACKAGE_DIR}/files_wcf.tar" \
+      "${PACKAGE_DIR}/templates.tar" "${PACKAGE_DIR}/acptemplates.tar" \
+      "${PACKAGE_DIR}/style.tar" "${PACKAGE_DIR}/style.tgz" "${PACKAGE_DIR}/style.tar.gz"
+
 cd temp_edit
 
 # files.tar — Ordner files/ ODER lib/,acp/,style/ (siehe tools/docs/PACKAGE-LAYOUT.de.md)
@@ -632,7 +639,8 @@ if [ -d "templates" ]; then
         TEMPLATE_COUNT=$(tar -tf "${PACKAGE_DIR}/templates.tar" 2>/dev/null | wc -l)
         print_success "templates.tar erstellt [aus templates/*.tpl] (${TEMPLATE_COUNT} Datei(en))"
     else
-        print_warning "Keine .tpl Dateien in templates/ gefunden"
+        rm -f "${PACKAGE_DIR}/templates.tar"
+        print_warning "Keine .tpl Dateien in templates/ gefunden — kein templates.tar"
     fi
     cd ..
 elif ls *.tpl 1> /dev/null 2>&1; then
@@ -1000,7 +1008,58 @@ trap "rm -rf ${TEMP_PACKAGE_DIR}" EXIT
 # Alle Dateien ins temporaere Verzeichnis kopieren
 # WICHTIG: package.xml aus temp_edit/ kopieren (Quelle der Wahrheit)
 cp "$PACKAGE_XML" "${TEMP_PACKAGE_DIR}/package.xml"
-cp *.tar "${TEMP_PACKAGE_DIR}/" 2>/dev/null || true
+
+# Nur PIP-Archive, die package.xml wirklich anfordert — kein blindes ``cp *.tar``
+# (sonst rutschen Reste aus dem Build-Slot, z. B. fremdes templates.tar, mit rein).
+mapfile -t _SWPM_PIP_ARCHIVES < <(
+    python3 - "$PACKAGE_XML" <<'PY'
+import sys
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+defaults = {
+    "file": "files.tar",
+    "template": "templates.tar",
+    "acpTemplate": "acptemplates.tar",
+    "style": "style.tar",
+}
+
+def local_tag(elem):
+    return elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
+
+root = ET.parse(sys.argv[1]).getroot()
+seen = set()
+for node in root.iter():
+    if local_tag(node) != "instruction":
+        continue
+    pip = (node.attrib.get("type") or "").strip()
+    if pip not in defaults:
+        continue
+    body = (node.text or "").strip()
+    app = (node.attrib.get("application") or "").strip()
+    if body:
+        name = body
+    elif pip == "file" and app == "wcf":
+        name = "files_wcf.tar"
+    else:
+        name = defaults[pip]
+    if name not in seen:
+        seen.add(name)
+        print(name)
+PY
+)
+for _arch in "${_SWPM_PIP_ARCHIVES[@]:-}"; do
+    [ -z "$_arch" ] && continue
+    if [ -f "${PROJECT_ROOT}/${_arch}" ]; then
+        cp "${PROJECT_ROOT}/${_arch}" "${TEMP_PACKAGE_DIR}/"
+    else
+        log_error_with_context \
+            "PIP-Archiv fehlt: ${_arch}" \
+            "In package.xml referenziert, nach Build nicht vorhanden"
+        exit 1
+    fi
+done
+# Keine weiteren losen *.tar aus dem Slot mitnehmen
 
 # WICHTIG: XML-Dateien aus temp_edit/ kopieren (nicht aus Root!)
 # package.xml wurde bereits aus temp_edit/ kopiert (wurde dort aktualisiert)
@@ -1068,6 +1127,17 @@ if [ "$SQL_COUNT" -eq 0 ]; then
 fi
 if [ "$SQL_COUNT" -gt 0 ]; then
     print_success "${SQL_COUNT} SQL-Datei(en) kopiert"
+fi
+
+# PIP-Archive vs. package.xml + Demo-Reste — vor dem finalen .tar.gz
+if command -v python3 &>/dev/null && [ -f "${SCRIPT_DIR}/check-package-pip-archives.py" ]; then
+    print_info "Pruefe PIP-Archive / fremde Demo-Templates..."
+    if ! python3 "${SCRIPT_DIR}/check-package-pip-archives.py" "${TEMP_PACKAGE_DIR}"; then
+        log_error_with_context \
+            "Paket enthaelt ueberfluessige oder fremde Archive/Templates" \
+            "Store: keine ueberfluessigen Dateien — Build-Slot bereinigen, erneut bauen"
+        exit 1
+    fi
 fi
 
 # .tar.gz erstellen (Dateien direkt ohne ./ Prefix) → releases/<plugin>/

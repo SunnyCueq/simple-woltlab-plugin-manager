@@ -35,7 +35,7 @@ What WoltLab checks on upload — and how you cover it **locally beforehand**:
 |-------------------|-------------------|
 | PHP and XML files syntactically correct | `validate-plugin.sh` → PHP/XML syntax |
 | Archive contains all files declared in `package.xml` | `validate-plugin.sh` → file completeness |
-| No junk files (`.DS_Store`, `Thumbs.db`, …) | `validate-plugin.sh` + `build.sh` |
+| No junk files (`.DS_Store`, `Thumbs.db`, foreign PIP archives, …) | `validate-plugin.sh` + `build.sh` + `check-package-pip-archives.py` (only archives from `package.xml`; no demo `templates.tar` from a reused build slot) |
 | Compatibility metadata complete and valid | `validate-plugin.sh` → `requiredpackages`, version |
 | Minimum `com.woltlab.wcf` version with security support | `validate-plugin.sh` → min version (6.0+; use current 6.2.x at release) |
 

@@ -20,6 +20,8 @@ releases/
 
 Der Unterordner heißt wie dein Plugin-Ordner (nicht die Paket-ID). `unpack`, `prepare-acp-install` und `gitpush` suchen dort zuerst; alte `.tar.gz` direkt im Plugin-Root werden noch als Fallback gefunden. Pro Plugin behält der Build die letzten fünf Versionen.
 
+**Wichtig — ein Ordner = ein Produkt:** Wenn du denselben Slot (z. B. `basis-plugin/`) für verschiedene Pakete wiederverwendest, können alte PIP-Archive (`templates.tar`, …) liegen bleiben. Der Build löscht sie vor dem Packen und nimmt nur Archive aus der aktuellen `package.xml` mit. Trotzdem: besser **eigener Ordner pro Plugin**, kein Demo-Rest im Slot.
+
 ## Layout-Ordner
 
 | Ordner | Erzeugt | Bedeutung |

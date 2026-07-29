@@ -288,6 +288,30 @@ else
     log "INFO" "$TAR_FOUND TAR-Datei(en) gefunden"
 fi
 
+# Store: neuestes fertiges Paket — keine fremden PIP-Archive (z. B. Demo-templates.tar)
+PIP_ARCH_CHECK="${TOOLS_DIR}/check-package-pip-archives.py"
+if [ -f "$PIP_ARCH_CHECK" ] && command -v python3 &>/dev/null; then
+    echo ""
+    echo -e "${YELLOW}📦 Store-Check: PIP-Archive vs. package.xml (neuestes Paket)...${NC}"
+    log "INFO" "Prüfe neuestes Paket auf überflüssige/fremde PIP-Archive"
+    LATEST_PKG=""
+    if declare -F swpm_find_latest_package >/dev/null 2>&1; then
+        LATEST_PKG="$(swpm_find_latest_package "$MAIN_DIR" "$(pwd)" || true)"
+    fi
+    if [ -z "$LATEST_PKG" ] || [ ! -f "$LATEST_PKG" ]; then
+        print_warning "Kein fertiges *_v*.tar.gz gefunden — PIP-Archiv-Check übersprungen (nach build erneut validate)"
+        log "WARNING" "PIP-Archiv-Check: kein Paket"
+        WARNINGS=$((WARNINGS + 1))
+    elif python3 "$PIP_ARCH_CHECK" --archive "$LATEST_PKG"; then
+        print_success "$(basename "$LATEST_PKG"): PIP-Archive OK"
+        log "INFO" "PIP-Archive OK: $LATEST_PKG"
+    else
+        print_error "$(basename "$LATEST_PKG"): überflüssige/fremde Archive oder Demo-Templates"
+        log "ERROR" "PIP-Archive fail: $LATEST_PKG"
+        ERRORS=$((ERRORS + 1))
+    fi
+fi
+
 echo ""
 
 # 3. Prüfe _extracted Verzeichnis (falls vorhanden) oder Plugin-Struktur
@@ -604,7 +628,7 @@ if [ -n "$EXTRACTED_DIR" ]; then
     echo ""
 
     # Template-Check: Doppelte {{ … (JSDoc @type {{…}}, Mustache) → unknown tag zur Laufzeit
-    # Praxis: /** @type {{file: File, slot: string}[]} */ in .tpl killt ACP beim Kompilieren
+    # Befund DIS/sunnyc 2026-07-19: /** @type {{file: File, slot: string}[]} */ in .tpl
     echo -e "${YELLOW}📋 Template-Check: Doppelte geschweifte Klammern ({{)...${NC}"
     log "INFO" "Prüfe Templates auf '{{' (bricht TemplateScriptingCompiler)"
     DOUBLE_BRACE_ISSUES=0

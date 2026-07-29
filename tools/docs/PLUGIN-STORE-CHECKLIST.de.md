@@ -1,6 +1,6 @@
 # Plugin Store Submission Checkliste
 
-**Letzte Aktualisierung:** 2026-07-15 (abgestimmt mit [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/))  
+**Letzte Aktualisierung:** 2026-07-29 (abgestimmt mit [WoltLab Plugin-Store-Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/))
 **Version:** 1.1.1
 
 WoltLab prüft eingereichte Pakete in **zwei Stufen** (offizielle Quelle):
@@ -35,7 +35,7 @@ Was WoltLab beim Upload prüft — und womit du es **vorher lokal** abdeckst:
 |-------------------|---------------------|
 | PHP- und XML-Dateien syntaktisch korrekt | `validate-plugin.sh` → PHP/XML-Syntax |
 | Archiv enthält alle in `package.xml` deklarierten Dateien | `validate-plugin.sh` → Datei-Vollständigkeit |
-| Keine überflüssigen Dateien (`.DS_Store`, `Thumbs.db`, …) | `validate-plugin.sh` + `build.sh` (Archiv-Check) |
+| Keine überflüssigen Dateien (`.DS_Store`, `Thumbs.db`, fremde PIP-Archive, …) | `validate-plugin.sh` + `build.sh` + `check-package-pip-archives.py` (nur Archive aus `package.xml`; kein Demo-`templates.tar` aus dem Build-Slot) |
 | Kompatibilitätsangaben vollständig und formal korrekt | `validate-plugin.sh` → `requiredpackages`, Version |
 | Mindestversion `com.woltlab.wcf` mit Sicherheits-Support | `validate-plugin.sh` → Minversion (aktuell 6.0+; bei Release aktuelle 6.2.x setzen) |
 
