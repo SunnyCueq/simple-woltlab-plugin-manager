@@ -5,6 +5,7 @@ copywriting-output/
 _build_temp/
 *.tar.gz
 *.tar
+.swpm-slot-package-id
 
 # Old packages
 dev.tkirch.wsc.urlshort.6.0.2.tar.gz

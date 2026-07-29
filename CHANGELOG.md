@@ -4,7 +4,7 @@
 
 ### Plugin-Manager
 
-- **Build-Härtung:** Kein blindes `cp *.tar` mehr — nur Archive aus der aktuellen `package.xml`; vor dem Packen werden alte PIP-Archive im Build-Slot gelöscht. Neu `check-package-pip-archives.py` (Build + Validate): fremdes/überflüssiges `templates.tar` (z. B. Demo-Reste aus wiederverwendetem `basis-plugin/`) bricht ab.
+- **Build-Härtung:** Kein blindes `cp *.tar` mehr — nur Archive aus der aktuellen `package.xml`; vor dem Packen werden alte PIP-Archive im Build-Slot gelöscht. Neu `check-package-pip-archives.py` (Build + Validate): fremdes/überflüssiges `templates.tar` (z. B. Demo-Reste aus wiederverwendetem `basis-plugin/`) bricht ab. Zusätzlich Slot-Guard `.swpm-slot-package-id`: stiller Produktwechsel im gleichen Ordner bricht ab (`SWPM_ALLOW_SLOT_SWITCH=1` zum bewussten Wechsel).
 - **Release-Workflow:** Push eines SemVer-Tags (`vX.Y.Z`) erzeugt/aktualisiert automatisch das GitHub-Release aus dem `CHANGELOG.md`-Abschnitt (+ Compare/Commits). Skript: `tools/publish-manager-release.sh`. Kein Auto-Changelog — Versionseintrag weiterhin bewusst setzen.
 - **Repo-Aufräumen:** verwaisten Remote-Branch `master` und lokalen Restbranch entfernt; Arbeitslinie bleibt `main`.
 

@@ -385,6 +385,16 @@ if [ ! -f "$PACKAGE_XML" ]; then
     fi
 fi
 
+# Package-ID früh: gleicher Slot darf nicht still zwischen Produkten wechseln
+PACKAGE_NAME=$(grep -oP '<package name="\K[^"]+' "$PACKAGE_XML" | head -1)
+if [ -z "$PACKAGE_NAME" ]; then
+    log_error_with_context "Package-Name nicht in $PACKAGE_XML gefunden" "package.xml Struktur-Fehler"
+    exit 1
+fi
+if ! swpm_enforce_slot_package_id "$PROJECT_ROOT" "$PACKAGE_NAME"; then
+    exit 2
+fi
+
 # --dry-run: PIP-Validierung + Tree-Output, dann Exit (ohne Bauen)
 if [ "$DRY_RUN" -eq 1 ]; then
     print_info "[DRY-RUN] Pruefe package.xml Instructions und zeige Paket-Inhalt..."
@@ -986,8 +996,10 @@ else
     echo ""
 fi
 
-# Package-Name aus package.xml lesen
-PACKAGE_NAME=$(grep -oP '<package name="\K[^"]+' "$PACKAGE_XML" | head -1)
+# Package-Name bereits früh gelesen (Slot-Guard); hier nur absichern
+if [ -z "${PACKAGE_NAME:-}" ]; then
+    PACKAGE_NAME=$(grep -oP '<package name="\K[^"]+' "$PACKAGE_XML" | head -1)
+fi
 if [ -z "$PACKAGE_NAME" ]; then
     log_error_with_context "Package-Name nicht in $PACKAGE_XML gefunden" "package.xml Struktur-Fehler"
     exit 1
@@ -1197,6 +1209,7 @@ fi
 
 print_success "Finale Paket-Validierung bestanden"
 print_success "Paket erstellt: ${PACKAGE_PATH}"
+swpm_write_slot_package_id "$PROJECT_ROOT" "$PACKAGE_NAME"
 echo ""
 
 # Aufraeumen: Nur letzte 5 Versionen in releases/<plugin>/ behalten

@@ -20,7 +20,9 @@ releases/
 
 Der Unterordner heißt wie dein Plugin-Ordner (nicht die Paket-ID). `unpack`, `prepare-acp-install` und `gitpush` suchen dort zuerst; alte `.tar.gz` direkt im Plugin-Root werden noch als Fallback gefunden. Pro Plugin behält der Build die letzten fünf Versionen.
 
-**Wichtig — ein Ordner = ein Produkt:** Wenn du denselben Slot (z. B. `basis-plugin/`) für verschiedene Pakete wiederverwendest, können alte PIP-Archive (`templates.tar`, …) liegen bleiben. Der Build löscht sie vor dem Packen und nimmt nur Archive aus der aktuellen `package.xml` mit. Trotzdem: besser **eigener Ordner pro Plugin**, kein Demo-Rest im Slot.
+**Wichtig — ein Ordner = ein Produkt:** Wenn du denselben Slot (z. B. `basis-plugin/`) für verschiedene Pakete wiederverwendest, können alte PIP-Archive (`templates.tar`, …) liegen bleiben. Der Build löscht sie vor dem Packen und nimmt nur Archive aus der aktuellen `package.xml` mit.
+
+Zusätzlich speichert der Build die zuletzt gebaute Paket-ID in `.swpm-slot-package-id`. Wechselt die ID im gleichen Ordner (Demo → anderes Plugin), **bricht der Build ab**. Einmalig erzwingen: `SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh …` (wischt dann Slot-Artefakte). Besser dauerhaft: **eigener Ordner pro Plugin**.
 
 ## Layout-Ordner
 

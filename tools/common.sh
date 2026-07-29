@@ -969,6 +969,70 @@ press_zero_to_back() {
     [ "$choice" = "0" ]
 }
 
+# Funktion: Stamp-Datei für Package-ID im Build-Slot
+swpm_slot_stamp_path() {
+    echo "${1%/}/.swpm-slot-package-id"
+}
+
+# Funktion: Lose PIP-/Legacy-Build-Artefakte im Plugin-Root entfernen (nicht releases/)
+swpm_wipe_slot_build_artifacts() {
+    local root="${1%/}"
+    [ -d "$root" ] || return 0
+    # PIP-Archive + Style-Ausgaben
+    find "$root" -maxdepth 1 -type f \( \
+        -name '*.tar' -o -name '*.tgz' -o -name 'style.tar.gz' \
+    \) -delete 2>/dev/null || true
+    # Alte Produkt-Pakete neben dem Slot (vor zentralem releases/)
+    find "$root" -maxdepth 1 -type f -name '*_v*.tar.gz' -delete 2>/dev/null || true
+}
+
+# Funktion: Verhindert stillen Produktwechsel im gleichen Ordner (Demo → Store-Plugin).
+# Ohne SWPM_ALLOW_SLOT_SWITCH=1 → Abbruch. Mit Override → Artefakte wischen + weiter.
+swpm_enforce_slot_package_id() {
+    local project_root="${1%/}"
+    local package_name="$2"
+    local stamp prev
+    stamp="$(swpm_slot_stamp_path "$project_root")"
+    [ -n "$package_name" ] || return 0
+    if [ ! -f "$stamp" ]; then
+        return 0
+    fi
+    prev="$(tr -d '[:space:]' < "$stamp" 2>/dev/null || true)"
+    [ -z "$prev" ] && return 0
+    [ "$prev" = "$package_name" ] && return 0
+
+    if [ "${SWPM_ALLOW_SLOT_SWITCH:-0}" = "1" ]; then
+        if declare -F print_warning >/dev/null 2>&1; then
+            print_warning "Build-Slot wechselt Paket: ${prev} → ${package_name} (SWPM_ALLOW_SLOT_SWITCH=1)"
+            print_info "Bereinige Build-Artefakte in $(basename "$project_root")/ …"
+        else
+            echo "WARN: Slot-Wechsel ${prev} → ${package_name}, Artefakte werden gelöscht" >&2
+        fi
+        swpm_wipe_slot_build_artifacts "$project_root"
+        return 0
+    fi
+
+    if declare -F print_error >/dev/null 2>&1; then
+        print_error "Build-Slot wird für ein anderes Paket wiederverwendet"
+        print_error "Zuletzt gebaut: ${prev}"
+        print_error "Jetzt:          ${package_name}"
+        print_error "Ordner:         ${project_root}"
+        print_info "Sicher: eigenes Verzeichnis pro Produkt (empfohlen)."
+        print_info "Einmalig gleichen Slot wechseln: SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh …"
+    else
+        echo "ERR: Slot ${project_root} war ${prev}, jetzt ${package_name}. Setze SWPM_ALLOW_SLOT_SWITCH=1 oder nutze einen eigenen Ordner." >&2
+    fi
+    return 2
+}
+
+# Funktion: Package-ID nach erfolgreichem Build im Slot speichern
+swpm_write_slot_package_id() {
+    local project_root="${1%/}"
+    local package_name="$2"
+    [ -n "$package_name" ] || return 0
+    printf '%s\n' "$package_name" > "$(swpm_slot_stamp_path "$project_root")"
+}
+
 # Funktion: Ordnername für releases/<label>/ (Plugin-Basename; bei temp_edit → Parent)
 swpm_plugin_release_label() {
     local plugin_root="$1"
