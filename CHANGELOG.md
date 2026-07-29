@@ -4,10 +4,14 @@
 
 ### Plugin-Manager
 
+## Version 1.2.3 – 2026-07-29
+
+### Plugin-Manager
+
 - **Schutz vor vermischten Paketen:** Wenn du denselben Plugin-Ordner nacheinander für *verschiedene* Produkte nutzt (z. B. zuerst ein Demo, dann ein Store-Plugin), stoppt der Build mit einer klaren Meldung. Grund: Alte Build-Dateien könnten sonst ins falsche Archiv rutschen. Empfohlen: **ein Ordner pro Plugin**. Einmalig trotzdem wechseln: `SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh …` (räumt den Ordner auf).
 - **Saubere Archive:** Der Build nimmt nur noch die in der `package.xml` genannten Archive mit (kein blindes Kopieren aller `*.tar`). Fremde oder Demo-Reste im Paket werden erkannt und brechen Build/Validate ab.
-- **Release-Workflow:** Push eines SemVer-Tags (`vX.Y.Z`) erzeugt/aktualisiert automatisch das GitHub-Release aus dem `CHANGELOG.md`-Abschnitt (+ Compare/Commits). Skript: `tools/publish-manager-release.sh`. Kein Auto-Changelog — Versionseintrag weiterhin bewusst setzen.
-- **Repo-Aufräumen:** verwaisten Remote-Branch `master` und lokalen Restbranch entfernt; Arbeitslinie bleibt `main`.
+- **GitHub-Release für SWPM:** Push eines SemVer-Tags (`vX.Y.Z`) erzeugt das Release aus dem Changelog-Abschnitt (Workflow + `publish-manager-release.sh`).
+- **Repo:** verwaister Branch `master` entfernt; Arbeitslinie ist `main`.
 
 ## Version 1.2.2 – 2026-07-29
 
