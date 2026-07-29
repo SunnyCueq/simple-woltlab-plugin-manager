@@ -11,7 +11,9 @@ Welche Skripte gibt es, und wofür? Kurze Transparenzliste — Details und Befeh
 1. Plugin-Quellcode in einem Ordner mit `package.xml` (oft `temp_edit/` = entpackte Arbeitskopie)
 2. `./tools.sh build` — Paket bauen (inkl. Build-Checks)
 3. `./tools.sh validate …` — lokale Qualitäts- und Richtlinien-Checks
-4. Optional: `./tools.sh push` — Commit, Tag, GitHub-Release (dein Repo)
+4. Optional: `./tools.sh push` — Commit, Tag, GitHub-Release (**Plugin**-Repos)
+
+**SWPM selbst releasen (Maintainer):** Eintrag unter `## Version x.y.z` im `CHANGELOG.md`, committen, Tag `vX.Y.Z` pushen — Action `release.yml` legt das GitHub-Release an (Notes aus dem Changelog).
 
 Produktlinie (mehrere Pakete): `./tools.sh family:check` / `family:build` — siehe [Produktlinie](PRODUCT-LINE.md).
 
@@ -45,7 +47,8 @@ Produktlinie (mehrere Pakete): `./tools.sh family:check` / `family:build` — si
 | `./tools.sh typescript` | TypeScript kompilieren (wenn vorhanden) |
 | `./tools.sh phpstan [plugin]` | PHPStan nur mit `phpstan.neon(.dist)` |
 | `./tools.sh lint:python [--fix]` | ruff für Manager-`tools/*.py` |
-| `./tools.sh push` | Commit, Tag, GitHub-Release |
+| `./tools.sh push` | Commit, Tag, GitHub-Release (**Plugin**-Repos) |
+| Tag `vX.Y.Z` pushen | GitHub-Release für **SWPM selbst** (`release.yml`, Notes aus `CHANGELOG.md`) |
 | `./tools.sh setup` | Core/Docs/d.ts optional laden |
 | `./tools.sh sync-woltlab-refs` | Referenz-Spiegel aktualisieren (Maintainer) |
 
@@ -60,7 +63,8 @@ Produktlinie (mehrere Pakete): `./tools.sh family:check` / `family:build` — si
 | `validate-plugin.sh` | Lokale Qualitäts-, Struktur- und Richtlinien-Checks |
 | `typescript.sh` | TypeScript → JavaScript |
 | `unpack.sh` | Paket nach `temp_edit/` entpacken |
-| `gitpush.sh` | Commit, Push, Tag, Release; Notes = Changelog + Compare/Commits |
+| `gitpush.sh` | Commit, Push, Tag, Release (**Plugins**); Notes = Changelog + Compare/Commits |
+| `publish-manager-release.sh` | GitHub-Release für dieses Repo aus Tag + `CHANGELOG.md` (auch lokal) |
 | `setup-minimal.sh` | Core, Docs, d.ts, Pfade |
 | `help.sh` | Dokumentation öffnen |
 | `swpm-family.sh` | Produktlinie (Basis + Add-ons) |

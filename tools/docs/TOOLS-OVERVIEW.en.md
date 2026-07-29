@@ -11,7 +11,9 @@ Which scripts exist, and what are they for? A short transparency list — detail
 1. Plugin sources in a folder with `package.xml` (often `temp_edit/` = unpacked working copy)
 2. `./tools.sh build` — build the package (includes build checks)
 3. `./tools.sh validate …` — local quality and guideline checks
-4. Optional: `./tools.sh push` — commit, tag, GitHub release (your repo)
+4. Optional: `./tools.sh push` — commit, tag, GitHub release (**plugin** repos)
+
+**Release SWPM itself (maintainers):** Add a `## Version x.y.z` section in `CHANGELOG.md`, commit, push tag `vX.Y.Z` — Action `release.yml` creates the GitHub Release (notes from the changelog).
 
 Product line (multiple packages): `./tools.sh family:check` / `family:build` — see [Product line](PRODUCT-LINE.md).
 
@@ -45,7 +47,8 @@ Product line (multiple packages): `./tools.sh family:check` / `family:build` —
 | `./tools.sh typescript` | Compile TypeScript (when present) |
 | `./tools.sh phpstan [plugin]` | PHPStan only with `phpstan.neon(.dist)` |
 | `./tools.sh lint:python [--fix]` | ruff for manager `tools/*.py` |
-| `./tools.sh push` | Commit, tag, GitHub release |
+| `./tools.sh push` | Commit, tag, GitHub release (**plugin** repos) |
+| Push tag `vX.Y.Z` | GitHub Release for **SWPM itself** (`release.yml`, notes from `CHANGELOG.md`) |
 | `./tools.sh setup` | Optionally load Core/docs/d.ts |
 | `./tools.sh sync-woltlab-refs` | Refresh reference mirrors (maintainers) |
 
@@ -60,7 +63,8 @@ Product line (multiple packages): `./tools.sh family:check` / `family:build` —
 | `validate-plugin.sh` | Local quality, structure, and guideline checks |
 | `typescript.sh` | TypeScript → JavaScript |
 | `unpack.sh` | Unpack package into `temp_edit/` |
-| `gitpush.sh` | Commit, push, tag, release; notes = changelog + Compare/commits |
+| `gitpush.sh` | Commit, push, tag, release (**plugins**); notes = changelog + Compare/commits |
+| `publish-manager-release.sh` | GitHub Release for this repo from tag + `CHANGELOG.md` (also runnable locally) |
 | `setup-minimal.sh` | Core, docs, d.ts, paths |
 | `help.sh` | Open documentation |
 | `swpm-family.sh` | Product line (core + add-ons) |

@@ -4,6 +4,9 @@
 
 ### Plugin-Manager
 
+- **Release-Workflow:** Push eines SemVer-Tags (`vX.Y.Z`) erzeugt/aktualisiert automatisch das GitHub-Release aus dem `CHANGELOG.md`-Abschnitt (+ Compare/Commits). Skript: `tools/publish-manager-release.sh`. Kein Auto-Changelog — Versionseintrag weiterhin bewusst setzen.
+- **Repo-Aufräumen:** verwaisten Remote-Branch `master` und lokalen Restbranch entfernt; Arbeitslinie bleibt `main`.
+
 ## Version 1.2.2 – 2026-07-29
 
 ### Plugin-Manager

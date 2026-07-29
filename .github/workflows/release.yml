@@ -1,0 +1,29 @@
+# GitHub Release for SWPM itself when a SemVer tag is pushed.
+# Notes come from CHANGELOG.md (no auto-invented changelog).
+# Flow: Unreleased → "## Version x.y.z" → commit → tag vX.Y.Z → push tag → this workflow.
+name: release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Publish release from CHANGELOG
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          chmod +x tools/publish-manager-release.sh
+          ./tools/publish-manager-release.sh
