@@ -969,6 +969,45 @@ press_zero_to_back() {
     [ "$choice" = "0" ]
 }
 
+# Funktion: Ordnername für releases/<label>/ (Plugin-Basename; bei temp_edit → Parent)
+swpm_plugin_release_label() {
+    local plugin_root="$1"
+    local base
+    base="$(basename "$plugin_root")"
+    if [ "$base" = "temp_edit" ]; then
+        base="$(basename "$(dirname "$plugin_root")")"
+    fi
+    printf '%s' "$base" | sed 's/[^a-zA-Z0-9._-]/-/g'
+}
+
+# Funktion: Zielverzeichnis für gebaute Pakete — <main_dir>/releases/<label>/
+swpm_release_dir() {
+    local main_dir="$1"
+    local plugin_root="$2"
+    echo "${main_dir}/releases/$(swpm_plugin_release_label "$plugin_root")"
+}
+
+# Funktion: Neuestes .tar.gz für ein Plugin (releases/ zuerst, Legacy im Plugin-Root)
+# Optionaler 3. Parameter: Glob, z. B. com.vendor.myapp_v*.tar.gz
+swpm_find_latest_package() {
+    local main_dir="$1"
+    local plugin_root="$2"
+    local package_glob="${3:-*.tar.gz}"
+    local release_dir latest=""
+    release_dir="$(swpm_release_dir "$main_dir" "$plugin_root")"
+    if [ -d "$release_dir" ]; then
+        # shellcheck disable=SC2086
+        latest=$(ls -t "$release_dir"/$package_glob 2>/dev/null | head -1 || true)
+    fi
+    if [ -z "$latest" ] || [ ! -f "$latest" ]; then
+        # shellcheck disable=SC2086
+        latest=$(ls -t "$plugin_root"/$package_glob 2>/dev/null | head -1 || true)
+    fi
+    if [ -n "$latest" ] && [ -f "$latest" ]; then
+        printf '%s\n' "$latest"
+    fi
+}
+
 # Funktion: Plugin-Verzeichnisse finden (kanonisch: check-family-deps.py --scan-workspace)
 find_plugin_directories() {
     local main_dir="$1"

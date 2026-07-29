@@ -6,6 +6,20 @@ SWPM packt aus `temp_edit/` (oder dem Plugin-Root — die **Arbeitskopie** mit `
 
 **PIP** = Package Installation Plugin: Installationsschritte in `package.xml` (Dateien, Templates, Optionen, …). Template-Details: [Template-Regeln](WOLTLAB-TEMPLATE-RULES.md). Mehrere Pakete: [Produktlinie](PRODUCT-LINE.md).
 
+## Fertiges Paket (Release-Ablage)
+
+Nach `./tools/build.sh` liegt das installierbare Archiv **zentral** unter dem SWPM-Workspace:
+
+```text
+releases/
+├── basis-plugin/
+│   └── com.vendor.myapp_v1.2.3.tar.gz
+└── mein-plugin-b/
+    └── com.vendor.other_v0.1.0.tar.gz
+```
+
+Der Unterordner heißt wie dein Plugin-Ordner (nicht die Paket-ID). `unpack`, `prepare-acp-install` und `gitpush` suchen dort zuerst; alte `.tar.gz` direkt im Plugin-Root werden noch als Fallback gefunden. Pro Plugin behält der Build die letzten fünf Versionen.
+
 ## Layout-Ordner
 
 | Ordner | Erzeugt | Bedeutung |

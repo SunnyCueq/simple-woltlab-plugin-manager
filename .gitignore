@@ -1,3 +1,7 @@
+# Gebaute Plugin-Pakete (zentral; gitpush kann mit -f trotzdem hinzufügen)
+releases/**/*.tar.gz
+!releases/**/.gitkeep
+
 # Credentials und lokale Konfigurationen
 .vscode/woltlab-credentials.local.json
 *.local.json

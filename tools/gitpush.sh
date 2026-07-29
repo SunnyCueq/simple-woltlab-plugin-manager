@@ -409,14 +409,7 @@ LATEST_TAR=""
 if [ ${#TO_PUSH_PLUGINS[@]} -gt 0 ]; then
     for plugin_dir in "${TO_PUSH_PLUGINS[@]}"; do
         plugin_path=$(normalize_plugin_path "$plugin_dir")
-        # Finde neuestes TAR-File für dieses Plugin (plattformkompatibel)
-        if command_exists stat; then
-            # GNU/Linux: Verwende find mit -printf (sortiert nach Modifikationszeit)
-            PLUGIN_TAR=$(find "${plugin_path}" -maxdepth 1 -name "*.tar.gz" -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -n 1 | cut -d' ' -f2-)
-        else
-            # Fallback: Verwende ls -t (sortiert nach Modifikationszeit)
-            PLUGIN_TAR=$(ls -t "${plugin_path}"/*.tar.gz 2>/dev/null | head -n 1)
-        fi
+        PLUGIN_TAR="$(swpm_find_latest_package "$MAIN_DIR" "$plugin_path" || true)"
         if [ -n "$PLUGIN_TAR" ] && [ -f "$PLUGIN_TAR" ]; then
             git add -f "$PLUGIN_TAR"  # -f um .gitignore zu überschreiben
             # Nur das neueste TAR-File behalten (basierend auf Modifikationszeit)

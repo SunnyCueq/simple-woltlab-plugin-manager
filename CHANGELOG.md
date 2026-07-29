@@ -4,6 +4,7 @@
 
 ### Plugin-Manager
 
+- **Build:** fertige `.tar.gz` landen zentral unter `releases/<plugin-ordner>/` (nicht mehr im Plugin-Root); `unpack` / `prepare-acp-install` / `gitpush` / Family suchen dort zuerst (Legacy-Fallback im Plugin-Root).
 - **Doku:** ACP-Guide (EN) — DevTools „Projekt abgleichen“ vs. Hotfix vs. Paket-Install; Verweis Community-Thread (kein offizielles CLI).
 - **Checks (PR #4 + Follow-up):** FQCN-sichere Endpoint-Registrierung; `files/`-Fallback für PIP-Quellen; neu `check-language-pip-keys.py` (warn) + Validate/Doku.
 - **Checks:** `check-template-double-brace.py` (fail) — `{{` in `.tpl` (JSDoc/Mustache) bricht Template-Compiler; Validate + Registry. Zusätzlich `check-language-option-placeholders.py` (fail) für unsichere Platzhalter in Option-Hilfetexten.

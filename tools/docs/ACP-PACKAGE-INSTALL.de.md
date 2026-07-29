@@ -56,9 +56,25 @@ Der Datei-Dialog (**„Datei auswählen“**) im ACP wird **manuell** bedient:
 
 ## Paket-Pfad (nach `prepare-acp-install.sh`)
 
-Im Container: `/var/www/html/de.vendor.myapp_vX.Y.Z.tar.gz`  
-Lokal: `basis-plugin/de.vendor.myapp_v*.tar.gz` (oder dein Plugin-Ordner)
+Im Container: `/var/www/html/de.vendor.myapp_vX.Y.Z.tar.gz`
+Lokal: `releases/<plugin-ordner>/de.vendor.myapp_v*.tar.gz` (z. B. `releases/basis-plugin/…`)
 
 ## Dev-Fallback (nur wenn ACP-Upload nicht möglich)
 
 `tools/install-package-once.php` – non-interaktives CLI-Update mit Admin-Session.
+
+## Projekt abgleichen (DevTools) — nicht dasselbe wie Paket-Install
+
+| Weg | Wann | SWPM |
+|-----|------|------|
+| **Projekt abgleichen** | Tägliche Entwicklung: PIPs aus dem DevTools-Projekt in die laufende Instanz spielen (Dateien, Templates, …) | **Nicht enthalten** — läuft im ACP unter Entwicklung → Projekte |
+| **Hotfix** (`docker cp` + Rechte-Fix) | Schnell PHP/JS/Templates in Docker testen, ohne PIP-Lauf | Optional, siehe [Docker-Rechte](DOCKER-APP-PERMISSIONS.md) |
+| **Paket-Install (ACP)** | Volle Installation/Update wie im Store (PIPs, DB, …) | [prepare-acp-install.sh](ACP-PACKAGE-INSTALL.md) + manueller Upload |
+
+WoltLab bietet dafür **kein offizielles CLI**. Alexander Ebert im Community-Thread [„Projekt schneller abgleichen“](https://www.woltlab.com/community/thread/305735-projekt-schneller-abgleichen/): Paketinstallation unterstützt keine CLI-Aufrufe — „hartes Nein“. Praxis bei WoltLab: meist **gezielter Abgleich einzelner PIPs** (oft &lt; 0,1 s), selten „Alles abgleichen“.
+
+!!! tip "ACP-Tipp (WoltLab)"
+
+    In der Projektliste liegt der Fokus im Filterfeld — mit Pfeiltasten + **Enter** kommst du direkt in die Sync-Ansicht.
+
+Community-Workaround (AJAX/cURL nach ACP-Login) ist im Thread beschrieben, aber **fragil** (Session, XSRF, WSC-Version) und nicht Teil von SWPM. Für Store-Plugins gilt zusätzlich: **kein eigener Paketserver** — Updates über den Plugin-Store ([Richtlinien](https://www.woltlab.com/pluginstore/de/richtlinien/)).

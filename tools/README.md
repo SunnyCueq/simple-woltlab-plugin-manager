@@ -45,7 +45,7 @@ The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, c
 
 ### build.sh – Build plugins
 
-**What it does:** Finds your plugin (folder with `package.xml`), compiles TypeScript when needed, and builds an installable `.tar.gz`. It can also bump the version in `package.xml`.
+**What it does:** Finds your plugin (folder with `package.xml`), compiles TypeScript when needed, and builds an installable `.tar.gz` under `releases/<plugin-folder>/`. It can also bump the version in `package.xml`.
 
 **When:** After code changes, when you need a package to test or ship.
 
@@ -124,7 +124,7 @@ The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, c
 ```
 
 - `plugin`: plugin directory name (e.g. `basis-plugin`); can be left empty to use the first detected plugin.
-- `package_file`: optional path to a specific `.tar.gz`; if omitted, the latest package in the plugin folder is used.
+- `package_file`: optional path to a specific `.tar.gz`; if omitted, the latest package under `releases/<plugin>/` is used (fallback: plugin root).
 
 ---
 
@@ -194,7 +194,7 @@ Details: [docs/PRODUCT-LINE.en.md](docs/PRODUCT-LINE.en.md).
 
 ### prepare-acp-install.sh – Prepare package for ACP upload
 
-**What it does:** Finds the newest `.tar.gz` in the plugin folder, copies it into the local Docker web container (`woltlab-web`), and prints the steps for the manual ACP upload.
+**What it does:** Finds the newest `.tar.gz` under `releases/<plugin>/` (fallback: plugin root), copies it into the local Docker web container (`woltlab-web`), and prints the steps for the manual ACP upload.
 
 **When:** After `./tools/build.sh`, before testing the package in WoltLab. You still pick the file yourself in the ACP dialog.
 

@@ -405,11 +405,9 @@ cmd_build() {
         # Unset overrides for this invocation
         if env -u WOLTLAB_PACKAGE_ID -u WOLTLAB_APP_ABBREV \
             bash "$SCRIPT_DIR/build.sh" "$build_path" "$version_type"; then
-            # Release-Archiv neben dem Quellpaket ablegen (falls Staging)
-            tar_out="$(ls -t "$build_path"/"${id}"_v*.tar.gz 2>/dev/null | head -1 || true)"
+            tar_out="$(swpm_find_latest_package "$MAIN_DIR" "$build_path" "${id}_v*.tar.gz" || true)"
             if [ -n "$tar_out" ] && [ -f "$tar_out" ]; then
-                mkdir -p "$path/releases"
-                cp -f "$tar_out" "$path/releases/"
+                print_info "Paket: $tar_out"
             fi
             print_success "OK: $id"
         else

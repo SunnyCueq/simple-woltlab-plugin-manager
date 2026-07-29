@@ -45,7 +45,7 @@ Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, T
 
 ### build.sh – Plugins bauen
 
-**Was es macht:** Findet dein Plugin (Ordner mit `package.xml`), kompiliert bei Bedarf TypeScript und erzeugt ein installierbares `.tar.gz`. Die Version in der `package.xml` kann erhöht werden.
+**Was es macht:** Findet dein Plugin (Ordner mit `package.xml`), kompiliert bei Bedarf TypeScript und erzeugt ein installierbares `.tar.gz` unter `releases/<plugin-ordner>/`. Die Version in der `package.xml` kann erhöht werden.
 
 **Wann:** Nach Code-Änderungen, wenn du ein Paket zum Testen oder Ausliefern brauchst.
 
@@ -124,7 +124,7 @@ Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, T
 ```
 
 - `Plugin`: Plugin-Ordnername (z. B. `basis-plugin`); kann leer bleiben für das erste erkannte Plugin.
-- `Paketdatei`: optionaler Pfad zu einer bestimmten `.tar.gz`; ohne Angabe wird das neueste Paket im Plugin-Ordner verwendet.
+- `Paketdatei`: optionaler Pfad zu einer bestimmten `.tar.gz`; ohne Angabe wird das neueste Paket unter `releases/<plugin>/` verwendet (Fallback: Plugin-Root).
 
 ---
 
@@ -194,7 +194,7 @@ Details und Ablage: [docs/PRODUCT-LINE.de.md](docs/PRODUCT-LINE.de.md).
 
 ### prepare-acp-install.sh – Paket für ACP-Upload vorbereiten
 
-**Was es macht:** Findet das neueste `.tar.gz` im Plugin-Ordner, kopiert es in den lokalen Docker-Webserver (`woltlab-web`) und gibt die exakten Schritte für den manuellen ACP-Upload aus.
+**Was es macht:** Findet das neueste `.tar.gz` unter `releases/<plugin>/` (Fallback: Plugin-Root), kopiert es in den lokalen Docker-Webserver (`woltlab-web`) und gibt die exakten Schritte für den manuellen ACP-Upload aus.
 
 **Wann nutzen:** Nach `./tools/build.sh`, bevor du das Paket in WoltLab testest. Paketdatei im ACP manuell im Installationsdialog auswählen.
 

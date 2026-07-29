@@ -989,6 +989,9 @@ fi
 print_info "[2/3] Erstelle finales Paket..."
 
 TAR_GZ_NAME="${PACKAGE_NAME}_v${NEW_VERSION}.tar.gz"
+RELEASE_DIR="$(swpm_release_dir "$MAIN_DIR" "$PROJECT_ROOT")"
+mkdir -p "$RELEASE_DIR"
+PACKAGE_PATH="${RELEASE_DIR}/${TAR_GZ_NAME}"
 
 # Temporaeres Verzeichnis fuer Paket-Erstellung
 TEMP_PACKAGE_DIR=$(mktemp -d)
@@ -1045,23 +1048,45 @@ else
     print_warning "language/ Verzeichnis nicht gefunden [kann optional sein]"
 fi
 
-# .tar.gz erstellen (Dateien direkt ohne ./ Prefix)
+# SQL-Dateien für PIP type="sql" (liegen im Paket-Root, nicht in files.tar)
+SQL_COUNT=0
+if [ -d "temp_edit" ]; then
+    for sql_file in temp_edit/*.sql; do
+        if [ -f "$sql_file" ]; then
+            cp "$sql_file" "${TEMP_PACKAGE_DIR}/"
+            SQL_COUNT=$((SQL_COUNT + 1))
+        fi
+    done
+fi
+if [ "$SQL_COUNT" -eq 0 ]; then
+    for sql_file in *.sql; do
+        if [ -f "$sql_file" ]; then
+            cp "$sql_file" "${TEMP_PACKAGE_DIR}/"
+            SQL_COUNT=$((SQL_COUNT + 1))
+        fi
+    done
+fi
+if [ "$SQL_COUNT" -gt 0 ]; then
+    print_success "${SQL_COUNT} SQL-Datei(en) kopiert"
+fi
+
+# .tar.gz erstellen (Dateien direkt ohne ./ Prefix) → releases/<plugin>/
 cd "${TEMP_PACKAGE_DIR}"
 # Alle Dateien explizit auflisten, um ./ Prefix zu vermeiden
-tar -czf "${PROJECT_ROOT}/${TAR_GZ_NAME}" *
+tar -czf "${PACKAGE_PATH}" *
 
 cd "${PROJECT_ROOT}"
 
 # Finale Paket-Validierung
 print_info "[VALIDIERUNG] Pruefe finales Paket..."
-if [ ! -f "${TAR_GZ_NAME}" ]; then
-    log_error_with_context "Paket ${TAR_GZ_NAME} wurde nicht erstellt!" "Paket-Erstellung fehlgeschlagen"
+if [ ! -f "${PACKAGE_PATH}" ]; then
+    log_error_with_context "Paket ${PACKAGE_PATH} wurde nicht erstellt!" "Paket-Erstellung fehlgeschlagen"
     exit 1
 fi
 
 # Pruefe ob alle kritischen Dateien im finalen Paket vorhanden sind
 print_info "Pruefe Paket-Inhalt..."
-PACKAGE_CONTENT=$(tar -tzf "${TAR_GZ_NAME}" 2>/dev/null || echo "")
+PACKAGE_CONTENT=$(tar -tzf "${PACKAGE_PATH}" 2>/dev/null || echo "")
 if [ -z "$PACKAGE_CONTENT" ]; then
     log_error_with_context "Paket ist leer oder beschädigt!" "Paket-Validierung fehlgeschlagen"
     exit 1
@@ -1087,22 +1112,37 @@ if ! echo "$PACKAGE_CONTENT" | grep -q "^package\.xml$"; then
     exit 1
 fi
 
+# SQL-PIP: referenzierte Dateien müssen im Archiv-Root liegen
+MISSING_SQL=()
+while IFS= read -r sql_ref; do
+    [ -z "$sql_ref" ] && continue
+    if ! echo "$PACKAGE_CONTENT" | grep -q "^${sql_ref}$"; then
+        MISSING_SQL+=("$sql_ref")
+    fi
+done < <(grep -oE '<instruction[^>]*type="sql"[^>]*>[^<]+</instruction>' "${TEMP_PACKAGE_DIR}/package.xml" 2>/dev/null | sed -n 's/.*>\([^<]*\)<.*/\1/p' | command tr -d '[:space:]' || true)
+if [ ${#MISSING_SQL[@]} -gt 0 ]; then
+    log_error_with_context "SQL-Datei(en) aus package.xml fehlen im Paket: ${MISSING_SQL[*]}" "PIP type=sql erwartet Dateien im Archiv-Root"
+    exit 1
+fi
 
 print_success "Finale Paket-Validierung bestanden"
-print_success "Paket erstellt: ${TAR_GZ_NAME}"
+print_success "Paket erstellt: ${PACKAGE_PATH}"
 echo ""
 
-# Aufraeumen: Nur letzte 5 Versionen behalten
+# Aufraeumen: Nur letzte 5 Versionen in releases/<plugin>/ behalten
 print_info "[3/5] Raeume alte Pakete auf..."
 KEEP_COUNT=5
 PACKAGE_PATTERN="${PACKAGE_NAME}_v*.tar.gz"
 
-if ls ${PACKAGE_PATTERN} 1> /dev/null 2>&1; then
-    TOTAL_COUNT=$(ls -t ${PACKAGE_PATTERN} 2>/dev/null | wc -l)
+# shellcheck disable=SC2086
+if ls "${RELEASE_DIR}"/${PACKAGE_PATTERN} 1> /dev/null 2>&1; then
+    # shellcheck disable=SC2086
+    TOTAL_COUNT=$(ls -t "${RELEASE_DIR}"/${PACKAGE_PATTERN} 2>/dev/null | wc -l)
     if [ "$TOTAL_COUNT" -gt "$KEEP_COUNT" ]; then
         OLD_COUNT=$((TOTAL_COUNT - KEEP_COUNT))
         print_info "${TOTAL_COUNT} Pakete gefunden, entferne ${OLD_COUNT} aelteste..."
-        ls -t ${PACKAGE_PATTERN} | tail -n +$((KEEP_COUNT + 1)) | while read -r old_package; do
+        # shellcheck disable=SC2086
+        ls -t "${RELEASE_DIR}"/${PACKAGE_PATTERN} | tail -n +$((KEEP_COUNT + 1)) | while read -r old_package; do
             rm -v "$old_package"
         done
         print_success "Aufraeumen abgeschlossen: ${KEEP_COUNT} Pakete behalten"
@@ -1117,9 +1157,9 @@ echo ""
 print_section "Build abgeschlossen" "Hauptmenue" "Build"
 print_success "Build abgeschlossen!"
 print_info "Version: ${NEW_VERSION}"
-print_info "Paket: ${TAR_GZ_NAME}"
+print_info "Paket: ${PACKAGE_PATH}"
 if [ "${JSON_MODE:-0}" -eq 1 ] && command -v python3 &>/dev/null && [ -f "${SCRIPT_DIR}/swpm-package-report.py" ]; then
-    python3 "${SCRIPT_DIR}/swpm-package-report.py" build-ok "$PACKAGE_NAME" "$NEW_VERSION" "${PROJECT_ROOT}/${TAR_GZ_NAME}" "${PROJECT_ROOT}"
+    python3 "${SCRIPT_DIR}/swpm-package-report.py" build-ok "$PACKAGE_NAME" "$NEW_VERSION" "${PACKAGE_PATH}" "${PROJECT_ROOT}"
 fi
 echo ""
 VALIDATE_DIR="${PROJECT_ROOT}"

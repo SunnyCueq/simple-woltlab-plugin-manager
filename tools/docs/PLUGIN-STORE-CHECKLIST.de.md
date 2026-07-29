@@ -173,7 +173,7 @@ cd /path/to/mein-plugin
 ### 4. Upload
 
 1. https://www.woltlab.com/pluginstore/
-2. TAR.GZ hochladen (`releases/*.tar.gz`)
+2. TAR.GZ hochladen (`releases/<plugin>/*.tar.gz`)
 3. Beschreibung DE + EN, Screenshots, Kategorie
 4. Zur Prüfung einreichen
 

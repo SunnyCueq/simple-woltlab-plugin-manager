@@ -56,7 +56,7 @@ Product line (multiple packages): `./tools.sh family:check` / `family:build` —
 | Script / command | Role |
 |------------------|------|
 | `tools.sh` | Entry: menu and CLI |
-| `build.sh` | Build installable `.tar.gz`, version bump/same |
+| `build.sh` | Build installable `.tar.gz` under `releases/<plugin>/`, version bump/same |
 | `validate-plugin.sh` | Local quality, structure, and guideline checks |
 | `typescript.sh` | TypeScript → JavaScript |
 | `unpack.sh` | Unpack package into `temp_edit/` |

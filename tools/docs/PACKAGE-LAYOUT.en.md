@@ -6,6 +6,20 @@ SWPM packs from `temp_edit/` (or the plugin root — the **working copy** with `
 
 **PIP** = Package Installation Plugin: install steps in `package.xml` (files, templates, options, …). Template details: [Template rules](WOLTLAB-TEMPLATE-RULES.md). Multiple packages: [Product line](PRODUCT-LINE.md).
 
+## Built package (release layout)
+
+After `./tools/build.sh`, the installable archive lives **centrally** under the SWPM workspace:
+
+```text
+releases/
+├── basis-plugin/
+│   └── com.vendor.myapp_v1.2.3.tar.gz
+└── mein-plugin-b/
+    └── com.vendor.other_v0.1.0.tar.gz
+```
+
+The subfolder matches your plugin folder name (not the package ID). `unpack`, `prepare-acp-install`, and `gitpush` look there first; legacy `.tar.gz` files next to the plugin root are still found as a fallback. The build keeps the last five versions per plugin.
+
 ## Layout folders
 
 | Folder | Produces | Meaning |

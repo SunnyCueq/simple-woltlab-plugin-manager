@@ -96,29 +96,33 @@ echo ""
 
 # Suche nach Paket-Datei
 if [ -z "$PACKAGE_FILE" ]; then
-    # Neuestes Paket finden
-    PACKAGE_FILE=$(ls -t *.tar.gz 2>/dev/null | head -1)
-    if [ -z "$PACKAGE_FILE" ]; then
-        print_error "Keine .tar.gz Datei gefunden"
+    PACKAGE_FILE="$(swpm_find_latest_package "$MAIN_DIR" "$PROJECT_ROOT" || true)"
+    if [ -z "$PACKAGE_FILE" ] || [ ! -f "$PACKAGE_FILE" ]; then
+        print_error "Keine .tar.gz Datei gefunden (gesucht: releases/$(swpm_plugin_release_label "$PROJECT_ROOT")/ und Plugin-Root)"
         exit 1
     fi
     print_info "Verwende neuestes Paket: ${PACKAGE_FILE}"
 elif [ ! -f "$PACKAGE_FILE" ]; then
-    # Prüfe ob es in anderen Verzeichnissen ist (durchsuche alle Unterverzeichnisse)
+    # Relativer Name: zuerst releases/<plugin>/, dann Plugin-Roots unter MAIN_DIR
     FOUND_PACKAGE=""
-    for search_dir in "${MAIN_DIR}"/*; do
-        if [ -d "$search_dir" ] && [ -f "${search_dir}/${PACKAGE_FILE}" ]; then
-            FOUND_PACKAGE="${search_dir}/${PACKAGE_FILE}"
-            break
-        fi
-    done
-    
+    RELEASE_DIR="$(swpm_release_dir "$MAIN_DIR" "$PROJECT_ROOT")"
+    if [ -f "${RELEASE_DIR}/${PACKAGE_FILE}" ]; then
+        FOUND_PACKAGE="${RELEASE_DIR}/${PACKAGE_FILE}"
+    else
+        for search_dir in "${MAIN_DIR}/releases"/* "${MAIN_DIR}"/*; do
+            if [ -d "$search_dir" ] && [ -f "${search_dir}/${PACKAGE_FILE}" ]; then
+                FOUND_PACKAGE="${search_dir}/${PACKAGE_FILE}"
+                break
+            fi
+        done
+    fi
+
     if [ -n "$FOUND_PACKAGE" ]; then
         PACKAGE_FILE="$FOUND_PACKAGE"
         print_info "Paket gefunden in: ${FOUND_PACKAGE}"
     else
         print_error "Paket-Datei nicht gefunden: ${PACKAGE_FILE}"
-        print_warning "Durchsucht wurde: ${MAIN_DIR}/*/${PACKAGE_FILE}"
+        print_warning "Durchsucht: ${RELEASE_DIR}/ und ${MAIN_DIR}/*/"
         exit 1
     fi
 fi

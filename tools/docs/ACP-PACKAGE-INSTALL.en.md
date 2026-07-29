@@ -56,8 +56,8 @@ The file dialog (**“Choose file”**) in the ACP is used **manually**:
 
 ## Package path (after `prepare-acp-install.sh`)
 
-In the container: `/var/www/html/de.vendor.myapp_vX.Y.Z.tar.gz`  
-Locally: `basis-plugin/de.vendor.myapp_v*.tar.gz` (or your plugin directory)
+In the container: `/var/www/html/de.vendor.myapp_vX.Y.Z.tar.gz`
+Locally: `releases/<plugin-folder>/de.vendor.myapp_v*.tar.gz` (e.g. `releases/basis-plugin/…`)
 
 ## Dev fallback (only if ACP upload is not possible)
 

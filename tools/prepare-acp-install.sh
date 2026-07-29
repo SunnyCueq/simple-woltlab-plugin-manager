@@ -10,22 +10,27 @@ set -euo pipefail
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly MAIN_DIR="$(dirname "$SCRIPT_DIR")"
 readonly PLUGIN="${1:-basis-plugin}"
-readonly PLUGIN_DIR="$MAIN_DIR/$PLUGIN"
 readonly DOCKER_CONTAINER="${WOLTLAB_DOCKER_CONTAINER:-woltlab-web}"
 readonly ACP_URL="${WOLTLAB_ACP_INSTALL_URL:-https://wsc.local/acp/index.php?package-start-install/&action=install}"
 
-if [ ! -d "$PLUGIN_DIR" ]; then
-    echo "Plugin-Verzeichnis nicht gefunden: $PLUGIN_DIR" >&2
+# shellcheck source=common.sh
+source "$SCRIPT_DIR/common.sh"
+
+if [ -d "$PLUGIN" ]; then
+    PLUGIN_DIR="$(cd "$PLUGIN" && pwd)"
+elif [ -d "$MAIN_DIR/$PLUGIN" ]; then
+    PLUGIN_DIR="$MAIN_DIR/$PLUGIN"
+else
+    echo "Plugin-Verzeichnis nicht gefunden: $PLUGIN" >&2
     exit 1
 fi
 
-mapfile -t PACKAGES < <(find "$PLUGIN_DIR" -maxdepth 1 -name '*.tar.gz' -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | cut -d' ' -f2-)
-if [ ${#PACKAGES[@]} -eq 0 ]; then
-    echo "Kein .tar.gz in $PLUGIN_DIR – zuerst ./tools/build.sh $PLUGIN bauen." >&2
+PACKAGE="$(swpm_find_latest_package "$MAIN_DIR" "$PLUGIN_DIR" || true)"
+if [ -z "$PACKAGE" ] || [ ! -f "$PACKAGE" ]; then
+    echo "Kein .tar.gz in $(swpm_release_dir "$MAIN_DIR" "$PLUGIN_DIR") (oder Legacy im Plugin-Root) – zuerst ./tools/build.sh $PLUGIN bauen." >&2
     exit 1
 fi
 
-PACKAGE="${PACKAGES[0]}"
 BASENAME="$(basename "$PACKAGE")"
 
 if ! docker ps --format '{{.Names}}' | grep -qx "$DOCKER_CONTAINER"; then

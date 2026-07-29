@@ -56,7 +56,7 @@ Produktlinie (mehrere Pakete): `./tools.sh family:check` / `family:build` — si
 | Skript / Befehl | Rolle |
 |-----------------|--------|
 | `tools.sh` | Einstieg: Menü und CLI |
-| `build.sh` | Installierbares `.tar.gz` bauen, Version bump/same |
+| `build.sh` | Installierbares `.tar.gz` unter `releases/<plugin>/` bauen, Version bump/same |
 | `validate-plugin.sh` | Lokale Qualitäts-, Struktur- und Richtlinien-Checks |
 | `typescript.sh` | TypeScript → JavaScript |
 | `unpack.sh` | Paket nach `temp_edit/` entpacken |
