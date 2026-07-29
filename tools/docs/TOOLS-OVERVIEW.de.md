@@ -8,10 +8,14 @@ Welche Skripte gibt es, und wofür? Kurze Transparenzliste — Details und Befeh
 
 ## Alltagsweg (kurz)
 
-1. Plugin-Quellcode in einem Ordner mit `package.xml` (oft `temp_edit/` = entpackte Arbeitskopie)
+1. Plugin-Quellcode in **einem eigenen Ordner** mit `package.xml` (oft `temp_edit/` = entpackte Arbeitskopie) — **ein Plugin = ein Ordner**
 2. `./tools.sh build` — Paket bauen (inkl. Build-Checks)
 3. `./tools.sh validate …` — lokale Qualitäts- und Richtlinien-Checks
 4. Optional: `./tools.sh push` — Commit, Tag, GitHub-Release (**Plugin**-Repos)
+
+!!! tip "Schutz vor vermischten Paketen"
+
+    Derselbe Ordner für zwei verschiedene Plugins (z. B. Demo und Store-Produkt) ist unsicher. SWPM merkt sich das zuletzt gebaute Plugin und **stoppt**, wenn du im gleichen Ordner ein anderes baust — damit keine alten Dateien ins falsche Archiv wandern. Details: [Paket-Layout](PACKAGE-LAYOUT.md).
 
 **SWPM selbst releasen (Maintainer):** Eintrag unter `## Version x.y.z` im `CHANGELOG.md`, committen, Tag `vX.Y.Z` pushen — Action `release.yml` legt das GitHub-Release an (Notes aus dem Changelog).
 

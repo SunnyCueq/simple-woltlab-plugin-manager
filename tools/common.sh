@@ -991,8 +991,9 @@ swpm_wipe_slot_build_artifacts() {
 swpm_enforce_slot_package_id() {
     local project_root="${1%/}"
     local package_name="$2"
-    local stamp prev
+    local stamp prev slot_name
     stamp="$(swpm_slot_stamp_path "$project_root")"
+    slot_name="$(basename "$project_root")"
     [ -n "$package_name" ] || return 0
     if [ ! -f "$stamp" ]; then
         return 0
@@ -1003,8 +1004,8 @@ swpm_enforce_slot_package_id() {
 
     if [ "${SWPM_ALLOW_SLOT_SWITCH:-0}" = "1" ]; then
         if declare -F print_warning >/dev/null 2>&1; then
-            print_warning "Build-Slot wechselt Paket: ${prev} → ${package_name} (SWPM_ALLOW_SLOT_SWITCH=1)"
-            print_info "Bereinige Build-Artefakte in $(basename "$project_root")/ …"
+            print_warning "Ordner „${slot_name}/“ wechselt von ${prev} zu ${package_name}."
+            print_info "Alte Build-Dateien in diesem Ordner werden gelöscht (Schutz vor Vermischung)."
         else
             echo "WARN: Slot-Wechsel ${prev} → ${package_name}, Artefakte werden gelöscht" >&2
         fi
@@ -1013,14 +1014,22 @@ swpm_enforce_slot_package_id() {
     fi
 
     if declare -F print_error >/dev/null 2>&1; then
-        print_error "Build-Slot wird für ein anderes Paket wiederverwendet"
-        print_error "Zuletzt gebaut: ${prev}"
-        print_error "Jetzt:          ${package_name}"
-        print_error "Ordner:         ${project_root}"
-        print_info "Sicher: eigenes Verzeichnis pro Produkt (empfohlen)."
-        print_info "Einmalig gleichen Slot wechseln: SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh …"
+        echo ""
+        print_error "Stop: In „${slot_name}/“ wurde zuletzt ein anderes Plugin gebaut."
+        echo ""
+        echo "  Zuletzt:  ${prev}"
+        echo "  Jetzt:    ${package_name}"
+        echo ""
+        echo "  Warum? Derselbe Ordner für zwei Plugins kann alte Dateien (z. B. templates.tar)"
+        echo "  ins falsche Paket mischen — das darf für den Plugin-Store nicht passieren."
+        echo ""
+        echo "  Was tun?"
+        echo "  1) Empfohlen: eigenes Verzeichnis pro Plugin (sicher und übersichtlich)."
+        echo "  2) Einmalig hier wechseln und aufräumen:"
+        echo "       SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh ${slot_name}"
+        echo ""
     else
-        echo "ERR: Slot ${project_root} war ${prev}, jetzt ${package_name}. Setze SWPM_ALLOW_SLOT_SWITCH=1 oder nutze einen eigenen Ordner." >&2
+        echo "ERR: Ordner ${slot_name} war ${prev}, jetzt ${package_name}. Eigenes Verzeichnis nutzen oder SWPM_ALLOW_SLOT_SWITCH=1." >&2
     fi
     return 2
 }
@@ -1029,8 +1038,15 @@ swpm_enforce_slot_package_id() {
 swpm_write_slot_package_id() {
     local project_root="${1%/}"
     local package_name="$2"
+    local stamp was_new=0
     [ -n "$package_name" ] || return 0
-    printf '%s\n' "$package_name" > "$(swpm_slot_stamp_path "$project_root")"
+    stamp="$(swpm_slot_stamp_path "$project_root")"
+    [ -f "$stamp" ] || was_new=1
+    printf '%s\n' "$package_name" > "$stamp"
+    if [ "$was_new" -eq 1 ] && declare -F print_info >/dev/null 2>&1; then
+        print_info "Ordner „$(basename "$project_root")/“ ist diesem Plugin zugeordnet (${package_name})."
+        print_info "Anderes Plugin hier bauen? Besser eigener Ordner — sonst stoppt der Build zum Schutz."
+    fi
 }
 
 # Funktion: Ordnername für releases/<label>/ (Plugin-Basename; bei temp_edit → Parent)

@@ -4,7 +4,8 @@
 
 ### Plugin-Manager
 
-- **Build-Härtung:** Kein blindes `cp *.tar` mehr — nur Archive aus der aktuellen `package.xml`; vor dem Packen werden alte PIP-Archive im Build-Slot gelöscht. Neu `check-package-pip-archives.py` (Build + Validate): fremdes/überflüssiges `templates.tar` (z. B. Demo-Reste aus wiederverwendetem `basis-plugin/`) bricht ab. Zusätzlich Slot-Guard `.swpm-slot-package-id`: stiller Produktwechsel im gleichen Ordner bricht ab (`SWPM_ALLOW_SLOT_SWITCH=1` zum bewussten Wechsel).
+- **Schutz vor vermischten Paketen:** Wenn du denselben Plugin-Ordner nacheinander für *verschiedene* Produkte nutzt (z. B. zuerst ein Demo, dann ein Store-Plugin), stoppt der Build mit einer klaren Meldung. Grund: Alte Build-Dateien könnten sonst ins falsche Archiv rutschen. Empfohlen: **ein Ordner pro Plugin**. Einmalig trotzdem wechseln: `SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh …` (räumt den Ordner auf).
+- **Saubere Archive:** Der Build nimmt nur noch die in der `package.xml` genannten Archive mit (kein blindes Kopieren aller `*.tar`). Fremde oder Demo-Reste im Paket werden erkannt und brechen Build/Validate ab.
 - **Release-Workflow:** Push eines SemVer-Tags (`vX.Y.Z`) erzeugt/aktualisiert automatisch das GitHub-Release aus dem `CHANGELOG.md`-Abschnitt (+ Compare/Commits). Skript: `tools/publish-manager-release.sh`. Kein Auto-Changelog — Versionseintrag weiterhin bewusst setzen.
 - **Repo-Aufräumen:** verwaisten Remote-Branch `master` und lokalen Restbranch entfernt; Arbeitslinie bleibt `main`.
 

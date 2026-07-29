@@ -8,10 +8,14 @@ Which scripts exist, and what are they for? A short transparency list — detail
 
 ## Everyday path (short)
 
-1. Plugin sources in a folder with `package.xml` (often `temp_edit/` = unpacked working copy)
+1. Plugin sources in **their own folder** with `package.xml` (often `temp_edit/` = unpacked working copy) — **one plugin = one folder**
 2. `./tools.sh build` — build the package (includes build checks)
 3. `./tools.sh validate …` — local quality and guideline checks
 4. Optional: `./tools.sh push` — commit, tag, GitHub release (**plugin** repos)
+
+!!! tip "Protection against mixed packages"
+
+    Reusing the same folder for two different plugins (e.g. a demo and a store product) is unsafe. SWPM remembers the last built plugin and **stops** if you build another one in that folder — so old files cannot slip into the wrong archive. Details: [Package layout](PACKAGE-LAYOUT.md).
 
 **Release SWPM itself (maintainers):** Add a `## Version x.y.z` section in `CHANGELOG.md`, commit, push tag `vX.Y.Z` — Action `release.yml` creates the GitHub Release (notes from the changelog).
 

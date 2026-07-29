@@ -20,9 +20,7 @@ releases/
 
 The subfolder matches your plugin folder name (not the package ID). `unpack`, `prepare-acp-install`, and `gitpush` look there first; legacy `.tar.gz` files next to the plugin root are still found as a fallback. The build keeps the last five versions per plugin.
 
-**Important — one folder per product:** Reusing the same slot (e.g. `basis-plugin/`) for different packages can leave old PIP archives (`templates.tar`, …) on disk. The build clears them before packing and only includes archives required by the current `package.xml`.
-
-Additionally, the build stores the last built package ID in `.swpm-slot-package-id`. If the ID changes in the same folder (demo → another plugin), the **build aborts**. One-shot override: `SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh …` (then wipes slot artifacts). Prefer a **dedicated folder per plugin**.
+**Important — one folder per product:** Reusing the same folder for two plugins can mix old build files. SWPM stores the last built package ID (`.swpm-slot-package-id`) and **stops** on a switch — with a clear message about what to do. One-shot override: `SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh …` (then wipes old artifacts). Also: only archives from the current `package.xml` go into the package.
 
 ## Layout folders
 

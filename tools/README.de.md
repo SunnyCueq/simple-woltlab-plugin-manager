@@ -47,6 +47,8 @@ Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, T
 
 **Was es macht:** Findet dein Plugin (Ordner mit `package.xml`), kompiliert bei Bedarf TypeScript und erzeugt ein installierbares `.tar.gz` unter `releases/<plugin-ordner>/`. Die Version in der `package.xml` kann erhöht werden.
 
+**Wichtig:** Ein Plugin = ein Ordner. Wenn du denselben Ordner für ein *anderes* Plugin wiederverwendest, stoppt der Build (Schutz vor vermischten Dateien). Einmalig wechseln: `SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh …`. Details: [docs/PACKAGE-LAYOUT.de.md](docs/PACKAGE-LAYOUT.de.md).
+
 **Wann:** Nach Code-Änderungen, wenn du ein Paket zum Testen oder Ausliefern brauchst.
 
 **Befehl:**

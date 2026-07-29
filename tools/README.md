@@ -47,6 +47,8 @@ The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, c
 
 **What it does:** Finds your plugin (folder with `package.xml`), compiles TypeScript when needed, and builds an installable `.tar.gz` under `releases/<plugin-folder>/`. It can also bump the version in `package.xml`.
 
+**Important:** One plugin = one folder. If you reuse the same folder for a *different* plugin, the build stops (protection against mixed files). One-shot switch: `SWPM_ALLOW_SLOT_SWITCH=1 ./tools/build.sh …`. Details: [docs/PACKAGE-LAYOUT.en.md](docs/PACKAGE-LAYOUT.en.md).
+
 **When:** After code changes, when you need a package to test or ship.
 
 **Command:**
