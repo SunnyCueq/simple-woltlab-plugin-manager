@@ -4,6 +4,13 @@
 
 ### Plugin-Manager
 
+## Version 1.2.6 – 2026-07-30
+
+### Plugin-Manager
+
+- **Release-Fix:** `./tools.sh release` ruft immer `release-manager.sh` auf — nicht mehr die alte lokale `manager-push.sh` (CalVer `vYYYY.MM.DD`, Remote `manager`). `manager-push.sh` ist nur noch ein Wrapper.
+- **Release-Ablauf:** Version optional aus CHANGELOG; `--commit` mit sicherem Staging (`.cursor/`, Plugin-One-Offs, WoltLab-Spiegel ausgeschlossen).
+
 ## Version 1.2.5 – 2026-07-30
 
 ### Plugin-Manager

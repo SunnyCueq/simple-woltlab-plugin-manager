@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fail-Hinweise für doppelte geschweifte Klammern in WoltLab-Templates.
 
-Hintergrund (Praxis-Befund):
+Hintergrund (DIS / sunnyc.de 2026-07-19):
 - TemplateScriptingCompiler behandelt „{{…“ als Tag-Start.
 - JSDoc in eingebettetem JS wie ``/** @type {{file: File}} */`` bricht die
   Kompilierung mit „unknown tag {{file: …“ — oft erst beim ersten ACP-Aufruf.

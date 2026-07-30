@@ -79,7 +79,7 @@ def main() -> int:
             issues.append(rel(plugin, empty))
 
     if not issues:
-        print("check-empty-pack-dirs: OK")
+        print("OK: keine leeren Pack-Ordner")
         return 0
 
     print("check-empty-pack-dirs: FEHLER — leere Ordner würden mit in PIP-Archive")

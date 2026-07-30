@@ -9,7 +9,6 @@ releases/**/*.tar.gz
 .env
 tools/.woltlab-setup-state
 tools/.woltlab-setup-state.json
-tools/manager-push.sh
 tools/manager-push.env
 tools/docs/logs/
 

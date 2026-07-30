@@ -595,11 +595,7 @@ if [ "$#" -gt 0 ]; then
 		;;
 	release | manager-push | manager:release)
 		shift
-		if [ -f "$TOOLS_DIR/manager-push.sh" ]; then
-			run_tool "$TOOLS_DIR/manager-push.sh" "$@"
-		else
-			run_tool "$TOOLS_DIR/release-manager.sh" "$@"
-		fi
+		run_tool "$TOOLS_DIR/release-manager.sh" "$@"
 		exit $?
 		;;
 	menu | ui)
