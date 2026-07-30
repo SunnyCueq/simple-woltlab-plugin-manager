@@ -1,0 +1,24 @@
+name: tools-tests
+
+on:
+  push:
+    paths:
+      - "tools/**"
+      - ".github/workflows/tools-tests.yml"
+  pull_request:
+    paths:
+      - "tools/**"
+      - ".github/workflows/tools-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run toolkit smoke tests
+        run: |
+          chmod +x tools/tests/run-tests.sh tools/tests/test_common_helpers.sh
+          ./tools/tests/run-tests.sh

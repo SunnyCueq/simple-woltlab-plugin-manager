@@ -53,6 +53,8 @@ In `package.xml` z. B. `<instruction type="style">style.tgz</instruction>` —
 
 Wenn `files/` existiert, wird **nur** daraus gepackt (nicht zusätzlich `lib/`). Nutze entweder das klassische Layout (`lib/`, `acp/`, `style/`) oder das `files/`-Layout — nicht beides gemischt.
 
+**Keine leeren Ordner unter Pack-Wurzeln:** `tar` nimmt auch Verzeichnisse ohne Dateien mit (z. B. leeres `files/acp/` → `./acp/` im Archiv). ACP-PHP gehört typisch nach `files/lib/acp/…`; ein leeres `files/acp/` ist oft ein Scaffold-Rest. Checker: `check-empty-pack-dirs.py` (Build bricht ab).
+
 ## CLI-Flags
 
 ```bash

@@ -431,12 +431,24 @@ verify_env_ports() {
 check_port_reachable() {
     local host="${1:-127.0.0.1}"
     local port="${2:-}"
-    [ -z "$port" ] || [ "$port" -lt 1 ] 2>/dev/null && return 1
-    if command -v timeout &>/dev/null; then
-        timeout 2 bash -c "echo >/dev/tcp/$host/$port" 2>/dev/null && return 0
-    fi
+    # Digits-only port — rejects shell metacharacters before any bash -c use
+    [[ "$port" =~ ^[1-9][0-9]*$ ]] || return 1
+    (( port >= 1 && port <= 65535 )) || return 1
+    # Only loopback hosts — never pass untrusted host into a shell string
+    case "$host" in
+        127.0.0.1|localhost|::1) ;;
+        *) return 1 ;;
+    esac
     if command -v nc &>/dev/null; then
-        nc -z "$host" "$port" 2>/dev/null && return 0
+        nc -z -- "$host" "$port" 2>/dev/null && return 0
+        return 1
+    fi
+    if command -v timeout &>/dev/null; then
+        case "$host" in
+            127.0.0.1) timeout 2 bash -c 'echo >/dev/tcp/127.0.0.1/'"$port" 2>/dev/null && return 0 ;;
+            localhost) timeout 2 bash -c 'echo >/dev/tcp/127.0.0.1/'"$port" 2>/dev/null && return 0 ;;
+            ::1) timeout 2 bash -c 'echo >/dev/tcp/::1/'"$port" 2>/dev/null && return 0 ;;
+        esac
     fi
     return 1
 }

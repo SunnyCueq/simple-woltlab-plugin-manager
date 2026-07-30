@@ -15,6 +15,8 @@ template-double-brace|fail|check-template-double-brace.py|templates|Doppelte {{ 
 endpoint-registration|fail|check-endpoint-registration.py|lib|RPC-Endpoint-Registrierung
 like-escaping|fail|check-like-escaping.py|lib|LIKE escapeLikeValue
 js-amd-exports|fail|check-js-amd-exports.py|js_acp|AMD Named Exports (setup)
+frontend-asset-wiring|fail|check-frontend-asset-wiring.py|always|Frontend-Assets: Listener-Dateien + Option-Gates (Default an)
+acp-scripts|fail|check-acp-scripts.py|always|ACP Install/Update-Skripte (kein getTPL()->clearTemplates)
 template-layout|warn|check-template-layout.py|always|Template-Layout (templates/)
 template-notices|warn|check-template-notices.py|templates|Hinweis-Boxen
 style-assets|warn|check-style-assets.py|style|CSS url()-Assets
@@ -24,3 +26,4 @@ language-pip-keys|warn|check-language-pip-keys.py|language|Implizite PIP-Sprachk
 language-address|warn|check-language-address.py|language|DE Anrede Sie/Du Konsistenz
 first-release-hygiene|warn|check-first-release-hygiene.py|always|First-Release 1.0.0 Hygiene (keine Update-Altlasten)
 package-descriptions|warn|check-package-descriptions.py|always|package.xml packagedescription (Default+de)
+empty-pack-dirs|fail|check-empty-pack-dirs.py|always|Leere Ordner unter files/ (landen in files.tar)

@@ -8,6 +8,8 @@ Rules (fail-safe):
   4. Exactly one weakly connected component (N>=1)
   5. Non-WoltLab requiredpackage must exist in family
   6. No cycles; minversion of family deps must be satisfied
+  Warnings (non-fatal): description hygiene; template ownership collisions;
+  static {include file='…'} of optional-sibling-only templates
 
 Top-level manifest "id" is product-line metadata — need NOT match any package.xml name.
 Whitelist packages[].id MUST match package.xml @name at that root.
@@ -490,6 +492,8 @@ def build_family(manifest_path: Path) -> tuple[dict[str, Any], list[str]]:
 
     # packagedescription hygiene (warn) + base must not claim add-on features as included
     _apply_description_hygiene(packages, directed, warnings)
+    # Template ownership + static includes of sibling-only templates (warn; product lines only)
+    _apply_template_ownership_hygiene(packages, directed, warnings)
 
     ok = len(errors) == 0
     result = {
@@ -593,6 +597,162 @@ def _description_claims_term_as_included(text: str, term: str) -> bool:
             continue
         return True
     return False
+
+
+# Static {include file='name'} — not file=$var (runtime). WCF resolves literals at compile time.
+_INCLUDE_FILE_LITERAL = re.compile(
+    r"\{include\b[^}]*\bfile\s*=\s*['\"]([^'\"$]+)['\"]",
+    re.I | re.S,
+)
+
+
+def _collect_package_templates(pkg_root: Path) -> dict[str, set[str]]:
+    """Map slot → template basenames (without .tpl) shipped by this package.
+
+    Slots mirror WoltLab install targets that share one application template space:
+      acp  — acptemplates/
+      front — templates/ and legacy root *.tpl
+    """
+    slots: dict[str, set[str]] = {"acp": set(), "front": set()}
+    roots = [pkg_root]
+    te = pkg_root / "temp_edit"
+    if te.is_dir():
+        roots.append(te)
+
+    for root in roots:
+        acp_dir = root / "acptemplates"
+        if acp_dir.is_dir():
+            for p in acp_dir.glob("*.tpl"):
+                slots["acp"].add(p.stem)
+        tpl_dir = root / "templates"
+        if tpl_dir.is_dir():
+            for p in tpl_dir.glob("*.tpl"):
+                slots["front"].add(p.stem)
+        # Legacy: Root-*.tpl packed into templates.tar
+        for p in root.glob("*.tpl"):
+            slots["front"].add(p.stem)
+
+    return slots
+
+
+def _iter_package_template_files(pkg_root: Path) -> list[Path]:
+    files: list[Path] = []
+    roots = [pkg_root]
+    te = pkg_root / "temp_edit"
+    if te.is_dir():
+        roots.append(te)
+    for root in roots:
+        for sub in ("acptemplates", "templates"):
+            d = root / sub
+            if d.is_dir():
+                files.extend(sorted(d.glob("*.tpl")))
+        files.extend(sorted(root.glob("*.tpl")))
+    # de-dupe by resolve
+    seen: set[str] = set()
+    out: list[Path] = []
+    for f in files:
+        key = str(f.resolve())
+        if key not in seen:
+            seen.add(key)
+            out.append(f)
+    return out
+
+
+def _family_requires(
+    pid: str, target: str, directed: dict[str, set[str]]
+) -> bool:
+    """True if pid transitively requires target via family requiredpackage edges."""
+    seen: set[str] = set()
+    stack = list(directed.get(pid, ()))
+    while stack:
+        n = stack.pop()
+        if n == target:
+            return True
+        if n in seen:
+            continue
+        seen.add(n)
+        stack.extend(directed.get(n, ()))
+    return False
+
+
+def _apply_template_ownership_hygiene(
+    packages: dict[str, dict[str, Any]],
+    directed: dict[str, set[str]],
+    warnings: list[str],
+) -> None:
+    """Warn on product-line template pitfalls (generic — any family, not app-specific).
+
+    1) Same template basename in the same slot (acp|front) in two family packages →
+       WoltLab file/template ownership blocks the second install.
+    2) Static {include file='X'} in package A where X is only shipped by sibling B
+       and A does not require B (directly/transitively) → compile fails when B is
+       not installed (even inside unused {if} branches).
+
+    Add-on → base includes are fine when requiredpackage guarantees the base.
+    """
+    if len(packages) < 2:
+        return
+
+    by_pkg: dict[str, dict[str, set[str]]] = {}
+    for pid, pkg in packages.items():
+        by_pkg[pid] = _collect_package_templates(Path(pkg["path"]))
+
+    # --- ownership collisions ---
+    for slot in ("acp", "front"):
+        owners: dict[str, list[str]] = defaultdict(list)
+        for pid, slots in by_pkg.items():
+            for name in slots[slot]:
+                owners[name].append(pid)
+        for name, pids in sorted(owners.items()):
+            if len(pids) < 2:
+                continue
+            warnings.append(
+                f"Template-Ownership ({slot}): '{name}.tpl' in mehreren Family-Paketen "
+                f"({', '.join(sorted(pids))}) — zweites Paket kann nicht installieren; "
+                f"unterschiedliche Namen oder dynamisches {{include file=$var}} nutzen"
+            )
+
+    # --- static includes of optional-sibling-only templates ---
+    all_names: set[str] = set()
+    for slots in by_pkg.values():
+        all_names |= slots["acp"] | slots["front"]
+
+    for pid, pkg in packages.items():
+        own = by_pkg[pid]["acp"] | by_pkg[pid]["front"]
+        sibling_only = all_names - own
+        if not sibling_only:
+            continue
+        pkg_root = Path(pkg["path"])
+        for tpl_file in _iter_package_template_files(pkg_root):
+            try:
+                text = tpl_file.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            for m in _INCLUDE_FILE_LITERAL.finditer(text):
+                raw = m.group(1).strip()
+                name = Path(raw).stem if raw else ""
+                if not name or name not in sibling_only:
+                    continue
+                owners = [
+                    other
+                    for other, slots in by_pkg.items()
+                    if other != pid and name in (slots["acp"] | slots["front"])
+                ]
+                # Safe if every owner is a required dep (e.g. add-on → base template).
+                if owners and all(
+                    _family_requires(pid, owner, directed) for owner in owners
+                ):
+                    continue
+                try:
+                    rel = str(tpl_file.relative_to(pkg_root))
+                except ValueError:
+                    rel = tpl_file.name
+                warnings.append(
+                    f"{pid}: statisches {{include file='{raw}'}} in {rel} — Template nur in "
+                    f"Family-Paket(en) {', '.join(sorted(owners))} (kein requiredpackage "
+                    f"von diesem Paket; Compile-Zeit → Fatal ohne Sibling). "
+                    f"Dynamisches Include + eigenes Fallback-Template verwenden."
+                )
 
 
 def discover_workspace(main_dir: Path) -> list[Path]:

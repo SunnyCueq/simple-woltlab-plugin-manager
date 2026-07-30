@@ -1015,7 +1015,7 @@ PACKAGE_PATH="${RELEASE_DIR}/${TAR_GZ_NAME}"
 
 # Temporaeres Verzeichnis fuer Paket-Erstellung
 TEMP_PACKAGE_DIR=$(mktemp -d)
-trap "rm -rf ${TEMP_PACKAGE_DIR}" EXIT
+trap 'rm -rf -- "$TEMP_PACKAGE_DIR"' EXIT
 
 # Alle Dateien ins temporaere Verzeichnis kopieren
 # WICHTIG: package.xml aus temp_edit/ kopieren (Quelle der Wahrheit)

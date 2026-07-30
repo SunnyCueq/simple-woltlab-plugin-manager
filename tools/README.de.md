@@ -130,6 +130,14 @@ Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, T
 
 ---
 
+### Toolkit-Smoke-Tests (SWPM selbst)
+
+```bash
+./tools/tests/run-tests.sh
+```
+
+Prüft `common.sh`-Helfer (Release-Pfade, Allowlist in `check_port_reachable`) und `check-package-pip-archives.py`. Läuft auch in CI über `.github/workflows/tools-tests.yml`.
+
 ### Optionale Checks (TypeScript, PHPStan, ruff)
 
 Nur relevant, wenn die jeweilige Technik im Projekt vorkommt:

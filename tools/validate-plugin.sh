@@ -312,6 +312,28 @@ if [ -f "$PIP_ARCH_CHECK" ] && command -v python3 &>/dev/null; then
     fi
 fi
 
+# Leere Pack-Ordner (tar nimmt sie mit → z. B. leeres files/acp/)
+EMPTY_DIRS_CHECK="${TOOLS_DIR}/check-empty-pack-dirs.py"
+EMPTY_DIRS_ROOT=""
+if [ -d "temp_edit/files" ] || [ -d "temp_edit/files_wcf" ] || [ -d "temp_edit/lib" ]; then
+    EMPTY_DIRS_ROOT="temp_edit"
+elif [ -d "files" ] || [ -d "files_wcf" ] || [ -d "lib" ]; then
+    EMPTY_DIRS_ROOT="."
+fi
+if [ -n "$EMPTY_DIRS_ROOT" ] && [ -f "$EMPTY_DIRS_CHECK" ] && command -v python3 &>/dev/null; then
+    echo ""
+    echo -e "${YELLOW}📂 Prüfe leere Pack-Ordner...${NC}"
+    log "INFO" "check-empty-pack-dirs: $EMPTY_DIRS_ROOT"
+    if python3 "$EMPTY_DIRS_CHECK" "$EMPTY_DIRS_ROOT"; then
+        print_success "Keine leeren Pack-Ordner"
+        log "INFO" "empty-pack-dirs OK"
+    else
+        print_error "Leere Ordner unter files/ (o. ä.) — würden in files.tar landen"
+        log "ERROR" "empty-pack-dirs fail"
+        ERRORS=$((ERRORS + 1))
+    fi
+fi
+
 echo ""
 
 # 3. Prüfe _extracted Verzeichnis (falls vorhanden) oder Plugin-Struktur

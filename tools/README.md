@@ -130,6 +130,14 @@ The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, c
 
 ---
 
+### Toolkit smoke tests (SWPM itself)
+
+```bash
+./tools/tests/run-tests.sh
+```
+
+Covers `common.sh` helpers (release paths, `check_port_reachable` allowlist) and `check-package-pip-archives.py`. Also runs in CI via `.github/workflows/tools-tests.yml`.
+
 ### Optional checks (TypeScript, PHPStan, ruff)
 
 Only when that tech is part of the project:

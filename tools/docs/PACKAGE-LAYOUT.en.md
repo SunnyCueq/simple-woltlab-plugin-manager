@@ -53,6 +53,8 @@ In `package.xml`, e.g. `<instruction type="style">style.tgz</instruction>` — S
 
 If `files/` exists, packing uses **only** that folder (not `lib/` as well). Use either the classic layout (`lib/`, `acp/`, `style/`) or the `files/` layout — do not mix both.
 
+**No empty directories under pack roots:** `tar` also stores directories with no files (e.g. empty `files/acp/` → `./acp/` in the archive). ACP PHP usually lives under `files/lib/acp/…`; an empty `files/acp/` is often a leftover scaffold. Checker: `check-empty-pack-dirs.py` (build fails).
+
 ## CLI flags
 
 ```bash
