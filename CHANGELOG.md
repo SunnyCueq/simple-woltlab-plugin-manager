@@ -4,6 +4,15 @@
 
 ### Plugin-Manager
 
+## Version 1.2.4 – 2026-07-30
+
+### Plugin-Manager
+
+- **Leere Pack-Ordner:** `check-empty-pack-dirs.py` bricht Build/Validate ab, wenn z. B. leeres `files/acp/` mit in `files.tar` rutschen würde (`tar` packt auch leere Verzeichnisse).
+- **Injection-Härtung:** `check_port_reachable` — nur Loopback-Hosts, Port nur Ziffern, bevorzugt `nc -z`; sicherer `trap` in `build.sh`.
+- **Neue Checks:** `check-acp-scripts.py` (kein `getTPL()->clearTemplates` in Install-Skripten), `check-frontend-asset-wiring.py` (CSS/JS nicht hinter Default-off-Optionen); Family-Deps warnt bei Template-Kollisionen.
+- **Toolkit-Tests:** `tools/tests/run-tests.sh` + CI-Workflow `tools-tests.yml`.
+
 ## Version 1.2.3 – 2026-07-29
 
 ### Plugin-Manager
