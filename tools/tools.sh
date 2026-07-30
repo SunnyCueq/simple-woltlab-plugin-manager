@@ -17,6 +17,7 @@
 #   validate
 #   setup
 #   push | gitpush
+#   release | manager-push
 #   docs
 #
 
@@ -160,7 +161,8 @@ cmd_help() {
 	echo "    setup                           → tools/setup-minimal.sh"
 	echo ""
 	echo -e "  ${BOLD}Git & Repo${RESET}"
-	echo "    push | gitpush [args…]          → tools/gitpush.sh"
+	echo "    push | gitpush [args…]          → tools/gitpush.sh (Plugin-Repos)"
+	echo "    release | manager-push [ver]    → tools/release-manager.sh (SWPM)"
 	echo "    repo                            → origin anzeigen / setzen"
 	echo ""
 	echo -e "  ${BOLD}Sonstiges${RESET}"
@@ -168,7 +170,6 @@ cmd_help() {
 	echo "    wcf-version                     → Core/Docs/GitHub-Version"
 	echo "    sync-woltlab-refs [6.2]         → Git-Spiegel aktualisieren"
 	echo "    lang                            → Menü-Sprache de/en"
-	echo "    manager-push                    → Maintainer (falls vorhanden)"
 	echo "    menu                            → Interaktives Menü"
 	echo ""
 	echo -e "  ${DIM}Ohne Argumente: interaktives Menü · Doku: tools/docs/TOOLS-OVERVIEW.de.md · Produktlinie: tools/docs/PRODUCT-LINE.de.md${RESET}"
@@ -353,8 +354,8 @@ show_interactive_menu() {
 	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "8" "Repo (origin)" "URL anzeigen/setzen"
 	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "9" "WoltLab-Version" "Core/Docs sync"
 	printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "L" "Sprache DE/EN" ".env"
-	if [ -f "$TOOLS_DIR/manager-push.sh" ]; then
-		printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "M" "Manager Push" "(Maintainer)"
+	if [ -f "$TOOLS_DIR/release-manager.sh" ]; then
+		printf "  ${CYAN}%-3s${RESET} %-22s ${DIM}%s${RESET}\n" "M" "SWPM Release" "release-manager.sh"
 	fi
 	tools_divider
 	printf "  ${CYAN}%-3s${RESET} Beenden\n" "0"
@@ -418,14 +419,19 @@ run_menu_loop() {
 				;;
 			l | L) cmd_lang ;;
 			m | M)
-				[ -f "$TOOLS_DIR/manager-push.sh" ] || {
-					print_error "manager-push.sh fehlt"
+				[ -f "$TOOLS_DIR/release-manager.sh" ] || {
+					print_error "release-manager.sh fehlt"
 					sleep 1
 					continue
 				}
-				read -r -p "Manager-Repo pushen? (j/N): " ok
-				[[ "${ok:-n}" =~ ^[jJyY] ]] || continue
-				run_tool "$TOOLS_DIR/manager-push.sh"
+				read -r -p "Version (z. B. 1.2.5): " rel_ver
+				rel_ver=$(echo "$rel_ver" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+				[ -n "$rel_ver" ] || {
+					print_error "Version erforderlich"
+					sleep 1
+					continue
+				}
+				run_tool "$TOOLS_DIR/release-manager.sh" "$rel_ver"
 				;;
 			0)
 				echo -e "${GREEN}Tschüss.${RESET}"
@@ -587,9 +593,13 @@ if [ "$#" -gt 0 ]; then
 		cmd_lang
 		exit 0
 		;;
-	manager-push)
+	release | manager-push | manager:release)
 		shift
-		run_tool "$TOOLS_DIR/manager-push.sh" "$@"
+		if [ -f "$TOOLS_DIR/manager-push.sh" ]; then
+			run_tool "$TOOLS_DIR/manager-push.sh" "$@"
+		else
+			run_tool "$TOOLS_DIR/release-manager.sh" "$@"
+		fi
 		exit $?
 		;;
 	menu | ui)

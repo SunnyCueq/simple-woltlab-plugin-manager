@@ -17,7 +17,14 @@ Which scripts exist, and what are they for? A short transparency list — detail
 
     Reusing the same folder for two different plugins (e.g. a demo and a store product) is unsafe. SWPM remembers the last built plugin and **stops** if you build another one in that folder — so old files cannot slip into the wrong archive. Details: [Package layout](PACKAGE-LAYOUT.md).
 
-**Release SWPM itself (maintainers):** Add a `## Version x.y.z` section in `CHANGELOG.md`, commit, push tag `vX.Y.Z` — Action `release.yml` creates the GitHub Release (notes from the changelog).
+**Release SWPM itself (maintainers):** Add a `## Version x.y.z` section in `CHANGELOG.md`, commit, then:
+
+```bash
+./tools/release-manager.sh 1.2.5
+# or: ./tools.sh release 1.2.5
+```
+
+The script validates the changelog, creates tag `vX.Y.Z`, pushes `main` + tag — Action `release.yml` creates the GitHub Release (notes from the changelog).
 
 Product line (multiple packages): `./tools.sh family:check` / `family:build` — see [Product line](PRODUCT-LINE.md).
 
@@ -52,7 +59,8 @@ Product line (multiple packages): `./tools.sh family:check` / `family:build` —
 | `./tools.sh phpstan [plugin]` | PHPStan only with `phpstan.neon(.dist)` |
 | `./tools.sh lint:python [--fix]` | ruff for manager `tools/*.py` |
 | `./tools.sh push` | Commit, tag, GitHub release (**plugin** repos) |
-| Push tag `vX.Y.Z` | GitHub Release for **SWPM itself** (`release.yml`, notes from `CHANGELOG.md`) |
+| `./tools.sh release <version>` | Release SWPM itself (`release-manager.sh`) |
+| Push tag `vX.Y.Z` | Alternatively manual — GitHub Release via `release.yml` |
 | `./tools.sh setup` | Optionally load Core/docs/d.ts |
 | `./tools.sh sync-woltlab-refs` | Refresh reference mirrors (maintainers) |
 
@@ -68,6 +76,7 @@ Product line (multiple packages): `./tools.sh family:check` / `family:build` —
 | `typescript.sh` | TypeScript → JavaScript |
 | `unpack.sh` | Unpack package into `temp_edit/` |
 | `gitpush.sh` | Commit, push, tag, release (**plugins**); notes = changelog + Compare/commits |
+| `release-manager.sh` | SWPM release: validate changelog, tag, push (CI → GitHub Release) |
 | `publish-manager-release.sh` | GitHub Release for this repo from tag + `CHANGELOG.md` (also runnable locally) |
 | `setup-minimal.sh` | Core, docs, d.ts, paths |
 | `help.sh` | Open documentation |
@@ -164,7 +173,7 @@ Rarely needed day to day; used by core scripts:
 | `download-woltlab-core.sh` | Load Core (setup) |
 | `sync-woltlab-references.sh` | Refresh docs/WCF mirrors |
 | `update-woltlab-version.sh` | Version info |
-| `manager-push.sh` | maintainers only (if present) |
+| `manager-push.env` | optional local overrides (gitignored) |
 
 `tools/woltlab-plugin-recovery/` is a separate recovery helper — not part of the normal build/validate menu.
 

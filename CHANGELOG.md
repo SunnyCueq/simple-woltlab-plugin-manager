@@ -4,6 +4,12 @@
 
 ### Plugin-Manager
 
+## Version 1.2.5 – 2026-07-30
+
+### Plugin-Manager
+
+- **Release-Ablauf:** `release-manager.sh` — Changelog prüfen, Tag `vX.Y.Z`, Push; CI `release.yml` erstellt GitHub-Release. Aufruf: `./tools.sh release <version>` oder Menü **M**.
+
 ## Version 1.2.4 – 2026-07-30
 
 ### Plugin-Manager
