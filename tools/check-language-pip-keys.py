@@ -56,6 +56,25 @@ def defined_language_keys(root: Path) -> dict[Path, set[str]]:
     return result
 
 
+def under_delete(el: ET.Element, parent_map: dict[ET.Element, ET.Element]) -> bool:
+    """True, wenn das Element unter einem <delete>-Vorfahren liegt (keine ACP-Phrasen nötig)."""
+    parent = parent_map.get(el)
+    while parent is not None:
+        if local_tag(parent.tag) == "delete":
+            return True
+        parent = parent_map.get(parent)
+    return False
+
+
+def parent_map(root: ET.Element) -> dict[ET.Element, ET.Element]:
+    """ElementTree hat keine parent-API — Parent-Map einmalig bauen."""
+    mapping: dict[ET.Element, ET.Element] = {}
+    for parent in root.iter():
+        for child in parent:
+            mapping[child] = parent
+    return mapping
+
+
 def required_keys(root: Path) -> list[tuple[Path, str, str]]:
     """(pip-datei, key, art) aller implizit erzeugten Sprachkeys."""
     required: list[tuple[Path, str, str]] = []
@@ -67,7 +86,11 @@ def required_keys(root: Path) -> list[tuple[Path, str, str]]:
             tree = ET.parse(path)
         except ET.ParseError:
             return
-        for el in tree.getroot().iter():
+        xml_root = tree.getroot()
+        parents = parent_map(xml_root)
+        for el in xml_root.iter():
+            if under_delete(el, parents):
+                continue
             tag = local_tag(el.tag)
             name = el.get("name") or ""
             if not name:
