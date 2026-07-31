@@ -21,6 +21,11 @@ if ! python3 "$SCRIPT_DIR/test_check_empty_pack_dirs.py"; then
     fail=1
 fi
 
+echo "== python: language PIP keys =="
+if ! python3 "$SCRIPT_DIR/test_check_language_pip_keys.py"; then
+    fail=1
+fi
+
 if (( fail )); then
     echo "tools/tests: FAILED"
     exit 1

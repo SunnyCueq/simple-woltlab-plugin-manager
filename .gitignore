@@ -9,6 +9,7 @@ releases/**/*.tar.gz
 .env
 tools/.woltlab-setup-state
 tools/.woltlab-setup-state.json
+tools/.woltlab-refs-latest.cache
 tools/manager-push.env
 tools/docs/logs/
 
@@ -35,6 +36,12 @@ Thumbs.db
 *.bak
 *.backup
 *.old
+*.orig
+*.rej
+
+# Lokale Scratch-/Experiment-Artefakte (nicht ins Repo)
+tools.zip
+tools/.hermes-*
 
 # Produktlinie: lokale Staging-/Manifest-Dateien (nicht committen)
 _family-stage/
@@ -81,6 +88,14 @@ woltlab-github/*
 woltlab-d-ts/*
 !woltlab-d-ts/.gitkeep
 
+# Offizielle WoltLab-Beispiel-Plugins (Referenz, sync-woltlab-references.sh)
+woltlab-exporter/*
+!woltlab-exporter/.gitkeep
+woltlab-conversation/*
+!woltlab-conversation/.gitkeep
+woltlab-legal-notice/*
+!woltlab-legal-notice/.gitkeep
+
 # Plugin-Verzeichnisse (werden separat verwaltet, NICHT committen!)
 # WICHTIG: Verzeichnisse bleiben erhalten, aber INHALT wird ignoriert
 # Diese enthalten große Dateien und werden separat gebaut/verwaltet
@@ -98,4 +113,7 @@ plugins-integrieren/*
 !plugins-integrieren/.gitignore
 !plugins-integrieren/README*.md
 !plugins-integrieren/CHANGELOG*.md
+
+wsc-cherrymagic/*
+!wsc-cherrymagic/.gitignore
 .venv-docs/

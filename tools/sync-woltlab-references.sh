@@ -3,18 +3,18 @@
 #################################################################
 # WoltLab-Referenzen automatisch synchronisieren (nicht-interaktiv)
 #
-# Synchronisiert woltlab-docs, woltlab-github und woltlab-d-ts mit
-# dem jeweiligen origin/<VERSION>-Branch (Standard: 6.2).
+# Synchronisiert:
+#   woltlab-docs, woltlab-github, woltlab-d-ts,
+#   woltlab-exporter, woltlab-conversation, woltlab-legal-notice
+# mit origin/<VERSION> (Standard: 6.2). Optional Core-ZIP via update-Skript.
 #
 # Manuell:
 #   ./tools/sync-woltlab-references.sh
 #   ./tools/sync-woltlab-references.sh 6.2
+#   ./tools/update-woltlab-version.sh 6.2.6   # inkl. Core-Download
 #
 # Cron (wöchentlich, Sonntag 04:00):
-#   0 4 * * 0 /home/benny/Dokumente/woltlab/plugin-manager/tools/sync-woltlab-references.sh >> /home/benny/.cache/woltlab-refs-sync.log 2>&1
-#
-# Systemd-Timer (optional):
-#   systemctl --user enable --now woltlab-refs-sync.timer
+#   0 4 * * 0 /pfad/zum/plugin-manager/tools/sync-woltlab-references.sh >> ~/.cache/woltlab-refs-sync.log 2>&1
 #################################################################
 
 set -e

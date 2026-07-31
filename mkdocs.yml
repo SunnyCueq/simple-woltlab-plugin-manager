@@ -4,7 +4,7 @@
 # Site: https://benjarogit.github.io/simple-woltlab-plugin-manager/
 
 site_name: SWPM · Dokumentation
-site_description: Handbuch für den Simple WoltLab Plugin Manager — Build, Validierung, Produktlinie
+site_description: Handbuch für den Simple WoltLab Plugin Manager — Build, Validierung, Produktlinie (vibe coding friendly)
 site_url: https://benjarogit.github.io/simple-woltlab-plugin-manager/
 site_author: SunnyCueq
 repo_url: https://github.com/benjarogit/simple-woltlab-plugin-manager
@@ -14,10 +14,13 @@ docs_dir: tools/docs
 site_dir: site
 copyright: Copyright &copy; SWPM contributors — MIT License
 
+# Brand colors (logo): coral #ff5b6e · cyan #22d3ee · indigo #6366f1 · lime #a3e635
+# on night blue #0a0e18 — applied via stylesheets/extra.css (primary/accent = custom)
+
 theme:
   name: material
   language: de
-  logo: assets/swpm-logo.jpg
+  logo: assets/swpm-mark.svg
   favicon: assets/favicon.png
   font:
     text: Roboto
@@ -30,6 +33,7 @@ theme:
       note: material/information-outline
       tip: material/fire
       warning: material/alert-outline
+      success: material/check-circle-outline
   palette:
     # Auto → light → dark (like Material docs)
     - media: "(prefers-color-scheme)"
@@ -86,12 +90,12 @@ plugins:
           default: true
           build: true
           site_name: SWPM · Dokumentation
-          site_description: Handbuch für den Simple WoltLab Plugin Manager — Build, Validierung, Produktlinie
+          site_description: Handbuch für den Simple WoltLab Plugin Manager — Build, Validierung, Produktlinie (vibe coding friendly)
         - locale: en
           name: English
           build: true
           site_name: SWPM · Documentation
-          site_description: Handbook for the Simple WoltLab Plugin Manager — build, validation, product line
+          site_description: Handbook for the Simple WoltLab Plugin Manager — build, validation, product line (vibe coding friendly)
           nav_translations:
             Start: Home
             Einstieg: Getting started

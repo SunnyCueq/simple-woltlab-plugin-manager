@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/swpm-logo.jpg" alt="SWPM — Simple WoltLab Plugin Manager" width="320">
+  <img src="docs/assets/swpm-logo.png" alt="SWPM — Simple WoltLab Plugin Manager" width="300">
 </p>
 
 <h1 align="center">Simple WoltLab Plugin Manager</h1>
@@ -9,14 +9,16 @@
 </p>
 
 <p align="center">
-  <a href="https://benjarogit.github.io/simple-woltlab-plugin-manager/en/"><img src="https://img.shields.io/badge/Documentation-Handbook%20DE%2FEN-1a5fb4?style=for-the-badge" alt="Documentation"></a>
+  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager/releases/latest"><img src="https://img.shields.io/github/v/release/benjarogit/simple-woltlab-plugin-manager?style=for-the-badge&color=0e7490&labelColor=0a0e18" alt="Latest release"></a>
+  <a href="https://benjarogit.github.io/simple-woltlab-plugin-manager/en/"><img src="https://img.shields.io/badge/Docs-Handbook%20DE%2FEN-4f46e5?style=for-the-badge&labelColor=0a0e18" alt="Documentation"></a>
+  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-65a30d?style=for-the-badge&labelColor=0a0e18" alt="MIT License"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager/releases/latest"><img src="https://img.shields.io/github/v/release/benjarogit/simple-woltlab-plugin-manager?style=flat-square&label=release" alt="Latest release"></a>
-  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT License"></a>
-  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20WSL2%20%7C%20Git%20Bash-2d6a4f?style=flat-square" alt="Platforms">
-  <img src="https://img.shields.io/badge/WoltLab%20Suite-6.2%2B-1a5fb4?style=flat-square" alt="WoltLab Suite 6.2+">
+  <img src="https://img.shields.io/badge/WoltLab%20Suite-6.2%2B-0e7490?style=flat-square&logoColor=white&labelColor=0a0e18" alt="WoltLab Suite 6.2+">
+  <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20WSL2%20%7C%20Git%20Bash-0d9488?style=flat-square&labelColor=0a0e18" alt="Platforms">
+  <img src="https://img.shields.io/badge/Vibe%20Coding-Friendly-e11d48?style=flat-square&labelColor=0a0e18" alt="Vibe Coding Friendly">
+  <a href="https://github.com/benjarogit/simple-woltlab-plugin-manager/actions/workflows/tools-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/benjarogit/simple-woltlab-plugin-manager/tools-tests.yml?branch=main&style=flat-square&label=toolkit%20tests&labelColor=0a0e18" alt="Toolkit tests"></a>
 </p>
 
 <p align="center"><a href="README.de.md"><strong>Deutsche Version</strong></a></p>
@@ -36,6 +38,8 @@ Source in the repo: `tools/docs/` (built to GitHub Pages automatically on push t
 ## What is SWPM?
 
 A generic toolkit for WoltLab Suite plugins: packaging (`package.xml`), checks, store rules, and translations — in one terminal menu, not tied to a single product plugin. Aligned with the [WoltLab Plugin Store guidelines](https://www.woltlab.com/pluginstore/en/guidelines/).
+
+Built so agent-assisted workflows stay grounded: clear CLI, local checks, and docs you can point tools at — **vibe coding friendly**, still store-aware.
 
 At a glance:
 

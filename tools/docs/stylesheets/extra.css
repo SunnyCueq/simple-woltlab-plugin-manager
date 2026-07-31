@@ -1,63 +1,124 @@
-/* SWPM brand — colors from docs logo (teal / orange / charcoal) */
+/* SWPM brand — palette taken from assets/swpm-logo.svg
+   Night blue ground · coral, cyan-indigo and lime as the three interlocking shapes.
+
+   The logo colours are tuned for dark backgrounds. On light backgrounds they fail
+   contrast as text, so each has a darkened "ink" variant used for links and labels. */
 
 :root {
-  /* Primary: deep blue-teal from logo center */
-  --md-primary-fg-color: #1a4f6e;
-  --md-primary-fg-color--light: #2d7a9a;
-  --md-primary-fg-color--dark: #0f3348;
-  /* Accent: warm orange from logo left lobe */
-  --md-accent-fg-color: #e85d04;
-  --md-accent-fg-color--transparent: rgba(232, 93, 4, 0.1);
-  --md-typeset-a-color: #1a6f8f;
+  /* Logo colours */
+  --swpm-coral: #ff5b6e;
+  --swpm-amber: #ff9a56;
+  --swpm-cyan: #22d3ee;
+  --swpm-indigo: #6366f1;
+  --swpm-lime: #a3e635;
+  --swpm-mint: #22d3aa;
+  --swpm-aqua: #5eead4;
+
+  /* Ground */
+  --swpm-navy: #141c2e;
+  --swpm-navy-deep: #0a0e18;
+  --swpm-navy-abyss: #05070c;
+  --swpm-slate: #3a4a66;
+  --swpm-muted: #8b98b8;
+  --swpm-paper: #f5f8ff;
+
+  /* Readable on light backgrounds (WCAG AA as body text) */
+  --swpm-cyan-ink: #0e7490;
+  --swpm-indigo-ink: #4f46e5;
+  --swpm-coral-ink: #d93a50;
+  --swpm-lime-ink: #4d7c0f;
+
+  --md-primary-fg-color: var(--swpm-navy-deep);
+  --md-primary-fg-color--light: var(--swpm-navy);
+  --md-primary-fg-color--dark: var(--swpm-navy-abyss);
+  --md-accent-fg-color: var(--swpm-cyan-ink);
+  --md-accent-fg-color--transparent: rgba(14, 116, 144, 0.12);
+  --md-typeset-a-color: var(--swpm-cyan-ink);
 }
 
 [data-md-color-scheme="slate"] {
-  --md-hue: 210;
-  --md-primary-fg-color: #2d7a9a;
-  --md-primary-fg-color--light: #4a9bb8;
-  --md-primary-fg-color--dark: #1a4f6e;
-  --md-accent-fg-color: #fb923c;
-  --md-accent-fg-color--transparent: rgba(251, 146, 60, 0.14);
-  --md-typeset-a-color: #5eb8d4;
+  --md-hue: 222;
+  --md-primary-fg-color: var(--swpm-navy-deep);
+  --md-primary-fg-color--light: var(--swpm-navy);
+  --md-primary-fg-color--dark: var(--swpm-navy-abyss);
+  --md-accent-fg-color: var(--swpm-cyan);
+  --md-accent-fg-color--transparent: rgba(34, 211, 238, 0.16);
+  --md-typeset-a-color: var(--swpm-aqua);
+  --md-default-bg-color: var(--swpm-navy-deep);
+  --md-code-bg-color: rgba(255, 255, 255, 0.04);
 }
 
-/* Header logo sizing (square brand mark) */
-.md-header__button.md-logo img,
-.md-nav__title .md-nav__button.md-logo img {
-  height: 2rem;
-  width: 2rem;
-  object-fit: cover;
-  border-radius: 0.25rem;
-}
+/* ── Header ─────────────────────────────────────────────────────────────── */
 
 .md-header {
-  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.08), 0 0.2rem 0.4rem rgba(0, 0, 0, 0.12);
+  background-color: var(--swpm-navy-deep);
+  box-shadow:
+    0 0 0.2rem rgba(0, 0, 0, 0.4),
+    0 0.15rem 0.4rem rgba(34, 211, 238, 0.1);
 }
 
-/* Hero on home: logo + intro spacing */
+.md-tabs {
+  background-color: var(--swpm-navy);
+  border-bottom: 1px solid rgba(58, 74, 102, 0.5);
+}
+
+/* Hairline in the brand gradient, echoing the three shapes */
+.md-tabs::after {
+  content: "";
+  display: block;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--swpm-coral) 0%,
+    var(--swpm-amber) 22%,
+    var(--swpm-cyan) 50%,
+    var(--swpm-indigo) 68%,
+    var(--swpm-lime) 100%
+  );
+  opacity: 0.85;
+}
+
+/* Brand mark is wide, not square — keep its aspect ratio */
+.md-header__button.md-logo img,
+.md-nav__title .md-nav__button.md-logo img {
+  height: 1.5rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.md-search__form {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.md-search__form:hover {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+/* ── Home hero ──────────────────────────────────────────────────────────── */
+
 .md-typeset .swpm-hero {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin: 0.5rem 0 1.5rem;
+  gap: 1.5rem;
+  margin: 0.5rem 0 1.25rem;
   flex-wrap: wrap;
 }
 
+/* Brand mark, not the full logo — the wordmark would repeat the heading */
 .md-typeset .swpm-hero img {
-  width: 7.5rem;
-  height: 7.5rem;
-  object-fit: cover;
-  border-radius: 0.6rem;
-  box-shadow: 0 0.25rem 1rem rgba(26, 79, 110, 0.22);
+  width: auto;
+  height: 5rem;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .md-typeset .swpm-hero .swpm-hero__text {
-  flex: 1 1 14rem;
+  flex: 1 1 16rem;
   min-width: 0;
 }
 
 .md-typeset .swpm-hero h1 {
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.4rem;
 }
 
 .md-typeset .swpm-hero p {
@@ -66,54 +127,172 @@
   opacity: 0.92;
 }
 
-/* Card grid polish */
+/* ── Badges ─────────────────────────────────────────────────────────────── */
+
+.md-typeset .swpm-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.5rem;
+  align-items: center;
+}
+
+.md-typeset .swpm-badges img {
+  height: 1.3rem;
+  margin: 0;
+}
+
+/* ── Card grid ──────────────────────────────────────────────────────────── */
+
 .md-typeset .grid.cards > ul > li {
-  border-radius: 0.4rem;
-  border-color: color-mix(in srgb, var(--md-primary-fg-color) 18%, transparent);
+  border-radius: 0.5rem;
+  border-color: rgba(58, 74, 102, 0.35);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
 .md-typeset .grid.cards > ul > li:hover {
-  border-color: var(--md-accent-fg-color);
+  border-color: var(--swpm-cyan);
+  box-shadow: 0 0.25rem 0.9rem rgba(34, 211, 238, 0.14);
+  transform: translateY(-2px);
 }
 
-/* Card icons — accent so they stand out */
-.md-typeset .grid.cards .lg {
-  color: var(--md-accent-fg-color);
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .grid.cards > ul > li {
+    transition: none;
+  }
+
+  .md-typeset .grid.cards > ul > li:hover {
+    transform: none;
+  }
 }
 
+.md-typeset .grid.cards .lg,
 .md-typeset .grid.cards .twemoji,
 .md-typeset .grid.cards svg {
-  color: var(--md-accent-fg-color);
+  color: var(--swpm-cyan-ink);
   fill: currentColor;
 }
 
-/* Task-list checkboxes (Store checklist) — accent when checked */
-.md-typeset .task-list-control [type="checkbox"]:checked + .task-list-indicator::before {
-  background: var(--md-accent-fg-color) !important;
+[data-md-color-scheme="slate"] .md-typeset .grid.cards .lg,
+[data-md-color-scheme="slate"] .md-typeset .grid.cards .twemoji,
+[data-md-color-scheme="slate"] .md-typeset .grid.cards svg {
+  color: var(--swpm-cyan);
 }
 
-/* Admonitions — tip/info aligned with brand */
+/* ── Admonitions — one shape colour each ────────────────────────────────── */
+
 .md-typeset .admonition.tip,
 .md-typeset details.tip {
-  border-color: var(--md-accent-fg-color);
+  border-color: var(--swpm-amber);
 }
 
 .md-typeset .admonition.tip > .admonition-title,
 .md-typeset details.tip > summary {
-  background-color: var(--md-accent-fg-color--transparent);
+  background-color: rgba(255, 154, 86, 0.14);
 }
 
 .md-typeset .admonition.info,
-.md-typeset details.info {
-  border-color: var(--md-primary-fg-color);
+.md-typeset .admonition.note,
+.md-typeset details.info,
+.md-typeset details.note {
+  border-color: var(--swpm-cyan);
 }
 
 .md-typeset .admonition.info > .admonition-title,
-.md-typeset details.info > summary {
-  background-color: color-mix(in srgb, var(--md-primary-fg-color) 12%, transparent);
+.md-typeset .admonition.note > .admonition-title,
+.md-typeset details.info > summary,
+.md-typeset details.note > summary {
+  background-color: rgba(34, 211, 238, 0.12);
 }
 
-/* Emoji/icons alignment */
+.md-typeset .admonition.success,
+.md-typeset details.success {
+  border-color: var(--swpm-lime);
+}
+
+.md-typeset .admonition.success > .admonition-title,
+.md-typeset details.success > summary {
+  background-color: rgba(163, 230, 53, 0.14);
+}
+
+.md-typeset .admonition.warning,
+.md-typeset details.warning {
+  border-color: var(--swpm-amber);
+}
+
+.md-typeset .admonition.danger,
+.md-typeset .admonition.failure,
+.md-typeset details.danger,
+.md-typeset details.failure {
+  border-color: var(--swpm-coral);
+}
+
+.md-typeset .admonition.danger > .admonition-title,
+.md-typeset .admonition.failure > .admonition-title,
+.md-typeset details.danger > summary,
+.md-typeset details.failure > summary {
+  background-color: rgba(255, 91, 110, 0.14);
+}
+
+/* ── Details ────────────────────────────────────────────────────────────── */
+
+.md-typeset details {
+  border-radius: 0.4rem;
+}
+
+/* ── Task lists ─────────────────────────────────────────────────────────── */
+
+.md-typeset .task-list-control [type="checkbox"]:checked + .task-list-indicator::before {
+  background: var(--swpm-lime-ink) !important;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .task-list-control [type="checkbox"]:checked + .task-list-indicator::before {
+  background: var(--swpm-lime) !important;
+}
+
+/* ── Tables ─────────────────────────────────────────────────────────────── */
+
+.md-typeset table:not([class]) th {
+  background-color: rgba(58, 74, 102, 0.14);
+}
+
+/* ── Code ───────────────────────────────────────────────────────────────── */
+
+.md-typeset code {
+  border-radius: 0.2rem;
+}
+
+.md-typeset .highlight span.filename {
+  border-bottom-color: var(--swpm-cyan);
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+
+.md-footer {
+  background-color: var(--swpm-navy);
+}
+
+.md-footer-meta {
+  background-color: var(--swpm-navy-abyss);
+}
+
+.md-footer a:hover {
+  color: var(--swpm-aqua);
+}
+
+/* ── Misc ───────────────────────────────────────────────────────────────── */
+
 .md-typeset :is(.emojione, .twemoji, .gemoji) svg {
   vertical-align: -0.125em;
+}
+
+/* Focus visibility — never remove the outline without a replacement */
+.md-typeset a:focus-visible,
+.md-header__button:focus-visible,
+.md-nav__link:focus-visible {
+  outline: 2px solid var(--swpm-cyan);
+  outline-offset: 2px;
 }

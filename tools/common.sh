@@ -829,9 +829,19 @@ show_system_overview() {
     local woltlab_ver
     woltlab_ver=$(get_woltlab_version "$(get_public_dir)" 2>/dev/null) || woltlab_ver="unknown"
     if [ -n "$woltlab_ver" ] && [ "$woltlab_ver" != "unknown" ]; then
-        ui_kv "WoltLab" "$woltlab_ver" "Core"
+        ui_kv "WoltLab" "$woltlab_ver" "lokale Installation"
     else
-        ui_warn "WoltLab: nicht ermittelt (Core)"
+        ui_warn "WoltLab: Installation nicht ermittelt"
+    fi
+    # Referenz-Core (woltlab-core/.swpm-core-version) — ohne Netz
+    local ref_ver=""
+    local main_guess
+    main_guess="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    if [ -f "$main_guess/woltlab-core/.swpm-core-version" ]; then
+        ref_ver="$(tr -d '[:space:]' < "$main_guess/woltlab-core/.swpm-core-version")"
+    fi
+    if [ -n "$ref_ver" ]; then
+        ui_kv "Refs-Core" "$ref_ver" "woltlab-core/ · Menü 9 prüft Updates"
     fi
     local repo_display
     repo_display=$(get_git_repo_display)
@@ -1141,7 +1151,7 @@ find_plugin_directories() {
             fi
         fi
     done
-    local skip_names=(woltlab-github woltlab-docs woltlab-core woltlab-d-ts tools maintainer docs)
+    local skip_names=(woltlab-github woltlab-docs woltlab-core woltlab-d-ts woltlab-exporter woltlab-conversation woltlab-legal-notice tools maintainer docs)
     for dir in "${main_dir}"/*; do
         [ -d "$dir" ] || continue
         local base

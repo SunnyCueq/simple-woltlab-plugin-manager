@@ -1,52 +1,66 @@
 #!/usr/bin/env bash
 
 #################################################################
-# WoltLab-Referenzen auf Version X synchronisieren
+# WoltLab-Referenzen prüfen / synchronisieren
 # Pfad: tools/update-woltlab-version.sh [OPTIONEN] [VERSION]
 #
-# Aktualisiert:
-#   - woltlab-core   (optional: Download ZIP)
-#   - woltlab-github (Git: Branch VERSION, z. B. origin/6.2)
-#   - woltlab-docs   (Git: Branch VERSION)
-#   - woltlab-d-ts   (Git: Branch VERSION)
+# Ohne VERSION (Menü 9 / interaktiv):
+#   Online-Core vs. lokal vergleichen → bei neuer Version fragen → Sync
 #
-# Beispiele:
-#   ./update-woltlab-version.sh 6.2
-#   ./update-woltlab-version.sh --refs-only 6.2
-#   ./sync-woltlab-references.sh
+# Mit VERSION:
+#   6.2 / 6.2.6 → Core (+ Git-Spiegel) auf diese Version bringen
 #
-# Automatisierung (Cron, wöchentlich Sonntag 04:00):
-#   0 4 * * 0 /pfad/zum/plugin-manager/tools/sync-woltlab-references.sh >> ~/.cache/woltlab-refs-sync.log 2>&1
+# Optionen:
+#   --check       Nur Status (Exit 0 aktuell, 2 Update verfügbar, 1 Fehler)
+#   --yes / -y    Ohne Rückfrage aktualisieren (wenn Update da / Core fehlt)
+#   --refs-only   Nur Git-Spiegel, kein Core-Download
+#   --fresh       Download-Seite neu abfragen (Cache ignorieren)
 #################################################################
 
-set -e
+set -euo pipefail
 
 readonly TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly MAIN_DIR="$(dirname "$TOOLS_DIR")"
 
-if [ -f "$TOOLS_DIR/common.sh" ]; then
-    # shellcheck source=common.sh
-    source "$TOOLS_DIR/common.sh"
-else
-    echo "common.sh nicht gefunden."
-    exit 1
-fi
+# shellcheck source=common.sh
+source "$TOOLS_DIR/common.sh"
+# shellcheck source=woltlab-refs-lib.sh
+source "$TOOLS_DIR/woltlab-refs-lib.sh"
 
 SKIP_CORE=0
+ASSUME_YES=0
+CHECK_ONLY=0
+FRESH=0
 VERSION=""
+
+usage() {
+    cat <<'EOF'
+Verwendung: update-woltlab-version.sh [OPTIONEN] [VERSION]
+
+Ohne VERSION: prüft, ob online eine neuere Core-Version liegt, fragt nach,
+             und synchronisiert bei Ja Core + Git-Referenzen.
+
+  --check       Nur Status (Exit 0=aktuell, 2=Update, 1=Fehler)
+  --yes, -y     Ohne Rückfrage aktualisieren
+  --refs-only   Nur Git-Spiegel (kein Core-ZIP)
+  --fresh       Online-Version neu von der Download-Seite holen
+  VERSION       6.2 (Linie) oder 6.2.6 (Patch); Git immer major.minor
+
+Linie: WOLTLAB_REF_LINE=6.2 in tools/.env (sonst aus lokalem Core / Git-Branch)
+EOF
+}
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        --refs-only | --no-core)
-            SKIP_CORE=1
-            shift
-            ;;
-        -h | --help)
-            echo "Verwendung: $0 [--refs-only] [VERSION]"
-            echo ""
-            echo "  --refs-only   Nur Git-Spiegel (docs, github, d.ts), kein woltlab-core-Download"
-            echo "  VERSION       z. B. 6.2 (Standard bei sync-woltlab-references.sh: 6.2)"
-            exit 0
+        --refs-only | --no-core) SKIP_CORE=1; shift ;;
+        --yes | -y) ASSUME_YES=1; shift ;;
+        --check) CHECK_ONLY=1; shift ;;
+        --fresh) FRESH=1; shift ;;
+        -h | --help) usage; exit 0 ;;
+        -*)
+            print_error "Unbekannte Option: $1"
+            usage >&2
+            exit 2
             ;;
         *)
             VERSION="$1"
@@ -55,107 +69,214 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-if [ -z "$VERSION" ]; then
-    if [ -t 0 ]; then
-        echo ""
-        echo -e "${CYAN}WoltLab-Referenzen synchronisieren${NC}"
-        echo ""
-        echo "Verwendung: $0 [--refs-only] <VERSION>"
-        echo "Beispiel:   $0 6.2"
-        echo ""
-        echo "Quellen:"
-        echo "  - https://docs.woltlab.com/<VERSION>/"
-        echo "  - https://github.com/WoltLab/WCF/tree/<VERSION>"
-        echo "  - https://github.com/WoltLab/d.ts/tree/<VERSION>"
-        echo ""
-        read -rp "Version (z. B. 6.2): " VERSION
-        VERSION=$(echo "$VERSION" | tr -d ' ')
-    else
-        VERSION="6.2"
+MIRRORS=(
+    "woltlab-github|woltlab-github|https://github.com/WoltLab/WCF"
+    "woltlab-docs|woltlab-docs|https://github.com/WoltLab/docs.woltlab.com"
+    "woltlab-d-ts|woltlab-d-ts|https://github.com/WoltLab/d.ts"
+    "woltlab-exporter|woltlab-exporter|https://github.com/WoltLab/com.woltlab.wcf.exporter"
+    "woltlab-conversation|woltlab-conversation|https://github.com/WoltLab/com.woltlab.wcf.conversation"
+    "woltlab-legal-notice|woltlab-legal-notice|https://github.com/WoltLab/com.woltlab.wcf.legalNotice"
+)
+
+ensure_git_mirror() {
+    local name="$1" dir="$2" url="$3" branch="$4"
+    if [ ! -d "$dir/.git" ]; then
+        print_info "$name: klone $url (Branch $branch) …"
+        if [ -d "$dir" ] && [ ! -d "$dir/.git" ]; then
+            rm -rf "$dir"
+        fi
+        if ! git clone --branch "$branch" --single-branch "$url" "$dir"; then
+            print_warning "$name: Clone mit Branch fehlgeschlagen — Default-Branch …"
+            if ! git clone "$url" "$dir"; then
+                print_warning "$name: Clone fehlgeschlagen."
+                return 1
+            fi
+            git -C "$dir" fetch origin "refs/heads/${branch}:refs/remotes/origin/${branch}" --tags --prune || true
+        fi
+        touch "$dir/.gitkeep" 2>/dev/null || true
     fi
-fi
-
-if [ -z "$VERSION" ]; then
-    print_error "Keine Version angegeben."
-    exit 1
-fi
-
-BRANCH="$VERSION"
+    return 0
+}
 
 sync_git_mirror() {
-    local name="$1"
-    local dir="$2"
-    local branch="$3"
-
-    if [ ! -d "$dir/.git" ]; then
-        print_warning "$name: kein Git-Repository – übersprungen."
-        return 0
-    fi
+    local name="$1" dir="$2" url="$3" branch="$4"
+    ensure_git_mirror "$name" "$dir" "$url" "$branch" || return 1
+    [ -d "$dir/.git" ] || return 1
 
     print_info "$name: fetch origin/$branch …"
     if ! git -C "$dir" fetch origin "refs/heads/${branch}:refs/remotes/origin/${branch}" --tags --prune 2>/dev/null; then
         print_warning "$name: fetch fehlgeschlagen."
         return 1
     fi
-
     if ! git -C "$dir" rev-parse "origin/${branch}" >/dev/null 2>&1; then
         print_warning "$name: Branch origin/$branch nicht gefunden."
         return 1
     fi
-
     git -C "$dir" config core.fileMode false
     git -C "$dir" checkout -B "$branch" "origin/${branch}"
     git -C "$dir" reset --hard "origin/${branch}"
-
-    local commit
-    commit=$(git -C "$dir" log -1 --oneline)
-    print_success "$name: $commit"
+    print_success "$name: $(git -C "$dir" log -1 --oneline)"
 }
 
-echo ""
-print_section "WoltLab $VERSION synchronisieren" "Hauptmenü" "Update Version"
-echo ""
+run_full_sync() {
+    local core_version="$1"
+    local branch="$2"
+    local do_core="${3:-1}"
+    local step=1
+    local total=${#MIRRORS[@]}
+    if [ "$do_core" -eq 1 ]; then
+        total=$((total + 1))
+    fi
 
-step=1
-total=4
-if [ "$SKIP_CORE" -eq 1 ]; then
-    total=3
-fi
-
-# ─── 1) woltlab-core (Download) ───
-if [ "$SKIP_CORE" -eq 0 ]; then
-    if [ -d "$MAIN_DIR/woltlab-core" ]; then
-        print_info "${step}/${total} woltlab-core: Lade Suite $VERSION herunter …"
-        if [ -x "$TOOLS_DIR/download-woltlab-core.sh" ]; then
-            "$TOOLS_DIR/download-woltlab-core.sh" "$VERSION" || print_warning "Core-Download fehlgeschlagen."
-        else
-            chmod +x "$TOOLS_DIR/download-woltlab-core.sh" 2>/dev/null
-            "$TOOLS_DIR/download-woltlab-core.sh" "$VERSION" || print_warning "Core-Download fehlgeschlagen."
-        fi
-        if [ -f "$MAIN_DIR/woltlab-core/WCFSetup.tar.gz" ]; then
-            print_success "woltlab-core: bereit"
-        fi
+    echo ""
+    print_section "WoltLab $core_version synchronisieren" "Hauptmenü" "Update Version"
+    echo -e "  ${DIM}Git-Branch:${RESET} $branch"
+    if [ "$do_core" -eq 1 ]; then
+        echo -e "  ${DIM}Core-ZIP:${RESET}   $core_version"
     else
-        print_warning "woltlab-core/ nicht gefunden – übersprungen."
+        echo -e "  ${DIM}Core-ZIP:${RESET}   übersprungen (--refs-only)"
     fi
     echo ""
-    step=$((step + 1))
+
+    if [ "$do_core" -eq 1 ]; then
+        mkdir -p "$MAIN_DIR/woltlab-core"
+        [ -f "$MAIN_DIR/woltlab-core/.gitkeep" ] || touch "$MAIN_DIR/woltlab-core/.gitkeep"
+        print_info "${step}/${total} woltlab-core …"
+        "$TOOLS_DIR/download-woltlab-core.sh" "$core_version" || print_warning "Core-Download fehlgeschlagen."
+        if [ -f "$MAIN_DIR/woltlab-core/.swpm-core-version" ]; then
+            print_success "woltlab-core: $(cat "$MAIN_DIR/woltlab-core/.swpm-core-version")"
+        fi
+        echo ""
+        step=$((step + 1))
+    fi
+
+    local entry name relpath url
+    for entry in "${MIRRORS[@]}"; do
+        IFS='|' read -r name relpath url <<< "$entry"
+        print_info "${step}/${total} $name …"
+        sync_git_mirror "$name" "$MAIN_DIR/$relpath" "$url" "$branch" || true
+        echo ""
+        step=$((step + 1))
+    done
+
+    print_success "Synchronisation auf WoltLab $core_version (Branch $branch) abgeschlossen."
+    echo ""
+}
+
+confirm() {
+    local prompt="$1"
+    local ok="n"
+    if [ "$ASSUME_YES" -eq 1 ]; then
+        return 0
+    fi
+    if [ ! -t 0 ]; then
+        return 1
+    fi
+    read -r -p "$prompt" ok
+    ok=${ok:-n}
+    [[ "$ok" =~ ^[jJyY] ]]
+}
+
+# ── Explizite VERSION ────────────────────────────────────────────────────────
+if [ -n "$VERSION" ]; then
+    CORE_VERSION="$VERSION"
+    BRANCH="$VERSION"
+    if [[ "$VERSION" =~ ^([0-9]+\.[0-9]+)\.[0-9]+$ ]]; then
+        BRANCH="${BASH_REMATCH[1]}"
+    elif [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
+        print_error "Ungültige Version: $VERSION"
+        exit 1
+    fi
+    do_core=1
+    [ "$SKIP_CORE" -eq 1 ] && do_core=0
+    run_full_sync "$CORE_VERSION" "$BRANCH" "$do_core"
+    exit 0
 fi
 
-# ─── Git-Spiegel ───
-print_info "${step}/${total} woltlab-github …"
-sync_git_mirror "woltlab-github" "$MAIN_DIR/woltlab-github" "$BRANCH" || true
-echo ""
-step=$((step + 1))
+# ── Status: lokal vs. Download-Seite ─────────────────────────────────────────
+if [ "$FRESH" -eq 1 ]; then
+    rm -f "$WOLTLAB_REFS_CACHE" 2>/dev/null || true
+fi
 
-print_info "${step}/${total} woltlab-docs …"
-sync_git_mirror "woltlab-docs" "$MAIN_DIR/woltlab-docs" "$BRANCH" || true
-echo ""
-step=$((step + 1))
+SWPM_REF_LINE="$(woltlab_preferred_line)"
+SWPM_LOCAL_CORE="$(woltlab_local_core_version 2>/dev/null || true)"
+SWPM_ONLINE_CORE=""
+SWPM_ONLINE_URL=""
+SWPM_UPDATE_AVAILABLE=0
+status_rc=1
 
-print_info "${step}/${total} woltlab-d-ts …"
-sync_git_mirror "woltlab-d-ts" "$MAIN_DIR/woltlab-d-ts" "$BRANCH" || true
+set +e
+if [ "$FRESH" -eq 1 ]; then
+    online="$(woltlab_detect_online_core "$SWPM_REF_LINE" --fresh)"
+else
+    online="$(woltlab_detect_online_core "$SWPM_REF_LINE")"
+fi
+det_rc=$?
+set -e
+
+if [ "$det_rc" -ne 0 ]; then
+    echo ""
+    print_error "Online-Version konnte nicht ermittelt werden ($WOLTLAB_DOWNLOAD_PAGE)."
+    exit 1
+fi
+
+SWPM_ONLINE_CORE="$(printf '%s' "$online" | cut -f1)"
+SWPM_ONLINE_URL="$(printf '%s' "$online" | cut -f2)"
+
+if [ -z "$SWPM_LOCAL_CORE" ]; then
+    SWPM_UPDATE_AVAILABLE=1
+    status_rc=2
+elif woltlab_version_gt "$SWPM_ONLINE_CORE" "$SWPM_LOCAL_CORE"; then
+    SWPM_UPDATE_AVAILABLE=1
+    status_rc=2
+else
+    status_rc=0
+fi
+
+echo ""
+echo -e "${BOLD}WoltLab-Referenzen${RESET}"
+echo -e "  ${DIM}Linie:${RESET}        ${SWPM_REF_LINE}"
+echo -e "  ${DIM}Lokal (Core):${RESET} ${SWPM_LOCAL_CORE:-— (kein Core)}"
+echo -e "  ${DIM}Online:${RESET}       ${SWPM_ONLINE_CORE}"
+echo -e "  ${DIM}URL:${RESET}          ${SWPM_ONLINE_URL}"
 echo ""
 
-print_success "Synchronisation auf WoltLab $VERSION abgeschlossen."
-echo ""
+if [ "$status_rc" -eq 0 ]; then
+    print_success "Lokal ist aktuell (${SWPM_LOCAL_CORE})."
+elif [ -z "$SWPM_LOCAL_CORE" ]; then
+    print_warning "Kein lokaler Core — Online: ${SWPM_ONLINE_CORE}."
+else
+    print_warning "Update verfügbar: ${SWPM_LOCAL_CORE} → ${SWPM_ONLINE_CORE}."
+fi
+
+if [ "$CHECK_ONLY" -eq 1 ]; then
+    exit "$status_rc"
+fi
+
+TARGET_CORE="$SWPM_ONLINE_CORE"
+TARGET_BRANCH="$(woltlab_line_from_version "$TARGET_CORE" || echo "$SWPM_REF_LINE")"
+do_core=1
+[ "$SKIP_CORE" -eq 1 ] && do_core=0
+
+if [ "$SWPM_UPDATE_AVAILABLE" -eq 1 ]; then
+    if [ -z "$SWPM_LOCAL_CORE" ]; then
+        prompt="Core ${TARGET_CORE} laden und Git-Spiegel syncen? (j/N): "
+    else
+        prompt="Auf ${TARGET_CORE} aktualisieren (Core + Docs/WCF/d.ts/Beispiele)? (j/N): "
+    fi
+    if confirm "$prompt"; then
+        run_full_sync "$TARGET_CORE" "$TARGET_BRANCH" "$do_core"
+        exit 0
+    fi
+    echo "Abgebrochen."
+    exit 0
+fi
+
+# Aktuell — optional nur Git-Spiegel (kein Core-Neudownload)
+if confirm "Bereits aktuell. Trotzdem Git-Spiegel (Branch ${TARGET_BRANCH}) syncen? (j/N): "; then
+    run_full_sync "$TARGET_CORE" "$TARGET_BRANCH" 0
+    exit 0
+fi
+
+print_info "Nichts zu tun."
+exit 0

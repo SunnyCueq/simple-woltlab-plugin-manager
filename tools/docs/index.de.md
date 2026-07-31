@@ -6,15 +6,25 @@ hide:
 
 <div class="swpm-hero" markdown>
 
-![SWPM Logo](assets/swpm-logo.jpg){ loading=eager }
+![SWPM Logo](assets/swpm-mark.svg){ loading=eager }
 
 <div class="swpm-hero__text" markdown>
 
 # SWPM Dokumentation
 
-Offizielles **Handbuch** zum Simple WoltLab Plugin Manager — Guides, Tool-Übersicht und Qualitätsregeln aus einer Quelle (`tools/docs/`), ohne Wiki-Doppelpflege.
+Offizielles **Handbuch** zum Simple WoltLab Plugin Manager — Guides, Tool-Übersicht und Qualitätsregeln aus einer Quelle (`tools/docs/`), ohne Wiki-Doppelpflege. Gebaut, um **vibe coding friendly** zu bleiben: klares CLI, lokale Checks, Doku für Agenten.
 
 </div>
+
+</div>
+
+<div class="swpm-badges" markdown>
+
+[![Latest release](https://img.shields.io/github/v/release/benjarogit/simple-woltlab-plugin-manager?style=flat-square&color=0e7490&labelColor=0a0e18)](https://github.com/benjarogit/simple-woltlab-plugin-manager/releases/latest)
+![WoltLab Suite 6.2+](https://img.shields.io/badge/WoltLab%20Suite-6.2%2B-0e7490?style=flat-square&labelColor=0a0e18)
+![Vibe Coding Friendly](https://img.shields.io/badge/Vibe%20Coding-Friendly-e11d48?style=flat-square&labelColor=0a0e18)
+![Platform](https://img.shields.io/badge/Plattform-Linux%20%7C%20macOS%20%7C%20Windows-0d9488?style=flat-square&labelColor=0a0e18)
+[![MIT License](https://img.shields.io/badge/Lizenz-MIT-65a30d?style=flat-square&labelColor=0a0e18)](https://github.com/benjarogit/simple-woltlab-plugin-manager/blob/main/LICENSE)
 
 </div>
 

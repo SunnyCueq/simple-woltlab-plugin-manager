@@ -758,11 +758,16 @@ def _apply_template_ownership_hygiene(
 def discover_workspace(main_dir: Path) -> list[Path]:
     """Top-level plugin roots under SWPM workspace (shared discovery for menu/build)."""
     main_dir = main_dir.resolve()
+    # WoltLab-Referenzspiegel bringen eigene package.xml mit und sind keine
+    # Nutzer-Plugins — sonst tauchen sie in Menü und Build als Ziel auf.
     skip = {
         "woltlab-github",
         "woltlab-docs",
         "woltlab-core",
         "woltlab-d-ts",
+        "woltlab-exporter",
+        "woltlab-conversation",
+        "woltlab-legal-notice",
         "tools",
         "maintainer",
         "docs",

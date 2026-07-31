@@ -378,6 +378,11 @@ EXCLUDE_DIRS=(
     "tools/woltlab-dev/public"  # Core DDEV (nur Ordnerstruktur behalten)
     "woltlab-docs"               # WoltLab Dokumentation (nur Ordnerstruktur behalten)
     "woltlab-github"             # WoltLab GitHub Repo (nur Ordnerstruktur behalten)
+    "woltlab-core"
+    "woltlab-d-ts"
+    "woltlab-exporter"
+    "woltlab-conversation"
+    "woltlab-legal-notice"
 )
 
 # Füge alle Änderungen hinzu

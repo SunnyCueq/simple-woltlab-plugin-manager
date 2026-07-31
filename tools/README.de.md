@@ -34,7 +34,7 @@ Im Ordner `tools/` stecken die Skripte für den Alltag: Plugin bauen, prüfen, T
 | 6 | Git Push | Commit, Push, Release (Plugin) |
 | 7 | Setup | Core, Docs, Typings, Pfade |
 | 8 | Repo (origin) | Remote anzeigen/setzen |
-| 9 | WoltLab-Version | Core/Docs-Info |
+| 9 | WoltLab-Refs | prüfen · Sync bei Update |
 | L | Sprache DE/EN | Menüsprache |
 | M | SWPM Release | `release-manager.sh` |
 | 0 | Beenden | |

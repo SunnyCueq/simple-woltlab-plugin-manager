@@ -1,8 +1,16 @@
 # Changelog
 
-## Unreleased
+## Version 1.3.0 – 2026-07-31
 
 ### Plugin-Manager
+
+- **Neues Logo & Farbschema:** Nachtblau als Grund, dazu Koralle, Cyan-Indigo und Lime als die drei verschlungenen Formen. Das Logo liegt als SVG und PNG bei, zusätzlich eine Bildmarke ohne Schriftzug für Header und Favicon. README und Handbuch übernehmen die Palette; für Links und Badges auf hellem Grund gibt es abgedunkelte Varianten, damit der Kontrast lesbar bleibt. Badge **Vibe Coding Friendly** bleibt erhalten.
+- **Handbuch-Optik:** dunkler Header mit Farbverlauf-Linie aus den Logofarben, Karten mit ruhigem Hover, sichtbare Fokusrahmen und ein an die Marke angelehnter Dunkelmodus. Bewegung respektiert `prefers-reduced-motion`.
+- **WoltLab-Refs:** Online-Core erkennen (Download-Seite), mit lokalem `woltlab-core` vergleichen, bei neuer Version nachfragen und Core + Spiegel syncen (Menü **9** / `./tools.sh wcf-version`). Zusätzlich Beispiel-Plugins Exporter, Conversation, Legal Notice.
+- **Neues Menü in `./tools.sh`:** durchgehende Nummerierung statt Mischung aus Ziffern und Buchstaben, Gruppen (Bauen · Prüfen · Repo · Mehr), Auswahllisten statt Freitext (Plugin-Wahl zeigt Name und Version), Merker für die zuletzt genutzte Aktion, Kurznamen wie `build`, dazu Plugin-Liste, Systemübersicht und CLI-Hilfe als eigene Einträge. Optional mit Fuzzy-Suche: `SWPM_PICKER=fzf ./tools.sh`. Menü-Ausgabe und Rückgabewerte sind getrennt, wodurch die Auswahl keine Überschriften mehr mitfängt. Die Übergangsdateien `tools-v2.sh`, `tools-alpha.sh` und `tools-beta.sh` sind entfallen — es bleibt ein Skript.
+- **Plugin-Erkennung:** Die WoltLab-Referenzspiegel (Exporter, Conversation, Legal Notice) bringen eigene `package.xml` mit und tauchten dadurch als Build-Ziel auf. Sie werden jetzt übersprungen.
+- **Release-Schutz:** Vor dem Commit prüft `release-manager.sh` den Index gegen Muster wie `CLAUDE*.md`, `.cursor/`, `.audit/`, `.env`, Archive und `*-once.php` — bei einem Treffer bricht der Release ab, statt lokale Reste zu veröffentlichen.
+- **Toolkit-Tests:** `test_check_language_pip_keys.py` läuft jetzt in `tools/tests/run-tests.sh` mit (und damit auch in der CI).
 
 ## Version 1.2.6 – 2026-07-30
 

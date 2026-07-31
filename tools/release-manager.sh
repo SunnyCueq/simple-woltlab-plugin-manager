@@ -130,6 +130,9 @@ swpm_release_stage_safe() {
         "woltlab-github"
         "woltlab-core"
         "woltlab-d-ts"
+        "woltlab-exporter"
+        "woltlab-conversation"
+        "woltlab-legal-notice"
         "basis-plugin"
         "mein-plugin"
         "plugins-integrieren"
@@ -157,10 +160,15 @@ swpm_release_stage_safe() {
         "tools/swpm-install-once.php"
         "tools/swpm-uninstall-once.php"
         "tools/uninstall-package-once.php"
+        "tools.zip"
     )
     for path in "${exclude_files[@]}"; do
         [ -e "$path" ] && git reset HEAD -- "$path" 2>/dev/null || true
     done
+    # Editor-/Agent-Scratchfiles
+    while IFS= read -r -d '' path; do
+        git reset HEAD -- "$path" 2>/dev/null || true
+    done < <(find . tools -maxdepth 1 \( -name '.hermes-*' -o -name '*.orig' -o -name '*.rej' \) -print0 2>/dev/null || true)
     while IFS= read -r -d '' path; do
         git reset HEAD -- "$path" 2>/dev/null || true
     done < <(find . -maxdepth 1 -name 'CLAUDE*.md' -print0 2>/dev/null || true)
@@ -170,6 +178,24 @@ swpm_release_stage_safe() {
     while IFS= read -r -d '' path; do
         git reset HEAD -- "$path" 2>/dev/null || true
     done < <(find releases -name '*.tar.gz' -print0 2>/dev/null || true)
+}
+
+# Letzte Instanz vor dem Commit: fängt Reste ab, die keine Exclude-Regel kennt.
+swpm_release_guard_staged() {
+    local staged blocked
+    staged="$(git diff --cached --name-only)"
+    [ -n "$staged" ] || return 0
+
+    blocked="$(printf '%s\n' "$staged" | grep -Ei \
+        '(^|/)CLAUDE.*\.md$|(^|/)\.cursor/|(^|/)\.audit/|(^|/)\.env$|(^|/)\.hermes-|\.(zip|tar|tar\.gz|tgz)$|-once\.php$|(^|/)swpm-(install|uninstall|force-remove)' \
+        || true)"
+    [ -n "$blocked" ] || return 0
+
+    print_error "Nicht releasebare Dateien im Staging — Commit abgebrochen:"
+    printf '  %s\n' $blocked >&2
+    echo "" >&2
+    echo "  Entfernen: git reset HEAD -- <datei>   (oder in .gitignore aufnehmen)" >&2
+    return 1
 }
 
 has_tracked_changes() {
@@ -275,6 +301,10 @@ if has_tracked_changes; then
                 if [ -z "$(git diff --cached --name-only)" ]; then
                     print_error "Nur ausgeschlossene Dateien geändert — nichts committbar."
                     git status -sb >&2 || true
+                    exit 1
+                fi
+                if ! swpm_release_guard_staged; then
+                    git reset -q HEAD -- . 2>/dev/null || true
                     exit 1
                 fi
                 identity="$(resolve_git_identity)"

@@ -170,9 +170,11 @@ Rarely needed day to day; used by core scripts:
 | `swpm-run-checks.sh` | Registry runner |
 | `swpm-family-resolve.sh` | Resolve family manifest |
 | `check-family-deps.py` | Product-line dependency graph |
-| `download-woltlab-core.sh` | Load Core (setup) |
-| `sync-woltlab-references.sh` | Refresh docs/WCF mirrors |
-| `update-woltlab-version.sh` | Version info |
+| `download-woltlab-core.sh` | Load Core; `6.2` → latest patch for that line |
+| `woltlab-refs-lib.sh` | Shared local/online detection (download page) |
+| `update-woltlab-version.sh` | Checks online Core, asks on update, syncs Core + mirrors |
+| `sync-woltlab-references.sh` | Git mirrors only (docs/WCF/d.ts/samples) |
+| `manager-push.env` | optional local overrides (gitignored) |
 | `manager-push.env` | optional local overrides (gitignored) |
 
 `tools/woltlab-plugin-recovery/` is a separate recovery helper — not part of the normal build/validate menu.

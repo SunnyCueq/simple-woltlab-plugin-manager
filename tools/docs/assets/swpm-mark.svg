@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SWPM brand mark: the three interlocking shapes without wordmark.
+     Used for header logo and favicon; derived from swpm-logo.svg. -->
+<svg viewBox="190 370 644 250" xmlns="http://www.w3.org/2000/svg" width="644" height="250">
+  <defs>
+    <linearGradient id="mk1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#FF5B6E"/>
+      <stop offset="1" stop-color="#FF9A56"/>
+    </linearGradient>
+    <linearGradient id="mk2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#6366F1"/>
+    </linearGradient>
+    <linearGradient id="mk3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#A3E635"/>
+      <stop offset="1" stop-color="#22D3AA"/>
+    </linearGradient>
+    <clipPath id="mkMidLower">
+      <rect x="0" y="495" width="1024" height="2000" transform="rotate(16 512 495)"/>
+    </clipPath>
+    <clipPath id="mkLeft">
+      <rect x="230" y="425" width="240" height="140" rx="70" ry="70" transform="rotate(-16 350 495)"/>
+    </clipPath>
+  </defs>
+
+  <g fill="none" stroke-width="30">
+    <path transform="rotate(-16 350 495)" stroke="url(#mk1)"
+          d="M 230 425 H 470 V 565 H 230 Z"/>
+    <rect x="392" y="425" width="240" height="140" rx="70" ry="70"
+          transform="rotate(16 512 495)" stroke="url(#mk2)"/>
+    <path transform="rotate(-16 674 495)" stroke="url(#mk3)"
+          d="M 624 425 H 724 L 794 495 L 724 565 H 624 L 554 495 Z"/>
+  </g>
+
+  <!-- Interlock: the middle shape passes over the left one at the bottom -->
+  <g fill="none" clip-path="url(#mkLeft)">
+    <g clip-path="url(#mkMidLower)">
+      <rect x="392" y="425" width="240" height="140" rx="70" ry="70"
+            transform="rotate(16 512 495)" stroke="url(#mk2)" stroke-width="16"/>
+    </g>
+  </g>
+</svg>

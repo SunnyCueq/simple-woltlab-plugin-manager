@@ -170,9 +170,10 @@ Für den Alltag selten direkt nötig; werden von den Kern-Skripten genutzt:
 | `swpm-run-checks.sh` | Registry-Runner |
 | `swpm-family-resolve.sh` | Family-Manifest auflösen |
 | `check-family-deps.py` | Abhängigkeitsgraph der Produktlinie |
-| `download-woltlab-core.sh` | Core laden (Setup) |
-| `sync-woltlab-references.sh` | Docs/WCF-Spiegel aktualisieren |
-| `update-woltlab-version.sh` | Versionsinfo |
+| `download-woltlab-core.sh` | Core laden; `6.2` → neuestes Patch der Linie |
+| `woltlab-refs-lib.sh` | Gemeinsame Erkennung lokal/online (Download-Seite) |
+| `update-woltlab-version.sh` | Prüft Online-Core, fragt bei Update, sync’t Core + Spiegel |
+| `sync-woltlab-references.sh` | Nur Git-Spiegel (Docs/WCF/d.ts/Beispiele) |
 | `manager-push.env` | optionale lokale Overrides (gitignored) |
 
 `tools/woltlab-plugin-recovery/` ist ein separates Recovery-Hilfsmittel — nicht Teil des normalen Build-/Validate-Menüs.

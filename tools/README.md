@@ -34,7 +34,7 @@ The `tools/` folder holds the day-to-day scripts: build a plugin, validate it, c
 | 6 | Git Push | commit, push, release (plugin) |
 | 7 | Setup | Core, docs, typings, paths |
 | 8 | Repo (origin) | show/set remote |
-| 9 | WoltLab version | Core/docs info |
+| 9 | WoltLab refs | check · sync on update |
 | L | Language DE/EN | menu language |
 | M | SWPM Release | `release-manager.sh` |
 | 0 | Exit | |
